@@ -106,6 +106,8 @@ def main(argv=None):
             print(json.dumps(result,ensure_ascii=False,indent=2));return 0
         if args.command=='query':
             from .warehouse import query_mart
+            from .process_engine import _manifest
+            _manifest(Path(args.workspace).resolve())
             print(json.dumps(query_mart(Path(args.workspace)/'warehouse.sqlite3',args.mart),ensure_ascii=False,indent=2));return 0
         if args.command=='verify':return verify(args.output)
         report=build(args.output,args.seed,args.scenario,args.csv_input)

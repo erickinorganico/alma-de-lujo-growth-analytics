@@ -1,16 +1,15 @@
-# Project efficiency — Alma de Lujo
+# Project efficiency — Alma de Lujo v0.2
 
-Decision: **not applicable** for Laya inference in v0.1. Reviewed 2026-09-22 after implementation, using the local `laya-local` skill. This is a code-scoped opportunity report, not a runtime installation claim.
+Reviewed 2026-09-22 using the local `laya-local` skill after adding real native-agent analysis and durable processes. Decision: **no validated bounded Laya replacement in this scope**. This conclusion is specific to observed code and role contracts; it is not an installation claim or an excuse to omit useful cognition.
 
-| Observed surface | Input/output | Observed frequency | Decision and fallback |
-|---|---|---|---|
-| `alma/analytics.py` inventory status | exact stock/cost/age -> fixed threshold status | once per SKU per build | deterministic arithmetic; no model |
-| `alma/validation.py` | typed records -> invariant results | every build/test | deterministic rules; unknown remains unknown |
-| `alma/decisions.py` | validated report -> versioned proposal | once per build | deterministic baseline; no text classifier |
-| `alma/storage.py` CSV columns | explicit schema -> typed values | optional local interchange | exact parse/reject; no inferred categories |
+| Actual surface | Repeated decision | Implementation / reason |
+| --- | --- | --- |
+| `alma/warehouse.py`, `models/marts/*.sql` | Cents, joins, coverage, cohorts, stock and temporal reconciliation | Exact deterministic SQL/Python; model substitution would add uncertainty |
+| `alma/lifecycle.py` | Legal state transition, approval gate, replay or conflict | Deterministic event/state rules; never infer authority |
+| `alma/native_agents.py` | Response schema, exact source values, hashes and external-action boundary | Deterministic validation; semantic critique is a separate native reviewer |
+| `agents/*.json` | Inventory, finance, growth, commerce and market interpretation | Bounded native Codex task with multiple evidence tables and open-form counterfactual reasoning; not a compact closed-label classifier |
+| Expense categories and product classes | Already explicit source fields | No free-text inference is needed; unrecognized input is rejected rather than guessed |
 
-No model callers, open-text classification, ranking judgments, or repeated LLM decisions exist in the runtime. Therefore no compact uncertain closed-option judgment is being replaced. No checkpoint was loaded, no shadow evaluation was warranted, no candidate was found validated and left unused, and no token/cost/latency benefit is claimed. Existing local Laya installation history is context only. Jev, paid inference and Beacon capture are absent.
+The native cognitive work is retained and its actual dispatches are recorded with model, task, effort, timestamps, evidence/output hashes and validation. Python's task bridge does not claim model inference. There is no API key client, separately billed provider, Jev, Beacon capture, speculative model checkpoint load or claimed cost/latency benefit.
 
-Refresh trigger: add real repeated text categorization (e.g. expense description -> category). Before any inference define labeled Spanish/multilingual baseline, positives, negatives, missing/ambiguous inputs, prompt injection, boundary lengths and REVIEW. Promotion requires zero critical policy violations, quality at least baseline, lower total measured work including cold/warm latency/retries/supervision, deterministic fallback and versioned regression fixtures. Do not use Laya for cents, joins, pricing, buying, inventory posting or causality.
-
-Native Sol, Luna, Terra and Astra dispatch is orchestration by the parent Codex task, not Laya routing. See `docs/ORCHESTRATION.md` for actual work and evidence.
+A future repeated uncertain task such as multilingual return-reason classification could qualify after a real source and labeled baseline exist. Before use: read the runtime reference, define labels and REVIEW, compare against deterministic rules, include missing/ambiguous/injection/length cases, measure cold and warm latency plus supervision, and promote only after quality and total-work evidence. Do not route arithmetic, business authorization, causal conclusions or accounting through a compact classifier.

@@ -33,6 +33,7 @@ def build_workspace(output, seed=42, scenario='normal', days=365, order_count=12
         atomic(output/'blocked.json',{'status':'BLOCKED','failed_checks':[q['id'] for q in quality if q['status']=='FAIL'],'synthetic':True})
         return {'status':'BLOCKED','output':str(output)}
     load=build_warehouse(data,output/'warehouse.sqlite3')
+    load['path']='warehouse.sqlite3'
     atomic(output/'warehouse-load.json',load)
     # All SQL views are explicit files; request evidence and CSV share the same rows.
     names=sorted({m for d in definitions().values() for m in d['marts']})
@@ -50,10 +51,14 @@ def build_workspace(output, seed=42, scenario='normal', days=365, order_count=12
     atomic(output/'experiment-analysis.json',analyze_experiments(data))
     from .workspace_report import write_report
     write_report(data,mart_rows,quality,output)
+    from .lifecycle import run_lifecycle_demo
+    lifecycle=run_lifecycle_demo(output/'lifecycle')
+    if lifecycle['status']!='PASS':raise ValueError('Business lifecycle replay failed')
     files=[p for p in output.rglob('*') if p.is_file() and p.suffix!='.sqlite3']
     manifest={'version':'2.0','status':'REVIEW' if any(q['status']!='PASS' for q in quality) else 'PASS',
               'metadata':data['metadata'],'counts':{t:len(r) for t,r in data['tables'].items()},
               'sha256':{str(p.relative_to(output)).replace('\\','/'):hashlib.sha256(p.read_bytes()).hexdigest() for p in files},
+              'binary_sha256':{str(p.relative_to(output)).replace('\\','/'):hashlib.sha256(p.read_bytes()).hexdigest() for p in output.rglob('*.sqlite3')},
               'database':'warehouse.sqlite3','database_rebuild':'python -m alma workspace --output NEW_EMPTY_DIRECTORY',
               'scope':'Synthetic analytical system; no external actions; native requests await actual Codex execution.'}
     atomic(output/'workspace.json',manifest)

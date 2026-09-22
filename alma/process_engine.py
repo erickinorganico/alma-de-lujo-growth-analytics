@@ -11,6 +11,8 @@ ROOT=Path(__file__).resolve().parent.parent
 
 def read(path): return json.loads(Path(path).read_text(encoding='utf-8-sig'))
 
+def read_json_clone(value):return json.loads(canonical(value))
+
 
 def atomic(path,value):
     path=Path(path)
@@ -49,7 +51,9 @@ def verify_events(folder):
 
 def transition(folder,state,status,step,details):
     events=verify_events(folder)
-    event=dict(sequence=len(events)+1,previous_hash=events[-1]['hash'] if events else 'GENESIS',
+    checkpoint={**state,'status':status,'step':step};checkpoint.pop('event_hash',None)
+    checkpoint=read_json_clone(checkpoint)
+    event=dict(checkpoint=checkpoint,sequence=len(events)+1,previous_hash=events[-1]['hash'] if events else 'GENESIS',
                from_status=state.get('status','NEW'),to_status=status,step=step,details=details)
     event['hash']=digest(event);events.append(event)
     atomic(Path(folder)/'events.json',events)
@@ -60,7 +64,7 @@ def transition(folder,state,status,step,details):
 
 def _manifest(workspace):
     manifest=read(workspace/'workspace.json')
-    for name,expected in manifest['sha256'].items():
+    for name,expected in {**manifest['sha256'],**manifest.get('binary_sha256',{})}.items():
         if Path(name).is_absolute() or '..' in Path(name).parts:raise ValueError('Invalid manifest artifact path')
         p=workspace/name
         if p.is_symlink() or not p.is_file():raise ValueError('Workspace artifact missing: '+name)
@@ -75,7 +79,8 @@ def _evidence(workspace,definition,manifest):
                 marts={name:read(workspace/'marts'/(name+'.json')) for name in definition['marts']},
                 sources=read(workspace/'research.json'),
                 lineage=read(workspace/'lineage.json'),
-                experiment_analysis=read(workspace/'experiment-analysis.json') if (workspace/'experiment-analysis.json').exists() else {})
+                experiment_analysis=read(workspace/'experiment-analysis.json') if (workspace/'experiment-analysis.json').exists() else {},
+                lifecycle=read(workspace/'lifecycle/summary.json') if (workspace/'lifecycle/summary.json').exists() else {})
 
 
 def _write_request(folder,request):
@@ -108,41 +113,98 @@ def start(workspace,process_id):
         return transition(folder,state,'WAITING_AGENT','native_analysis',{'request_id':request['request_id'],'role':definition['agent']})
 
 
-def _resume(workspace,folder,manifest):
-    state=read(folder/'state.json');events=verify_events(folder)
-    if not events or state['event_hash']!=events[-1]['hash'] or state['status']!=events[-1]['to_status']:
+def _bound_context(workspace,folder,manifest):
+    events=verify_events(folder)
+    state_path=folder/'state.json'
+    expected_state={**events[-1]['checkpoint'],'event_hash':events[-1]['hash']} if events else None
+    if not state_path.exists() and expected_state is not None:
+        atomic(state_path,expected_state)
+    state=read(state_path)
+    # Events are the atomic commit record. Recover the only legitimate interrupted
+    # write window: the prior exact checkpoint remains after a committed event.
+    if len(events)>1 and state=={**events[-2]['checkpoint'],'event_hash':events[-2]['hash']}:
+        atomic(state_path,expected_state);state=expected_state
+    if not events or state.get('event_hash')!=events[-1]['hash']:
         raise ValueError('Process checkpoint differs from event chain')
+    projected={k:v for k,v in state.items() if k!='event_hash'}
+    if projected!=events[-1].get('checkpoint'):
+        raise ValueError('Full process checkpoint differs from journal anchor')
     definition=definitions()[state['process_id']]
     if digest(definition)!=state['definition_hash'] or digest(manifest)!=state['workspace_hash']:
         raise ValueError('Inputs or process changed; create a new workspace')
-    if state['status'] not in ('WAITING_AGENT','WAITING_REVIEW'):return state
-    role=definition['agent'] if state['status']=='WAITING_AGENT' else 'evidence_reviewer'
-    request=read(folder/'tasks'/(role+'.request.json'));verify_request(request)
-    response_path=folder/'tasks'/(role+'.response.json')
-    receipt_path=folder/'tasks'/(role+'.dispatch.json')
-    if not response_path.exists() or not receipt_path.exists():return state
-    response=read(response_path);receipt=read(receipt_path)
+    evidence=_evidence(workspace,definition,manifest)
+    run_id=digest({'input':manifest['sha256'],'definition':definition})[:24]
+    if state['input_hash']!=digest(evidence) or state['run_id']!=run_id or state['owner']!=definition['owner']:
+        raise ValueError('Process identity or input evidence binding changed')
+    return state,events,definition,evidence
+
+
+def _request_bound(folder,expected):
+    path=folder/'tasks'/(expected['role']+'.request.json')
+    request=read(path);verify_request(request)
+    if request!=expected:raise ValueError('Task request differs from immutable process evidence')
+    return request
+
+
+def _accepted(folder,request,anchored=None):
+    role=request['role'];response=read(folder/'tasks'/(role+'.response.json'))
+    receipt=read(folder/'tasks'/(role+'.dispatch.json'))
     validate_response(request,response);validate_dispatch(receipt,request)
     if digest(response)!=receipt['response_sha256']:raise ValueError('Response differs from native dispatch receipt')
-    state['responses'][role]={'sha256':digest(response),'request_id':request['request_id'],'agent_id':receipt['agent_id'],'model':receipt['model']}
+    entry={'sha256':digest(response),'request_id':request['request_id'],'agent_id':receipt['agent_id'],'model':receipt['model'],'dispatch_hash':digest(receipt)}
+    if anchored is not None and entry!=anchored:raise ValueError('Accepted response or dispatch changed')
+    return response,receipt,entry
+
+
+def _packet(state,definition,analyst,reviewer):
+    return dict(version='2.0',run_id=state['run_id'],process_id=state['process_id'],synthetic=True,
+        status='READY_FOR_OWNER' if reviewer['verdict']=='READY_FOR_OWNER' else 'REVIEW',
+        input_hash=state['input_hash'],facts=analyst['facts'],unknowns=analyst['unknowns'],
+        hypotheses=analyst['hypotheses'],recommendations=analyst['recommendations'],
+        review=reviewer,agent_receipts=state['responses'],external_execution='PROHIBITED')
+
+
+def _validate_completed(workspace,folder,manifest):
+    state,events,definition,evidence=_bound_context(workspace,folder,manifest)
+    if state['status'] not in ('READY_FOR_OWNER','REVIEW','WAITING_AGENT','WAITING_REVIEW'):return state
+    analyst_request=_request_bound(folder,make_request(definition['agent'],state['process_id'],evidence,state['run_id']))
+    if state['status']=='WAITING_AGENT':return state
+    analyst,ar,_=_accepted(folder,analyst_request,state['responses'].get(definition['agent']))
+    review_evidence={**evidence,'analysis':analyst}
+    reviewer_request=_request_bound(folder,make_request('evidence_reviewer',state['process_id'],review_evidence,state['run_id']))
+    if state['status']=='WAITING_REVIEW':return state
+    reviewer,rr,_=_accepted(folder,reviewer_request,state['responses'].get('evidence_reviewer'))
+    if ar['agent_id']==rr['agent_id']:raise ValueError('Reviewer must be a different native agent')
+    packet=read(folder/'decision-packet.json');expected=_packet(state,definition,analyst,reviewer)
+    if packet!=expected or digest(packet)!=events[-1]['details']['sha256']:
+        raise ValueError('Terminal decision packet was modified')
+    return state
+
+
+def _resume(workspace,folder,manifest):
+    state,events,definition,evidence=_bound_context(workspace,folder,manifest)
+    if state['status'] in ('READY_FOR_OWNER','REVIEW'):return _validate_completed(workspace,folder,manifest)
+    if state['status'] not in ('WAITING_AGENT','WAITING_REVIEW'):return state
+    analyst_request=make_request(definition['agent'],state['process_id'],evidence,state['run_id'])
+    _request_bound(folder,analyst_request)
+    if state['status']=='WAITING_AGENT':
+        role=definition['agent'];request=analyst_request
+    else:
+        analyst,analyst_receipt,_=_accepted(folder,analyst_request,state['responses'][definition['agent']])
+        role='evidence_reviewer'
+        request=_request_bound(folder,make_request(role,state['process_id'],{**evidence,'analysis':analyst},state['run_id']))
+    if events[-1]['details'].get('request_id')!=request['request_id']:
+        raise ValueError('Task request differs from emitted event identity')
+    if not (folder/'tasks'/(role+'.response.json')).exists() or not (folder/'tasks'/(role+'.dispatch.json')).exists():return state
+    response,receipt,entry=_accepted(folder,request)
+    state['responses'][role]=entry
     if response['verdict']=='BLOCKED':return transition(folder,state,'BLOCKED','agent_review',{'role':role,'summary':response['summary']})
     if role!='evidence_reviewer':
-        evidence=dict(request['evidence']);evidence['analysis']=response
-        reviewer=make_request('evidence_reviewer',state['process_id'],evidence,state['run_id'])
+        reviewer=make_request('evidence_reviewer',state['process_id'],{**evidence,'analysis':response},state['run_id'])
         _write_request(folder,reviewer)
         return transition(folder,state,'WAITING_REVIEW','independent_review',{'request_id':reviewer['request_id'],'analyst':role})
-    analyst=read(folder/'tasks'/(definition['agent']+'.response.json'))
-    analyst_receipt=read(folder/'tasks'/(definition['agent']+'.dispatch.json'))
     if receipt['agent_id']==analyst_receipt['agent_id']:raise ValueError('Reviewer must be a different native agent')
-    # Revalidate accepted analyst after waiting; a changed response cannot silently enter a packet.
-    analyst_request=read(folder/'tasks'/(definition['agent']+'.request.json'))
-    validate_response(analyst_request,analyst)
-    if digest(analyst)!=state['responses'][definition['agent']]['sha256']:raise ValueError('Accepted analyst response changed')
-    packet=dict(version='2.0',run_id=state['run_id'],process_id=state['process_id'],synthetic=True,
-                status='READY_FOR_OWNER' if response['verdict']=='READY_FOR_OWNER' else 'REVIEW',
-                input_hash=state['input_hash'],facts=analyst['facts'],unknowns=analyst['unknowns'],
-                hypotheses=analyst['hypotheses'],recommendations=analyst['recommendations'],
-                review=response,agent_receipts=state['responses'],external_execution='PROHIBITED')
+    packet=_packet(state,definition,analyst,response)
     atomic(folder/'decision-packet.json',packet)
     return transition(folder,state,packet['status'],'decision_packet',{'sha256':digest(packet),'external_execution':'PROHIBITED'})
 
@@ -159,10 +221,15 @@ def submit(workspace,process_id,response_path,receipt_path):
     if process_id not in definitions():raise ValueError('Unknown process')
     folder=workspace/'processes'/process_id
     with locked(folder):
-        state=read(folder/'state.json');role=read(response_path).get('role')
+        state,events,definition,evidence=_bound_context(workspace,folder,manifest);role=read(response_path).get('role')
         expected=definitions()[process_id]['agent'] if state['status']=='WAITING_AGENT' else 'evidence_reviewer' if state['status']=='WAITING_REVIEW' else None
         if role!=expected:raise ValueError('No task currently waiting for this role')
-        request=read(folder/'tasks'/(role+'.request.json'));response=read(response_path);receipt=read(receipt_path)
+        expected_request=make_request(definition['agent'],process_id,evidence,state['run_id'])
+        _request_bound(folder,expected_request)
+        if role=='evidence_reviewer':
+            analyst,ar,_=_accepted(folder,expected_request,state['responses'][definition['agent']])
+            expected_request=make_request(role,process_id,{**evidence,'analysis':analyst},state['run_id'])
+        request=_request_bound(folder,expected_request);response=read(response_path);receipt=read(receipt_path)
         validate_response(request,response);validate_dispatch(receipt,request)
         if digest(response)!=receipt['response_sha256']:raise ValueError('Response hash mismatch')
         atomic(folder/'tasks'/(role+'.response.json'),response)
@@ -171,10 +238,9 @@ def submit(workspace,process_id,response_path,receipt_path):
 
 
 def status(workspace):
-    workspace=Path(workspace).resolve();_manifest(workspace)
+    workspace=Path(workspace).resolve();manifest=_manifest(workspace)
     result=[]
     for p in sorted((workspace/'processes').glob('*/state.json')):
-        state=read(p);events=verify_events(p.parent)
-        if state['event_hash']!=events[-1]['hash']:raise ValueError('Checkpoint hash mismatch')
+        state=_validate_completed(workspace,p.parent,manifest)
         result.append({k:state[k] for k in ('process_id','status','step','run_id')})
     return result

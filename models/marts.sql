@@ -1,0 +1,24 @@
+-- Alma de Lujo warehouse v2 SQL lineage.
+--
+-- Source tables are loaded by alma.warehouse into SQLite STRICT relations.
+-- The Python loader materializes each fixed query below as an identically named
+-- table.  SQL is kept alongside the executable MART_SQL dictionary so reviewers
+-- can inspect grain and intended joins without running arbitrary input SQL.
+
+-- sales_daily       date: delivered line revenue and credit-note events;
+--                   COGS uses sale ledger events and reverses only restocked
+--                   return movements on the return event date.
+-- inventory_position variant: ledger, active reservation, in-transit PO, count.
+-- inventory_aging    variant: snapshot inventory enriched with last positive event.
+-- procurement        purchase_order: PO terms against receipt/payment event sums.
+-- cash_daily         event date: settled customer cash / refunds / supplier / expense payments.
+-- finance_monthly    calendar month: revenue, COGS, expense accrual, cash movement.
+-- channel_performance channel: delivered order lines, one order count per order.
+-- customer_cohorts   acquisition month x delivered order month.
+-- experiment_results experiment x arm: simulated randomized descriptive outcomes.
+-- funnel_conversion  channel x campaign: descriptive funnel and order counts.
+-- reconciliation     named source-to-mart independent total checks.
+
+-- Authoritative executable text is loaded from models/marts/<mart>.sql by
+-- alma.warehouse._materialize_marts.  `{{coverage:table}}` is replaced with a
+-- scalar coverage lookup at materialization time.

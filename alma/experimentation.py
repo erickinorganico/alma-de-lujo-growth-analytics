@@ -40,7 +40,7 @@ def analyze_experiments(data):
                 if not exp['start_date']<=a['assigned_date']<=exp['end_date']:problems.append('ASSIGNMENT_OUTSIDE_WINDOW')
                 o=outcomes.get(a['id'])
                 if o is not None:
-                    if not a['assigned_date']<=o['date']<=data['metadata']['as_of']:problems.append('OUTCOME_TIME_INVALID')
+                    if not a['assigned_date']<=o['date']<=min(data['metadata']['as_of'],exp['end_date']):problems.append('OUTCOME_TIME_INVALID')
                     observed.append(o)
             n=len(assignments);nobs=len(observed)
             known=all(coverage.get(k) for k in ('experiments','experiment_assignments','experiment_outcomes')) and n==nobs

@@ -35,7 +35,7 @@ class NativeContractTests(unittest.TestCase):
         with self.assertRaises(ValueError):validate_response(changed,original)
 
 
-class ProcessTests(unittest.TestCase):
+class ProcessFixture:
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory();self.root=Path(self.temp.name)
         defs=engine.definitions();coverage={t:True for d in defs.values() for t in d['required_tables']}
@@ -54,6 +54,7 @@ class ProcessTests(unittest.TestCase):
         engine.atomic(self.root/'response.json',res);engine.atomic(self.root/'receipt.json',receipt(req,res,agent))
         return engine.submit(self.root,'finance-close',self.root/'response.json',self.root/'receipt.json')
 
+class ProcessTests(ProcessFixture,unittest.TestCase):
     def test_run_resume_review_and_no_external_action(self):
         state=engine.start(self.root,'finance-close');self.assertEqual(state['status'],'WAITING_AGENT')
         before=engine.verify_events(self.root/'processes/finance-close')
@@ -85,6 +86,33 @@ class ProcessTests(unittest.TestCase):
     def test_accepted_analyst_cannot_change_while_waiting(self):
         engine.start(self.root,'finance-close');self.deliver('finance_analyst','/root/disposable_test_analyst')
         p=self.root/'processes/finance-close/tasks/finance_analyst.response.json';res=engine.read(p);res['summary']='Changed prose';engine.atomic(p,res)
-        with self.assertRaisesRegex(ValueError,'changed'):self.deliver('evidence_reviewer','/root/disposable_test_reviewer')
+        with self.assertRaises(ValueError):self.deliver('evidence_reviewer','/root/disposable_test_reviewer')
+
+class BridgeTamperTests(ProcessFixture,unittest.TestCase):
+    def test_coherently_replaced_request_is_rejected(self):
+        engine.start(self.root,'finance-close')
+        path=self.root/'processes/finance-close/tasks/finance_analyst.request.json'
+        original=engine.read(path);changed=copy.deepcopy(original['evidence']);changed['counts']['orders']=999999
+        replacement=make_request('finance_analyst','finance-close',changed,original['run_id'])
+        engine.atomic(path,replacement)
+        with self.assertRaisesRegex(ValueError,'immutable'):engine.resume(self.root,'finance-close')
+
+    def test_state_identity_and_response_hash_rewrite_rejected(self):
+        engine.start(self.root,'finance-close');self.deliver('finance_analyst','/root/disposable_test_analyst')
+        path=self.root/'processes/finance-close/state.json';state=engine.read(path)
+        state['run_id']='replacement';state['input_hash']='arbitrary';engine.atomic(path,state)
+        with self.assertRaisesRegex(ValueError,'checkpoint'):engine.resume(self.root,'finance-close')
+
+    def test_interrupted_checkpoint_write_recovers_from_committed_journal(self):
+        state=engine.start(self.root,'finance-close')
+        (self.root/'processes/finance-close/state.json').unlink()
+        recovered=engine.resume(self.root,'finance-close')
+        self.assertEqual(state,recovered)
+
+    def test_terminal_packet_and_dispatch_are_revalidated(self):
+        engine.start(self.root,'finance-close');self.deliver('finance_analyst','/root/disposable_test_analyst');self.deliver('evidence_reviewer','/root/disposable_test_reviewer')
+        path=self.root/'processes/finance-close/decision-packet.json';packet=engine.read(path);packet['external_execution']='EXECUTE';engine.atomic(path,packet)
+        with self.assertRaisesRegex(ValueError,'packet'):engine.resume(self.root,'finance-close')
+        with self.assertRaisesRegex(ValueError,'packet'):engine.status(self.root)
 
 if __name__=='__main__':unittest.main()

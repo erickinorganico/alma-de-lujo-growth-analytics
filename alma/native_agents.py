@@ -85,7 +85,7 @@ def validate_response(request, response):
         if not isinstance(response[field],list) or len(response[field])>30: raise ValueError('Invalid '+field)
         for item in response[field]: _text(item,field)
     if not response['unknowns']: raise ValueError('Synthetic limitations must be acknowledged')
-    if not isinstance(response['recommendations'],list) or len(response['recommendations'])>12: raise ValueError('Invalid recommendations')
+    if not isinstance(response['recommendations'],list) or len(response['recommendations'])>(5 if request['process_id']=='weekly-growth-review' else 12): raise ValueError('Invalid recommendations')
     for rec in response['recommendations']:
         expected={'id','action','evidence_refs','primary_metric','guardrail','window','population','closure_rule','approval_required','execution'}
         if not isinstance(rec,dict) or set(rec)!=expected: raise ValueError('Recommendation fields invalid')

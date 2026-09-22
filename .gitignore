@@ -11,3 +11,6 @@ node_modules/
 
 .local-archive/
 .local/
+
+# Native workers prepare responses here; only validated accepted copies are released.
+evidence/**/native-drafts/
