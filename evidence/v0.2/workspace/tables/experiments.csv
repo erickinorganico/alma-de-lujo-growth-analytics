@@ -1,0 +1,2 @@
+id,name,hypothesis,primary_metric,guardrail,start_date,end_date,status
+exp-socks-01,Synthetic Pilates socks vignette,A socks-led creative may improve contribution per eligible visit.,contribution_cents_per_visit,return_rate_under_10_percent,2025-09-22,2025-11-17,completed

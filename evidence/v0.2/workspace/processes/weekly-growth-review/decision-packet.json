@@ -1,0 +1,243 @@
+{
+  "agent_receipts": {
+    "evidence_reviewer": {
+      "agent_id": "/root/astra_v2_review",
+      "dispatch_hash": "8c0238dad416fb765a6d44a8e76db7471a1ad4cd6502cbfef79d3729b6ea653c",
+      "model": "gpt-6-astra",
+      "request_id": "019045af923a6f2a3e68948129b5ec2d98e541e9a2c424aa8be4022b04d171bd",
+      "sha256": "e0ec6b2b4026da655ae185210a093245ff7ec6f975d38260366dbbd813276463"
+    },
+    "growth_analyst": {
+      "agent_id": "/root/sol_scope_v2",
+      "dispatch_hash": "97887714c37d895869c27db319225cb8ff035488b1b1068230f249ca2bd32d39",
+      "model": "gpt-5.6-sol",
+      "request_id": "86241dc471bb7c488b937606a9f8983fef0e0cc375dbac907a2e42caf2705b55",
+      "sha256": "681cf030c27c128edc20c8e91ae84e42bc4645c49d239740e63aef08dec2e153"
+    }
+  },
+  "external_execution": "PROHIBITED",
+  "facts": [
+    {
+      "evidence_refs": [
+        "/metadata/scenario"
+      ],
+      "id": "GROWTH-F01",
+      "kind": "observation",
+      "statement": "El conjunto analizado corresponde al escenario sintético normal.",
+      "value": "normal"
+    },
+    {
+      "evidence_refs": [
+        "/counts/orders"
+      ],
+      "id": "GROWTH-F02",
+      "kind": "observation",
+      "statement": "La instantánea contiene 1,200 órdenes sintéticas.",
+      "value": 1200
+    },
+    {
+      "evidence_refs": [
+        "/marts/funnel_conversion/1/lead_to_linked_order_rate"
+      ],
+      "id": "GROWTH-F03",
+      "kind": "observation",
+      "statement": "Instagram tiene una tasa descriptiva lead-to-linked-order de 0.4852.",
+      "value": 0.4852
+    },
+    {
+      "evidence_refs": [
+        "/marts/funnel_conversion/0/lead_to_linked_order_rate"
+      ],
+      "id": "GROWTH-F04",
+      "kind": "observation",
+      "statement": "DM tiene una tasa descriptiva lead-to-linked-order de 0.3129.",
+      "value": 0.3129
+    },
+    {
+      "evidence_refs": [
+        "/marts/channel_performance/1/attribution_unknown"
+      ],
+      "id": "GROWTH-F05",
+      "kind": "observation",
+      "statement": "El mart de canal marca como desconocida la atribución de ingreso de Instagram.",
+      "value": 1
+    },
+    {
+      "evidence_refs": [
+        "/marts/finance_monthly/12/contribution_after_variable_cents"
+      ],
+      "id": "GROWTH-F06",
+      "kind": "observation",
+      "statement": "Septiembre de 2026 registra 2,700,622 centavos de contribución después de gasto variable en el corte sintético.",
+      "value": 2700622
+    },
+    {
+      "evidence_refs": [
+        "/marts/customer_cohorts/12/repeat_within_30d_rate"
+      ],
+      "id": "GROWTH-F07",
+      "kind": "observation",
+      "statement": "La tasa de repetición a 30 días de la cohorte de septiembre permanece desconocida.",
+      "value": null
+    },
+    {
+      "evidence_refs": [
+        "/experiment_analysis/experiments/0/observed_conversion_difference"
+      ],
+      "id": "GROWTH-F08",
+      "kind": "observation",
+      "statement": "La diferencia descriptiva de conversión tratamiento menos control del experimento sintético es -0.06339285714285714.",
+      "value": -0.06339285714285714
+    }
+  ],
+  "hypotheses": [
+    "La brecha descriptiva entre DM e Instagram podría provenir de mezcla de intención, seguimiento, definición de lead o madurez, no necesariamente del canal.",
+    "La variación de repetición entre cohortes podría reflejar censura temporal y mezcla sintética antes que una mejora persistente de retención.",
+    "Un diseño con métrica primaria de contribución por visita y guardrail de devoluciones podría evitar seleccionar una variante sólo por conversión."
+  ],
+  "input_hash": "4c5cfe6e04c75c428a99e5a589e237fde4d9331655311b85b867e87b30c21d79",
+  "process_id": "weekly-growth-review",
+  "recommendations": [
+    {
+      "action": "Priorizar una revisión diagnóstica aprobada del tramo lead-a-orden de DM frente a Instagram, segmentando por intención y madurez antes de proponer reasignación de canal.",
+      "approval_required": true,
+      "closure_rule": "Cerrar como inconcluso si la cobertura o la comparabilidad difieren; elevar una propuesta sólo si la brecha persiste en segmentos predeclarados y un dueño revisa las explicaciones alternativas.",
+      "evidence_refs": [
+        "/marts/funnel_conversion/0",
+        "/marts/funnel_conversion/1",
+        "/marts/channel_performance/0/attribution_unknown",
+        "/marts/channel_performance/1/attribution_unknown"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "Mantener attribution_unknown visible y no presentar net_revenue_cents como ingreso incremental atribuible.",
+      "id": "GROWTH-R01",
+      "population": "Leads elegibles de DM e Instagram bajo una definición común, excluyendo filas sin cobertura conocida.",
+      "primary_metric": "lead_to_linked_order_rate por canal y segmento",
+      "window": "Cuatro cortes semanales completos posteriores a una fecha de inicio aprobada."
+    },
+    {
+      "action": "Revisar retención sólo con cohortes que hayan completado la ventana de 30 días y conservar por separado clientes elegibles e inmaduros.",
+      "approval_required": true,
+      "closure_rule": "Cerrar cada cohorte sólo cuando no queden observaciones requeridas fuera de ventana; mantener REVIEW si la madurez cambia el denominador.",
+      "evidence_refs": [
+        "/marts/customer_cohorts/11",
+        "/marts/customer_cohorts/12"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "immature_customers y cohort_coverage_known deben permanecer visibles; una tasa nula por inmadurez no se convierte en cero.",
+      "id": "GROWTH-R02",
+      "population": "Clientes sintéticos de una cohorte mensual con eligible_customers_30d mayor que cero.",
+      "primary_metric": "repeat_within_30d_rate entre clientes elegibles",
+      "window": "Treinta días completos por cohorte, con lectura después de cerrar su ventana."
+    },
+    {
+      "action": "Si el dueño decide evaluar la hipótesis de calcetines, aprobar primero un protocolo fijo que mida contribución por visita y no declare ganador con la viñeta sintética actual.",
+      "approval_required": true,
+      "closure_rule": "Cerrar con la regla estadística predeclarada y guardrails completos; si no se alcanza información suficiente o falla SRM, concluir inconcluso.",
+      "evidence_refs": [
+        "/experiment_analysis/experiments/0",
+        "/experiment_analysis/planning_example",
+        "/marts/experiment_results/0",
+        "/marts/experiment_results/1"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "return_rate_under_10_percent, balance de asignación y cobertura de outcomes.",
+      "id": "GROWTH-R03",
+      "population": "Tráfico elegible definido por el dueño para una futura prueba; los 67 casos sintéticos actuales sólo prueban el sistema.",
+      "primary_metric": "contribution_cents_per_visit según el contrato experimental",
+      "window": "Ventana fija y tamaño aprobados antes de observar resultados; sin parada oportunista."
+    }
+  ],
+  "review": {
+    "challenges": [
+      "Recalculé las tasas, la diferencia de conversión de -0.06339285714285714, ambos intervalos Wilson y SRM p=0.713985795669382; coinciden. Son diagnósticos binomiales y de asignación, no pruebas de efecto sobre contribución.",
+      "La contribución total es 71,200 centavos en 32 controles y 77,140 en 35 tratamientos. El mayor total de tratamiento se debe comparar con su mayor población: las medias son 2,225 y 2,204 centavos por asignación. No sustituir la métrica primaria por conversión ni llamar por visita a un denominador de personas sin explicitar la relación.",
+      "El ejemplo de 1,774 observaciones por brazo usa conversión binaria con baseline 0.10 y MDE 0.03. No dimensiona directamente una prueba de contribución monetaria; predeclarar estimando, unidad, varianza/piloto, MDE monetario y método de incertidumbre adecuados.",
+      "La propuesta de retención debe elegir entre una cohorte mensual completamente madura o un subconjunto maduro dentro de ella. eligible_customers_30d > 0 no significa que toda la cohorte completó la ventana; agosto ilustra esa diferencia.",
+      "Preferir no estimable por inmadurez en la prosa de septiembre: nula puede leerse como cero aunque el valor correcto sea NULL. El análisis identifica correctamente el mes parcial y no debe convertirlo en comparación mensual completa.",
+      "Definir el denominador y la madurez del guardrail de devoluciones. Cero devoluciones observadas en 32/35 asignaciones no garantiza riesgo inferior a 10%, especialmente si el denominador previsto son compras o unidades."
+    ],
+    "evidence_hash": "93d649c342803d377dffa6a8b93a7e53d285652537a51ee469a8b4a6d78a0959",
+    "facts": [
+      {
+        "evidence_refs": [
+          "/marts/customer_cohorts/12/eligible_customers_30d"
+        ],
+        "id": "september_eligible",
+        "kind": "observation",
+        "statement": "La cohorte de septiembre tiene cero clientes elegibles a 30 días en este corte sintético.",
+        "value": 0
+      },
+      {
+        "evidence_refs": [
+          "/marts/customer_cohorts/12/repeat_within_30d_rate"
+        ],
+        "id": "september_unknown_rate",
+        "kind": "observation",
+        "statement": "La repetición de septiembre es NULL: no estimable con la ventana disponible, no una tasa observada de cero.",
+        "value": null
+      },
+      {
+        "evidence_refs": [
+          "/marts/customer_cohorts/11/eligible_customers_30d"
+        ],
+        "id": "august_eligible",
+        "kind": "observation",
+        "statement": "Agosto aporta 24 clientes elegibles a la tasa publicada; no incluye a sus 12 clientes todavía inmaduros en ese denominador.",
+        "value": 24
+      },
+      {
+        "evidence_refs": [
+          "/metadata/as_of"
+        ],
+        "id": "partial_month_cut",
+        "kind": "observation",
+        "statement": "El corte del snapshot es 2026-09-21; septiembre no es un mes completo.",
+        "value": "2026-09-21"
+      },
+      {
+        "evidence_refs": [
+          "/marts/finance_monthly/12/contribution_after_variable_cents"
+        ],
+        "id": "september_contribution",
+        "kind": "observation",
+        "statement": "La contribución sintética después de gasto variable de septiembre al corte es 2,700,622 centavos MXN.",
+        "value": 2700622
+      },
+      {
+        "evidence_refs": [
+          "/marts/experiment_results/0/primary_metric"
+        ],
+        "id": "primary_metric",
+        "kind": "observation",
+        "statement": "El experimento declara contribution_cents_per_visit como métrica primaria.",
+        "value": "contribution_cents_per_visit"
+      }
+    ],
+    "hypotheses": [
+      "La diferencia entre canales puede reflejar mezcla, identidad, estados y madurez; una comparación segmentada debe conservar cohortes y denominadores completos antes de priorizar intervención."
+    ],
+    "recommendations": [],
+    "request_id": "019045af923a6f2a3e68948129b5ec2d98e541e9a2c424aa8be4022b04d171bd",
+    "role": "evidence_reviewer",
+    "summary": "Las observaciones de crecimiento se verifican: septiembre tiene cero clientes elegibles y repetición desconocida, agosto mezcla 24 elegibles con 12 inmaduros, y el resultado financiero de septiembre llega sólo al día 21. REVIEW: se evita correctamente declarar causalidad o ganador, pero el protocolo debe resolver la unidad de contribución y su incertidumbre. Los agregados permiten calcular 2,225 frente a 2,204 centavos por persona asignada, diferencia tratamiento menos control de -21; no demuestran contribución por visita ni un efecto monetario significativo.",
+    "unknowns": [
+      "No hay datos reales de crecimiento ni atribución incremental por canal.",
+      "El registro experimental liga asignaciones a customer_id y outcomes a assignment_id; falta una definición verificable de visitas/exposición para interpretar contribución por visita.",
+      "La evidencia agregada no proporciona distribución individual o varianza de contribución para estimar incertidumbre monetaria ni dimensionar una prueba real."
+    ],
+    "verdict": "REVIEW",
+    "version": "2.0"
+  },
+  "run_id": "59cccb92c86e35f1b44f1281",
+  "status": "REVIEW",
+  "synthetic": true,
+  "unknowns": [
+    "Todos los registros son simulados; no informan demanda, adquisición, retención, contribución ni comportamiento reales de Alma de Lujo.",
+    "La atribución de ingreso está marcada como desconocida en los cuatro canales, por lo que no puede estimarse retorno incremental por canal.",
+    "La cohorte de septiembre todavía no tiene clientes elegibles a 30 días; agosto mezcla 24 elegibles con 12 inmaduros.",
+    "El corte termina el 21 de septiembre de 2026, de modo que la contribución mensual de septiembre no es comparable con meses completos sin normalización predeclarada.",
+    "El ejemplo de planeación usa supuestos de baseline 0.10 y MDE absoluto 0.03 que no han sido aprobados para una prueba real."
+  ],
+  "version": "2.0"
+}

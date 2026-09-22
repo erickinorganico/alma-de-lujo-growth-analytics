@@ -1,0 +1,73 @@
+{
+  "alternative_explanations": [
+    "La mezcla de intención o la definición de lead puede explicar la diferencia entre canales.",
+    "La estacionalidad del generador y el corte parcial pueden explicar diferencias mensuales.",
+    "La aparente variación de retención puede ser censura de ventana y tamaño de cohorte.",
+    "La diferencia experimental puede ser ruido muestral en una simulación pequeña."
+  ],
+  "calculations": [
+    {
+      "formula": "0.4852 - 0.3129",
+      "interpretation": "Brecha descriptiva de 17.23 puntos porcentuales; no efecto causal.",
+      "name": "instagram_minus_dm_lead_to_order",
+      "result": 0.1723
+    },
+    {
+      "formula": "32 + 35",
+      "interpretation": "Viñeta sintética; muy por debajo del ejemplo de planeación de 1,774 por brazo bajo supuestos no aprobados.",
+      "name": "current_experiment_assignments",
+      "result": 67
+    },
+    {
+      "formula": "0 eligible / 27 cohort customers",
+      "interpretation": "No existe denominador maduro para repeat rate de septiembre.",
+      "name": "september_cohort_maturity",
+      "result": 0.0
+    }
+  ],
+  "effort": "high",
+  "evidence_hash": "4c5cfe6e04c75c428a99e5a589e237fde4d9331655311b85b867e87b30c21d79",
+  "kind": "native-analyst-query-trace",
+  "model": "gpt-5.6-sol",
+  "native_job": "/root/sol_scope_v2",
+  "process_id": "weekly-growth-review",
+  "queries": [
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart channel_performance",
+      "mode": "registered read-only",
+      "result": "Cuatro canales; net revenue agregado 37,087,457 centavos MXN; attribution_unknown=1 en cada fila."
+    },
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart funnel_conversion",
+      "mode": "registered read-only",
+      "result": "DM 2,204 sesiones/604 leads/189 órdenes y tasa lead-a-orden 0.3129; Instagram 2,443/843/409 y 0.4852; Organic 0.3989; Paid Social 0.3848."
+    },
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart customer_cohorts",
+      "mode": "registered read-only",
+      "result": "Agosto 2026: 36 clientes, 24 elegibles, 12 inmaduros, repeat rate 0.5417; septiembre: 27 clientes, 0 elegibles, 27 inmaduros y tasa nula."
+    },
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart experiment_results",
+      "mode": "registered read-only",
+      "result": "Control 32 asignados/13 conversiones/0.40625; tratamiento 35/12/0.34285714285714286; ambos con cero returned_customers y synthetic_descriptive_only=1."
+    },
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart finance_monthly",
+      "mode": "registered read-only",
+      "result": "Septiembre 2026 al día 21: 4,455,806 net revenue, 2,700,622 contribución después de variable y 4,579,725 movimiento de efectivo; campos separados."
+    }
+  ],
+  "questions": [
+    "¿Qué brechas descriptivas aparecen entre sesiones, leads y órdenes sin convertirlas en causalidad de canal?",
+    "¿Qué cohortes tienen una ventana completa de 30 días y cuáles siguen censuradas?",
+    "¿La contribución está separada de ingreso y del movimiento de efectivo?",
+    "¿El experimento permite decidir o exige mantener REVIEW?"
+  ],
+  "request_id": "86241dc471bb7c488b937606a9f8983fef0e0cc375dbac907a2e42caf2705b55",
+  "role": "growth_analyst",
+  "runtime_identity_source": "Parent-confirmed native dispatch metadata and recorded turn_context for this task.",
+  "synthetic": true,
+  "validation": "validate_response(request, response) must pass before parent dispatch is recorded.",
+  "version": "2.0"
+}

@@ -1,0 +1,404 @@
+{
+  "version": "2.0",
+  "reviewer": "/root/astra_v2_review",
+  "status": "PASS",
+  "sql_probes": [
+    {
+      "probe": "baseline_generator_and_controls",
+      "passed": true,
+      "details": {
+        "rows": 22844,
+        "orders": 1200,
+        "controls": [
+          {
+            "check_id": "sales_net_revenue",
+            "source_cents": 37087457,
+            "mart_cents": 37087457,
+            "passed": 1
+          },
+          {
+            "check_id": "cash_in",
+            "source_cents": 49622444,
+            "mart_cents": 49622444,
+            "passed": 1
+          },
+          {
+            "check_id": "cash_out",
+            "source_cents": 5414773,
+            "mart_cents": 5414773,
+            "passed": 1
+          },
+          {
+            "check_id": "purchase_receipts",
+            "source_cents": 663,
+            "mart_cents": 663,
+            "passed": 1
+          },
+          {
+            "check_id": "supplier_payments",
+            "source_cents": 4158000,
+            "mart_cents": 4158000,
+            "passed": 1
+          },
+          {
+            "check_id": "marketing_spend",
+            "source_cents": 147526,
+            "mart_cents": 147526,
+            "passed": 1
+          }
+        ]
+      }
+    },
+    {
+      "probe": "ADV2-02_spend_only_campaign",
+      "passed": true,
+      "details": {
+        "source_spend": 147526,
+        "mart_spend": {
+          "funnel_conversion": 147526,
+          "channel_performance": 147526
+        },
+        "zero_order_campaign": {
+          "channel": "Organic",
+          "campaign_id": "camp-no-orders",
+          "delivered_orders": 0,
+          "customers": 0,
+          "gross_revenue_cents": 0,
+          "discount_cents": 0,
+          "credit_note_cents": 0,
+          "net_revenue_cents": 0,
+          "cogs_cents": 0,
+          "marketing_spend_cents": 13927,
+          "attribution_unknown": 1,
+          "revenue_coverage_known": 1
+        }
+      }
+    },
+    {
+      "probe": "ADV2-03_nullable_and_duplicate_session_leads",
+      "passed": true,
+      "details": {
+        "expected": {
+          "all_leads": 2831,
+          "linked_leads": 2830,
+          "unlinked_leads": 1,
+          "session_linked_leads": 2829
+        },
+        "actual": {
+          "all_leads": 2831,
+          "linked_leads": 2830,
+          "unlinked_leads": 1,
+          "session_linked_leads": 2829
+        }
+      }
+    },
+    {
+      "probe": "ADV2-04_independent_cohort_oracle",
+      "passed": true,
+      "details": {
+        "months": 13,
+        "discrepancies": [],
+        "repeat_customers": 114
+      }
+    },
+    {
+      "probe": "ADV2-05_missing_source_coverage",
+      "passed": true,
+      "details": {
+        "channel_rows_checked": 4,
+        "experiment_rows": [
+          {
+            "experiment_id": "exp-socks-01",
+            "name": "Synthetic Pilates socks vignette",
+            "status": "completed",
+            "primary_metric": "contribution_cents_per_visit",
+            "guardrail": "return_rate_under_10_percent",
+            "start_date": "2025-09-22",
+            "end_date": "2025-11-17",
+            "arm": "control",
+            "assigned_customers": null,
+            "converted_customers": null,
+            "conversion_rate": null,
+            "net_revenue_cents": null,
+            "contribution_cents": null,
+            "returned_customers": null,
+            "outcome_coverage_known": 0,
+            "synthetic_descriptive_only": 1
+          },
+          {
+            "experiment_id": "exp-socks-01",
+            "name": "Synthetic Pilates socks vignette",
+            "status": "completed",
+            "primary_metric": "contribution_cents_per_visit",
+            "guardrail": "return_rate_under_10_percent",
+            "start_date": "2025-09-22",
+            "end_date": "2025-11-17",
+            "arm": "treatment",
+            "assigned_customers": null,
+            "converted_customers": null,
+            "conversion_rate": null,
+            "net_revenue_cents": null,
+            "contribution_cents": null,
+            "returned_customers": null,
+            "outcome_coverage_known": 0,
+            "synthetic_descriptive_only": 1
+          }
+        ]
+      }
+    },
+    {
+      "probe": "ADV2-06_late_outcome",
+      "passed": true,
+      "details": {
+        "warehouse_rejected": true,
+        "error": "experiment outcome is outside assignment/experiment window",
+        "analysis_status": "BLOCKED",
+        "issues": [
+          "OUTCOME_TIME_INVALID"
+        ]
+      }
+    }
+  ],
+  "finance_probes": [
+    {
+      "probe": "independent_monthly_event_oracle_normal",
+      "passed": true,
+      "details": {
+        "months": 13,
+        "discrepancies": [],
+        "unknown_cost_months": 0
+      }
+    },
+    {
+      "probe": "independent_monthly_event_oracle_missing_cost",
+      "passed": true,
+      "details": {
+        "months": 13,
+        "discrepancies": [],
+        "unknown_cost_months": 13
+      }
+    }
+  ],
+  "reviewed_at_utc": "2026-09-22T08:46:19.861284+00:00",
+  "scope": "Independent adversarial review of warehouse marts, evidence binding, process replay and experiment diagnostics; no assertion of real business impact or general prose correctness.",
+  "unresolved_material_findings": [],
+  "findings": [
+    {
+      "id": "ADV2-01",
+      "original_severity": "P1",
+      "status": "RESOLVED_INDEPENDENTLY_RECHECKED"
+    },
+    {
+      "id": "ADV2-02",
+      "original_severity": "P2",
+      "status": "RESOLVED_INDEPENDENTLY_RECHECKED"
+    },
+    {
+      "id": "ADV2-03",
+      "original_severity": "P2",
+      "status": "RESOLVED_INDEPENDENTLY_RECHECKED"
+    },
+    {
+      "id": "ADV2-04",
+      "original_severity": "P2",
+      "status": "RESOLVED_INDEPENDENTLY_RECHECKED"
+    },
+    {
+      "id": "ADV2-05",
+      "original_severity": "P2",
+      "status": "RESOLVED_INDEPENDENTLY_RECHECKED"
+    },
+    {
+      "id": "ADV2-06",
+      "original_severity": "P2",
+      "status": "RESOLVED_INDEPENDENTLY_RECHECKED"
+    }
+  ],
+  "bridge_probes": [
+    {
+      "probe": "coherent_request_replacement",
+      "passed": true,
+      "result": "Task request differs from immutable process evidence"
+    },
+    {
+      "probe": "checkpoint_rewrite",
+      "passed": true,
+      "result": "Full process checkpoint differs from journal anchor"
+    },
+    {
+      "probe": "terminal_packet_resume",
+      "passed": true,
+      "result": "Terminal decision packet was modified"
+    },
+    {
+      "probe": "terminal_packet_status",
+      "passed": true,
+      "result": "Terminal decision packet was modified"
+    },
+    {
+      "probe": "legitimate_flow_and_idempotent_resume",
+      "passed": true,
+      "result": "READY_FOR_OWNER"
+    }
+  ],
+  "reviewed_file_sha256": {
+    "alma/warehouse.py": "3bb82592398d12a07a4fbcf2eac0aecdf6e6bddaa1b187d52c0484db2c1ed70d",
+    "alma/native_agents.py": "3d78c3e04ba5985568e7d6ed290fb99044297c7022636d5c98664e24dbff4264",
+    "alma/process_engine.py": "15b77f7a4b9c9c743a5ccadca9fe6f7e3551177d5343869613ba00105253e583",
+    "alma/workspace.py": "d2c470610d8478a26a07ba9cc9f34fee3f49d5ab841200210328fddccb62932a",
+    "alma/workspace_report.py": "4e27858aa185a5604a170d049aef79cf314597b3d5d5dfef1baea09ab2b7d74f",
+    "alma/experimentation.py": "44d2a83f16e6f965daaa7fe35fcb3d0a30c3f8d38cbf345902d3aa9cdd51288a",
+    "alma/simulation.py": "cd644721203b235c0fc992ed780f3b73fe9c53321ef8ef6e25ca25ec2dab0558",
+    "models/schema.sql": "404104a8031e5bd2862a760f26690cd68ee55b1dcacee284a08c67592714ef39",
+    "models/marts/cash_daily.sql": "89d3e68fbc96f5adee334e665d68a2e070405cc2077fa57b529f2816ff9103cd",
+    "models/marts/channel_performance.sql": "acdd965e0c89b3f34a873157436d40768935cdaeee1fde5a160e363636094b72",
+    "models/marts/customer_cohorts.sql": "6654b6ef0a36ea451c526be86d3a42df8f9252b56ddd0939e844fa8174860ada",
+    "models/marts/experiment_results.sql": "564f1d03774820105b5a8bbeca75039833ae79bd97b007b1e261c58d8dc58d53",
+    "models/marts/finance_monthly.sql": "f5340240d7b7efee7161862575adc74ff1a7b666b4b9d169762c968af02b9e57",
+    "models/marts/funnel_conversion.sql": "6785459b1eb7fa0ada73167c485916535e53e9cacb94bec03929993a1f0b4672",
+    "models/marts/inventory_aging.sql": "3959153eea4949c03974373d20671e693c57d514495edd49d0efdeedb6c47973",
+    "models/marts/inventory_position.sql": "4bffc82efe8695f607432b791ea90107880e6e9d2871011c43170ca35f311e01",
+    "models/marts/procurement.sql": "48184d8bb0f6b3f07748d7f8e72cc60a37f3b4e7dbb9f93f11ffbe652899eb42",
+    "models/marts/reconciliation.sql": "2ebfa62d64cbd357a221b94b0f332a3a305b879ca39233525dab7b76d2380ed7",
+    "models/marts/sales_daily.sql": "3b852fcebc0db1f174eb40c823a2bfd79091c4ccb4f54a4744320cfff90192ee"
+  },
+  "report": "docs/ADVERSARIAL-REVIEW-v2.md",
+  "original_reviewed_file_sha256": {
+    "alma/warehouse.py": "3bb82592398d12a07a4fbcf2eac0aecdf6e6bddaa1b187d52c0484db2c1ed70d",
+    "alma/native_agents.py": "fd0b8fb59c74de49cf2b33a05905cb6342f1d38550421183a69641b2ebe45ee7",
+    "alma/process_engine.py": "a6ca5e2f3d0deb1a15f09d8a34db3058ee4e3674beff715ca596dbe8a7b7c0f2",
+    "alma/workspace.py": "b8308986743b44c50c4739f6f328aca546705baa1d26d1964aae3dea7a8a08ff",
+    "alma/workspace_report.py": "2155ea20586d455738f80d806acb00f39fd7d4841232fa0e059ebaefa716cea2",
+    "alma/experimentation.py": "7dbcc5c60e6451f3abb407ff5a66c2762ca3c02fe959a807da135190812573fc",
+    "alma/simulation.py": "cd644721203b235c0fc992ed780f3b73fe9c53321ef8ef6e25ca25ec2dab0558",
+    "models/schema.sql": "404104a8031e5bd2862a760f26690cd68ee55b1dcacee284a08c67592714ef39",
+    "models/marts/cash_daily.sql": "89d3e68fbc96f5adee334e665d68a2e070405cc2077fa57b529f2816ff9103cd",
+    "models/marts/channel_performance.sql": "acdd965e0c89b3f34a873157436d40768935cdaeee1fde5a160e363636094b72",
+    "models/marts/customer_cohorts.sql": "6654b6ef0a36ea451c526be86d3a42df8f9252b56ddd0939e844fa8174860ada",
+    "models/marts/experiment_results.sql": "564f1d03774820105b5a8bbeca75039833ae79bd97b007b1e261c58d8dc58d53",
+    "models/marts/finance_monthly.sql": "f5340240d7b7efee7161862575adc74ff1a7b666b4b9d169762c968af02b9e57",
+    "models/marts/funnel_conversion.sql": "6785459b1eb7fa0ada73167c485916535e53e9cacb94bec03929993a1f0b4672",
+    "models/marts/inventory_aging.sql": "3959153eea4949c03974373d20671e693c57d514495edd49d0efdeedb6c47973",
+    "models/marts/inventory_position.sql": "4bffc82efe8695f607432b791ea90107880e6e9d2871011c43170ca35f311e01",
+    "models/marts/procurement.sql": "48184d8bb0f6b3f07748d7f8e72cc60a37f3b4e7dbb9f93f11ffbe652899eb42",
+    "models/marts/reconciliation.sql": "2ebfa62d64cbd357a221b94b0f332a3a305b879ca39233525dab7b76d2380ed7",
+    "models/marts/sales_daily.sql": "3b852fcebc0db1f174eb40c823a2bfd79091c4ccb4f54a4744320cfff90192ee"
+  },
+  "format_only_verification": {
+    "at_utc": "2026-09-22T09:02:00.434695+00:00",
+    "source_record": "evidence/v0.2/source-format.json",
+    "method": "Read current bytes; reconstruct prior CRLF bytes; require exact prior review hash and source-format before/after hashes; independently compare Python AST. Retain earlier logical probe results.",
+    "checks": [
+      {
+        "file": "alma/warehouse.py",
+        "status": "UNCHANGED",
+        "sha256": "3bb82592398d12a07a4fbcf2eac0aecdf6e6bddaa1b187d52c0484db2c1ed70d"
+      },
+      {
+        "file": "alma/native_agents.py",
+        "status": "CRLF_TO_LF_ONLY_VERIFIED",
+        "before": "fd0b8fb59c74de49cf2b33a05905cb6342f1d38550421183a69641b2ebe45ee7",
+        "after": "3d78c3e04ba5985568e7d6ed290fb99044297c7022636d5c98664e24dbff4264",
+        "reconstructed_prior_bytes_sha256": "fd0b8fb59c74de49cf2b33a05905cb6342f1d38550421183a69641b2ebe45ee7",
+        "python_ast_equal_independently_verified": true
+      },
+      {
+        "file": "alma/process_engine.py",
+        "status": "CRLF_TO_LF_ONLY_VERIFIED",
+        "before": "a6ca5e2f3d0deb1a15f09d8a34db3058ee4e3674beff715ca596dbe8a7b7c0f2",
+        "after": "15b77f7a4b9c9c743a5ccadca9fe6f7e3551177d5343869613ba00105253e583",
+        "reconstructed_prior_bytes_sha256": "a6ca5e2f3d0deb1a15f09d8a34db3058ee4e3674beff715ca596dbe8a7b7c0f2",
+        "python_ast_equal_independently_verified": true
+      },
+      {
+        "file": "alma/workspace.py",
+        "status": "CRLF_TO_LF_ONLY_VERIFIED",
+        "before": "b8308986743b44c50c4739f6f328aca546705baa1d26d1964aae3dea7a8a08ff",
+        "after": "d2c470610d8478a26a07ba9cc9f34fee3f49d5ab841200210328fddccb62932a",
+        "reconstructed_prior_bytes_sha256": "b8308986743b44c50c4739f6f328aca546705baa1d26d1964aae3dea7a8a08ff",
+        "python_ast_equal_independently_verified": true
+      },
+      {
+        "file": "alma/workspace_report.py",
+        "status": "CRLF_TO_LF_ONLY_VERIFIED",
+        "before": "2155ea20586d455738f80d806acb00f39fd7d4841232fa0e059ebaefa716cea2",
+        "after": "4e27858aa185a5604a170d049aef79cf314597b3d5d5dfef1baea09ab2b7d74f",
+        "reconstructed_prior_bytes_sha256": "2155ea20586d455738f80d806acb00f39fd7d4841232fa0e059ebaefa716cea2",
+        "python_ast_equal_independently_verified": true
+      },
+      {
+        "file": "alma/experimentation.py",
+        "status": "CRLF_TO_LF_ONLY_VERIFIED",
+        "before": "7dbcc5c60e6451f3abb407ff5a66c2762ca3c02fe959a807da135190812573fc",
+        "after": "44d2a83f16e6f965daaa7fe35fcb3d0a30c3f8d38cbf345902d3aa9cdd51288a",
+        "reconstructed_prior_bytes_sha256": "7dbcc5c60e6451f3abb407ff5a66c2762ca3c02fe959a807da135190812573fc",
+        "python_ast_equal_independently_verified": true
+      },
+      {
+        "file": "alma/simulation.py",
+        "status": "UNCHANGED",
+        "sha256": "cd644721203b235c0fc992ed780f3b73fe9c53321ef8ef6e25ca25ec2dab0558"
+      },
+      {
+        "file": "models/schema.sql",
+        "status": "UNCHANGED",
+        "sha256": "404104a8031e5bd2862a760f26690cd68ee55b1dcacee284a08c67592714ef39"
+      },
+      {
+        "file": "models/marts/cash_daily.sql",
+        "status": "UNCHANGED",
+        "sha256": "89d3e68fbc96f5adee334e665d68a2e070405cc2077fa57b529f2816ff9103cd"
+      },
+      {
+        "file": "models/marts/channel_performance.sql",
+        "status": "UNCHANGED",
+        "sha256": "acdd965e0c89b3f34a873157436d40768935cdaeee1fde5a160e363636094b72"
+      },
+      {
+        "file": "models/marts/customer_cohorts.sql",
+        "status": "UNCHANGED",
+        "sha256": "6654b6ef0a36ea451c526be86d3a42df8f9252b56ddd0939e844fa8174860ada"
+      },
+      {
+        "file": "models/marts/experiment_results.sql",
+        "status": "UNCHANGED",
+        "sha256": "564f1d03774820105b5a8bbeca75039833ae79bd97b007b1e261c58d8dc58d53"
+      },
+      {
+        "file": "models/marts/finance_monthly.sql",
+        "status": "UNCHANGED",
+        "sha256": "f5340240d7b7efee7161862575adc74ff1a7b666b4b9d169762c968af02b9e57"
+      },
+      {
+        "file": "models/marts/funnel_conversion.sql",
+        "status": "UNCHANGED",
+        "sha256": "6785459b1eb7fa0ada73167c485916535e53e9cacb94bec03929993a1f0b4672"
+      },
+      {
+        "file": "models/marts/inventory_aging.sql",
+        "status": "UNCHANGED",
+        "sha256": "3959153eea4949c03974373d20671e693c57d514495edd49d0efdeedb6c47973"
+      },
+      {
+        "file": "models/marts/inventory_position.sql",
+        "status": "UNCHANGED",
+        "sha256": "4bffc82efe8695f607432b791ea90107880e6e9d2871011c43170ca35f311e01"
+      },
+      {
+        "file": "models/marts/procurement.sql",
+        "status": "UNCHANGED",
+        "sha256": "48184d8bb0f6b3f07748d7f8e72cc60a37f3b4e7dbb9f93f11ffbe652899eb42"
+      },
+      {
+        "file": "models/marts/reconciliation.sql",
+        "status": "UNCHANGED",
+        "sha256": "2ebfa62d64cbd357a221b94b0f332a3a305b879ca39233525dab7b76d2380ed7"
+      },
+      {
+        "file": "models/marts/sales_daily.sql",
+        "status": "UNCHANGED",
+        "sha256": "3b852fcebc0db1f174eb40c823a2bfd79091c4ccb4f54a4744320cfff90192ee"
+      }
+    ]
+  }
+}

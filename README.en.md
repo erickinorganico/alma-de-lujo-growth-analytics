@@ -1,61 +1,38 @@
-# Alma de Lujo · Growth & Business Analytics
+# Alma de Lujo · Growth & Business Analytics v0.2
 
-A reproducible analytical MVP for an early-stage sportswear brand, using **100% synthetic business data**. It connects market research, merchandise, purchasing, inventory, commerce, customers, management finance and Growth experiments. Multicolor Pilates socks are an owner-provided hero-product hypothesis, not measured demand.
+A working analytical system with **30 typed relational tables, 11 SQL marts, six business lifecycles, six analytical processes, and seven native Codex agent roles**. All commercial records are synthetic. The 365-day case includes 1,200 orders, 46 variants and 22,844 source rows.
 
-[Español](README.md) · [Example report](evidence/demo/report.md) · [Portfolio case](docs/PORTFOLIO-CASE.md) · [Release evidence](docs/RELEASE.md)
+[Spanish documentation](README.md) · [Decision book](evidence/v0.2/DECISION-BOOK.md) · [Analytical dossier](evidence/v0.2/workspace/DOSSIER.md) · [Scope acceptance](evidence/v0.2/acceptance.json)
 
-## Run offline
+## Run
 
-Python 3.11+ standard library only. No package install, credentials, network, Node, Docker, paid API or external account is required.
-
-```powershell
-python -m alma demo
-python -m alma verify
-```
-
-Windows Codex users can also run `./run.ps1` and `./run.ps1 -Command verify`. The launcher selects a project virtual environment, Codex bundled Python, then PATH. It changes no global runtime configuration.
-
-Optional clean environment:
+Python 3.11+ and modern SQLite; standard library only.
 
 ```powershell
-python -m venv --without-pip .venv
-.\.venv\Scripts\python.exe -m alma demo
-.\.venv\Scripts\python.exe -m alma verify
+python -m alma workspace --output build/cycle-001
+python -m alma query --workspace build/cycle-001 --mart finance_monthly
+python -m alma process status --workspace build/cycle-001
+python scripts/verify_v2.py --output build/verification-v2
 ```
 
-If PATH resolves to an unconfigured Python shim, use your actual Python 3.11+ executable or the launcher. Open `build/demo/report.md` or `report.html` as files. These are analytical documents with tables and static SVG figures; this release has no frontend, backend, local server or navigable application.
+A new workspace creates reproducible JSON/CSV, constrained SQLite, SQL marts, lineage, scenario controls, Markdown/HTML/SVG documents, business-process histories and native-agent requests. It waits for native cognition at `WAITING_AGENT`. [Runbook](docs/RUNBOOK-v2.md).
 
-## Artifacts
+## Actual native analysis
 
-`build/demo` contains canonical JSON/CSV, SQLite raw staging, an analytical JSON view, Markdown/HTML reports, three SVG figures, quality checks, three read-only analyst packets and SHA-256 receipts. Fixed snapshot date 2026-09-21, seed 42. Seventeen tables include 8 synthetic orders, independent returns/refunds, reservations, partial purchasing receipts, inventory movements, expenses, customer cohorts and missing DM traffic.
+The delivered snapshot includes model-produced responses, registered query traces, parent runtime dispatch receipts, and separate Astra reviews. The [native cycle procedure](agents/RUN-NATIVE-CYCLE.md) explains how to run a new cycle inside Codex. Terminal-only replay validates recorded outputs without pretending to call a model. No separately billed inference API is installed.
 
-The simulated case yields MXN 3,916 net revenue, MXN 348 operating proxy and MXN -2,082 observed cash movement. This demonstrates the timing separation of purchase, delivery, revenue and cash; it is **not actual Alma performance**. An inspectable release snapshot is in `evidence/demo`; the SQLite database is generated locally.
+The [decision book](evidence/v0.2/DECISION-BOOK.md) preserves observations, hypotheses, bounded proposals, explicit unknowns and reviewer objections. A REVIEW outcome completes the analytical workflow while leaving business approval unresolved. External purchases, payments, campaigns and refunds remain prohibited.
 
-## Controlled failures and verification
+## Inspect
 
-```powershell
-python -m alma demo --scenario missing_cost --output build/missing-cost
-python -m alma demo --scenario negative_stock --output build/negative-stock
-python -m alma demo --scenario missing_payment --output build/missing-payment
-python -m alma demo --scenario duplicate_event --output build/duplicate-event
-```
+- [Specifications and acceptance criteria](specs/PRD.md)
+- [Process states, gates and ownership](specs/PROCESS-CATALOG.md)
+- [Database dictionary](specs/DATA-DICTIONARY.md) and [executable SQL](models/marts)
+- [Source tables](evidence/v0.2/workspace/tables) and [SQLite snapshot](evidence/v0.2/workspace/warehouse.sqlite3)
+- [Six scenario comparisons](evidence/v0.2/SCENARIO-COMPARISON.md)
+- [Independent adversarial review](docs/ADVERSARIAL-REVIEW-v2.md)
+- [Release evidence](docs/RELEASE.md)
 
-Normal exit is 0. Expected blocked scenarios exit 2 and preserve explicit failure evidence. Invalid structure/references withhold unsafe reports and exit 1. Use separate directories to preserve prior snapshots. Unknown data is never inferred as zero.
+Sportswear and multicolor Pilates socks are user-confirmed directions. Demand, actual products, inventory, prices, sales and profitability are not verified business facts. Public research is attributed with population/date limitations; Instagram's latest catalog was inaccessible. No real customer data is included.
 
-Verification runs unit/integration/adversarial tests, all five scenarios, CSV/SQLite roundtrips, deterministic replay and 15 analyst-policy evaluations. Results are written to `build/verification/verification.json` and `agent-evals.json`. See [RELEASE.md](docs/RELEASE.md) for the actual final test results, clean-install proof and publication evidence.
-
-## Method and limits
-
-Revenue is recognized on delivery; credits reduce revenue; settled refunds reduce cash; physical restock reverses historical standard COGS. Inventory derives from signed movements and separate reservations; prototype lifecycle is excluded from replenishment proposals. Net sell-through subtracts restocked units. Costs and thresholds are provisional policies pending owner discovery.
-
-Cash is observed movement, not bank balance or runway. Expense/supplier cash dates use their summarized row date. Thirty-day cohorts use eligible mature customers; channel ratios are descriptive rather than individual attribution or causal lift. Missing DM denominators remain unknown.
-
-Read-only deterministic inventory, finance and Growth policies emit versioned packets with resolvable evidence, unknowns, hypotheses and human approval requirements. There is no LLM caller or external execution tool; every execution attempt raises `PermissionError`. Local evals test these policies, not semantic truth of arbitrary imported prose. Laya was assessed as not applicable because the runtime contains exact deterministic decisions rather than repeated uncertain classification.
-
-The synthetic CSV interchange is ready for adapter development, not approved real-data use. Actual catalog, costs, stock ownership, channel events, privacy/provenance, payment histories and reconciliation need owner-approved discovery. Tax, invoicing, FIFO, formal accounting and production account integrations are outside this MVP. No actual customers, messages, purchases, employer IP or private datasets are included.
-
-## Documentation and contribution
-
-[Domain](docs/DOMAIN.md), [contracts](docs/INTERFACES.md), [ADR](docs/ADR-001-local-first-architecture.md), [market brief](docs/MARKET-RESEARCH.md), [operating playbook](docs/PLAYBOOK.md), [migration](docs/DATA-MIGRATION.md), [adversarial review](docs/ADVERSARIAL-REVIEW.md), [orchestration](docs/ORCHESTRATION.md), [Laya assessment](PROJECT-EFFICIENCY.md).
-
-Erick directed the project and supplied the business context; native Codex Sol/Luna/Terra/Astra agents assisted implementation and review, with parent integration and verification. This demonstrates delivery and analytical methods, not business adoption, revenue improvement or autonomous operations. Original code is MIT-licensed. Third-party photos/reports are not redistributed. [Public repository](https://github.com/erickinorganico/alma-de-lujo-growth-analytics).
+Code and synthetic fixtures: [MIT](LICENSE). Public repository access is isolated to `erickinorganico`. The smaller v0.1 baseline remains under tag `v0.1.0` and `python -m alma demo`; its rule-based policies are not native model runs.

@@ -1,0 +1,166 @@
+{
+  "completed_at_utc": "2026-09-22T09:25:19.547226+00:00",
+  "evidence_hash": "3412062569902e2053fbc8fb40596a83551655b24a260b24af063f36a35aab1a",
+  "external_business_actions": "PROHIBITED",
+  "kind": "native-independent-review-query-trace",
+  "process_id": "market-to-experiment",
+  "queries": [
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart experiment_results",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "f44aac0b132aa6ca8d2a15c46f5427c3fdfa97035a339b40510916c74595fe3f",
+      "row_count": 2
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart channel_performance",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "73f2149cd09e9c396f5add5ca5115d8e01d99c0bddfd6558ee948a1c4006410c",
+      "row_count": 4
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart inventory_position",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "e58278c97e0bd86adcf800d13549b3466e17f45d8fc0db36e15ac58c9ed852da",
+      "row_count": 46
+    }
+  ],
+  "questions": [
+    "El registro contiene una observación o una fuente con varias poblaciones?",
+    "Qué unidad y métrica evalúa realmente la viñeta experimental?",
+    "Las propuestas mantienen hipótesis de mercado separadas de demanda demostrada y protocolo aprobado?"
+  ],
+  "recomputed": {
+    "assignment_columns": [
+      "id",
+      "experiment_id",
+      "customer_id",
+      "arm",
+      "assigned_date"
+    ],
+    "distinct_observation_populations": [
+      "12+ national",
+      "18+ in 32 urban cities",
+      "Men 12+ national",
+      "Women 12+ national"
+    ],
+    "experiment_arms": [
+      {
+        "arm": "control",
+        "assigned": 32,
+        "contribution_sum_cents": 71200,
+        "conversion_rate": 0.40625,
+        "converted": 13,
+        "declared_guardrail": "return_rate_under_10_percent",
+        "declared_primary_metric": "contribution_cents_per_visit",
+        "mean_contribution_per_assigned_cents": 2225.0,
+        "returned_count": 0,
+        "wilson_95_recomputed": [
+          0.2551963484266544,
+          0.5773997512461714
+        ]
+      },
+      {
+        "arm": "treatment",
+        "assigned": 35,
+        "contribution_sum_cents": 77140,
+        "conversion_rate": 0.34285714285714286,
+        "converted": 12,
+        "declared_guardrail": "return_rate_under_10_percent",
+        "declared_primary_metric": "contribution_cents_per_visit",
+        "mean_contribution_per_assigned_cents": 2204.0,
+        "returned_count": 0,
+        "wilson_95_recomputed": [
+          0.20831694987048963,
+          0.5084805048600374
+        ]
+      }
+    ],
+    "experiment_comparisons": {
+      "contribution_mean_difference_per_assigned_cents": -21.0,
+      "contribution_uncertainty": "Not recoverable from bound aggregate sums alone; no individual distribution, sum of squares or unit-aligned variance. Wilson intervals and 1774-per-arm binary planning do not quantify monetary mean uncertainty.",
+      "conversion_difference_treatment_minus_control": -0.06339285714285714,
+      "raw_contribution_total_difference_cents": 5940,
+      "srm_p_recomputed": 0.713985795669382
+    },
+    "observation_count": 4,
+    "observations": [
+      {
+        "id": "activity-urban-adult",
+        "metric": "physically_active_percent",
+        "page": 4,
+        "population": "18+ in 32 urban cities",
+        "source_id": "inegi-mopradef-2025",
+        "unit": "percent",
+        "value": 44.5,
+        "year": 2025
+      },
+      {
+        "id": "activity-national",
+        "metric": "physically_active_percent",
+        "page": 6,
+        "population": "12+ national",
+        "source_id": "inegi-mopradef-2025",
+        "unit": "percent",
+        "value": 41.7,
+        "year": 2025
+      },
+      {
+        "id": "activity-national-women",
+        "metric": "physically_active_percent",
+        "page": 6,
+        "population": "Women 12+ national",
+        "source_id": "inegi-mopradef-2025",
+        "unit": "percent",
+        "value": 37.4,
+        "year": 2025
+      },
+      {
+        "id": "activity-national-men",
+        "metric": "physically_active_percent",
+        "page": 6,
+        "population": "Men 12+ national",
+        "source_id": "inegi-mopradef-2025",
+        "unit": "percent",
+        "value": 46.7,
+        "year": 2025
+      }
+    ],
+    "outcome_columns": [
+      "id",
+      "assignment_id",
+      "date",
+      "converted",
+      "net_revenue_cents",
+      "contribution_cents",
+      "returned"
+    ],
+    "public_source_scope": "Verified the immutable bound register and claims; did not refetch public websites or certify new external evidence.",
+    "source_count": 4,
+    "verified_public_sources": [
+      "inegi-mopradef-2025"
+    ]
+  },
+  "request_id": "8044572b2fd6d4dcc0fe3b01a16fb0a93a0a09580331a82f2d69d695076bbe34",
+  "response_sha256": "f526ea720f6ea0cb6e7fe8f482b430e170e22254f65d0ef00074d23cf7f12be3",
+  "response_validation": {
+    "facts_checked": 6,
+    "request_id": "8044572b2fd6d4dcc0fe3b01a16fb0a93a0a09580331a82f2d69d695076bbe34",
+    "scope": "schema, immutable evidence, exact observation values and authority; prose meaning requires reviewer",
+    "valid": true
+  },
+  "reviewer": "/root/astra_v2_review",
+  "semantic_challenges": [
+    "Corregir única observación pública verificada por una fuente pública verificada con cuatro observaciones registradas. Las poblaciones urbana adulta, nacional de 12+, mujeres y hombres se solapan o difieren; no sumarlas, promediarlas ni interpretarlas como una tendencia homogénea.",
+    "Las limitaciones sobre TAM y demanda son advertencias de la ficha del proyecto; no presentarlas como cita textual o conclusión comercial emitida por INEGI sin verificar esa atribución.",
+    "Conversión, Wilson y SRM se recalcularon y coinciden; el análisis correctamente no declara ganador. Sin embargo, la métrica primaria es monetaria: 71,200/32=2,225 y 77,140/35=2,204 centavos por asignación, no evidencia de contribución por visita. No comparar sólo totales de brazos desiguales.",
+    "Antes de aprobar el protocolo, definir visitas elegibles, asignación por persona o visita, exposición repetida y estimador de contribución con incertidumbre. Los intervalos Wilson y el ejemplo de tamaño binomial no sustituyen ese diseño monetario.",
+    "Predeclarar denominador y ventana de devoluciones, umbral de SRM, información mínima, regla de decisión y abandono. Tener un texto que solicita futura aprobación no equivale a contar con un protocolo ejecutable ya aprobado.",
+    "El acceso fallido a Instagram o una landing AMVO no prueban demanda. Verificar sólo las fuentes efectivamente necesarias para la hipótesis, sin convertir la adquisición de un informe de categoría específico en requisito universal."
+  ],
+  "synthetic_business_data": true,
+  "verdict": "REVIEW",
+  "version": "2.0"
+}

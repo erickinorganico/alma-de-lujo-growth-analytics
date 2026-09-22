@@ -1,0 +1,28 @@
+{
+  "definition_hash": "ca78280cf373d1d539403336d3102ca2a3c0e92644206acaec5e6bd79fb9f52c",
+  "event_hash": "bb148705332949c67f7725521f4e48b6fceefa2280c0393074b27345c6df1a40",
+  "input_hash": "4c5cfe6e04c75c428a99e5a589e237fde4d9331655311b85b867e87b30c21d79",
+  "owner": "Responsable de crecimiento",
+  "process_id": "weekly-growth-review",
+  "responses": {
+    "evidence_reviewer": {
+      "agent_id": "/root/astra_v2_review",
+      "dispatch_hash": "8c0238dad416fb765a6d44a8e76db7471a1ad4cd6502cbfef79d3729b6ea653c",
+      "model": "gpt-6-astra",
+      "request_id": "019045af923a6f2a3e68948129b5ec2d98e541e9a2c424aa8be4022b04d171bd",
+      "sha256": "e0ec6b2b4026da655ae185210a093245ff7ec6f975d38260366dbbd813276463"
+    },
+    "growth_analyst": {
+      "agent_id": "/root/sol_scope_v2",
+      "dispatch_hash": "97887714c37d895869c27db319225cb8ff035488b1b1068230f249ca2bd32d39",
+      "model": "gpt-5.6-sol",
+      "request_id": "86241dc471bb7c488b937606a9f8983fef0e0cc375dbac907a2e42caf2705b55",
+      "sha256": "681cf030c27c128edc20c8e91ae84e42bc4645c49d239740e63aef08dec2e153"
+    }
+  },
+  "run_id": "59cccb92c86e35f1b44f1281",
+  "status": "REVIEW",
+  "step": "decision_packet",
+  "version": "2.0",
+  "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+}

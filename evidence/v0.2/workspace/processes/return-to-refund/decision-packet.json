@@ -1,0 +1,262 @@
+{
+  "agent_receipts": {
+    "evidence_reviewer": {
+      "agent_id": "/root/astra_v2_review",
+      "dispatch_hash": "e44c16d8420eb66df85cff67d688aca5ad05b956b0ea8535512519ec9975720c",
+      "model": "gpt-6-astra",
+      "request_id": "fa53011afb533d0dd7b32d1421540565018688266b64c542f9be0ae905205b18",
+      "sha256": "4adb1fc2dcc4582bcaed71417b3931b322f0d94eb3c4e56666071d8ec04fcdf8"
+    },
+    "returns_analyst": {
+      "agent_id": "/root/luna_simulation_v2",
+      "dispatch_hash": "df782f9f8d197b6656e3749e1de9aa5f545a0137765370aebab67bd5289e3749",
+      "model": "gpt-5.6-luna",
+      "request_id": "d961da889a78ad917a5719e082ae43988029a2a4af01e6b94fb0db901171d3e9",
+      "sha256": "dd1d73b6c1da02b35b531311b6a60cf2eee3e6fcffda475dc33d9ceeed8c9abb"
+    }
+  },
+  "external_execution": "PROHIBITED",
+  "facts": [
+    {
+      "evidence_refs": [
+        "/counts/returns"
+      ],
+      "id": "returns_count",
+      "kind": "observation",
+      "statement": "La evidencia sintética contiene 61 eventos de devolución.",
+      "value": 61
+    },
+    {
+      "evidence_refs": [
+        "/counts/credit_notes"
+      ],
+      "id": "credit_notes_count",
+      "kind": "observation",
+      "statement": "La evidencia sintética contiene 61 notas de crédito.",
+      "value": 61
+    },
+    {
+      "evidence_refs": [
+        "/counts/refunds"
+      ],
+      "id": "refunds_count",
+      "kind": "observation",
+      "statement": "La evidencia sintética contiene 61 reembolsos.",
+      "value": 61
+    },
+    {
+      "evidence_refs": [
+        "/quality/53/status"
+      ],
+      "id": "return_ledger_pass",
+      "kind": "observation",
+      "statement": "El control sintético de ledger de devoluciones está aprobado.",
+      "value": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "/marts/cash_daily/4/refund_out_cents",
+        "/marts/cash_daily/4/cash_in_cents",
+        "/marts/cash_daily/4/net_cash_change_cents"
+      ],
+      "id": "refund_cash_event",
+      "kind": "observation",
+      "statement": "El 2025-09-28 el mart de caja registra 17,606 centavos MXN de refund_out, cero cash_in y movimiento neto de efectivo de -17,606 centavos MXN.",
+      "value": 17606
+    },
+    {
+      "evidence_refs": [
+        "/marts/inventory_position/0/ledger_on_hand_qty",
+        "/marts/inventory_position/0/counted_qty",
+        "/marts/inventory_position/0/count_discrepancy_qty"
+      ],
+      "id": "inventory_count_example",
+      "kind": "observation",
+      "statement": "La posición sintética de var-legging-black-l muestra 36 unidades en ledger, 36 unidades contadas y discrepancia cero al 2026-09-21.",
+      "value": 36
+    },
+    {
+      "evidence_refs": [
+        "/marts/inventory_position/0/trailing_30d_net_sold_qty",
+        "/marts/inventory_position/0/available_qty"
+      ],
+      "id": "inventory_recent_sales_example",
+      "kind": "observation",
+      "statement": "La misma posición sintética reporta 13 unidades vendidas netas en los últimos 30 días, con 28 unidades disponibles.",
+      "value": 13
+    },
+    {
+      "evidence_refs": [
+        "/counts/returns",
+        "/counts/credit_notes",
+        "/counts/refunds",
+        "/quality/53/status",
+        "/metadata/limitations"
+      ],
+      "id": "event_role_separation",
+      "kind": "inference",
+      "statement": "La igualdad de conteos entre returns, credit_notes y refunds no demuestra igualdad de cantidades ni sincronía de fechas; el ledger y caja sólo prueban los controles definidos para este snapshot.",
+      "value": null
+    },
+    {
+      "evidence_refs": [
+        "/marts/inventory_position/0/ledger_on_hand_qty",
+        "/marts/cash_daily/4/refund_out_cents",
+        "/quality/53/status"
+      ],
+      "id": "physical_cash_difference",
+      "kind": "inference",
+      "statement": "El restock puede cambiar inventario y COGS sin ser equivalente a una salida de caja; el refund puede cambiar caja sin demostrar que la unidad retornó a stock, por lo que el diagnóstico debe unir línea, cantidad, restock y fechas.",
+      "value": null
+    }
+  ],
+  "hypotheses": [
+    "Las diferencias de fecha entre entrega, return, credit note y refund pueden explicar por qué inventario, ingreso y caja no cambian en el mismo día.",
+    "Una parte de las unidades retornadas puede ser restock y otra merma; la clasificación por restock debe conservarse como dimensión, no inferirse del reembolso.",
+    "El caso de caja del 2025-09-28 es compatible con un reembolso aislado sin cobro ese día, pero no establece presión de liquidez real."
+  ],
+  "input_hash": "3aa20a4a9fc9366a281f55e25a06378b51a6828e43fdfa584a6f500c3c892944",
+  "process_id": "return-to-refund",
+  "recommendations": [
+    {
+      "action": "Preparar una conciliación por order_item_id que una fecha de entrega, return físico, cantidad restock, credit note y refund; no emitir ni cancelar reembolsos.",
+      "approval_required": true,
+      "closure_rule": "Cerrar cuando cada fila tenga cantidad física, decisión de restock/merma, crédito y estado de refund con soporte.",
+      "evidence_refs": [
+        "/counts/returns",
+        "/counts/credit_notes",
+        "/counts/refunds",
+        "/quality/53/status"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "Bloquear el cierre si falta order_item_id, fecha, cantidad, restock o cobertura de refund; no inferir cero desde ausencia.",
+      "id": "returns-event-reconciliation",
+      "population": "Las 61 devoluciones sintéticas y sus líneas relacionadas; para datos reales sólo devoluciones autorizadas.",
+      "primary_metric": "porcentaje de returns con cadena completa de evento y cantidades reconciliadas",
+      "window": "Cuatro semanas de revisión semanal sobre el corte aprobado."
+    },
+    {
+      "action": "Proponer un puente de fechas que separe movimiento de inventario/COGS, nota de crédito y salida de caja por evento; no ajustar inventario ni caja.",
+      "approval_required": true,
+      "closure_rule": "Cerrar cuando las colas de evento y sus fechas estén conciliadas y las excepciones tengan responsable aprobado.",
+      "evidence_refs": [
+        "/marts/cash_daily/4/refund_out_cents",
+        "/marts/cash_daily/4/net_cash_change_cents",
+        "/marts/inventory_position/0/count_discrepancy_qty"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "No presentar una devolución como cobrada o restockeada si el evento correspondiente está ausente o fuera de secuencia.",
+      "id": "returns-stock-cash-timing",
+      "population": "Returns restock=1, returns restock=0, credit_notes y refunds con cobertura conocida.",
+      "primary_metric": "días entre return físico, credit note y refund por order_item_id",
+      "window": "Un corte mensual con seguimiento semanal de eventos nuevos."
+    },
+    {
+      "action": "Diseñar una muestra aprobada de inspección de unidades retornadas para comparar restock, merma y crédito, sin comprar, reembolsar o cambiar estados automáticamente.",
+      "approval_required": true,
+      "closure_rule": "Cerrar con conteo de elegibles, inspeccionadas, restock, merma y discrepancias revisado por responsable del negocio.",
+      "evidence_refs": [
+        "/marts/inventory_position/0/trailing_30d_net_sold_qty",
+        "/counts/returns",
+        "/metadata/limitations"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "No extrapolar la muestra a clientes reales si falta motivo, inspección o denominador; separar hipótesis sintética de evidencia operativa.",
+      "id": "returns-inspection-sample",
+      "population": "Unidades retornadas con trazabilidad completa, estratificadas por restock y variante.",
+      "primary_metric": "tasa de recuperación física por motivo y variante",
+      "window": "28 días o hasta completar una muestra predefinida por variante."
+    }
+  ],
+  "review": {
+    "challenges": [
+      "La igualdad 61/61/61 no permite emparejar eventos. El análisis lo reconoce; conservar IDs, cantidades físicas y montos monetarios en columnas y niveles de detalle distintos.",
+      "Para los indicadores de monto y días por order_item_id, definir un vínculo verificable o una asignación explícita antes de unir refunds. Si no existe, mantener el reembolso a nivel orden y marcar la atribución por línea como desconocida; no multiplicarlo por cada línea o crédito.",
+      "returns_ledger, credit_limits y payment_reconciliation ya tienen PASS. La recomendación debe aprovecharlos y añadir detalle de excepciones o vínculos, no presentar como ausentes esos controles ya implementados.",
+      "El ejemplo de una variante con discrepancia cero no prueba que cada devolución se reingresó a inventario ni que todo reembolso corresponda a restock. El COGS se revierte para unidades restockeadas; una merma física no debe recibir automáticamente esa reversión.",
+      "Una muestra limitada a unidades con trazabilidad completa puede excluir precisamente los casos fallidos. Reportar elegibles, excluidas y razones; fijar el tamaño o la regla de parada antes de observar resultados y no extrapolar a toda la población sin justificar la cobertura."
+    ],
+    "evidence_hash": "109fb2e4628047d4f017e58e247667ece960f17c94d08a23dedacd58ee467d0c",
+    "facts": [
+      {
+        "evidence_refs": [
+          "/counts/returns"
+        ],
+        "id": "physical_returns",
+        "kind": "observation",
+        "statement": "La evidencia registra 61 eventos sintéticos de devolución física.",
+        "value": 61
+      },
+      {
+        "evidence_refs": [
+          "/marts/cash_daily/4/refund_out_cents"
+        ],
+        "id": "refund_cash_event",
+        "kind": "observation",
+        "statement": "El mart registra salida sintética por reembolso de 17,606 centavos MXN el 2025-09-28.",
+        "value": 17606
+      },
+      {
+        "evidence_refs": [
+          "/lineage/schema/tables/refunds/columns/1/name"
+        ],
+        "id": "refund_link_grain",
+        "kind": "observation",
+        "statement": "La segunda columna de refunds es order_id, que identifica la orden y no una línea específica.",
+        "value": "order_id"
+      },
+      {
+        "evidence_refs": [
+          "/lineage/schema/tables/credit_notes/columns/1/name"
+        ],
+        "id": "credit_link_grain",
+        "kind": "observation",
+        "statement": "La segunda columna de credit_notes es order_item_id, que identifica una línea.",
+        "value": "order_item_id"
+      },
+      {
+        "evidence_refs": [
+          "/quality/53/status"
+        ],
+        "id": "existing_return_control",
+        "kind": "observation",
+        "statement": "El control returns_ledger ya existe y pasa en el snapshot.",
+        "value": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "/marts/inventory_position/0/count_discrepancy_qty"
+        ],
+        "id": "inventory_discrepancy",
+        "kind": "observation",
+        "statement": "La variante de inventario usada como ejemplo tiene discrepancia de conteo cero dentro del snapshot sintético.",
+        "value": 0
+      }
+    ],
+    "hypotheses": [
+      "Desfases entre devolución, crédito y reembolso pueden explicar diferencias temporales entre inventario, ingreso y caja, pero deben verificarse al nivel de cada evento sin imponer una equivalencia uno a uno."
+    ],
+    "recommendations": [],
+    "request_id": "fa53011afb533d0dd7b32d1421540565018688266b64c542f9be0ae905205b18",
+    "role": "evidence_reviewer",
+    "summary": "Los tres conteos de 61 eventos, el ejemplo de caja de 17,606 centavos MXN y la posición de inventario citada se verifican. REVIEW: la separación conceptual entre devolución física, crédito comercial y reembolso es correcta, pero la conciliación propuesta por línea requiere un vínculo o asignación explícita: refunds está a nivel order_id, mientras returns y credit_notes están a nivel order_item_id. Una unión directa por orden puede duplicar efectivo y fabricar tiempos de reembolso por línea. Los controles existentes deben aprovecharse para producir excepciones detalladas.",
+    "unknowns": [
+      "No existe en el esquema enlazado una clave de refund hacia devolución o línea; falta una política verificable de asignación de importes y fechas para órdenes con varias líneas.",
+      "Los ejemplos no establecen tasa de recuperación física, merma, calidad de inspección ni satisfacción real.",
+      "No hay saldo bancario inicial ni evidencia real de recepción, inspección o ejecución de reembolsos."
+    ],
+    "verdict": "REVIEW",
+    "version": "2.0"
+  },
+  "run_id": "ab428a1d2682fe9a31a4d634",
+  "status": "REVIEW",
+  "synthetic": true,
+  "unknowns": [
+    "Los conteos agregados no muestran el importe ni la fecha de cada return, credit note y refund emparejados por order_item_id.",
+    "No hay datos reales de clientes, motivos de devolución, transportista, inspección física o decisión de merma.",
+    "No puede afirmarse que cada refund correspondió a una unidad restockeada ni que las notas de crédito se cobraron en la misma fecha.",
+    "La posición de inventario es sintética y no prueba disponibilidad, merma o satisfacción reales de Alma de Lujo.",
+    "El saldo bancario inicial y otras obligaciones reales no están en el snapshot; cash_daily sólo muestra movimientos cubiertos."
+  ],
+  "version": "2.0"
+}

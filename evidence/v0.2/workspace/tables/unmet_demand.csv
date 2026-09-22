@@ -1,0 +1,8 @@
+id,date,variant_id,quantity,reason
+unmet-00001,2026-09-21,var-sock-black-s,2,synthetic availability request; not observed demand
+unmet-00008,2026-09-14,var-sock-rose-m,3,synthetic availability request; not observed demand
+unmet-00015,2026-09-07,var-sock-lilac-l,4,synthetic availability request; not observed demand
+unmet-00022,2026-08-31,var-legging-navy-s,5,synthetic availability request; not observed demand
+unmet-00029,2026-08-24,var-top-black-m,6,synthetic availability request; not observed demand
+unmet-00036,2026-09-16,var-top-rose-l,7,synthetic availability request; not observed demand
+unmet-00043,2026-09-09,var-short-navy-s,2,synthetic availability request; not observed demand

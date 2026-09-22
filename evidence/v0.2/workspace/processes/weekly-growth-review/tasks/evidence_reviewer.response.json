@@ -1,0 +1,81 @@
+{
+  "challenges": [
+    "Recalculé las tasas, la diferencia de conversión de -0.06339285714285714, ambos intervalos Wilson y SRM p=0.713985795669382; coinciden. Son diagnósticos binomiales y de asignación, no pruebas de efecto sobre contribución.",
+    "La contribución total es 71,200 centavos en 32 controles y 77,140 en 35 tratamientos. El mayor total de tratamiento se debe comparar con su mayor población: las medias son 2,225 y 2,204 centavos por asignación. No sustituir la métrica primaria por conversión ni llamar por visita a un denominador de personas sin explicitar la relación.",
+    "El ejemplo de 1,774 observaciones por brazo usa conversión binaria con baseline 0.10 y MDE 0.03. No dimensiona directamente una prueba de contribución monetaria; predeclarar estimando, unidad, varianza/piloto, MDE monetario y método de incertidumbre adecuados.",
+    "La propuesta de retención debe elegir entre una cohorte mensual completamente madura o un subconjunto maduro dentro de ella. eligible_customers_30d > 0 no significa que toda la cohorte completó la ventana; agosto ilustra esa diferencia.",
+    "Preferir no estimable por inmadurez en la prosa de septiembre: nula puede leerse como cero aunque el valor correcto sea NULL. El análisis identifica correctamente el mes parcial y no debe convertirlo en comparación mensual completa.",
+    "Definir el denominador y la madurez del guardrail de devoluciones. Cero devoluciones observadas en 32/35 asignaciones no garantiza riesgo inferior a 10%, especialmente si el denominador previsto son compras o unidades."
+  ],
+  "evidence_hash": "93d649c342803d377dffa6a8b93a7e53d285652537a51ee469a8b4a6d78a0959",
+  "facts": [
+    {
+      "evidence_refs": [
+        "/marts/customer_cohorts/12/eligible_customers_30d"
+      ],
+      "id": "september_eligible",
+      "kind": "observation",
+      "statement": "La cohorte de septiembre tiene cero clientes elegibles a 30 días en este corte sintético.",
+      "value": 0
+    },
+    {
+      "evidence_refs": [
+        "/marts/customer_cohorts/12/repeat_within_30d_rate"
+      ],
+      "id": "september_unknown_rate",
+      "kind": "observation",
+      "statement": "La repetición de septiembre es NULL: no estimable con la ventana disponible, no una tasa observada de cero.",
+      "value": null
+    },
+    {
+      "evidence_refs": [
+        "/marts/customer_cohorts/11/eligible_customers_30d"
+      ],
+      "id": "august_eligible",
+      "kind": "observation",
+      "statement": "Agosto aporta 24 clientes elegibles a la tasa publicada; no incluye a sus 12 clientes todavía inmaduros en ese denominador.",
+      "value": 24
+    },
+    {
+      "evidence_refs": [
+        "/metadata/as_of"
+      ],
+      "id": "partial_month_cut",
+      "kind": "observation",
+      "statement": "El corte del snapshot es 2026-09-21; septiembre no es un mes completo.",
+      "value": "2026-09-21"
+    },
+    {
+      "evidence_refs": [
+        "/marts/finance_monthly/12/contribution_after_variable_cents"
+      ],
+      "id": "september_contribution",
+      "kind": "observation",
+      "statement": "La contribución sintética después de gasto variable de septiembre al corte es 2,700,622 centavos MXN.",
+      "value": 2700622
+    },
+    {
+      "evidence_refs": [
+        "/marts/experiment_results/0/primary_metric"
+      ],
+      "id": "primary_metric",
+      "kind": "observation",
+      "statement": "El experimento declara contribution_cents_per_visit como métrica primaria.",
+      "value": "contribution_cents_per_visit"
+    }
+  ],
+  "hypotheses": [
+    "La diferencia entre canales puede reflejar mezcla, identidad, estados y madurez; una comparación segmentada debe conservar cohortes y denominadores completos antes de priorizar intervención."
+  ],
+  "recommendations": [],
+  "request_id": "019045af923a6f2a3e68948129b5ec2d98e541e9a2c424aa8be4022b04d171bd",
+  "role": "evidence_reviewer",
+  "summary": "Las observaciones de crecimiento se verifican: septiembre tiene cero clientes elegibles y repetición desconocida, agosto mezcla 24 elegibles con 12 inmaduros, y el resultado financiero de septiembre llega sólo al día 21. REVIEW: se evita correctamente declarar causalidad o ganador, pero el protocolo debe resolver la unidad de contribución y su incertidumbre. Los agregados permiten calcular 2,225 frente a 2,204 centavos por persona asignada, diferencia tratamiento menos control de -21; no demuestran contribución por visita ni un efecto monetario significativo.",
+  "unknowns": [
+    "No hay datos reales de crecimiento ni atribución incremental por canal.",
+    "El registro experimental liga asignaciones a customer_id y outcomes a assignment_id; falta una definición verificable de visitas/exposición para interpretar contribución por visita.",
+    "La evidencia agregada no proporciona distribución individual o varianza de contribución para estimar incertidumbre monetaria ni dimensionar una prueba real."
+  ],
+  "verdict": "REVIEW",
+  "version": "2.0"
+}

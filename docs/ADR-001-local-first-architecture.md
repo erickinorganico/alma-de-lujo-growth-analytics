@@ -1,3 +1,5 @@
+> Historical v0.1 reference. Current implementation and acceptance: [v0.2 PRD](../specs/PRD.md), [runbook](RUNBOOK-v2.md), and [release evidence](RELEASE.md).
+
 # ADR 001 — Offline deterministic analytical pipeline
 
 Status: accepted for the synthetic MVP, 2026-09-22.

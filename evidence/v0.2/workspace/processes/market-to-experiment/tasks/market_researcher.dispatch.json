@@ -1,0 +1,20 @@
+{
+  "agent_id": "/root/sol_scope_v2",
+  "completed_at_utc": "2026-09-22T09:21:36Z",
+  "effort": "high",
+  "mode": "live",
+  "model": "gpt-5.6-sol",
+  "parent_review": "schema-and-evidence-validated",
+  "provider": "native-codex",
+  "recorded_by": "parent-runtime",
+  "request_id": "2be050bc89703b393c8a50068bdaf0ff23278633bac33d71c96f4edf81aa1e85",
+  "response_sha256": "20c57ecf7911993215d52497ea5bfb89a023c7ca9e96d301e305ea915bc67eaf",
+  "retry_history": [
+    {
+      "reason": "Corrected trace self-identification using actual native dispatch and runtime turn_context metadata; analytical response unchanged",
+      "revision": 2
+    }
+  ],
+  "role": "market_researcher",
+  "started_at_utc": "2026-09-22T09:13:31Z"
+}

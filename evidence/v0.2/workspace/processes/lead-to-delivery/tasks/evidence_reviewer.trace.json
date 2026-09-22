@@ -1,0 +1,193 @@
+{
+  "completed_at_utc": "2026-09-22T09:09:41.974229+00:00",
+  "evidence_hash": "95ccea6a1ac8149345da541e9cdb0fa10d671e8726de61b4bf41ad899156d6db",
+  "external_business_actions": "PROHIBITED",
+  "kind": "native-independent-review-query-trace",
+  "process_id": "lead-to-delivery",
+  "queries": [
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart funnel_conversion",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "a3528889c352eb61da1204a6c790fda000e13a64bb82e12721732676c8421f78",
+      "row_count": 4
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart channel_performance",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "73f2149cd09e9c396f5add5ca5115d8e01d99c0bddfd6558ee948a1c4006410c",
+      "row_count": 4
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart sales_daily",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "befd9177409dbd30dba6292e8dee700b2b3648c3528695f55e6952286227b766",
+      "row_count": 277
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart reconciliation",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "f0a23d8f8e3e12da7fa363f7a192c75cd42b641531ffdeab59db40c3e210db9c",
+      "row_count": 6
+    }
+  ],
+  "questions": [
+    "Coinciden las tasas y la población de órdenes vinculadas con los conteos globales?",
+    "Existe una ventana madura para llamar fuga a la ausencia de vinculación?",
+    "La propuesta añade trazabilidad útil o duplica el control de prepago existente?"
+  ],
+  "recomputed": {
+    "channel_delivery_counts": [
+      {
+        "attribution_unknown": 1,
+        "channel": "DM",
+        "customers": 112,
+        "delivered_orders": 139
+      },
+      {
+        "attribution_unknown": 1,
+        "channel": "Instagram",
+        "customers": 209,
+        "delivered_orders": 279
+      },
+      {
+        "attribution_unknown": 1,
+        "channel": "Organic",
+        "customers": 160,
+        "delivered_orders": 188
+      },
+      {
+        "attribution_unknown": 1,
+        "channel": "Paid Social",
+        "customers": 139,
+        "delivered_orders": 166
+      }
+    ],
+    "funnel_rows": [
+      {
+        "all_leads": 604,
+        "campaign_id": "camp-private",
+        "channel": "DM",
+        "funnel_coverage_known": 1,
+        "lead_to_linked_order_rate": 0.3129,
+        "linked_leads": 604,
+        "linked_orders": 189,
+        "marketing_spend_cents": 31522,
+        "session_linked_leads": 604,
+        "session_to_lead_rate": 0.274,
+        "sessions": 2204,
+        "unlinked_leads": 0
+      },
+      {
+        "all_leads": 843,
+        "campaign_id": "camp-studio",
+        "channel": "Instagram",
+        "funnel_coverage_known": 1,
+        "lead_to_linked_order_rate": 0.4852,
+        "linked_leads": 843,
+        "linked_orders": 409,
+        "marketing_spend_cents": 40338,
+        "session_linked_leads": 843,
+        "session_to_lead_rate": 0.3451,
+        "sessions": 2443,
+        "unlinked_leads": 0
+      },
+      {
+        "all_leads": 697,
+        "campaign_id": "organic",
+        "channel": "Organic",
+        "funnel_coverage_known": 1,
+        "lead_to_linked_order_rate": 0.3989,
+        "linked_leads": 697,
+        "linked_orders": 278,
+        "marketing_spend_cents": 36767,
+        "session_linked_leads": 697,
+        "session_to_lead_rate": 0.3034,
+        "sessions": 2297,
+        "unlinked_leads": 0
+      },
+      {
+        "all_leads": 686,
+        "campaign_id": "camp-move",
+        "channel": "Paid Social",
+        "funnel_coverage_known": 1,
+        "lead_to_linked_order_rate": 0.3848,
+        "linked_leads": 686,
+        "linked_orders": 264,
+        "marketing_spend_cents": 38899,
+        "session_linked_leads": 686,
+        "session_to_lead_rate": 0.3001,
+        "sessions": 2286,
+        "unlinked_leads": 0
+      }
+    ],
+    "quality_58": {
+      "evidence_refs": [
+        "tables/movements",
+        "tables/payments",
+        "tables/orders"
+      ],
+      "id": "shipment_prepayment",
+      "message": "Cobro completo previo al despacho y despacho no posterior a entrega",
+      "status": "PASS"
+    },
+    "rates_recomputed": [
+      {
+        "channel": "DM",
+        "distinct_orders_divided_all_leads": 0.3129,
+        "distinct_sessions_with_lead_divided_sessions": 0.274,
+        "matches": true
+      },
+      {
+        "channel": "Instagram",
+        "distinct_orders_divided_all_leads": 0.4852,
+        "distinct_sessions_with_lead_divided_sessions": 0.3451,
+        "matches": true
+      },
+      {
+        "channel": "Organic",
+        "distinct_orders_divided_all_leads": 0.3989,
+        "distinct_sessions_with_lead_divided_sessions": 0.3034,
+        "matches": true
+      },
+      {
+        "channel": "Paid Social",
+        "distinct_orders_divided_all_leads": 0.3848,
+        "distinct_sessions_with_lead_divided_sessions": 0.3001,
+        "matches": true
+      }
+    ],
+    "sales_net_revenue": 37087457,
+    "totals": {
+      "all_leads": 2830,
+      "linked_leads": 2830,
+      "linked_orders": 1140,
+      "session_linked_leads": 2830,
+      "sessions": 9230,
+      "unlinked_leads": 0
+    }
+  },
+  "request_id": "b171a09299f5e634e19d50200fc4dd31d8cc26c2e86a80201cdbe1b815694fc3",
+  "response_sha256": "2af96670bce5ec5e513d43f8f5bdc13cb7ad87114ee7d09a656e28d503016ab3",
+  "response_validation": {
+    "facts_checked": 6,
+    "request_id": "b171a09299f5e634e19d50200fc4dd31d8cc26c2e86a80201cdbe1b815694fc3",
+    "scope": "schema, immutable evidence, exact observation values and authority; prose meaning requires reviewer",
+    "valid": true
+  },
+  "reviewer": "/root/astra_v2_review",
+  "semantic_challenges": [
+    "La suma comprobada es 9,230 sesiones, 2,830 leads y 1,140 órdenes vinculadas. No usar las 1,200 órdenes totales como numerador de la tasa de leads vinculados; deben explicarse aparte las 60 órdenes fuera de ese vínculo.",
+    "Las tasas publicadas se reproducen desde sesiones distintas con lead/sesiones y órdenes distintas vinculadas/todos los leads. Son cocientes descriptivos del corte; una tasa de conversión por cohorte necesita plazo fijo y tratamiento explícito de leads abiertos e inmaduros.",
+    "No dividir 924 filas de shipment entre 1,200 órdenes para afirmar tasa de entrega. El análisis reconoce esta limitación correctamente; el siguiente reporte debe contar órdenes distintas por estado y ventana.",
+    "La conciliación de prepago previo al despacho ya pasa. La mejora propuesta debe ser un reporte de excepciones, estados y trazabilidad reutilizando ese control, no afirmar que falta una regla de prepago.",
+    "La población de la auditoría de leads no debe excluir los no vinculados por exigir una orden vinculable. Separar sesiones anónimas de leads identificados y preservar el denominador completo de elegibles.",
+    "Usar responsable del negocio en las reglas de cierre; la evidencia no establece identidad ni género de quien aprueba."
+  ],
+  "synthetic": true,
+  "verdict": "REVIEW",
+  "version": "2.0"
+}

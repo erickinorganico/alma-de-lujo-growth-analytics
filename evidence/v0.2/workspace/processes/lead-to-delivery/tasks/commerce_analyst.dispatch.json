@@ -1,0 +1,20 @@
+{
+  "agent_id": "/root/luna_simulation_v2",
+  "completed_at_utc": "2026-09-22T09:05:01Z",
+  "effort": "high",
+  "mode": "live",
+  "model": "gpt-5.6-luna",
+  "parent_review": "schema-and-evidence-validated",
+  "provider": "native-codex",
+  "recorded_by": "parent-runtime",
+  "request_id": "0b1d66fb3cdaaa3637cf4d1a45e11b71c2d38178a5901d006a7b0ce446e90144",
+  "response_sha256": "559742990492a95f396d509273f7c3a2e496cf75dcaf2ddfdb5bf804acd3442a",
+  "retry_history": [
+    {
+      "reason": "Corrected Windows default JSON decoding in local analysis validation to explicit UTF-8; original request and response hashes unchanged",
+      "revision": 2
+    }
+  ],
+  "role": "commerce_analyst",
+  "started_at_utc": "2026-09-22T08:46:42Z"
+}

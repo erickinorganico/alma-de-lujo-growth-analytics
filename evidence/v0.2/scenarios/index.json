@@ -1,0 +1,37 @@
+{
+  "scenarios": [
+    {
+      "passed": true,
+      "scenario": "normal",
+      "status": "PASS"
+    },
+    {
+      "passed": true,
+      "scenario": "stock_pressure",
+      "status": "PASS"
+    },
+    {
+      "passed": true,
+      "scenario": "promotion_illusion",
+      "status": "PASS"
+    },
+    {
+      "passed": true,
+      "scenario": "cash_squeeze",
+      "status": "PASS"
+    },
+    {
+      "passed": true,
+      "scenario": "missing_cost",
+      "status": "REVIEW"
+    },
+    {
+      "passed": true,
+      "scenario": "broken_link",
+      "status": "BLOCKED"
+    }
+  ],
+  "synthetic": true,
+  "verification": "../verification.json",
+  "version": "2.0"
+}

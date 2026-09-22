@@ -1,0 +1,51 @@
+{
+  "alternative_explanations": [
+    "Una menor conversión de DM puede deberse a seguimiento, repetición de clientes, definición de lead o mezcla de intención, no necesariamente a peor canal.",
+    "Las órdenes sin shipment pueden ser pendientes o canceladas, o representar una ventana de entrega inmadura; se necesita estado por orden.",
+    "Las diferencias de volumen por canal pueden provenir de asignación sintética y no de comportamiento real."
+  ],
+  "completed_at_utc": "2026-09-22T08:50:00Z",
+  "effort": "high",
+  "model": "gpt-5.6-luna",
+  "native_job": "/root/luna_simulation_v2",
+  "observations": [
+    "La población de exposición es sustancialmente mayor que la población de órdenes y conserva sesiones anónimas sintéticas.",
+    "Instagram tiene el mayor volumen de órdenes vinculadas y DM el menor; las tasas son descriptivas por campaña y canal.",
+    "La conciliación de prepago antes de shipment está aprobada, pero el conteo agregado de shipments no clasifica las órdenes sin shipment.",
+    "La evidencia mantiene la atribución de ingresos como desconocida, por lo que no se calculó retorno incremental."
+  ],
+  "process_id": "lead-to-delivery",
+  "queries": [
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart funnel_conversion",
+      "mart": "funnel_conversion",
+      "mode": "registered read-only",
+      "purpose": "Comparar sesiones, leads y órdenes vinculadas por canal.",
+      "result": "DM 2,204 sesiones/604 leads/189 órdenes; Instagram 2,443/843/409; Organic 2,297/697/278; Paid Social 2,286/686/264."
+    },
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart channel_performance",
+      "mart": "channel_performance",
+      "mode": "registered read-only",
+      "purpose": "Separar órdenes entregadas, ingresos sintéticos y marca de atribución desconocida.",
+      "result": "Instagram tiene 279 delivered_orders y attribution_unknown=1; todos los canales muestran attribution_unknown=1."
+    },
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart sales_daily",
+      "mart": "sales_daily",
+      "mode": "registered read-only",
+      "purpose": "Comprobar reconocimiento por fecha de movimiento y separar una venta reconocida de una orden captada.",
+      "result": "El mart contiene fechas de reconocimiento y cobertura conocida; no expone por sí solo el estado completo de cada orden."
+    }
+  ],
+  "questions": [
+    "¿Dónde caen las sesiones sintéticas antes de lead y después de lead antes de orden por canal?",
+    "¿La diferencia entre órdenes y shipments puede separarse entre estados pendientes, cancelados, pagados, enviados y entregados con la evidencia disponible?",
+    "¿La atribución de canal y el prepago antes de shipment están cubiertos?"
+  ],
+  "request_id": "0b1d66fb3cdaaa3637cf4d1a45e11b71c2d38178a5901d006a7b0ce446e90144",
+  "request_read_encoding": "utf-8-sig",
+  "role": "commerce_analyst",
+  "task_started_at_utc": "2026-09-22T08:46:42Z",
+  "validation": "Direct validate_response PASS after loading the immutable request with UTF-8 BOM handling; request_id and evidence_hash matched exactly."
+}

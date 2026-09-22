@@ -1,0 +1,158 @@
+[
+  {
+    "checkpoint": {
+      "definition_hash": "eae8edd7cd21595c2e099ba9f605871ff98ec9b682407cf13654ed4e8d6a6c0d",
+      "input_hash": "a3a5428f9fd4eecd8e8333408f4a4827ee84b731fca864eac3e6860f2df166ff",
+      "owner": "Responsable de compras e inventario",
+      "process_id": "procure-to-stock",
+      "responses": {},
+      "run_id": "0cb80284742b5834d9292358",
+      "status": "VALIDATING",
+      "step": "source_contract",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "required_tables": [
+        "products",
+        "variants",
+        "purchase_orders",
+        "purchase_receipts",
+        "supplier_payments",
+        "movements",
+        "reservations",
+        "inventory_counts"
+      ]
+    },
+    "from_status": "NEW",
+    "hash": "f9aadc6f6a0f64bc8d59381312f260d5f1bc8f75f416ca109daaab348774abbd",
+    "previous_hash": "GENESIS",
+    "sequence": 1,
+    "step": "source_contract",
+    "to_status": "VALIDATING"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "eae8edd7cd21595c2e099ba9f605871ff98ec9b682407cf13654ed4e8d6a6c0d",
+      "input_hash": "a3a5428f9fd4eecd8e8333408f4a4827ee84b731fca864eac3e6860f2df166ff",
+      "owner": "Responsable de compras e inventario",
+      "process_id": "procure-to-stock",
+      "responses": {},
+      "run_id": "0cb80284742b5834d9292358",
+      "status": "ANALYZING",
+      "step": "sql_marts",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "evidence_hash": "a3a5428f9fd4eecd8e8333408f4a4827ee84b731fca864eac3e6860f2df166ff",
+      "marts": [
+        "inventory_position",
+        "inventory_aging",
+        "procurement",
+        "reconciliation"
+      ]
+    },
+    "from_status": "VALIDATING",
+    "hash": "821a0a17ecfe11d1049ad05e33e86b21bdc6f937372f684dc9c4e98469e29004",
+    "previous_hash": "f9aadc6f6a0f64bc8d59381312f260d5f1bc8f75f416ca109daaab348774abbd",
+    "sequence": 2,
+    "step": "sql_marts",
+    "to_status": "ANALYZING"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "eae8edd7cd21595c2e099ba9f605871ff98ec9b682407cf13654ed4e8d6a6c0d",
+      "input_hash": "a3a5428f9fd4eecd8e8333408f4a4827ee84b731fca864eac3e6860f2df166ff",
+      "owner": "Responsable de compras e inventario",
+      "process_id": "procure-to-stock",
+      "responses": {},
+      "run_id": "0cb80284742b5834d9292358",
+      "status": "WAITING_AGENT",
+      "step": "native_analysis",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "request_id": "7e9246d514491d67384faa8e65c7336a61c0cd41f51a91daf9948425666f0c5f",
+      "role": "merchandiser"
+    },
+    "from_status": "ANALYZING",
+    "hash": "0103d6cb57fe7192f8c0758cbdad8de8949c630cb3df1048b00956294a09317c",
+    "previous_hash": "821a0a17ecfe11d1049ad05e33e86b21bdc6f937372f684dc9c4e98469e29004",
+    "sequence": 3,
+    "step": "native_analysis",
+    "to_status": "WAITING_AGENT"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "eae8edd7cd21595c2e099ba9f605871ff98ec9b682407cf13654ed4e8d6a6c0d",
+      "input_hash": "a3a5428f9fd4eecd8e8333408f4a4827ee84b731fca864eac3e6860f2df166ff",
+      "owner": "Responsable de compras e inventario",
+      "process_id": "procure-to-stock",
+      "responses": {
+        "merchandiser": {
+          "agent_id": "/root/terra_warehouse_v2",
+          "dispatch_hash": "33079dd661adf200f328f457355b0207271fd9abf7de1a9c974acb79e782b310",
+          "model": "gpt-5.6-terra",
+          "request_id": "7e9246d514491d67384faa8e65c7336a61c0cd41f51a91daf9948425666f0c5f",
+          "sha256": "588ac08268482a9d0ef36f2decdb67eca7291320d239b30a8181e60f230460ca"
+        }
+      },
+      "run_id": "0cb80284742b5834d9292358",
+      "status": "WAITING_REVIEW",
+      "step": "independent_review",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "analyst": "merchandiser",
+      "request_id": "02a7c6b52f15e948cacad9079b91eba1b91ca371a0e233af0dc47d7b6ec7915f"
+    },
+    "from_status": "WAITING_AGENT",
+    "hash": "0f3adfbcbf1ea1c1918e7bac1d4c26ef07d93d1d3cb90b6e2bf9260d852bb03b",
+    "previous_hash": "0103d6cb57fe7192f8c0758cbdad8de8949c630cb3df1048b00956294a09317c",
+    "sequence": 4,
+    "step": "independent_review",
+    "to_status": "WAITING_REVIEW"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "eae8edd7cd21595c2e099ba9f605871ff98ec9b682407cf13654ed4e8d6a6c0d",
+      "input_hash": "a3a5428f9fd4eecd8e8333408f4a4827ee84b731fca864eac3e6860f2df166ff",
+      "owner": "Responsable de compras e inventario",
+      "process_id": "procure-to-stock",
+      "responses": {
+        "evidence_reviewer": {
+          "agent_id": "/root/astra_v2_review",
+          "dispatch_hash": "4475e981ff0bf22dcf010b98fb9694c535cb56c0a4e0249aa89f9037af864fac",
+          "model": "gpt-6-astra",
+          "request_id": "02a7c6b52f15e948cacad9079b91eba1b91ca371a0e233af0dc47d7b6ec7915f",
+          "sha256": "663f3c7fec27428acb286155d118ffdbcb485271ab7ffb8f0b8eee0e0f1eae79"
+        },
+        "merchandiser": {
+          "agent_id": "/root/terra_warehouse_v2",
+          "dispatch_hash": "33079dd661adf200f328f457355b0207271fd9abf7de1a9c974acb79e782b310",
+          "model": "gpt-5.6-terra",
+          "request_id": "7e9246d514491d67384faa8e65c7336a61c0cd41f51a91daf9948425666f0c5f",
+          "sha256": "588ac08268482a9d0ef36f2decdb67eca7291320d239b30a8181e60f230460ca"
+        }
+      },
+      "run_id": "0cb80284742b5834d9292358",
+      "status": "REVIEW",
+      "step": "decision_packet",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "external_execution": "PROHIBITED",
+      "sha256": "32371a0a07534fa9cd95d89d73b260eda64561da41208f812b78a15474331953"
+    },
+    "from_status": "WAITING_REVIEW",
+    "hash": "34e7e2dfed3491fbe252bad7bc8af03e96ac8a0ba439301fe223c2ef068c9c97",
+    "previous_hash": "0f3adfbcbf1ea1c1918e7bac1d4c26ef07d93d1d3cb90b6e2bf9260d852bb03b",
+    "sequence": 5,
+    "step": "decision_packet",
+    "to_status": "REVIEW"
+  }
+]

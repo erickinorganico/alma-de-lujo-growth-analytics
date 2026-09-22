@@ -1,0 +1,260 @@
+{
+  "agent_receipts": {
+    "commerce_analyst": {
+      "agent_id": "/root/luna_simulation_v2",
+      "dispatch_hash": "d55d6ccba98441c1f6d8d2d5ac7f4543b30ae687fffb49deec16dbac6b5e2427",
+      "model": "gpt-5.6-luna",
+      "request_id": "0b1d66fb3cdaaa3637cf4d1a45e11b71c2d38178a5901d006a7b0ce446e90144",
+      "sha256": "559742990492a95f396d509273f7c3a2e496cf75dcaf2ddfdb5bf804acd3442a"
+    },
+    "evidence_reviewer": {
+      "agent_id": "/root/astra_v2_review",
+      "dispatch_hash": "405b3d4f583597362c69cd1872e7c4f30752db662def74050251b0d2eae1d5c0",
+      "model": "gpt-6-astra",
+      "request_id": "b171a09299f5e634e19d50200fc4dd31d8cc26c2e86a80201cdbe1b815694fc3",
+      "sha256": "2af96670bce5ec5e513d43f8f5bdc13cb7ad87114ee7d09a656e28d503016ab3"
+    }
+  },
+  "external_execution": "PROHIBITED",
+  "facts": [
+    {
+      "evidence_refs": [
+        "/counts/sessions"
+      ],
+      "id": "synthetic_sessions",
+      "kind": "observation",
+      "statement": "La evidencia sintética contiene 9,230 sesiones.",
+      "value": 9230
+    },
+    {
+      "evidence_refs": [
+        "/counts/leads"
+      ],
+      "id": "synthetic_leads",
+      "kind": "observation",
+      "statement": "La evidencia sintética contiene 2,830 leads.",
+      "value": 2830
+    },
+    {
+      "evidence_refs": [
+        "/counts/orders"
+      ],
+      "id": "synthetic_orders",
+      "kind": "observation",
+      "statement": "La evidencia sintética contiene 1,200 órdenes.",
+      "value": 1200
+    },
+    {
+      "evidence_refs": [
+        "/marts/funnel_conversion/1/session_to_lead_rate"
+      ],
+      "id": "instagram_session_lead_rate",
+      "kind": "observation",
+      "statement": "El mart de funnel reporta una tasa sintética sesión→lead de 0.3451 para Instagram.",
+      "value": 0.3451
+    },
+    {
+      "evidence_refs": [
+        "/marts/funnel_conversion/1/linked_orders"
+      ],
+      "id": "instagram_linked_orders",
+      "kind": "observation",
+      "statement": "El mart de funnel reporta 409 órdenes sintéticas vinculadas para Instagram.",
+      "value": 409
+    },
+    {
+      "evidence_refs": [
+        "/marts/funnel_conversion/0/linked_orders"
+      ],
+      "id": "dm_linked_orders",
+      "kind": "observation",
+      "statement": "El mart de funnel reporta 189 órdenes sintéticas vinculadas para DM.",
+      "value": 189
+    },
+    {
+      "evidence_refs": [
+        "/counts/shipments",
+        "/counts/orders"
+      ],
+      "id": "shipment_rows",
+      "kind": "observation",
+      "statement": "La evidencia sintética contiene 924 filas de shipment frente a 1,200 órdenes.",
+      "value": 924
+    },
+    {
+      "evidence_refs": [
+        "/quality/58/status"
+      ],
+      "id": "shipment_payment_check",
+      "kind": "observation",
+      "statement": "El control sintético de prepago antes de despacho está aprobado.",
+      "value": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "/marts/channel_performance/1/attribution_unknown"
+      ],
+      "id": "attribution_unknown",
+      "kind": "observation",
+      "statement": "La atribución de ingresos por canal permanece marcada como desconocida en el mart sintético.",
+      "value": 1
+    },
+    {
+      "evidence_refs": [
+        "/marts/funnel_conversion/0/session_to_lead_rate",
+        "/marts/funnel_conversion/1/session_to_lead_rate",
+        "/metadata/limitations"
+      ],
+      "id": "funnel_interpretation",
+      "kind": "inference",
+      "statement": "La diferencia entre las tasas por canal puede reflejar mezcla de exposición, calidad de lead, definición de lead o cobertura de identidad; no permite atribuir causalidad ni impacto real.",
+      "value": null
+    }
+  ],
+  "hypotheses": [
+    "La caída sesión→lead puede concentrarse en exposición anónima y en diferencias de intención por canal.",
+    "La menor tasa lead→orden de DM frente a Instagram podría obedecer a seguimiento, definición de lead o mezcla de clientes repetidos; requiere una población comparable.",
+    "Las órdenes sin shipment pueden combinar estados todavía no enviados con cancelaciones o pendientes, por lo que no deben tratarse como una sola fuga operacional."
+  ],
+  "input_hash": "faf6669d61bdbc0ea473c1802c44934c56b8f26476c3020c9050d79be05412b0",
+  "process_id": "lead-to-delivery",
+  "recommendations": [
+    {
+      "action": "Proponer una revisión aprobada de la definición y captura de lead por canal, conservando sesiones anónimas y motivos de no conversión; no modificar campañas ni contactar clientes desde este análisis.",
+      "approval_required": true,
+      "closure_rule": "Cerrar cuando cada canal tenga denominador, definición de lead y registro de no conversión revisados por la dueña.",
+      "evidence_refs": [
+        "/marts/funnel_conversion/0/session_to_lead_rate",
+        "/marts/funnel_conversion/1/session_to_lead_rate"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "No publicar una tasa si sesiones, leads o identidad tienen cobertura desconocida; conservar el desglose sintético por canal.",
+      "id": "commerce-qualify-leads",
+      "population": "Sesiones elegibles por canal, separando anónimas de sesiones con customer_id y deduplicando lead_id.",
+      "primary_metric": "session_to_lead_rate por canal y campaña con denominador conocido",
+      "window": "Cuatro semanas de observación sintética o de datos reales previamente aprobados."
+    },
+    {
+      "action": "Preparar una auditoría de lead→orden que conserve campaña, canal, customer_id y motivo de pérdida; no atribuir ingresos ni ejecutar seguimiento.",
+      "approval_required": true,
+      "closure_rule": "Cerrar cuando los leads no vinculados tengan estado y razón de salida revisados, y la tasa sea reproducible desde IDs.",
+      "evidence_refs": [
+        "/marts/funnel_conversion/0/lead_to_linked_order_rate",
+        "/marts/funnel_conversion/1/lead_to_linked_order_rate"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "No mezclar leads abiertos, perdidos y convertidos ni tratar órdenes no vinculadas como cero demanda.",
+      "id": "commerce-order-linkage",
+      "population": "Leads con sesión y orden vinculable, incluyendo la población anónima y repetida.",
+      "primary_metric": "lead_to_linked_order_rate por canal",
+      "window": "Un corte semanal durante cuatro semanas."
+    },
+    {
+      "action": "Solicitar un reporte de conciliación de estado que separe pendiente, cancelada, pagada, shipped y delivered y relacione cada shipment con cobro liquidado; no ejecutar cobros, envíos ni cancelaciones.",
+      "approval_required": true,
+      "closure_rule": "Cerrar cuando cada orden tenga estado final, fecha de shipment o motivo de ausencia y reconciliación de pago.",
+      "evidence_refs": [
+        "/counts/orders",
+        "/counts/shipments",
+        "/quality/58/status"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "Bloquear cualquier acción si faltan estado, pago, shipment o fecha de entrega; mantener aprobación humana.",
+      "id": "commerce-settlement-delivery",
+      "population": "Las 1,200 órdenes sintéticas y sus pagos, facturas, shipments y fechas de entrega; para datos reales sólo filas autorizadas.",
+      "primary_metric": "proporción de órdenes shipped/delivered con liquidación completa antes del shipment",
+      "window": "Revisión semanal de cuatro semanas y cierre al corte aprobado."
+    }
+  ],
+  "review": {
+    "challenges": [
+      "La suma comprobada es 9,230 sesiones, 2,830 leads y 1,140 órdenes vinculadas. No usar las 1,200 órdenes totales como numerador de la tasa de leads vinculados; deben explicarse aparte las 60 órdenes fuera de ese vínculo.",
+      "Las tasas publicadas se reproducen desde sesiones distintas con lead/sesiones y órdenes distintas vinculadas/todos los leads. Son cocientes descriptivos del corte; una tasa de conversión por cohorte necesita plazo fijo y tratamiento explícito de leads abiertos e inmaduros.",
+      "No dividir 924 filas de shipment entre 1,200 órdenes para afirmar tasa de entrega. El análisis reconoce esta limitación correctamente; el siguiente reporte debe contar órdenes distintas por estado y ventana.",
+      "La conciliación de prepago previo al despacho ya pasa. La mejora propuesta debe ser un reporte de excepciones, estados y trazabilidad reutilizando ese control, no afirmar que falta una regla de prepago.",
+      "La población de la auditoría de leads no debe excluir los no vinculados por exigir una orden vinculable. Separar sesiones anónimas de leads identificados y preservar el denominador completo de elegibles.",
+      "Usar responsable del negocio en las reglas de cierre; la evidencia no establece identidad ni género de quien aprueba."
+    ],
+    "evidence_hash": "95ccea6a1ac8149345da541e9cdb0fa10d671e8726de61b4bf41ad899156d6db",
+    "facts": [
+      {
+        "evidence_refs": [
+          "/marts/funnel_conversion/1/sessions"
+        ],
+        "id": "instagram_sessions",
+        "kind": "observation",
+        "statement": "Instagram contiene 2,443 sesiones sintéticas en el denominador del mart.",
+        "value": 2443
+      },
+      {
+        "evidence_refs": [
+          "/marts/funnel_conversion/1/all_leads"
+        ],
+        "id": "instagram_leads",
+        "kind": "observation",
+        "statement": "Instagram contiene 843 leads sintéticos y sesiones distintas con lead en este corte.",
+        "value": 843
+      },
+      {
+        "evidence_refs": [
+          "/marts/funnel_conversion/1/linked_orders"
+        ],
+        "id": "instagram_orders",
+        "kind": "observation",
+        "statement": "Instagram contiene 409 órdenes sintéticas vinculadas.",
+        "value": 409
+      },
+      {
+        "evidence_refs": [
+          "/counts/orders"
+        ],
+        "id": "all_orders",
+        "kind": "observation",
+        "statement": "El universo completo contiene 1,200 órdenes sintéticas, incluidos registros fuera de la población vinculada del embudo.",
+        "value": 1200
+      },
+      {
+        "evidence_refs": [
+          "/counts/shipments"
+        ],
+        "id": "shipment_rows",
+        "kind": "observation",
+        "statement": "El snapshot contiene 924 filas de shipment; este conteo no demuestra 924 órdenes únicas entregadas.",
+        "value": 924
+      },
+      {
+        "evidence_refs": [
+          "/quality/58/status"
+        ],
+        "id": "existing_prepayment_control",
+        "kind": "observation",
+        "statement": "El control shipment_prepayment ya está implementado y tiene estado PASS en la evidencia.",
+        "value": "PASS"
+      }
+    ],
+    "hypotheses": [
+      "Diferencias de madurez, mezcla de intención o definición de lead pueden explicar parte de las tasas por canal sin implicar fallas de seguimiento."
+    ],
+    "recommendations": [],
+    "request_id": "b171a09299f5e634e19d50200fc4dd31d8cc26c2e86a80201cdbe1b815694fc3",
+    "role": "evidence_reviewer",
+    "summary": "Las cifras y las tasas citadas coinciden con los marts sintéticos. REVIEW: los cuatro canales suman 1,140 órdenes vinculadas, frente a 1,200 órdenes totales; no representan exactamente la misma población. El término fuga debe limitarse a diferencias descriptivas entre eventos del corte, sin convertirlas en abandono definitivo, retraso o falla operativa. El análisis distingue correctamente filas de shipment de una tasa de entrega y evita atribuir impacto causal real.",
+    "unknowns": [
+      "Faltan una ventana de conversión fija, madurez por fecha de sesión/lead y motivos de salida para interpretar no vinculación como abandono.",
+      "El mart agregado no identifica estados ni pagos por orden, ni identidad real, demanda real o impacto causal de canales."
+    ],
+    "verdict": "REVIEW",
+    "version": "2.0"
+  },
+  "run_id": "ee8fa46d9f1f5d1c9263d077",
+  "status": "REVIEW",
+  "synthetic": true,
+  "unknowns": [
+    "No hay desglose en los marts entregados de órdenes canceladas, pendientes, pagadas, enviadas y entregadas por estado; la diferencia entre 1,200 órdenes y 924 shipments no puede convertirse en una tasa de entrega.",
+    "No hay identidad real ni tráfico de Instagram verificable; el snapshot es sintético y no prueba conversión, demanda o impacto de Alma de Lujo.",
+    "La marca de atribución desconocida impide afirmar retorno incremental por canal o campaña.",
+    "No se observan facturación fiscal real, cargos fallidos, motivos de cancelación ni fecha de pago de cada orden en los marts citados.",
+    "Los resultados de experimento y las hipótesis de preferencia son simulados, no evidencia de lift o preferencia real."
+  ],
+  "version": "2.0"
+}

@@ -1,0 +1,168 @@
+{
+  "challenges": [
+    "El warehouse demuestra consistencia interna del snapshot sintético, no la exactitud de operaciones externas.",
+    "La cobertura de funnel está conocida en el snapshot, pero la atribución de ingresos por canal permanece desconocida.",
+    "El conteo de shipments no permite inferir cancelaciones, pendientes o retrasos sin un mart de estados por orden."
+  ],
+  "evidence_hash": "faf6669d61bdbc0ea473c1802c44934c56b8f26476c3020c9050d79be05412b0",
+  "facts": [
+    {
+      "evidence_refs": [
+        "/counts/sessions"
+      ],
+      "id": "synthetic_sessions",
+      "kind": "observation",
+      "statement": "La evidencia sintética contiene 9,230 sesiones.",
+      "value": 9230
+    },
+    {
+      "evidence_refs": [
+        "/counts/leads"
+      ],
+      "id": "synthetic_leads",
+      "kind": "observation",
+      "statement": "La evidencia sintética contiene 2,830 leads.",
+      "value": 2830
+    },
+    {
+      "evidence_refs": [
+        "/counts/orders"
+      ],
+      "id": "synthetic_orders",
+      "kind": "observation",
+      "statement": "La evidencia sintética contiene 1,200 órdenes.",
+      "value": 1200
+    },
+    {
+      "evidence_refs": [
+        "/marts/funnel_conversion/1/session_to_lead_rate"
+      ],
+      "id": "instagram_session_lead_rate",
+      "kind": "observation",
+      "statement": "El mart de funnel reporta una tasa sintética sesión→lead de 0.3451 para Instagram.",
+      "value": 0.3451
+    },
+    {
+      "evidence_refs": [
+        "/marts/funnel_conversion/1/linked_orders"
+      ],
+      "id": "instagram_linked_orders",
+      "kind": "observation",
+      "statement": "El mart de funnel reporta 409 órdenes sintéticas vinculadas para Instagram.",
+      "value": 409
+    },
+    {
+      "evidence_refs": [
+        "/marts/funnel_conversion/0/linked_orders"
+      ],
+      "id": "dm_linked_orders",
+      "kind": "observation",
+      "statement": "El mart de funnel reporta 189 órdenes sintéticas vinculadas para DM.",
+      "value": 189
+    },
+    {
+      "evidence_refs": [
+        "/counts/shipments",
+        "/counts/orders"
+      ],
+      "id": "shipment_rows",
+      "kind": "observation",
+      "statement": "La evidencia sintética contiene 924 filas de shipment frente a 1,200 órdenes.",
+      "value": 924
+    },
+    {
+      "evidence_refs": [
+        "/quality/58/status"
+      ],
+      "id": "shipment_payment_check",
+      "kind": "observation",
+      "statement": "El control sintético de prepago antes de despacho está aprobado.",
+      "value": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "/marts/channel_performance/1/attribution_unknown"
+      ],
+      "id": "attribution_unknown",
+      "kind": "observation",
+      "statement": "La atribución de ingresos por canal permanece marcada como desconocida en el mart sintético.",
+      "value": 1
+    },
+    {
+      "evidence_refs": [
+        "/marts/funnel_conversion/0/session_to_lead_rate",
+        "/marts/funnel_conversion/1/session_to_lead_rate",
+        "/metadata/limitations"
+      ],
+      "id": "funnel_interpretation",
+      "kind": "inference",
+      "statement": "La diferencia entre las tasas por canal puede reflejar mezcla de exposición, calidad de lead, definición de lead o cobertura de identidad; no permite atribuir causalidad ni impacto real.",
+      "value": null
+    }
+  ],
+  "hypotheses": [
+    "La caída sesión→lead puede concentrarse en exposición anónima y en diferencias de intención por canal.",
+    "La menor tasa lead→orden de DM frente a Instagram podría obedecer a seguimiento, definición de lead o mezcla de clientes repetidos; requiere una población comparable.",
+    "Las órdenes sin shipment pueden combinar estados todavía no enviados con cancelaciones o pendientes, por lo que no deben tratarse como una sola fuga operacional."
+  ],
+  "recommendations": [
+    {
+      "action": "Proponer una revisión aprobada de la definición y captura de lead por canal, conservando sesiones anónimas y motivos de no conversión; no modificar campañas ni contactar clientes desde este análisis.",
+      "approval_required": true,
+      "closure_rule": "Cerrar cuando cada canal tenga denominador, definición de lead y registro de no conversión revisados por la dueña.",
+      "evidence_refs": [
+        "/marts/funnel_conversion/0/session_to_lead_rate",
+        "/marts/funnel_conversion/1/session_to_lead_rate"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "No publicar una tasa si sesiones, leads o identidad tienen cobertura desconocida; conservar el desglose sintético por canal.",
+      "id": "commerce-qualify-leads",
+      "population": "Sesiones elegibles por canal, separando anónimas de sesiones con customer_id y deduplicando lead_id.",
+      "primary_metric": "session_to_lead_rate por canal y campaña con denominador conocido",
+      "window": "Cuatro semanas de observación sintética o de datos reales previamente aprobados."
+    },
+    {
+      "action": "Preparar una auditoría de lead→orden que conserve campaña, canal, customer_id y motivo de pérdida; no atribuir ingresos ni ejecutar seguimiento.",
+      "approval_required": true,
+      "closure_rule": "Cerrar cuando los leads no vinculados tengan estado y razón de salida revisados, y la tasa sea reproducible desde IDs.",
+      "evidence_refs": [
+        "/marts/funnel_conversion/0/lead_to_linked_order_rate",
+        "/marts/funnel_conversion/1/lead_to_linked_order_rate"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "No mezclar leads abiertos, perdidos y convertidos ni tratar órdenes no vinculadas como cero demanda.",
+      "id": "commerce-order-linkage",
+      "population": "Leads con sesión y orden vinculable, incluyendo la población anónima y repetida.",
+      "primary_metric": "lead_to_linked_order_rate por canal",
+      "window": "Un corte semanal durante cuatro semanas."
+    },
+    {
+      "action": "Solicitar un reporte de conciliación de estado que separe pendiente, cancelada, pagada, shipped y delivered y relacione cada shipment con cobro liquidado; no ejecutar cobros, envíos ni cancelaciones.",
+      "approval_required": true,
+      "closure_rule": "Cerrar cuando cada orden tenga estado final, fecha de shipment o motivo de ausencia y reconciliación de pago.",
+      "evidence_refs": [
+        "/counts/orders",
+        "/counts/shipments",
+        "/quality/58/status"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "Bloquear cualquier acción si faltan estado, pago, shipment o fecha de entrega; mantener aprobación humana.",
+      "id": "commerce-settlement-delivery",
+      "population": "Las 1,200 órdenes sintéticas y sus pagos, facturas, shipments y fechas de entrega; para datos reales sólo filas autorizadas.",
+      "primary_metric": "proporción de órdenes shipped/delivered con liquidación completa antes del shipment",
+      "window": "Revisión semanal de cuatro semanas y cierre al corte aprobado."
+    }
+  ],
+  "request_id": "0b1d66fb3cdaaa3637cf4d1a45e11b71c2d38178a5901d006a7b0ce446e90144",
+  "role": "commerce_analyst",
+  "summary": "El flujo sintético tiene 9,230 sesiones, 2,830 leads y 1,200 órdenes. La fuga descriptiva está entre sesión y lead y después entre lead y orden: Instagram aporta el mayor volumen de órdenes vinculadas y DM el menor entre los canales mostrados. El warehouse registra 924 shipments para 1,200 órdenes, pero la evidencia entregada no separa cuántas órdenes pendientes o canceladas explican la diferencia ni permite convertirla en una tasa real de entrega o cobro. Los resultados son sintéticos, la atribución de ingresos permanece marcada como desconocida y no sustentan impacto de la marca real.",
+  "unknowns": [
+    "No hay desglose en los marts entregados de órdenes canceladas, pendientes, pagadas, enviadas y entregadas por estado; la diferencia entre 1,200 órdenes y 924 shipments no puede convertirse en una tasa de entrega.",
+    "No hay identidad real ni tráfico de Instagram verificable; el snapshot es sintético y no prueba conversión, demanda o impacto de Alma de Lujo.",
+    "La marca de atribución desconocida impide afirmar retorno incremental por canal o campaña.",
+    "No se observan facturación fiscal real, cargos fallidos, motivos de cancelación ni fecha de pago de cada orden en los marts citados.",
+    "Los resultados de experimento y las hipótesis de preferencia son simulados, no evidencia de lift o preferencia real."
+  ],
+  "verdict": "REVIEW",
+  "version": "2.0"
+}

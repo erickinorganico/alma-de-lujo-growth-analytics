@@ -1,0 +1,28 @@
+{
+  "definition_hash": "4489750a6d1dd787ca419ed6cc5a3b90dc02c42fd4bcce41083037322bfc21a4",
+  "event_hash": "3ee7005e6b3c3e848d63b7f03f8942869f76e61d0fa8474380657e4581550da3",
+  "input_hash": "faf6669d61bdbc0ea473c1802c44934c56b8f26476c3020c9050d79be05412b0",
+  "owner": "Responsable de operación comercial",
+  "process_id": "lead-to-delivery",
+  "responses": {
+    "commerce_analyst": {
+      "agent_id": "/root/luna_simulation_v2",
+      "dispatch_hash": "d55d6ccba98441c1f6d8d2d5ac7f4543b30ae687fffb49deec16dbac6b5e2427",
+      "model": "gpt-5.6-luna",
+      "request_id": "0b1d66fb3cdaaa3637cf4d1a45e11b71c2d38178a5901d006a7b0ce446e90144",
+      "sha256": "559742990492a95f396d509273f7c3a2e496cf75dcaf2ddfdb5bf804acd3442a"
+    },
+    "evidence_reviewer": {
+      "agent_id": "/root/astra_v2_review",
+      "dispatch_hash": "405b3d4f583597362c69cd1872e7c4f30752db662def74050251b0d2eae1d5c0",
+      "model": "gpt-6-astra",
+      "request_id": "b171a09299f5e634e19d50200fc4dd31d8cc26c2e86a80201cdbe1b815694fc3",
+      "sha256": "2af96670bce5ec5e513d43f8f5bdc13cb7ad87114ee7d09a656e28d503016ab3"
+    }
+  },
+  "run_id": "ee8fa46d9f1f5d1c9263d077",
+  "status": "REVIEW",
+  "step": "decision_packet",
+  "version": "2.0",
+  "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+}

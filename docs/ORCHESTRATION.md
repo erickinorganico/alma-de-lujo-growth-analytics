@@ -1,18 +1,34 @@
-# Native agent orchestration record
+# Native agent orchestration v0.2
 
-Scope: original local implementation followed by the corrected analytical-repository handoff; user pauses were respected. Final scope is scripts/data/reports, with public GitHub publication authorized to `erickinorganico/alma-de-lujo-growth-analytics`.
+The implementation and analytical execution were delegated within the user's authorization. All inference used native Codex models. No separately billed model provider or automatic mid-task model switching was introduced.
 
-| Assignment | Native model / effort | Exclusive ownership | Actual outcome and corrections | Verification |
-|---|---|---|---|---|
-| Operational plan and domain contracts | Sol / medium | PLAN, DOMAIN; later INTERFACES and INTEGRATION | Defined decisions, provisional metrics, source contracts and module ownership; reconciled corrected handoff | Documentation reconciliation; final integration run |
-| Reproducible fixtures | Luna / medium | fixtures.py, test_fixtures.py, FIXTURES | Fixed initial null campaign labels, converted tests to unittest, corrected shipment/reservation/payment states, marketing costs and payment-before-shipment dates | 4 fixture tests and normal quality checks PASS; expected red scenarios |
-| Analytical report documents and plots | Terra / medium | reporting.py, test_reporting.py | Implemented MD/HTML/SVG; corrected signed/zero charts, sock-only comparison, missing counts and safe HTML structure. Earlier UI work was excluded after scope correction | 4 reporting tests; parent independent browser preview |
-| Cross-module integration | Sol / medium | analytics/CLI/security test modules and integration docs | Independent hand-computed money/stock oracle, missing coverage matrix, contract errors, lifecycle separation, storage roundtrips and artifact checks | Full 33-test suite plus 5 scenarios and 15 policy evals |
-| Adversarial review | Astra / high | ADVERSARIAL-REVIEW and independent test_adversarial.py | Found unsafe date/FK access, unknown-to-zero reporting and raw-table injection risks; parent/Terra fixed and reviewer reran regressions | Final 5 adversarial + 4 report tests PASS; no unresolved blocker in bounded scope |
-| Integration and release | Parent Codex agent | analytics, validation, storage, CLI, decision policies, eval matrix, docs, release | Fixed dependency propagation, prototypes, financial invariants, Markdown tables, CLI tests, graph legends, isolated GitHub access and publication | Fresh venv with no pip, clean copied source, final full suite, release scan and remote verification |
+## Build assignments
 
-Model choices were explicit native dispatches. There was no automatic mid-task model switching, external inference provider or paid model API. No child delegated further. Ownership avoided simultaneous writes to implementation files; parent reconciliation followed each reported finding.
+| Native task | Routed model / effort | Bounded responsibility |
+| --- | --- | --- |
+| sol_scope_v2 | gpt-5.6-sol / high | PRD, scope, business lifecycle implementation and acceptance runner |
+| terra_warehouse_v2 | gpt-5.6-terra / high | Constrained SQLite, eleven SQL marts, lineage, independent clean installation |
+| luna_simulation_v2 | gpt-5.6-luna / high | Seeded annual scenarios and fixture verification; final documentary consistency review |
+| astra_v2_review | gpt-6-astra / high | Independent financial, SQL and bridge integrity probes; substantive native reviews |
+| Parent | Native Codex | Integration, request/response engine, import/report tools, runtime attestations and release verification |
 
-The early attempts produced concrete failures and rework rather than uniform success. In particular, fixture-only checks initially missed cross-domain lifecycle errors, and broad text escaping initially harmed report structure. Independent integration/adversarial tests exposed those defects; the final receipts supersede the intermediate runs. No measured token, latency, cost or supervision savings are claimed. Laya opportunity assessment is `not applicable` for this deterministic runtime; see PROJECT-EFFICIENCY.md.
+Contributors owned separate files and preserved concurrent edits. Concrete failures led to targeted rework: shipment chronology, unknown-cost propagation, month/cohort denominators, immutable request binding, state/receipt/packet tampering, and prose contracts. The final review records what was actually rechecked.
 
-Final evidence is checked into `evidence/verification.json`, `evidence/agent-evals.json`, `evidence/clean-install.json`, and the bounded adversarial review. The parent inspected the generated report and verified the published repository separately; agent completion alone was not the release gate.
+## Actual analytical execution
+
+| Native task | Analytical roles executed | Reviewer |
+| --- | --- | --- |
+| terra_warehouse_v2 | Finance analyst and merchandiser | astra_v2_review |
+| luna_simulation_v2 | Commerce and returns analysts | astra_v2_review |
+| sol_scope_v2 | Growth analyst and market researcher | astra_v2_review |
+| astra_v2_review | Six independent evidence reviews | Parent validates schema, hashes, role separation and final state |
+
+There are **seven role contracts, twelve accepted role outputs, four native task identities, and four routed models**. Reusing the review task does not imply six distinct reviewers. Independence means each reviewer task differs from the analyst task for that process.
+
+[Accepted run index](../evidence/v0.2/agents/task-runs.json) contains actual model, effort, task ID, request hash, response digest, dispatch times, retry history, parent validation and trace paths. [Orchestration windows](../evidence/v0.2/orchestration.json) record the bounded parent dispatch windows. [Routing metadata](../evidence/v0.2/agents/model-provenance.json) verifies models from native session metadata; a generic model self-description in an initial Sol trace was corrected using that source.
+
+The receipt is a parent-runtime attestation, not a provider-signed certificate. Exact observations validate mechanically; freeform inferences require semantic review. Queries, calculations, alternative explanations, unknowns and reviewer challenges remain inspectable. Intermediate drafts are ignored in Git; accepted outputs are immutable within their process history.
+
+The six analytical workflows completed in REVIEW. This is a substantive result: numeric calculations reconciled while reviewers challenged uncalibrated reorder thresholds, causal assumptions, immature cohorts, an invalid per-line refund allocation, and monetary experiment uncertainty. External execution remains PROHIBITED.
+
+No token, latency, cost or supervision savings were measured. The [Laya assessment](../PROJECT-EFFICIENCY.md) found no validated bounded classification step worth substituting into this deterministic calculation and open-ended analysis workflow.

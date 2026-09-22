@@ -14,6 +14,12 @@
 | `funnel_conversion` | channel × campaign | All leads plus linked/unlinked subgroups, distinct linked sessions/orders, descriptive spend, and conditional rates. Aggregate funnel traffic is not used as a substitution denominator. |
 | `reconciliation` | named check | Independent source and mart totals with a `passed` evidence flag. |
 
+The reconciliation result retains the generic columns `source_cents` and
+`mart_cents` for compatibility. For `check_id = purchase_receipts`, their unit is
+**physical units**, not currency; every other current reconciliation check uses
+MXN cents. Interpret those two columns together with `check_id` and never sum
+different checks. Business marts use quantity and money columns separately.
+
 `models/marts.sql` is the short lineage index; `models/marts/*.sql` are the
 executable fixed-query definitions loaded by `alma/warehouse.py`. Marts are materialized, and `query_mart` exposes names
 only, so a consumer cannot execute arbitrary SQL through the public API.

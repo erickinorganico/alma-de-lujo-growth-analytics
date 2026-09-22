@@ -1,0 +1,3 @@
+experiment_id,name,status,primary_metric,guardrail,start_date,end_date,arm,assigned_customers,converted_customers,conversion_rate,net_revenue_cents,contribution_cents,returned_customers,outcome_coverage_known,synthetic_descriptive_only
+exp-socks-01,Synthetic Pilates socks vignette,completed,contribution_cents_per_visit,return_rate_under_10_percent,2025-09-22,2025-11-17,control,32,13,0.40625,115637,71200,0,1,1
+exp-socks-01,Synthetic Pilates socks vignette,completed,contribution_cents_per_visit,return_rate_under_10_percent,2025-09-22,2025-11-17,treatment,35,12,0.34285714285714286,110512,77140,0,1,1

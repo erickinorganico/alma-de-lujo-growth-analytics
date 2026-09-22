@@ -1,45 +1,52 @@
-# MVP release evidence — 2026-09-22
+# Alma de Lujo v0.2.0 release evidence
 
-Status: **synthetic analytical MVP complete**. Public repository: [erickinorganico/alma-de-lujo-growth-analytics](https://github.com/erickinorganico/alma-de-lujo-growth-analytics).
+This release replaces the small v0.1 baseline with a substantive synthetic Growth & Business Analytics system. The public destination is [erickinorganico/alma-de-lujo-growth-analytics](https://github.com/erickinorganico/alma-de-lujo-growth-analytics). v0.1 remains historical under its tag; this document describes v0.2.
 
-The verified executable source milestone is commit `9c55c61` (pipeline, reports, tests and scripts). Documentation/evidence are published in subsequent commits without changing the analytical runtime. Public history started with `cdab0cb`; both commits were pushed to the personal repository before this evidence package.
+## Delivered system
 
-## Gates and concrete evidence
+- 30 typed source tables, 22,844 rows, 1,200 orders and 46 variants across 365 days.
+- 11 executable SQL marts with grain, ownership, column metadata, lineage and source reconciliation.
+- Six business lifecycles with 42 accepted golden events, six rejected illegal transitions, immutable receipts, replay and conflict controls.
+- Six persistent analytical processes and seven role contracts. Six actual analyst outputs plus six separate Astra reviews are recorded across four native tasks and four models.
+- Structured decision packets and a readable [decision book](../evidence/v0.2/DECISION-BOOK.md), plus Markdown/HTML/SVG analytical reports and CSV/SQLite deliverables.
 
-| Gate | Result | Artifact |
-|---|---|---|
-| Unit, integration and independent adversarial regressions | 33 tests PASS; 0 failures/errors/skips | `evidence/verification.json` |
-| Normal route | PASS; all declared quality checks green | `evidence/demo/quality.json`, `report.json` |
-| Four controlled failures | Correct BLOCKED states; absent cost remains UNKNOWN; negative stock/missing payment/duplicate event detected | verification scenario results; `evidence/red/` missing-cost report |
-| Analyst policies | 15/15 eval cases PASS; 3 packets per scenario; forged refs/approval bypass/execution blocked | `evidence/agent-evals.json`, `contracts/decision-packet.schema.json` |
-| Determinism and interchange | Repeated report equal; canonical CSV and SQLite roundtrips equal input; declared artifact hashes checked | CLI integration tests; per-snapshot `receipt.json` |
-| Clean install | Fresh copied source/tests + venv without pip; demo and full verify exit 0 | `evidence/clean-install.json` |
-| Tested runtime | Windows, Python 3.12.14, SQLite 3.53.1; pip absent in clean venv | clean-install receipt |
-| Adversarial gate | PASS for bounded synthetic scope; original and follow-up blockers fixed | `docs/ADVERSARIAL-REVIEW.md` |
-| Visual document review | 6 tables, 14 headings, 3 loaded local charts; 0 scripts/errors, no horizontal overflow at 1440px | `evidence/report-preview.json`, `.png` |
-| Secrets/licensing | Pattern scan of Git publication scope has no findings; original code MIT; no third-party media/data redistribution | `scripts/audit_release.py`, `evidence/release-audit.json`, LICENSE |
-| Git/publication | Isolated personal credential verified; public main created and verified milestones pushed; staged diff whitespace checked | commit history; `docs/GITHUB-ACCESS.md` |
+## Verification
 
-The analytical runtime needs no credentials, paid API, external package or browser. Browser preview is optional development verification using an existing Playwright installation, not a demo dependency. Network URLs in source citations are links for human review; no report asset is loaded remotely.
+| Gate | Verified evidence |
+| --- | --- |
+| Unit and integration tests | [67 tests passed](../evidence/v0.2/verification.json); zero failures/errors |
+| Scenarios | Six expected outcomes; stock pressure, discount illusion, cash pressure, unknown cost and broken linkage are distinguishable; [comparison](../evidence/v0.2/SCENARIO-COMPARISON.md) |
+| Replay and import | Same seed reproduces canonical data; another seed changes data while validating; identical batches are no-ops; invalid batches preserve accepted marts; [CSV roundtrip](../evidence/v0.2/interchange.json) |
+| Financial/SQL integrity | Six source-to-mart reconciliations; independent financial oracle across 13 calendar months; [controls](../evidence/v0.2/sql-controls.json) |
+| Independent code review | 13 probes, six finding groups corrected and rechecked, 19 reviewed file hashes; [Astra review](ADVERSARIAL-REVIEW-v2.md) |
+| Native cognition | 12 validated response/dispatch/trace bundles; analyst and reviewer identities differ per process; [run index](../evidence/v0.2/agents/task-runs.json) and [routing evidence](../evidence/v0.2/agents/model-provenance.json) |
+| Written/runtime contract consistency | Five findings resolved; [resolution](../evidence/v0.2/spec-consistency-resolution.json), [v2 packet schema](../contracts/decision-packet-v2.schema.json) and [instance context](../evidence/v0.2/lifecycle-instance-context.json) |
+| Scope acceptance | [32 criteria PASS, zero FAIL/BLOCKED](../evidence/v0.2/acceptance.json) |
+| Clean installation | Fresh no-pip Python 3.12.14 environment, offline build, all 30 CSV and 11 JSON/CSV marts identical; all six final native packets validate in a copied snapshot; [receipt](../evidence/v0.2/clean-install.json) |
+| Static visual report | 12 tables, 15 headings, three loaded local charts, zero scripts/errors/overflow; [preview](../evidence/v0.2/report-preview.json) |
+| Publication audit | Synthetic SQLite binaries verified by hash and metadata; publishable text/SQL dumps checked for secret patterns; [audit](../evidence/v0.2/release-audit.json) |
+| Ongoing CI | GitHub Actions reruns tests, scenarios, scope acceptance and release audit on pushes and pull requests; [workflow](../.github/workflows/verify.yml) |
 
-## Coverage and semantics
+The business packet status is REVIEW, independently of software acceptance PASS. Reviewers verified calculations and preserved objections about demand, attribution, cohort maturity, allocation of refunds, payment timing and experimental uncertainty. No owner approval or business impact is claimed.
 
-Seventeen canonical tables span market/product/purchasing/inventory/commerce/finance/customer/Growth information. Market sources are linked context; the raw business dataset is entirely synthetic. No live catalog or social account was imported. The user-confirmed sportswear/Pilates-socks direction is distinct from invented example garments, colors, costs and activity.
+## Portability and limits
 
-Financial policies remain provisional: delivery-based revenue, distinct credit/refund/return events, standard COGS, observed cash, summarized supplier/expense payment dates and no fiscal accounting. Derived unknowns remain unknown, with conservative withholding of complete inventory-classification counts when dependencies are missing. Read-only packets resolve references but do not prove semantic entailment of arbitrary freeform text.
+The core needs only Python and SQLite. It installs no paid inference provider or production integration. A new local workspace waits at WAITING_AGENT; actual cognition runs through the documented native Codex task bridge. Offline replay verifies recorded responses and makes no new model call.
 
-The reproducibility guarantee covers the same declared fixture/policy and tested runtime. SQLite binary hash portability across different SQLite versions is not promised; canonical JSON/CSV and analytical outputs remain inspectable. The snapshot receipts include the locally generated SQLite file, which is deliberately ignored in Git; public canonical data is sufficient to reconstruct it.
+Both exact synthetic SQLite files are published to preserve snapshot hashes. A fresh SQLite build may have different binary bytes while its canonical source and all analytical exports match. Cross-version binary reproducibility is not promised.
 
-## Explicit remaining business work
+The user's sportswear/Pilates-socks direction is distinct from simulated garments, colors, costs, prices and sales. Instagram's latest catalog was inaccessible. INEGI observations are attributed market context, not a Pilates demand estimate. Real customers, real inventory, tax accounting, paid campaigns, orders and payments are outside this release.
 
-Real-data use is outside this MVP: confirm owner process, actual SKU/cost/source coverage, privacy/provenance and financial policy; add an approved adapter and reconcile real authoritative totals. Actual market demand, adoption, causal lift, ROI, production deployment, payments and tax correctness are not claimed. No frontend/backend, SaaS, CRM or ERP was built into the release.
+The audit is a bounded pattern and provenance check, not proof that arbitrary future user text is free of personal data. Source credentials, local scratch files and intermediate native drafts are excluded from Git. Personal GitHub access stays isolated to this repository.
 
 ## Reproduce
 
 ```powershell
-python -m alma demo
-python -m alma verify
+python -m alma workspace --output build/cycle-001
+python scripts/verify_v2.py --output build/verification-v2
+python scripts/check_scope_v2.py --workspace evidence/v0.2/workspace --verification build/verification-v2/verification.json --output build/acceptance.json
+python scripts/build_decision_book.py --workspace evidence/v0.2/workspace --output build/DECISION-BOOK.md
 python scripts/audit_release.py
 ```
 
-Open generated report documents directly. Use separate output paths for red scenarios. `demo` exits 0 for a green snapshot, 2 for a controlled blocked snapshot and 1 for an input/build error. `verify` evaluates red outcomes as expected successful tests. See README ES/EN for fresh-environment commands and the migration/playbook documents for the next authority boundary.
+See the [runbook](RUNBOOK-v2.md), [native procedure](../agents/RUN-NATIVE-CYCLE.md) and [PRD](../specs/PRD.md).

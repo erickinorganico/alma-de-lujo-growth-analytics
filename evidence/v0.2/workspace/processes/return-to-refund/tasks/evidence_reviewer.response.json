@@ -1,0 +1,80 @@
+{
+  "challenges": [
+    "La igualdad 61/61/61 no permite emparejar eventos. El análisis lo reconoce; conservar IDs, cantidades físicas y montos monetarios en columnas y niveles de detalle distintos.",
+    "Para los indicadores de monto y días por order_item_id, definir un vínculo verificable o una asignación explícita antes de unir refunds. Si no existe, mantener el reembolso a nivel orden y marcar la atribución por línea como desconocida; no multiplicarlo por cada línea o crédito.",
+    "returns_ledger, credit_limits y payment_reconciliation ya tienen PASS. La recomendación debe aprovecharlos y añadir detalle de excepciones o vínculos, no presentar como ausentes esos controles ya implementados.",
+    "El ejemplo de una variante con discrepancia cero no prueba que cada devolución se reingresó a inventario ni que todo reembolso corresponda a restock. El COGS se revierte para unidades restockeadas; una merma física no debe recibir automáticamente esa reversión.",
+    "Una muestra limitada a unidades con trazabilidad completa puede excluir precisamente los casos fallidos. Reportar elegibles, excluidas y razones; fijar el tamaño o la regla de parada antes de observar resultados y no extrapolar a toda la población sin justificar la cobertura."
+  ],
+  "evidence_hash": "109fb2e4628047d4f017e58e247667ece960f17c94d08a23dedacd58ee467d0c",
+  "facts": [
+    {
+      "evidence_refs": [
+        "/counts/returns"
+      ],
+      "id": "physical_returns",
+      "kind": "observation",
+      "statement": "La evidencia registra 61 eventos sintéticos de devolución física.",
+      "value": 61
+    },
+    {
+      "evidence_refs": [
+        "/marts/cash_daily/4/refund_out_cents"
+      ],
+      "id": "refund_cash_event",
+      "kind": "observation",
+      "statement": "El mart registra salida sintética por reembolso de 17,606 centavos MXN el 2025-09-28.",
+      "value": 17606
+    },
+    {
+      "evidence_refs": [
+        "/lineage/schema/tables/refunds/columns/1/name"
+      ],
+      "id": "refund_link_grain",
+      "kind": "observation",
+      "statement": "La segunda columna de refunds es order_id, que identifica la orden y no una línea específica.",
+      "value": "order_id"
+    },
+    {
+      "evidence_refs": [
+        "/lineage/schema/tables/credit_notes/columns/1/name"
+      ],
+      "id": "credit_link_grain",
+      "kind": "observation",
+      "statement": "La segunda columna de credit_notes es order_item_id, que identifica una línea.",
+      "value": "order_item_id"
+    },
+    {
+      "evidence_refs": [
+        "/quality/53/status"
+      ],
+      "id": "existing_return_control",
+      "kind": "observation",
+      "statement": "El control returns_ledger ya existe y pasa en el snapshot.",
+      "value": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "/marts/inventory_position/0/count_discrepancy_qty"
+      ],
+      "id": "inventory_discrepancy",
+      "kind": "observation",
+      "statement": "La variante de inventario usada como ejemplo tiene discrepancia de conteo cero dentro del snapshot sintético.",
+      "value": 0
+    }
+  ],
+  "hypotheses": [
+    "Desfases entre devolución, crédito y reembolso pueden explicar diferencias temporales entre inventario, ingreso y caja, pero deben verificarse al nivel de cada evento sin imponer una equivalencia uno a uno."
+  ],
+  "recommendations": [],
+  "request_id": "fa53011afb533d0dd7b32d1421540565018688266b64c542f9be0ae905205b18",
+  "role": "evidence_reviewer",
+  "summary": "Los tres conteos de 61 eventos, el ejemplo de caja de 17,606 centavos MXN y la posición de inventario citada se verifican. REVIEW: la separación conceptual entre devolución física, crédito comercial y reembolso es correcta, pero la conciliación propuesta por línea requiere un vínculo o asignación explícita: refunds está a nivel order_id, mientras returns y credit_notes están a nivel order_item_id. Una unión directa por orden puede duplicar efectivo y fabricar tiempos de reembolso por línea. Los controles existentes deben aprovecharse para producir excepciones detalladas.",
+  "unknowns": [
+    "No existe en el esquema enlazado una clave de refund hacia devolución o línea; falta una política verificable de asignación de importes y fechas para órdenes con varias líneas.",
+    "Los ejemplos no establecen tasa de recuperación física, merma, calidad de inspección ni satisfacción real.",
+    "No hay saldo bancario inicial ni evidencia real de recepción, inspección o ejecución de reembolsos."
+  ],
+  "verdict": "REVIEW",
+  "version": "2.0"
+}

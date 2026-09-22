@@ -1,0 +1,202 @@
+{
+  "completed_at_utc": "2026-09-22T09:03:09.807949+00:00",
+  "evidence_hash": "829cc1dfba0e4e93ec62c626dcc64a8929e1c7fdc30f5d82fa4fa45909ab6cad",
+  "external_business_actions": "PROHIBITED",
+  "kind": "native-independent-review-query-trace",
+  "local_read_correction": "Initial default Windows text decoding was replaced with explicit UTF-8; both original request/evidence hashes verify. No evidence changed.",
+  "process_id": "finance-close",
+  "queries": [
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence/v0.2/workspace --mart finance_monthly",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "668729a23bc1632e0012d97ae49d3320239ecd8b3b7729dc27fcc220236bd988",
+      "row_count": 13
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence/v0.2/workspace --mart cash_daily",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "1249bed02a576fafddf79eef10f4b289224915de1a2ac820d6138c9c81983e08",
+      "row_count": 335
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence/v0.2/workspace --mart procurement",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "e1127ac36465159868d8c13b49307f51bb7fece7a9d712fd79a62fb319556361",
+      "row_count": 46
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence/v0.2/workspace --mart reconciliation",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "f0a23d8f8e3e12da7fa363f7a192c75cd42b641531ffdeab59db40c3e210db9c",
+      "row_count": 6
+    }
+  ],
+  "questions": [
+    "Do period and October components equal the analyst calculations?",
+    "Does a seven-day supplier-payment shift cross the month boundary?",
+    "Does the evidence establish the proposed purchasing priority or merely arithmetic?"
+  ],
+  "recomputed": {
+    "october_cash_components": {
+      "cash_in_cents": 659680,
+      "expense_out_cents": 30414,
+      "net_cash_change_cents": -3528734,
+      "refund_out_cents": 0,
+      "supplier_out_cents": 4158000
+    },
+    "october_finance": {
+      "cash_coverage_known": 1,
+      "cogs_cents": 200200,
+      "contribution_after_variable_cents": 294115,
+      "cost_coverage_known": 1,
+      "expense_accrual_cents": 30414,
+      "expense_coverage_known": 1,
+      "gross_profit_cents": 306818,
+      "month": "2025-10",
+      "net_cash_change_cents": -3528734,
+      "net_revenue_cents": 507018,
+      "operating_after_all_expenses_cents": 276404,
+      "revenue_coverage_known": 1,
+      "variable_expense_cents": 12703
+    },
+    "payment_plus_7_days_sensitivity": {
+      "last_shifted_date": "2025-10-31",
+      "method": "Move each October supplier outflow seven days later, keep all other daily components fixed; aggregate by date. All shifted events remain in October.",
+      "monthly_total_unchanged": -3528734,
+      "observed_min_daily": -323400,
+      "shifted_min_daily": -264900
+    },
+    "period_sums": {
+      "expense_accrual_cents": 361353,
+      "gross_profit_cents": 22527657,
+      "net_cash_change_cents": 44207671,
+      "net_revenue_cents": 37087457,
+      "operating_after_all_expenses_cents": 22166304
+    },
+    "procurement": {
+      "open_cost_cents": 2089000,
+      "open_qty": 332,
+      "paid_cents": 4158000
+    },
+    "supplier_cash_dates": [
+      [
+        "2025-10-01",
+        152600
+      ],
+      [
+        "2025-10-02",
+        112000
+      ],
+      [
+        "2025-10-03",
+        210000
+      ],
+      [
+        "2025-10-04",
+        323400
+      ],
+      [
+        "2025-10-05",
+        167100
+      ],
+      [
+        "2025-10-06",
+        137600
+      ],
+      [
+        "2025-10-07",
+        243100
+      ],
+      [
+        "2025-10-08",
+        240000
+      ],
+      [
+        "2025-10-09",
+        137900
+      ],
+      [
+        "2025-10-10",
+        133300
+      ],
+      [
+        "2025-10-11",
+        193700
+      ],
+      [
+        "2025-10-12",
+        264900
+      ],
+      [
+        "2025-10-13",
+        150700
+      ],
+      [
+        "2025-10-14",
+        108200
+      ],
+      [
+        "2025-10-15",
+        227500
+      ],
+      [
+        "2025-10-16",
+        168900
+      ],
+      [
+        "2025-10-17",
+        109600
+      ],
+      [
+        "2025-10-18",
+        94950
+      ],
+      [
+        "2025-10-19",
+        199200
+      ],
+      [
+        "2025-10-20",
+        273950
+      ],
+      [
+        "2025-10-21",
+        137100
+      ],
+      [
+        "2025-10-22",
+        135750
+      ],
+      [
+        "2025-10-23",
+        190400
+      ],
+      [
+        "2025-10-24",
+        46150
+      ]
+    ]
+  },
+  "request_id": "209158682f660e0b4d08152e97df32136ab4d19d7a1a8573bfca746be8552ae1",
+  "response_sha256": "0c16312e7f81768e99418a0659c5603a873fa73af374502ce16653ea7866a179",
+  "response_validation": {
+    "facts_checked": 5,
+    "request_id": "209158682f660e0b4d08152e97df32136ab4d19d7a1a8573bfca746be8552ae1",
+    "scope": "schema, immutable evidence, exact observation values and authority; prose meaning requires reviewer",
+    "valid": true
+  },
+  "reviewer": "/root/astra_v2_review",
+  "semantic_challenges": [
+    "All five period sums, all October cash components, 332 open units and their 2,089,000-cent cost valuation were independently recomputed and matched. This validates arithmetic, not the causal purchase-deferral rationale in the summary.",
+    "Recommendation rank-1 should identify the full set of supplier-payment events, not imply a single 4,158,000-cent payment. The bound mart shows outflows on 24 dates.",
+    "The proposed seven-day delay stays entirely within October. Its monthly primary metric is invariant; focus the protocol on the daily trough and distinguish daily movement from a minimum bank balance.",
+    "The purchasing freeze and priority of payment timing require an explicit decision objective and actual constraints. Preserve them as owner-review proposals rather than deductions from positive cash-versus-profit differences."
+  ],
+  "synthetic": true,
+  "verdict": "REVIEW",
+  "version": "2.0"
+}

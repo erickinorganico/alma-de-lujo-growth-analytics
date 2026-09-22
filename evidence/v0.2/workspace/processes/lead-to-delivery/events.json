@@ -1,0 +1,159 @@
+[
+  {
+    "checkpoint": {
+      "definition_hash": "4489750a6d1dd787ca419ed6cc5a3b90dc02c42fd4bcce41083037322bfc21a4",
+      "input_hash": "faf6669d61bdbc0ea473c1802c44934c56b8f26476c3020c9050d79be05412b0",
+      "owner": "Responsable de operación comercial",
+      "process_id": "lead-to-delivery",
+      "responses": {},
+      "run_id": "ee8fa46d9f1f5d1c9263d077",
+      "status": "VALIDATING",
+      "step": "source_contract",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "required_tables": [
+        "campaigns",
+        "content_assets",
+        "sessions",
+        "leads",
+        "orders",
+        "order_items",
+        "payments",
+        "shipments",
+        "invoices"
+      ]
+    },
+    "from_status": "NEW",
+    "hash": "d02e7cde58023070141330727ca733fe77f4b8dc157a2e0980226929b4ac7d02",
+    "previous_hash": "GENESIS",
+    "sequence": 1,
+    "step": "source_contract",
+    "to_status": "VALIDATING"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "4489750a6d1dd787ca419ed6cc5a3b90dc02c42fd4bcce41083037322bfc21a4",
+      "input_hash": "faf6669d61bdbc0ea473c1802c44934c56b8f26476c3020c9050d79be05412b0",
+      "owner": "Responsable de operación comercial",
+      "process_id": "lead-to-delivery",
+      "responses": {},
+      "run_id": "ee8fa46d9f1f5d1c9263d077",
+      "status": "ANALYZING",
+      "step": "sql_marts",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "evidence_hash": "faf6669d61bdbc0ea473c1802c44934c56b8f26476c3020c9050d79be05412b0",
+      "marts": [
+        "funnel_conversion",
+        "channel_performance",
+        "sales_daily",
+        "reconciliation"
+      ]
+    },
+    "from_status": "VALIDATING",
+    "hash": "a1a7d71c0b002a0fd0f31dba656da31108cdb86716b0a24cd928039d39fcd85d",
+    "previous_hash": "d02e7cde58023070141330727ca733fe77f4b8dc157a2e0980226929b4ac7d02",
+    "sequence": 2,
+    "step": "sql_marts",
+    "to_status": "ANALYZING"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "4489750a6d1dd787ca419ed6cc5a3b90dc02c42fd4bcce41083037322bfc21a4",
+      "input_hash": "faf6669d61bdbc0ea473c1802c44934c56b8f26476c3020c9050d79be05412b0",
+      "owner": "Responsable de operación comercial",
+      "process_id": "lead-to-delivery",
+      "responses": {},
+      "run_id": "ee8fa46d9f1f5d1c9263d077",
+      "status": "WAITING_AGENT",
+      "step": "native_analysis",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "request_id": "0b1d66fb3cdaaa3637cf4d1a45e11b71c2d38178a5901d006a7b0ce446e90144",
+      "role": "commerce_analyst"
+    },
+    "from_status": "ANALYZING",
+    "hash": "cfc11f01861bd80b301a7d249e7300d22c51b7050e4d8bd8643b5ef0340471d0",
+    "previous_hash": "a1a7d71c0b002a0fd0f31dba656da31108cdb86716b0a24cd928039d39fcd85d",
+    "sequence": 3,
+    "step": "native_analysis",
+    "to_status": "WAITING_AGENT"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "4489750a6d1dd787ca419ed6cc5a3b90dc02c42fd4bcce41083037322bfc21a4",
+      "input_hash": "faf6669d61bdbc0ea473c1802c44934c56b8f26476c3020c9050d79be05412b0",
+      "owner": "Responsable de operación comercial",
+      "process_id": "lead-to-delivery",
+      "responses": {
+        "commerce_analyst": {
+          "agent_id": "/root/luna_simulation_v2",
+          "dispatch_hash": "d55d6ccba98441c1f6d8d2d5ac7f4543b30ae687fffb49deec16dbac6b5e2427",
+          "model": "gpt-5.6-luna",
+          "request_id": "0b1d66fb3cdaaa3637cf4d1a45e11b71c2d38178a5901d006a7b0ce446e90144",
+          "sha256": "559742990492a95f396d509273f7c3a2e496cf75dcaf2ddfdb5bf804acd3442a"
+        }
+      },
+      "run_id": "ee8fa46d9f1f5d1c9263d077",
+      "status": "WAITING_REVIEW",
+      "step": "independent_review",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "analyst": "commerce_analyst",
+      "request_id": "b171a09299f5e634e19d50200fc4dd31d8cc26c2e86a80201cdbe1b815694fc3"
+    },
+    "from_status": "WAITING_AGENT",
+    "hash": "5adb1544cfbd16e8d838918d1f0b8477a91e5fb525d00be47da2a239abb14ebd",
+    "previous_hash": "cfc11f01861bd80b301a7d249e7300d22c51b7050e4d8bd8643b5ef0340471d0",
+    "sequence": 4,
+    "step": "independent_review",
+    "to_status": "WAITING_REVIEW"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "4489750a6d1dd787ca419ed6cc5a3b90dc02c42fd4bcce41083037322bfc21a4",
+      "input_hash": "faf6669d61bdbc0ea473c1802c44934c56b8f26476c3020c9050d79be05412b0",
+      "owner": "Responsable de operación comercial",
+      "process_id": "lead-to-delivery",
+      "responses": {
+        "commerce_analyst": {
+          "agent_id": "/root/luna_simulation_v2",
+          "dispatch_hash": "d55d6ccba98441c1f6d8d2d5ac7f4543b30ae687fffb49deec16dbac6b5e2427",
+          "model": "gpt-5.6-luna",
+          "request_id": "0b1d66fb3cdaaa3637cf4d1a45e11b71c2d38178a5901d006a7b0ce446e90144",
+          "sha256": "559742990492a95f396d509273f7c3a2e496cf75dcaf2ddfdb5bf804acd3442a"
+        },
+        "evidence_reviewer": {
+          "agent_id": "/root/astra_v2_review",
+          "dispatch_hash": "405b3d4f583597362c69cd1872e7c4f30752db662def74050251b0d2eae1d5c0",
+          "model": "gpt-6-astra",
+          "request_id": "b171a09299f5e634e19d50200fc4dd31d8cc26c2e86a80201cdbe1b815694fc3",
+          "sha256": "2af96670bce5ec5e513d43f8f5bdc13cb7ad87114ee7d09a656e28d503016ab3"
+        }
+      },
+      "run_id": "ee8fa46d9f1f5d1c9263d077",
+      "status": "REVIEW",
+      "step": "decision_packet",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "external_execution": "PROHIBITED",
+      "sha256": "f38dc3a2ecbb2a09610ba9240ec40bc834a5aa74bd4e16cde033a4041991b265"
+    },
+    "from_status": "WAITING_REVIEW",
+    "hash": "3ee7005e6b3c3e848d63b7f03f8942869f76e61d0fa8474380657e4581550da3",
+    "previous_hash": "5adb1544cfbd16e8d838918d1f0b8477a91e5fb525d00be47da2a239abb14ebd",
+    "sequence": 5,
+    "step": "decision_packet",
+    "to_status": "REVIEW"
+  }
+]

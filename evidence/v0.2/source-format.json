@@ -1,0 +1,125 @@
+{
+  "reason": "Match committed LF sources without changing Python AST",
+  "files": [
+    {
+      "file": "alma/analytics.py",
+      "before": "f4097a59f461bc0251d6edf803d76d2459e60bfef69470205f3525dc1f5ba1bb",
+      "after": "9bfa4e8b85a26fbef3713d5f5f764b9501421e05adb8a9cd5273b04c004e91ef",
+      "python_ast_equal": true
+    },
+    {
+      "file": "alma/decisions.py",
+      "before": "254bfb4fda599513ffeeda5c80215fddd4df2c5e7e8530ef0cb767d606d6c244",
+      "after": "69e59e1a959f39976a0b0503a5a0addb3bab0f3a8a65f7d8a104b23dcbaa54a5",
+      "python_ast_equal": true
+    },
+    {
+      "file": "alma/evaluation.py",
+      "before": "776e22d3e7b8054d0e9da9f585cac30a575e07b54ec4fa992b6d8e38687842e9",
+      "after": "21253dfd261d665a5fbc10454e8c62369aed13922f04336366f842cbf5893d5d",
+      "python_ast_equal": true
+    },
+    {
+      "file": "alma/experimentation.py",
+      "before": "7dbcc5c60e6451f3abb407ff5a66c2762ca3c02fe959a807da135190812573fc",
+      "after": "44d2a83f16e6f965daaa7fe35fcb3d0a30c3f8d38cbf345902d3aa9cdd51288a",
+      "python_ast_equal": true
+    },
+    {
+      "file": "alma/interchange.py",
+      "before": "79dba95782fba300219bd8eb186ed136f359f48abd8d843cb46648f4a7a904dd",
+      "after": "2dc9f78430e4c2c68df462194c7c47280ec6992eccc934a33dd4bb7a645bf103",
+      "python_ast_equal": true
+    },
+    {
+      "file": "alma/native_agents.py",
+      "before": "fd0b8fb59c74de49cf2b33a05905cb6342f1d38550421183a69641b2ebe45ee7",
+      "after": "3d78c3e04ba5985568e7d6ed290fb99044297c7022636d5c98664e24dbff4264",
+      "python_ast_equal": true
+    },
+    {
+      "file": "alma/process_engine.py",
+      "before": "a6ca5e2f3d0deb1a15f09d8a34db3058ee4e3674beff715ca596dbe8a7b7c0f2",
+      "after": "15b77f7a4b9c9c743a5ccadca9fe6f7e3551177d5343869613ba00105253e583",
+      "python_ast_equal": true
+    },
+    {
+      "file": "alma/reporting.py",
+      "before": "248db34860c463bb0a82de269bee5dfe3d9878bdf270c17346dd8ace1a1444d4",
+      "after": "b2bb367247dbb3a02515daddea285f63df4746cf364aacdffdb15248caff4aa0",
+      "python_ast_equal": true
+    },
+    {
+      "file": "alma/storage.py",
+      "before": "c80e854808112a55d0c541f7397e4c54ee3eac6defb052147ea9dac2f73dfa32",
+      "after": "3707a29d659205a5636c724df7faac0fc795771c998865a6167f225d743af62c",
+      "python_ast_equal": true
+    },
+    {
+      "file": "alma/validation.py",
+      "before": "58102a673cb5dca47d2e8b75fb821f3a8010e70d29a1d7df2d435038cf157e26",
+      "after": "ad57bd3714630b17aae99e5147ea9bff935749aa83d8c4d5ce57074bf077bab0",
+      "python_ast_equal": true
+    },
+    {
+      "file": "alma/workspace.py",
+      "before": "b8308986743b44c50c4739f6f328aca546705baa1d26d1964aae3dea7a8a08ff",
+      "after": "d2c470610d8478a26a07ba9cc9f34fee3f49d5ab841200210328fddccb62932a",
+      "python_ast_equal": true
+    },
+    {
+      "file": "alma/workspace_report.py",
+      "before": "2155ea20586d455738f80d806acb00f39fd7d4841232fa0e059ebaefa716cea2",
+      "after": "4e27858aa185a5604a170d049aef79cf314597b3d5d5dfef1baea09ab2b7d74f",
+      "python_ast_equal": true
+    },
+    {
+      "file": "alma/__init__.py",
+      "before": "34baa42be6375a0e246d2d8f29ab66b505ea752a97e06ab616dde5e8a940cd14",
+      "after": "a2628e7d494823c9460200498312f17b17094a35234cf2b5f1ebf580414964cf",
+      "python_ast_equal": true
+    },
+    {
+      "file": "alma/__main__.py",
+      "before": "ddabd8a87ab51cc82a6edfa52376d1510077ed886a225853b3252813d8a5c017",
+      "after": "00c12f159e4208afc80ef5cadc81b7f1f49d557c3b9688be6731416fa5562dd3",
+      "python_ast_equal": true
+    },
+    {
+      "file": "scripts/audit_release.py",
+      "before": "26e62f32cb677f7ca720a174ee97a41723c9f222a62844c78f51637cffd5a95b",
+      "after": "8d92a13614ae5ce80a496e529d59fe71364f95bf9478fbe963eecb60c76e9e1a",
+      "python_ast_equal": true
+    },
+    {
+      "file": "scripts/record_native_run.py",
+      "before": "5c266d2fd428ac0a8ab81fbffde6b00fb7aa6734f9f15a1bc91da527b6b98a0c",
+      "after": "eb0bc0d85a36207ab998d7ce2806c2bb3b474d89a10f0955adf297263e3c59f2",
+      "python_ast_equal": true
+    },
+    {
+      "file": "scripts/verify_v2.py",
+      "before": "1066e3b228a751a995f73fb9e0ca378101dcd0ce204d086ef997384af6ce5309",
+      "after": "8367ec73853f59088f44fdeece8469e4ef264eb76ae7b57d64a935a0bfe930ad",
+      "python_ast_equal": true
+    },
+    {
+      "file": "tests/test_cli.py",
+      "before": "175113ac843f96d5e45f522f4df81bdfea420aa5bdcb42a6baff671fbe52b4de",
+      "after": "6b0076b1db16cc420a1d39368193a3f45d87239b8479acdbe1552ef7775776a5",
+      "python_ast_equal": true
+    },
+    {
+      "file": "tests/test_experimentation.py",
+      "before": "3d2793dfe39fc332941e09d9d6641db5f9740f9948ba498e0c1676391401036c",
+      "after": "cb982a16be7a9320c2ce94fa360e7b16440cb2d43a3d260c6c5e02a8bbed86ed",
+      "python_ast_equal": true
+    },
+    {
+      "file": "tests/test_process_engine.py",
+      "before": "57e0e1b9514ce4b71b9bf1e540a9dcda3815977330402e0d533c008b810d9e59",
+      "after": "7fc7b46c47158177265d70f1099116e5b51e2ea6a34c066630d0db01de185f30",
+      "python_ast_equal": true
+    }
+  ]
+}

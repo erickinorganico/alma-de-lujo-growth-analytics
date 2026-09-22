@@ -4,7 +4,18 @@ Un sistema analítico para ropa deportiva y calcetines de Pilates: datos relacio
 
 **Los datos comerciales son sintéticos.** Las fuentes públicas de mercado están atribuidas por separado. Este proyecto no demuestra ventas o rentabilidad reales de Alma de Lujo.
 
-[Ver dossier analítico](evidence/v0.2/workspace/DOSSIER.md) · [Explorar las tablas](evidence/v0.2/workspace/tables) · [Consultar SQL](models/marts) · [Leer los procesos](specs/PROCESS-CATALOG.md) · [Sistema de agentes](specs/AGENT-SYSTEM.md)
+[Libro de decisiones](evidence/v0.2/DECISION-BOOK.md) · [Dossier analítico](evidence/v0.2/workspace/DOSSIER.md) · [Tablas](evidence/v0.2/workspace/tables) · [SQL](models/marts) · [Procesos](specs/PROCESS-CATALOG.md) · [Agentes](specs/AGENT-SYSTEM.md)
+
+```mermaid
+flowchart LR
+  Source[30 tablas sintéticas] --> SQL[SQLite y 11 modelos SQL]
+  Events[Casos de seis procesos] --> States[Estados, controles y eventos]
+  SQL --> Evidence[Evidencia inmutable]
+  States --> Evidence
+  Evidence --> Agents[Seis roles analistas nativos]
+  Agents --> Review[Revisión independiente Astra]
+  Review --> Decisions[Seis paquetes de decisión]
+```
 
 ## Qué contiene
 
@@ -56,6 +67,8 @@ El importador exige el contrato exacto y el marcador sintético. Se preservan ca
 ## Verificación
 
 La verificación v0.2 reúne **67 pruebas automáticas**, seis escenarios, mecanismos de estrés y replay, integridad de importación, oráculos financieros y revisión adversarial independiente. [Resultados](evidence/v0.2/verification.json) · [Revisión Astra](docs/ADVERSARIAL-REVIEW-v2.md) · [CSV roundtrip](evidence/v0.2/interchange.json).
+
+[Matriz de aceptación ejecutada](evidence/v0.2/acceptance.json) · [Recibos y trazas de agentes](evidence/v0.2/agents/task-runs.json) · [Identidad de modelos verificada](evidence/v0.2/agents/model-provenance.json) · [Instalación limpia](evidence/v0.2/clean-install.json) · [Release](docs/RELEASE.md).
 
 Los estados de aceptación, las ejecuciones de agentes y la publicación se verifican como evidencias separadas. La consistencia de una simulación no prueba adopción, exactitud de datos externos ni impacto comercial.
 

@@ -1,0 +1,192 @@
+{
+  "cash_squeeze": [
+    {
+      "check_id": "sales_net_revenue",
+      "mart_cents": 37652211,
+      "passed": 1,
+      "source_cents": 37652211
+    },
+    {
+      "check_id": "cash_in",
+      "mart_cents": 50955825,
+      "passed": 1,
+      "source_cents": 50955825
+    },
+    {
+      "check_id": "cash_out",
+      "mart_cents": 7654002,
+      "passed": 1,
+      "source_cents": 7654002
+    },
+    {
+      "check_id": "purchase_receipts",
+      "mart_cents": 666,
+      "passed": 1,
+      "source_cents": 666
+    },
+    {
+      "check_id": "supplier_payments",
+      "mart_cents": 6335700,
+      "passed": 1,
+      "source_cents": 6335700
+    },
+    {
+      "check_id": "marketing_spend",
+      "mart_cents": 147526,
+      "passed": 1,
+      "source_cents": 147526
+    }
+  ],
+  "missing_cost": [
+    {
+      "check_id": "sales_net_revenue",
+      "mart_cents": 37087457,
+      "passed": 1,
+      "source_cents": 37087457
+    },
+    {
+      "check_id": "cash_in",
+      "mart_cents": 49622444,
+      "passed": 1,
+      "source_cents": 49622444
+    },
+    {
+      "check_id": "cash_out",
+      "mart_cents": 5414773,
+      "passed": 1,
+      "source_cents": 5414773
+    },
+    {
+      "check_id": "purchase_receipts",
+      "mart_cents": 663,
+      "passed": 1,
+      "source_cents": 663
+    },
+    {
+      "check_id": "supplier_payments",
+      "mart_cents": 4158000,
+      "passed": 1,
+      "source_cents": 4158000
+    },
+    {
+      "check_id": "marketing_spend",
+      "mart_cents": 147526,
+      "passed": 1,
+      "source_cents": 147526
+    }
+  ],
+  "normal": [
+    {
+      "check_id": "sales_net_revenue",
+      "mart_cents": 37087457,
+      "passed": 1,
+      "source_cents": 37087457
+    },
+    {
+      "check_id": "cash_in",
+      "mart_cents": 49622444,
+      "passed": 1,
+      "source_cents": 49622444
+    },
+    {
+      "check_id": "cash_out",
+      "mart_cents": 5414773,
+      "passed": 1,
+      "source_cents": 5414773
+    },
+    {
+      "check_id": "purchase_receipts",
+      "mart_cents": 663,
+      "passed": 1,
+      "source_cents": 663
+    },
+    {
+      "check_id": "supplier_payments",
+      "mart_cents": 4158000,
+      "passed": 1,
+      "source_cents": 4158000
+    },
+    {
+      "check_id": "marketing_spend",
+      "mart_cents": 147526,
+      "passed": 1,
+      "source_cents": 147526
+    }
+  ],
+  "promotion_illusion": [
+    {
+      "check_id": "sales_net_revenue",
+      "mart_cents": 38789806,
+      "passed": 1,
+      "source_cents": 38789806
+    },
+    {
+      "check_id": "cash_in",
+      "mart_cents": 54391334,
+      "passed": 1,
+      "source_cents": 54391334
+    },
+    {
+      "check_id": "cash_out",
+      "mart_cents": 6921701,
+      "passed": 1,
+      "source_cents": 6921701
+    },
+    {
+      "check_id": "purchase_receipts",
+      "mart_cents": 944,
+      "passed": 1,
+      "source_cents": 944
+    },
+    {
+      "check_id": "supplier_payments",
+      "mart_cents": 6064400,
+      "passed": 1,
+      "source_cents": 6064400
+    },
+    {
+      "check_id": "marketing_spend",
+      "mart_cents": 156842,
+      "passed": 1,
+      "source_cents": 156842
+    }
+  ],
+  "stock_pressure": [
+    {
+      "check_id": "sales_net_revenue",
+      "mart_cents": 36794267,
+      "passed": 1,
+      "source_cents": 36794267
+    },
+    {
+      "check_id": "cash_in",
+      "mart_cents": 48874300,
+      "passed": 1,
+      "source_cents": 48874300
+    },
+    {
+      "check_id": "cash_out",
+      "mart_cents": 2545051,
+      "passed": 1,
+      "source_cents": 2545051
+    },
+    {
+      "check_id": "purchase_receipts",
+      "mart_cents": 214,
+      "passed": 1,
+      "source_cents": 214
+    },
+    {
+      "check_id": "supplier_payments",
+      "mart_cents": 1360700,
+      "passed": 1,
+      "source_cents": 1360700
+    },
+    {
+      "check_id": "marketing_spend",
+      "mart_cents": 147526,
+      "passed": 1,
+      "source_cents": 147526
+    }
+  ]
+}

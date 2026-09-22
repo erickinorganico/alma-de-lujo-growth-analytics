@@ -1,0 +1,58 @@
+[
+  {
+    "all_leads": 604,
+    "campaign_id": "camp-private",
+    "channel": "DM",
+    "funnel_coverage_known": 1,
+    "lead_to_linked_order_rate": 0.3129,
+    "linked_leads": 604,
+    "linked_orders": 189,
+    "marketing_spend_cents": 31522,
+    "session_linked_leads": 604,
+    "session_to_lead_rate": 0.274,
+    "sessions": 2204,
+    "unlinked_leads": 0
+  },
+  {
+    "all_leads": 843,
+    "campaign_id": "camp-studio",
+    "channel": "Instagram",
+    "funnel_coverage_known": 1,
+    "lead_to_linked_order_rate": 0.4852,
+    "linked_leads": 843,
+    "linked_orders": 409,
+    "marketing_spend_cents": 40338,
+    "session_linked_leads": 843,
+    "session_to_lead_rate": 0.3451,
+    "sessions": 2443,
+    "unlinked_leads": 0
+  },
+  {
+    "all_leads": 697,
+    "campaign_id": "organic",
+    "channel": "Organic",
+    "funnel_coverage_known": 1,
+    "lead_to_linked_order_rate": 0.3989,
+    "linked_leads": 697,
+    "linked_orders": 278,
+    "marketing_spend_cents": 36767,
+    "session_linked_leads": 697,
+    "session_to_lead_rate": 0.3034,
+    "sessions": 2297,
+    "unlinked_leads": 0
+  },
+  {
+    "all_leads": 686,
+    "campaign_id": "camp-move",
+    "channel": "Paid Social",
+    "funnel_coverage_known": 1,
+    "lead_to_linked_order_rate": 0.3848,
+    "linked_leads": 686,
+    "linked_orders": 264,
+    "marketing_spend_cents": 38899,
+    "session_linked_leads": 686,
+    "session_to_lead_rate": 0.3001,
+    "sessions": 2286,
+    "unlinked_leads": 0
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "agent_id": "/root/terra_warehouse_v2",
+  "completed_at_utc": "2026-09-22T08:58:33Z",
+  "effort": "high",
+  "mode": "live",
+  "model": "gpt-5.6-terra",
+  "parent_review": "schema-and-evidence-validated",
+  "provider": "native-codex",
+  "recorded_by": "parent-runtime",
+  "request_id": "fb1bc78aa9e1c79680a282b330d18cba2172057d88f29ea6963b586600d44e57",
+  "response_sha256": "381a00e920e0d88e189c23717f4ea676b86633d2e029eb0c1c0b65f218b1c178",
+  "retry_history": [
+    {
+      "reason": "Parent requested stronger evidence-specific prioritization and financial decomposition",
+      "revision": 2
+    }
+  ],
+  "role": "finance_analyst",
+  "started_at_utc": "2026-09-22T08:45:14Z"
+}

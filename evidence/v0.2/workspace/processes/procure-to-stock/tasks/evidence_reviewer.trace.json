@@ -1,0 +1,296 @@
+{
+  "completed_at_utc": "2026-09-22T09:03:09.827163+00:00",
+  "evidence_hash": "88f23969cc6638cb094e3876d667bbdd0ab0df192cef7d9884626aee70784f5f",
+  "external_business_actions": "PROHIBITED",
+  "kind": "native-independent-review-query-trace",
+  "local_read_correction": "Initial default Windows text decoding was replaced with explicit UTF-8; both original request/evidence hashes verify. No evidence changed.",
+  "process_id": "procure-to-stock",
+  "queries": [
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence/v0.2/workspace --mart inventory_position",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "e58278c97e0bd86adcf800d13549b3466e17f45d8fc0db36e15ac58c9ed852da",
+      "row_count": 46
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence/v0.2/workspace --mart procurement",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "e1127ac36465159868d8c13b49307f51bb7fece7a9d712fd79a62fb319556361",
+      "row_count": 46
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence/v0.2/workspace --mart reconciliation",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "f0a23d8f8e3e12da7fa363f7a192c75cd42b641531ffdeab59db40c3e210db9c",
+      "row_count": 6
+    }
+  ],
+  "questions": [
+    "Do exact stock covers and ranked launched variants match their formula and count?",
+    "Do category/product cost valuations and open PO quantities reconcile?",
+    "Are the no-buy threshold and lifecycle population supported or explicitly conditional?"
+  ],
+  "recomputed": {
+    "category_value_cents": {
+      "Pilates socks": 3712800,
+      "Sportswear": 9123700
+    },
+    "inventory_total_cents": 12836500,
+    "launched_below_42": 0,
+    "launched_count": 36,
+    "lowest_five": [
+      {
+        "color": "Rose",
+        "cover_days": 46.67,
+        "id": "var-sock-rose-s",
+        "in_transit_qty": 10,
+        "name": "Grip Pilates Socks",
+        "size": "S"
+      },
+      {
+        "color": "Ivory",
+        "cover_days": 49.41,
+        "id": "var-sock-ivory-l",
+        "in_transit_qty": 12,
+        "name": "Grip Pilates Socks",
+        "size": "L"
+      },
+      {
+        "color": "Ivory",
+        "cover_days": 52.5,
+        "id": "var-sock-ivory-m",
+        "in_transit_qty": 11,
+        "name": "Grip Pilates Socks",
+        "size": "M"
+      },
+      {
+        "color": "Ivory",
+        "cover_days": 52.5,
+        "id": "var-sock-ivory-s",
+        "in_transit_qty": 14,
+        "name": "Grip Pilates Socks",
+        "size": "S"
+      },
+      {
+        "color": "Sage",
+        "cover_days": 52.5,
+        "id": "var-sock-sage-s",
+        "in_transit_qty": 11,
+        "name": "Grip Pilates Socks",
+        "size": "S"
+      }
+    ],
+    "open_po7": {
+      "coverage_known": 1,
+      "open_qty": 10,
+      "ordered_date": "2025-10-01",
+      "ordered_qty": 32,
+      "ordered_value_cents": 134400,
+      "paid_cents": 92400,
+      "purchase_order_id": "po-00007",
+      "receipt_event_qty": 22,
+      "received_qty": 22,
+      "reconciled": 1,
+      "supplier_id": "sup-grip",
+      "supplier_payment_event_cents": 92400,
+      "unit_cost_cents": 4200,
+      "variant_id": "var-sock-rose-s"
+    },
+    "product_inventory_value_cents": {
+      "Flow Leggings": 3696000,
+      "Grip Pilates Socks": 3712800,
+      "Move Biker Shorts": 2463700,
+      "Recovery Wrap Concept": 274400,
+      "Sculpt Studio Top": 2689600
+    },
+    "selected_rows": [
+      {
+        "available_qty": 28,
+        "category": "Pilates socks",
+        "color": "Black",
+        "cost_cents": 4200,
+        "count_date": "2026-09-21",
+        "count_discrepancy_qty": 0,
+        "counted_qty": 57,
+        "cover_days": 64.62,
+        "in_transit_qty": 9,
+        "index": 18,
+        "inventory_coverage_known": 1,
+        "inventory_value_cents": 239400,
+        "ledger_on_hand_qty": 57,
+        "lifecycle": "launched",
+        "product_id": "prod-socks",
+        "product_name": "Grip Pilates Socks",
+        "reserved_qty": 29,
+        "size": "L",
+        "stock_status": "AVAILABLE",
+        "trailing_30d_net_sold_qty": 13,
+        "variant_id": "var-sock-black-l"
+      },
+      {
+        "available_qty": 28,
+        "category": "Pilates socks",
+        "color": "Ivory",
+        "cost_cents": 4200,
+        "count_date": "2026-09-21",
+        "count_discrepancy_qty": 0,
+        "counted_qty": 51,
+        "cover_days": 49.41,
+        "in_transit_qty": 12,
+        "index": 24,
+        "inventory_coverage_known": 1,
+        "inventory_value_cents": 214200,
+        "ledger_on_hand_qty": 51,
+        "lifecycle": "launched",
+        "product_id": "prod-socks",
+        "product_name": "Grip Pilates Socks",
+        "reserved_qty": 23,
+        "size": "L",
+        "stock_status": "AVAILABLE",
+        "trailing_30d_net_sold_qty": 17,
+        "variant_id": "var-sock-ivory-l"
+      },
+      {
+        "available_qty": 28,
+        "category": "Pilates socks",
+        "color": "Rose",
+        "cost_cents": 4200,
+        "count_date": "2026-09-21",
+        "count_discrepancy_qty": 0,
+        "counted_qty": 50,
+        "cover_days": 210.0,
+        "in_transit_qty": 6,
+        "index": 30,
+        "inventory_coverage_known": 1,
+        "inventory_value_cents": 210000,
+        "ledger_on_hand_qty": 50,
+        "lifecycle": "launched",
+        "product_id": "prod-socks",
+        "product_name": "Grip Pilates Socks",
+        "reserved_qty": 22,
+        "size": "L",
+        "stock_status": "AVAILABLE",
+        "trailing_30d_net_sold_qty": 4,
+        "variant_id": "var-sock-rose-l"
+      },
+      {
+        "available_qty": 28,
+        "category": "Pilates socks",
+        "color": "Rose",
+        "cost_cents": 4200,
+        "count_date": "2026-09-21",
+        "count_discrepancy_qty": 0,
+        "counted_qty": 39,
+        "cover_days": 64.62,
+        "in_transit_qty": 10,
+        "index": 31,
+        "inventory_coverage_known": 1,
+        "inventory_value_cents": 163800,
+        "ledger_on_hand_qty": 39,
+        "lifecycle": "launched",
+        "product_id": "prod-socks",
+        "product_name": "Grip Pilates Socks",
+        "reserved_qty": 11,
+        "size": "M",
+        "stock_status": "AVAILABLE",
+        "trailing_30d_net_sold_qty": 13,
+        "variant_id": "var-sock-rose-m"
+      },
+      {
+        "available_qty": 28,
+        "category": "Pilates socks",
+        "color": "Rose",
+        "cost_cents": 4200,
+        "count_date": "2026-09-21",
+        "count_discrepancy_qty": 0,
+        "counted_qty": 54,
+        "cover_days": 46.67,
+        "in_transit_qty": 10,
+        "index": 32,
+        "inventory_coverage_known": 1,
+        "inventory_value_cents": 226800,
+        "ledger_on_hand_qty": 54,
+        "lifecycle": "launched",
+        "product_id": "prod-socks",
+        "product_name": "Grip Pilates Socks",
+        "reserved_qty": 26,
+        "size": "S",
+        "stock_status": "AVAILABLE",
+        "trailing_30d_net_sold_qty": 18,
+        "variant_id": "var-sock-rose-s"
+      },
+      {
+        "available_qty": 28,
+        "category": "Sportswear",
+        "color": "Sand",
+        "cost_cents": 9800,
+        "count_date": "2026-09-21",
+        "count_discrepancy_qty": 0,
+        "counted_qty": 28,
+        "cover_days": null,
+        "in_transit_qty": 12,
+        "index": 45,
+        "inventory_coverage_known": 1,
+        "inventory_value_cents": 274400,
+        "ledger_on_hand_qty": 28,
+        "lifecycle": "sample",
+        "product_id": "prod-wrap",
+        "product_name": "Recovery Wrap Concept",
+        "reserved_qty": 0,
+        "size": "O/S",
+        "stock_status": "PRELAUNCH",
+        "trailing_30d_net_sold_qty": 0,
+        "variant_id": "var-wrap-sand-o-s"
+      }
+    ],
+    "stock_cover_formula_checks": [
+      {
+        "index": 18,
+        "reported": 64.62,
+        "rounded_available_times_30_over_trailing_sold": 64.62
+      },
+      {
+        "index": 24,
+        "reported": 49.41,
+        "rounded_available_times_30_over_trailing_sold": 49.41
+      },
+      {
+        "index": 30,
+        "reported": 210.0,
+        "rounded_available_times_30_over_trailing_sold": 210.0
+      },
+      {
+        "index": 31,
+        "reported": 64.62,
+        "rounded_available_times_30_over_trailing_sold": 64.62
+      },
+      {
+        "index": 32,
+        "reported": 46.67,
+        "rounded_available_times_30_over_trailing_sold": 46.67
+      }
+    ]
+  },
+  "request_id": "02a7c6b52f15e948cacad9079b91eba1b91ca371a0e233af0dc47d7b6ec7915f",
+  "response_sha256": "663f3c7fec27428acb286155d118ffdbcb485271ab7ffb8f0b8eee0e0f1eae79",
+  "response_validation": {
+    "facts_checked": 5,
+    "request_id": "02a7c6b52f15e948cacad9079b91eba1b91ca371a0e233af0dc47d7b6ec7915f",
+    "scope": "schema, immutable evidence, exact observation values and authority; prose meaning requires reviewer",
+    "valid": true
+  },
+  "reviewer": "/root/astra_v2_review",
+  "semantic_challenges": [
+    "Independent registered queries match every bound mart; cover formulas, top-five ranking, open PO quantities, total valuation 12,836,500 cents, socks 3,712,800 cents and leggings 3,696,000 cents recompute correctly.",
+    "A 42-day threshold may support the stated no-reorder scenario, but it is not calibrated to lead-time or demand distributions. The 4.67-day buffer for Rose S is conditional on the assumed demand rate and should not be called a validated service guarantee.",
+    "Open PO units and in-transit units are the same underlying exposure in these marts; they should not be added together. They also cannot substitute for available stock before receipt.",
+    "Recommendation rank-3 names any lifecycle other than launched in its population, while its action and guardrail describe PRELAUNCH. Restrict that population to idea/sample concepts or separately specify treatment of clearance and retired items; clearance is not automatically a prelaunch concept.",
+    "The 12,836,500-cent total includes 274,400 cents of sample stock. Keep total asset cost valuation separate from the narrower launched/operational capital population."
+  ],
+  "synthetic": true,
+  "verdict": "REVIEW",
+  "version": "2.0"
+}

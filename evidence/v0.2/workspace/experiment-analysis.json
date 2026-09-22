@@ -1,0 +1,53 @@
+{
+  "experiments": [
+    {
+      "arms": {
+        "control": {
+          "assigned": 32,
+          "conversion_rate": 0.40625,
+          "converted": 13,
+          "coverage_known": true,
+          "mean_contribution_cents": 2225.0,
+          "observed": 32,
+          "returned_rate_per_assigned": 0.0,
+          "wilson_95": [
+            0.2551963484266544,
+            0.5773997512461714
+          ]
+        },
+        "treatment": {
+          "assigned": 35,
+          "conversion_rate": 0.34285714285714286,
+          "converted": 12,
+          "coverage_known": true,
+          "mean_contribution_cents": 2204.0,
+          "observed": 35,
+          "returned_rate_per_assigned": 0.0,
+          "wilson_95": [
+            0.20831694987048963,
+            0.5084805048600374
+          ]
+        }
+      },
+      "balanced_assignment_srm_p": 0.713985795669382,
+      "decision": "No automated winner; analyst must evaluate a predeclared fixed-window protocol and contribution/return guardrails. Synthetic outcomes cannot establish real lift.",
+      "experiment_id": "exp-socks-01",
+      "interval_method": "Wilson 95% for each arm separately; overlapping intervals are not a formal test of the difference.",
+      "issues": [],
+      "observed_conversion_difference": -0.06339285714285714,
+      "status": "REVIEW",
+      "synthetic": true
+    }
+  ],
+  "method_source": "https://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm",
+  "planning_example": {
+    "absolute_mde": 0.03,
+    "alpha": 0.05,
+    "baseline_assumption": 0.1,
+    "method": "normal approximation for independent balanced binomial arms; planning only",
+    "per_arm": 1774,
+    "power": 0.8
+  },
+  "synthetic": true,
+  "version": "2.0"
+}

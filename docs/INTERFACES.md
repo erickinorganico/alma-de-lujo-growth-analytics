@@ -1,3 +1,5 @@
+> Historical v0.1 reference. Current implementation and acceptance: [v0.2 PRD](../specs/PRD.md), [runbook](RUNBOOK-v2.md), and [release evidence](RELEASE.md).
+
 # Implementation contracts v1
 
 All amounts integer MXN cents; quantities integer; ISO dates; IDs synthetic strings. Seed 42, as_of 2026-09-21, 90 days. Provisional demo policy: recognize revenue on delivery, credit notes reduce revenue on their date; refunds only reduce cash; restock returns reverse standard COGS separately. Costs are locked on order items. The demo also requires settlement no later than the posted shipment/sale movement for prepaid shipped/delivered orders, and reconciles `expenses.category == 'marketing'` to funnel spend. These are synthetic analytical invariants, not approved real operating/accounting policy. All domains synthetic. No real-data loading enabled.

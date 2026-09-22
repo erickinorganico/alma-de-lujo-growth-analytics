@@ -1,0 +1,258 @@
+{
+  "distinct_native_tasks": 4,
+  "models": [
+    "gpt-5.6-luna",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-6-astra"
+  ],
+  "runs": [
+    {
+      "agent_id": "/root/astra_v2_review",
+      "completed_at_utc": "2026-09-22T09:03:53Z",
+      "effort": "high",
+      "mode": "live",
+      "model": "gpt-6-astra",
+      "parent_review": "schema-and-evidence-validated",
+      "process_id": "finance-close",
+      "provider": "native-codex",
+      "recorded_by": "parent-runtime",
+      "request_id": "209158682f660e0b4d08152e97df32136ab4d19d7a1a8573bfca746be8552ae1",
+      "response_path": "evidence/v0.2/workspace/processes/finance-close/tasks/evidence_reviewer.response.json",
+      "response_sha256": "0c16312e7f81768e99418a0659c5603a873fa73af374502ce16653ea7866a179",
+      "retry_history": [],
+      "role": "evidence_reviewer",
+      "started_at_utc": "2026-09-22T08:58:33Z",
+      "trace_path": "evidence/v0.2/workspace/processes/finance-close/tasks/evidence_reviewer.trace.json"
+    },
+    {
+      "agent_id": "/root/terra_warehouse_v2",
+      "completed_at_utc": "2026-09-22T08:58:33Z",
+      "effort": "high",
+      "mode": "live",
+      "model": "gpt-5.6-terra",
+      "parent_review": "schema-and-evidence-validated",
+      "process_id": "finance-close",
+      "provider": "native-codex",
+      "recorded_by": "parent-runtime",
+      "request_id": "fb1bc78aa9e1c79680a282b330d18cba2172057d88f29ea6963b586600d44e57",
+      "response_path": "evidence/v0.2/workspace/processes/finance-close/tasks/finance_analyst.response.json",
+      "response_sha256": "381a00e920e0d88e189c23717f4ea676b86633d2e029eb0c1c0b65f218b1c178",
+      "retry_history": [
+        {
+          "reason": "Parent requested stronger evidence-specific prioritization and financial decomposition",
+          "revision": 2
+        }
+      ],
+      "role": "finance_analyst",
+      "started_at_utc": "2026-09-22T08:45:14Z",
+      "trace_path": "evidence/v0.2/workspace/processes/finance-close/tasks/finance_analyst.trace.json"
+    },
+    {
+      "agent_id": "/root/luna_simulation_v2",
+      "completed_at_utc": "2026-09-22T09:05:01Z",
+      "effort": "high",
+      "mode": "live",
+      "model": "gpt-5.6-luna",
+      "parent_review": "schema-and-evidence-validated",
+      "process_id": "lead-to-delivery",
+      "provider": "native-codex",
+      "recorded_by": "parent-runtime",
+      "request_id": "0b1d66fb3cdaaa3637cf4d1a45e11b71c2d38178a5901d006a7b0ce446e90144",
+      "response_path": "evidence/v0.2/workspace/processes/lead-to-delivery/tasks/commerce_analyst.response.json",
+      "response_sha256": "559742990492a95f396d509273f7c3a2e496cf75dcaf2ddfdb5bf804acd3442a",
+      "retry_history": [
+        {
+          "reason": "Corrected Windows default JSON decoding in local analysis validation to explicit UTF-8; original request and response hashes unchanged",
+          "revision": 2
+        }
+      ],
+      "role": "commerce_analyst",
+      "started_at_utc": "2026-09-22T08:46:42Z",
+      "trace_path": "evidence/v0.2/workspace/processes/lead-to-delivery/tasks/commerce_analyst.trace.json"
+    },
+    {
+      "agent_id": "/root/astra_v2_review",
+      "completed_at_utc": "2026-09-22T09:13:31Z",
+      "effort": "high",
+      "mode": "live",
+      "model": "gpt-6-astra",
+      "parent_review": "schema-and-evidence-validated",
+      "process_id": "lead-to-delivery",
+      "provider": "native-codex",
+      "recorded_by": "parent-runtime",
+      "request_id": "b171a09299f5e634e19d50200fc4dd31d8cc26c2e86a80201cdbe1b815694fc3",
+      "response_path": "evidence/v0.2/workspace/processes/lead-to-delivery/tasks/evidence_reviewer.response.json",
+      "response_sha256": "2af96670bce5ec5e513d43f8f5bdc13cb7ad87114ee7d09a656e28d503016ab3",
+      "retry_history": [],
+      "role": "evidence_reviewer",
+      "started_at_utc": "2026-09-22T09:05:30Z",
+      "trace_path": "evidence/v0.2/workspace/processes/lead-to-delivery/tasks/evidence_reviewer.trace.json"
+    },
+    {
+      "agent_id": "/root/astra_v2_review",
+      "completed_at_utc": "2026-09-22T09:25:39Z",
+      "effort": "high",
+      "mode": "live",
+      "model": "gpt-6-astra",
+      "parent_review": "schema-and-evidence-validated",
+      "process_id": "market-to-experiment",
+      "provider": "native-codex",
+      "recorded_by": "parent-runtime",
+      "request_id": "8044572b2fd6d4dcc0fe3b01a16fb0a93a0a09580331a82f2d69d695076bbe34",
+      "response_path": "evidence/v0.2/workspace/processes/market-to-experiment/tasks/evidence_reviewer.response.json",
+      "response_sha256": "f526ea720f6ea0cb6e7fe8f482b430e170e22254f65d0ef00074d23cf7f12be3",
+      "retry_history": [],
+      "role": "evidence_reviewer",
+      "started_at_utc": "2026-09-22T09:22:26Z",
+      "trace_path": "evidence/v0.2/workspace/processes/market-to-experiment/tasks/evidence_reviewer.trace.json"
+    },
+    {
+      "agent_id": "/root/sol_scope_v2",
+      "completed_at_utc": "2026-09-22T09:21:36Z",
+      "effort": "high",
+      "mode": "live",
+      "model": "gpt-5.6-sol",
+      "parent_review": "schema-and-evidence-validated",
+      "process_id": "market-to-experiment",
+      "provider": "native-codex",
+      "recorded_by": "parent-runtime",
+      "request_id": "2be050bc89703b393c8a50068bdaf0ff23278633bac33d71c96f4edf81aa1e85",
+      "response_path": "evidence/v0.2/workspace/processes/market-to-experiment/tasks/market_researcher.response.json",
+      "response_sha256": "20c57ecf7911993215d52497ea5bfb89a023c7ca9e96d301e305ea915bc67eaf",
+      "retry_history": [
+        {
+          "reason": "Corrected trace self-identification using actual native dispatch and runtime turn_context metadata; analytical response unchanged",
+          "revision": 2
+        }
+      ],
+      "role": "market_researcher",
+      "started_at_utc": "2026-09-22T09:13:31Z",
+      "trace_path": "evidence/v0.2/workspace/processes/market-to-experiment/tasks/market_researcher.trace.json"
+    },
+    {
+      "agent_id": "/root/astra_v2_review",
+      "completed_at_utc": "2026-09-22T09:03:53Z",
+      "effort": "high",
+      "mode": "live",
+      "model": "gpt-6-astra",
+      "parent_review": "schema-and-evidence-validated",
+      "process_id": "procure-to-stock",
+      "provider": "native-codex",
+      "recorded_by": "parent-runtime",
+      "request_id": "02a7c6b52f15e948cacad9079b91eba1b91ca371a0e233af0dc47d7b6ec7915f",
+      "response_path": "evidence/v0.2/workspace/processes/procure-to-stock/tasks/evidence_reviewer.response.json",
+      "response_sha256": "663f3c7fec27428acb286155d118ffdbcb485271ab7ffb8f0b8eee0e0f1eae79",
+      "retry_history": [],
+      "role": "evidence_reviewer",
+      "started_at_utc": "2026-09-22T08:58:33Z",
+      "trace_path": "evidence/v0.2/workspace/processes/procure-to-stock/tasks/evidence_reviewer.trace.json"
+    },
+    {
+      "agent_id": "/root/terra_warehouse_v2",
+      "completed_at_utc": "2026-09-22T08:58:33Z",
+      "effort": "high",
+      "mode": "live",
+      "model": "gpt-5.6-terra",
+      "parent_review": "schema-and-evidence-validated",
+      "process_id": "procure-to-stock",
+      "provider": "native-codex",
+      "recorded_by": "parent-runtime",
+      "request_id": "7e9246d514491d67384faa8e65c7336a61c0cd41f51a91daf9948425666f0c5f",
+      "response_path": "evidence/v0.2/workspace/processes/procure-to-stock/tasks/merchandiser.response.json",
+      "response_sha256": "588ac08268482a9d0ef36f2decdb67eca7291320d239b30a8181e60f230460ca",
+      "retry_history": [
+        {
+          "reason": "Parent requested stronger evidence-specific prioritization and financial decomposition",
+          "revision": 2
+        }
+      ],
+      "role": "merchandiser",
+      "started_at_utc": "2026-09-22T08:45:14Z",
+      "trace_path": "evidence/v0.2/workspace/processes/procure-to-stock/tasks/merchandiser.trace.json"
+    },
+    {
+      "agent_id": "/root/astra_v2_review",
+      "completed_at_utc": "2026-09-22T09:13:31Z",
+      "effort": "high",
+      "mode": "live",
+      "model": "gpt-6-astra",
+      "parent_review": "schema-and-evidence-validated",
+      "process_id": "return-to-refund",
+      "provider": "native-codex",
+      "recorded_by": "parent-runtime",
+      "request_id": "fa53011afb533d0dd7b32d1421540565018688266b64c542f9be0ae905205b18",
+      "response_path": "evidence/v0.2/workspace/processes/return-to-refund/tasks/evidence_reviewer.response.json",
+      "response_sha256": "4adb1fc2dcc4582bcaed71417b3931b322f0d94eb3c4e56666071d8ec04fcdf8",
+      "retry_history": [],
+      "role": "evidence_reviewer",
+      "started_at_utc": "2026-09-22T09:05:30Z",
+      "trace_path": "evidence/v0.2/workspace/processes/return-to-refund/tasks/evidence_reviewer.trace.json"
+    },
+    {
+      "agent_id": "/root/luna_simulation_v2",
+      "completed_at_utc": "2026-09-22T09:05:01Z",
+      "effort": "high",
+      "mode": "live",
+      "model": "gpt-5.6-luna",
+      "parent_review": "schema-and-evidence-validated",
+      "process_id": "return-to-refund",
+      "provider": "native-codex",
+      "recorded_by": "parent-runtime",
+      "request_id": "d961da889a78ad917a5719e082ae43988029a2a4af01e6b94fb0db901171d3e9",
+      "response_path": "evidence/v0.2/workspace/processes/return-to-refund/tasks/returns_analyst.response.json",
+      "response_sha256": "dd1d73b6c1da02b35b531311b6a60cf2eee3e6fcffda475dc33d9ceeed8c9abb",
+      "retry_history": [
+        {
+          "reason": "Corrected Windows default JSON decoding in local analysis validation to explicit UTF-8; original request and response hashes unchanged",
+          "revision": 2
+        }
+      ],
+      "role": "returns_analyst",
+      "started_at_utc": "2026-09-22T08:46:42Z",
+      "trace_path": "evidence/v0.2/workspace/processes/return-to-refund/tasks/returns_analyst.trace.json"
+    },
+    {
+      "agent_id": "/root/astra_v2_review",
+      "completed_at_utc": "2026-09-22T09:25:39Z",
+      "effort": "high",
+      "mode": "live",
+      "model": "gpt-6-astra",
+      "parent_review": "schema-and-evidence-validated",
+      "process_id": "weekly-growth-review",
+      "provider": "native-codex",
+      "recorded_by": "parent-runtime",
+      "request_id": "019045af923a6f2a3e68948129b5ec2d98e541e9a2c424aa8be4022b04d171bd",
+      "response_path": "evidence/v0.2/workspace/processes/weekly-growth-review/tasks/evidence_reviewer.response.json",
+      "response_sha256": "e0ec6b2b4026da655ae185210a093245ff7ec6f975d38260366dbbd813276463",
+      "retry_history": [],
+      "role": "evidence_reviewer",
+      "started_at_utc": "2026-09-22T09:22:26Z",
+      "trace_path": "evidence/v0.2/workspace/processes/weekly-growth-review/tasks/evidence_reviewer.trace.json"
+    },
+    {
+      "agent_id": "/root/sol_scope_v2",
+      "completed_at_utc": "2026-09-22T09:21:36Z",
+      "effort": "high",
+      "mode": "live",
+      "model": "gpt-5.6-sol",
+      "parent_review": "schema-and-evidence-validated",
+      "process_id": "weekly-growth-review",
+      "provider": "native-codex",
+      "recorded_by": "parent-runtime",
+      "request_id": "86241dc471bb7c488b937606a9f8983fef0e0cc375dbac907a2e42caf2705b55",
+      "response_path": "evidence/v0.2/workspace/processes/weekly-growth-review/tasks/growth_analyst.response.json",
+      "response_sha256": "681cf030c27c128edc20c8e91ae84e42bc4645c49d239740e63aef08dec2e153",
+      "retry_history": [
+        {
+          "reason": "Corrected trace self-identification using actual native dispatch and runtime turn_context metadata; analytical response unchanged",
+          "revision": 2
+        }
+      ],
+      "role": "growth_analyst",
+      "started_at_utc": "2026-09-22T09:13:31Z",
+      "trace_path": "evidence/v0.2/workspace/processes/weekly-growth-review/tasks/growth_analyst.trace.json"
+    }
+  ],
+  "version": "2.0"
+}

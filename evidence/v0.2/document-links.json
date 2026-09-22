@@ -1,0 +1,16 @@
+{
+  "checked_documents": [
+    "README.md",
+    "README.en.md",
+    "docs/RELEASE.md",
+    "docs/ORCHESTRATION.md",
+    "evidence/v0.2/DECISION-BOOK.md",
+    "specs/PRD.md",
+    "specs/PROCESS-CATALOG.md",
+    "specs/SCOPE-MATRIX.md"
+  ],
+  "local_links": 100,
+  "missing": [],
+  "passed": true,
+  "version": "2.0"
+}
