@@ -1,0 +1,102 @@
+[
+  {
+    "actions": [
+      {
+        "approval_required": true,
+        "description": "Revisar y corregir evidencia faltante antes de usar indicadores.",
+        "execution": "BLOCKED"
+      }
+    ],
+    "facts": [
+      {
+        "evidence_refs": [
+          "meta/synthetic"
+        ],
+        "text": "El conjunto es sintético y no representa ventas reales."
+      },
+      {
+        "evidence_refs": [
+          "quality"
+        ],
+        "text": "Estado de reconciliación: BLOCKED"
+      }
+    ],
+    "hypotheses": [
+      "Calcetines de Pilates: candidato a producto principal, según el usuario; pendiente de validación."
+    ],
+    "id": "decision-cbe7dfd8ad532d34",
+    "status": "BLOCKED",
+    "unknowns": [
+      "Demanda real, costos y precios reales, operación de la dueña y catálogo exacto pendientes.",
+      "No existe baseline para atribuir impacto incremental."
+    ],
+    "version": "1.0"
+  },
+  {
+    "actions": [
+      {
+        "approval_required": true,
+        "description": "Revisar el puente ingreso-costo-gastos-efectivo y la política provisional con la dueña.",
+        "execution": "BLOCKED"
+      }
+    ],
+    "facts": [
+      {
+        "evidence_refs": [
+          "kpis/operating_proxy_cents",
+          "kpis/net_cash_cents"
+        ],
+        "text": "El resultado operativo y el efectivo observado son medidas separadas en este caso sintético."
+      },
+      {
+        "evidence_refs": [
+          "kpis/cogs_cents"
+        ],
+        "text": "El costo de venta usa costos estándar de artículos entregados, con reversión de restock."
+      }
+    ],
+    "hypotheses": [
+      "El calendario de compras y cobros puede explicar diferencias entre resultado y efectivo; requiere revisar eventos."
+    ],
+    "id": "decision-cbe7dfd8ad532d34-finance",
+    "status": "BLOCKED",
+    "unknowns": [
+      "Demanda real, costos y precios reales, operación de la dueña y catálogo exacto pendientes.",
+      "No existe baseline para atribuir impacto incremental."
+    ],
+    "version": "1.0"
+  },
+  {
+    "actions": [
+      {
+        "approval_required": true,
+        "description": "Revisar la población, métrica, guardrail, ventana y criterio de cierre de EXP-SOCKS-01 y EXP-COLOR-02 antes de aprobar cualquier ejecución.",
+        "execution": "BLOCKED"
+      }
+    ],
+    "facts": [
+      {
+        "evidence_refs": [
+          "experiments"
+        ],
+        "text": "Existen diseños de experimento pendientes de aprobación; no hay resultados de experimentos reales."
+      },
+      {
+        "evidence_refs": [
+          "channels"
+        ],
+        "text": "El tráfico por canal conserva los denominadores desconocidos."
+      }
+    ],
+    "hypotheses": [
+      "Calcetines de Pilates multicolor: candidato a producto principal comunicado por el usuario."
+    ],
+    "id": "decision-cbe7dfd8ad532d34-growth",
+    "status": "BLOCKED",
+    "unknowns": [
+      "Demanda real, costos y precios reales, operación de la dueña y catálogo exacto pendientes.",
+      "No existe baseline para atribuir impacto incremental."
+    ],
+    "version": "1.0"
+  }
+]

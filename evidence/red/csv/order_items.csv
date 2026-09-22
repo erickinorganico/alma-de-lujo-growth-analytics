@@ -1,0 +1,13 @@
+id,order_id,variant_id,quantity,unit_price_cents,discount_cents,unit_cost_cents
+item-001,ord-001,var-sock-rose,2,28900,0,9200
+item-002,ord-001,var-legging-black,1,89900,1000,35500
+item-003,ord-002,var-sock-black,1,28900,0,9200
+item-004,ord-002,var-legging-navy,1,89900,0,35500
+item-005,ord-003,var-sock-lilac,2,28900,500,
+item-006,ord-003,var-short-black,1,49900,0,19800
+item-007,ord-004,var-sock-sage,1,28900,0,9200
+item-008,ord-004,var-legging-navy,1,89900,0,35500
+item-009,ord-005,var-short-coral,2,49900,0,19800
+item-010,ord-006,var-sock-ivory,1,28900,0,9200
+item-011,ord-007,var-sock-black,1,28900,0,9200
+item-012,ord-008,var-sock-rose,1,28900,0,9200

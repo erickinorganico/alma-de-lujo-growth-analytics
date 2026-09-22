@@ -1,0 +1,25 @@
+{
+  "as_of": "2026-09-21",
+  "coverage": {
+    "credit_notes": true,
+    "customers": true,
+    "expenses": true,
+    "funnel": true,
+    "movements": true,
+    "order_items": true,
+    "orders": true,
+    "payments": true,
+    "products": true,
+    "purchase_orders": true,
+    "refunds": true,
+    "reservations": true,
+    "returns": true,
+    "suppliers": true,
+    "unmet_demand": true,
+    "variants": true
+  },
+  "currency": "MXN",
+  "scenario": "normal",
+  "seed": 42,
+  "synthetic": true
+}

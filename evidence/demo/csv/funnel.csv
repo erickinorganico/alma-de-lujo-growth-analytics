@@ -1,0 +1,5 @@
+id,date,channel,campaign_id,visits,leads,spend_cents
+funnel-001,2026-07-23,Instagram,camp-studio,620,74,42000
+funnel-002,2026-08-12,Paid Social,camp-move,410,31,38000
+funnel-003,2026-09-01,DM,camp-private,,,0
+funnel-004,2026-09-06,Organic,organic,300,28,0

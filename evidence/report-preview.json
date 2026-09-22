@@ -1,0 +1,25 @@
+{
+  "checks": {
+    "title": "Alma de Lujo — reporte sintético",
+    "tables": 6,
+    "headings": 14,
+    "images": [
+      {
+        "loaded": true,
+        "source": "charts/monthly_finance.svg"
+      },
+      {
+        "loaded": true,
+        "source": "charts/cash_bridge.svg"
+      },
+      {
+        "loaded": true,
+        "source": "charts/color_stock.svg"
+      }
+    ],
+    "scripts": 0,
+    "overflow": false
+  },
+  "errors": [],
+  "passed": true
+}

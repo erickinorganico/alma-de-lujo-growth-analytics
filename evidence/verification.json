@@ -1,0 +1,57 @@
+{
+  "agent_evals_passed": true,
+  "errors": 0,
+  "failures": 0,
+  "passed": true,
+  "reproducible": true,
+  "scenario_results": [
+    {
+      "csv_roundtrip": true,
+      "passed": true,
+      "problems": [],
+      "scenario": "normal",
+      "status": "PASS"
+    },
+    {
+      "csv_roundtrip": true,
+      "passed": true,
+      "problems": [
+        "cost_coverage"
+      ],
+      "scenario": "missing_cost",
+      "status": "BLOCKED"
+    },
+    {
+      "csv_roundtrip": true,
+      "passed": true,
+      "problems": [
+        "reservations",
+        "stock_nonnegative"
+      ],
+      "scenario": "negative_stock",
+      "status": "BLOCKED"
+    },
+    {
+      "csv_roundtrip": true,
+      "passed": true,
+      "problems": [
+        "payment_reconciliation",
+        "shipment_prepayment"
+      ],
+      "scenario": "missing_payment",
+      "status": "BLOCKED"
+    },
+    {
+      "csv_roundtrip": true,
+      "passed": true,
+      "problems": [
+        "unique_movements"
+      ],
+      "scenario": "duplicate_event",
+      "status": "BLOCKED"
+    }
+  ],
+  "schema_version": "1.0",
+  "skipped": 0,
+  "tests_run": 33
+}

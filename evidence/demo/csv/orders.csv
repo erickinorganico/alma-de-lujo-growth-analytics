@@ -1,0 +1,9 @@
+id,customer_id,channel,campaign_id,date,delivered_date,status
+ord-001,cust-001,Instagram,camp-studio,2026-07-01,2026-07-05,delivered
+ord-002,cust-002,Organic,organic,2026-07-18,2026-07-22,delivered
+ord-003,cust-003,Instagram,camp-color,2026-08-04,2026-08-08,delivered
+ord-004,cust-004,DM,camp-private,2026-08-20,,shipped
+ord-005,cust-005,Paid Social,camp-move,2026-08-28,,paid
+ord-006,cust-006,DM,camp-private,2026-09-07,,pending
+ord-007,cust-007,Organic,organic,2026-09-11,,cancelled
+ord-008,cust-001,Instagram,camp-studio,2026-09-16,2026-09-19,delivered

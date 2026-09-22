@@ -1,0 +1,6 @@
+id,date,category,amount_cents,paid_cents,variable
+expense-001,2026-07-08,packaging,24000,24000,1
+expense-002,2026-08-07,photography,85000,0,0
+expense-003,2026-09-09,shipping,31000,18000,1
+expense-004,2026-07-23,marketing,42000,42000,1
+expense-005,2026-08-12,marketing,38000,38000,1

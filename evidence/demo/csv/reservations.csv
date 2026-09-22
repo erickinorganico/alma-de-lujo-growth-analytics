@@ -1,0 +1,5 @@
+id,order_item_id,quantity,status
+reservation-001,item-009,2,active
+reservation-002,item-010,1,active
+reservation-003,item-007,1,released
+reservation-004,item-008,1,released

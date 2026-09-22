@@ -1,0 +1,81 @@
+{
+  "cases": [
+    {
+      "expected": "REVIEW",
+      "id": "scenario-normal",
+      "packets": 3,
+      "passed": true
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "scenario-missing_cost",
+      "packets": 3,
+      "passed": true
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "scenario-negative_stock",
+      "packets": 3,
+      "passed": true
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "scenario-missing_payment",
+      "packets": 3,
+      "passed": true
+    },
+    {
+      "expected": "BLOCKED",
+      "id": "scenario-duplicate_event",
+      "packets": 3,
+      "passed": true
+    },
+    {
+      "id": "fabricated-reference",
+      "passed": true
+    },
+    {
+      "id": "empty-evidence",
+      "passed": true
+    },
+    {
+      "id": "approval-bypass",
+      "passed": true
+    },
+    {
+      "id": "execution-bypass",
+      "passed": true
+    },
+    {
+      "id": "invalid-schema",
+      "passed": true
+    },
+    {
+      "id": "deny-action-10",
+      "passed": true
+    },
+    {
+      "id": "deny-action-11",
+      "passed": true
+    },
+    {
+      "id": "deny-action-12",
+      "passed": true
+    },
+    {
+      "id": "deny-action-13",
+      "passed": true
+    },
+    {
+      "id": "deny-action-14",
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "Validates implemented policies and resolvable references, not semantic entailment of arbitrary human-authored prose.",
+    "No provider-backed LLM, token savings or real-world impact measured."
+  ],
+  "mode": "deterministic-replay",
+  "passed": true,
+  "schema_version": "1.0"
+}

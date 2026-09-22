@@ -1,0 +1,1 @@
+Business data in this snapshot is synthetic. Reproduce with `python -m alma demo --scenario missing_cost --output build/red`. The receipt hashes the complete local build, including `alma.sqlite3`, which is generated locally and intentionally not distributed in Git. Canonical `data.json` and `csv/` are included.

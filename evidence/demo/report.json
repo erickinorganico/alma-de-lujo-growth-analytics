@@ -1,0 +1,1212 @@
+{
+  "channels": [
+    {
+      "channel": "DM",
+      "conversion_pct": null,
+      "delivered_orders": 0,
+      "leads": null,
+      "net_revenue_cents": 0,
+      "orders": 2,
+      "spend_cents": 0,
+      "visits": null
+    },
+    {
+      "channel": "Instagram",
+      "conversion_pct": 0.48,
+      "delivered_orders": 3,
+      "leads": 74,
+      "net_revenue_cents": 272800,
+      "orders": 3,
+      "spend_cents": 42000,
+      "visits": 620
+    },
+    {
+      "channel": "Organic",
+      "conversion_pct": 0.33,
+      "delivered_orders": 1,
+      "leads": 28,
+      "net_revenue_cents": 118800,
+      "orders": 2,
+      "spend_cents": 0,
+      "visits": 300
+    },
+    {
+      "channel": "Paid Social",
+      "conversion_pct": 0.24,
+      "delivered_orders": 0,
+      "leads": 31,
+      "net_revenue_cents": 0,
+      "orders": 1,
+      "spend_cents": 38000,
+      "visits": 410
+    }
+  ],
+  "cohorts": [
+    {
+      "customers": 2,
+      "mature_30d": 2,
+      "month": "2026-07",
+      "repeat_customers": 0,
+      "repeat_rate_pct": 0.0
+    },
+    {
+      "customers": 1,
+      "mature_30d": 1,
+      "month": "2026-08",
+      "repeat_customers": 0,
+      "repeat_rate_pct": 0.0
+    }
+  ],
+  "decisions": [
+    {
+      "actions": [
+        {
+          "approval_required": true,
+          "description": "Revisar cobertura por color y diseñar un lote piloto; aprobación humana antes de comprar.",
+          "execution": "BLOCKED"
+        }
+      ],
+      "facts": [
+        {
+          "evidence_refs": [
+            "meta/synthetic"
+          ],
+          "text": "El conjunto es sintético y no representa ventas reales."
+        },
+        {
+          "evidence_refs": [
+            "quality"
+          ],
+          "text": "Estado de reconciliación: PASS"
+        }
+      ],
+      "hypotheses": [
+        "Calcetines de Pilates: candidato a producto principal, según el usuario; pendiente de validación."
+      ],
+      "id": "decision-5542e226a62415e4",
+      "status": "REVIEW",
+      "unknowns": [
+        "Demanda real, costos y precios reales, operación de la dueña y catálogo exacto pendientes.",
+        "No existe baseline para atribuir impacto incremental."
+      ],
+      "version": "1.0"
+    },
+    {
+      "actions": [
+        {
+          "approval_required": true,
+          "description": "Revisar el puente ingreso-costo-gastos-efectivo y la política provisional con la dueña.",
+          "execution": "BLOCKED"
+        }
+      ],
+      "facts": [
+        {
+          "evidence_refs": [
+            "kpis/operating_proxy_cents",
+            "kpis/net_cash_cents"
+          ],
+          "text": "El resultado operativo y el efectivo observado son medidas separadas en este caso sintético."
+        },
+        {
+          "evidence_refs": [
+            "kpis/cogs_cents"
+          ],
+          "text": "El costo de venta usa costos estándar de artículos entregados, con reversión de restock."
+        }
+      ],
+      "hypotheses": [
+        "El calendario de compras y cobros puede explicar diferencias entre resultado y efectivo; requiere revisar eventos."
+      ],
+      "id": "decision-5542e226a62415e4-finance",
+      "status": "REVIEW",
+      "unknowns": [
+        "Demanda real, costos y precios reales, operación de la dueña y catálogo exacto pendientes.",
+        "No existe baseline para atribuir impacto incremental."
+      ],
+      "version": "1.0"
+    },
+    {
+      "actions": [
+        {
+          "approval_required": true,
+          "description": "Revisar la población, métrica, guardrail, ventana y criterio de cierre de EXP-SOCKS-01 y EXP-COLOR-02 antes de aprobar cualquier ejecución.",
+          "execution": "BLOCKED"
+        }
+      ],
+      "facts": [
+        {
+          "evidence_refs": [
+            "experiments"
+          ],
+          "text": "Existen diseños de experimento pendientes de aprobación; no hay resultados de experimentos reales."
+        },
+        {
+          "evidence_refs": [
+            "channels"
+          ],
+          "text": "El tráfico por canal conserva los denominadores desconocidos."
+        }
+      ],
+      "hypotheses": [
+        "Calcetines de Pilates multicolor: candidato a producto principal comunicado por el usuario."
+      ],
+      "id": "decision-5542e226a62415e4-growth",
+      "status": "REVIEW",
+      "unknowns": [
+        "Demanda real, costos y precios reales, operación de la dueña y catálogo exacto pendientes.",
+        "No existe baseline para atribuir impacto incremental."
+      ],
+      "version": "1.0"
+    }
+  ],
+  "experiments": [
+    {
+      "close_criterion": "Antes de iniciar: fijar MDE y muestra con baseline. Cerrar a 28 días; si falta muestra o trazabilidad => INCONCLUSO. Sin baseline no lanzar ni afirmar causalidad.",
+      "evidence_refs": [
+        "market/instagram-brand",
+        "inventory"
+      ],
+      "guardrail": "Tasa de devolución <= 10%, ningún SKU sobrevendido; costos y tráfico conocidos",
+      "hypothesis": "La preferencia expresada por la dueña podría traducirse en contribución por visita superior al resto del catálogo.",
+      "id": "EXP-SOCKS-01",
+      "population": "Visitas nuevas elegibles asignadas aleatoriamente 1:1 a dos vitrinas con igual precio y exposición",
+      "primary_metric": "Contribución por visita elegible con costo y atribución completos",
+      "status": "DRAFT_APPROVAL_REQUIRED",
+      "title": "Validar calcetines de Pilates como producto principal",
+      "window": "28 días desde aprobación; no detener por resultados favorables tempranos"
+    },
+    {
+      "close_criterion": "Consolidar conteos y cobertura al día 14; menos de 30 respuestas => INCONCLUSO. Intención no demuestra compra.",
+      "evidence_refs": [
+        "inventory",
+        "market/instagram-brand"
+      ],
+      "guardrail": "Una respuesta por participante sintético; registrar sin preferencia y faltantes; no comprar automáticamente",
+      "hypothesis": "Las solicitudes de color pueden orientar un siguiente lote pequeño.",
+      "id": "EXP-COLOR-02",
+      "population": "Participantes que voluntariamente responden una encuesta; sesgo de autoselección explícito",
+      "primary_metric": "Proporción de intención explícita por color entre respuestas válidas",
+      "status": "DRAFT_APPROVAL_REQUIRED",
+      "title": "Preferencia de color de calcetines",
+      "window": "14 días desde aprobación"
+    }
+  ],
+  "inventory": [
+    {
+      "available": 23,
+      "category": "Pilates socks",
+      "color": "Black",
+      "cost_cents": 9200,
+      "days_since_sale": 64,
+      "in_transit": 0,
+      "lifecycle": "launched",
+      "name": "Grip Pilates Socks",
+      "on_hand": 23,
+      "reserved": 0,
+      "sell_through_pct": 4.17,
+      "size": "M",
+      "sku": "var-sock-black",
+      "sold_units": 1,
+      "status": "SLOW",
+      "value_cents": 211600
+    },
+    {
+      "available": 23,
+      "category": "Pilates socks",
+      "color": "Ivory",
+      "cost_cents": 9200,
+      "days_since_sale": null,
+      "in_transit": 0,
+      "lifecycle": "launched",
+      "name": "Grip Pilates Socks",
+      "on_hand": 24,
+      "reserved": 1,
+      "sell_through_pct": 0.0,
+      "size": "M",
+      "sku": "var-sock-ivory",
+      "sold_units": 0,
+      "status": "SLOW",
+      "value_cents": 220800
+    },
+    {
+      "available": 62,
+      "category": "Pilates socks",
+      "color": "Rose",
+      "cost_cents": 9200,
+      "days_since_sale": 4,
+      "in_transit": 0,
+      "lifecycle": "launched",
+      "name": "Grip Pilates Socks",
+      "on_hand": 62,
+      "reserved": 0,
+      "sell_through_pct": 3.12,
+      "size": "M",
+      "sku": "var-sock-rose",
+      "sold_units": 3,
+      "status": "HEALTHY",
+      "value_cents": 570400
+    },
+    {
+      "available": 23,
+      "category": "Pilates socks",
+      "color": "Sage",
+      "cost_cents": 9200,
+      "days_since_sale": 31,
+      "in_transit": 0,
+      "lifecycle": "launched",
+      "name": "Grip Pilates Socks",
+      "on_hand": 23,
+      "reserved": 0,
+      "sell_through_pct": 4.17,
+      "size": "M",
+      "sku": "var-sock-sage",
+      "sold_units": 1,
+      "status": "SLOW",
+      "value_cents": 211600
+    },
+    {
+      "available": 22,
+      "category": "Pilates socks",
+      "color": "Lilac",
+      "cost_cents": 9200,
+      "days_since_sale": 47,
+      "in_transit": 0,
+      "lifecycle": "launched",
+      "name": "Grip Pilates Socks",
+      "on_hand": 22,
+      "reserved": 0,
+      "sell_through_pct": 8.33,
+      "size": "M",
+      "sku": "var-sock-lilac",
+      "sold_units": 2,
+      "status": "SLOW",
+      "value_cents": 202400
+    },
+    {
+      "available": 29,
+      "category": "Sportswear",
+      "color": "Black",
+      "cost_cents": 35500,
+      "days_since_sale": 81,
+      "in_transit": 6,
+      "lifecycle": "launched",
+      "name": "Flow Leggings",
+      "on_hand": 29,
+      "reserved": 0,
+      "sell_through_pct": 3.33,
+      "size": "M",
+      "sku": "var-legging-black",
+      "sold_units": 1,
+      "status": "SLOW",
+      "value_cents": 1029500
+    },
+    {
+      "available": 10,
+      "category": "Sportswear",
+      "color": "Navy",
+      "cost_cents": 35500,
+      "days_since_sale": 31,
+      "in_transit": 0,
+      "lifecycle": "launched",
+      "name": "Flow Leggings",
+      "on_hand": 10,
+      "reserved": 0,
+      "sell_through_pct": 16.67,
+      "size": "M",
+      "sku": "var-legging-navy",
+      "sold_units": 2,
+      "status": "SLOW",
+      "value_cents": 355000
+    },
+    {
+      "available": 12,
+      "category": "Sportswear",
+      "color": "Black",
+      "cost_cents": 24500,
+      "days_since_sale": null,
+      "in_transit": 0,
+      "lifecycle": "sample",
+      "name": "Sculpt Studio Top",
+      "on_hand": 12,
+      "reserved": 0,
+      "sell_through_pct": 0.0,
+      "size": "M",
+      "sku": "var-top-black",
+      "sold_units": 0,
+      "status": "PRELAUNCH",
+      "value_cents": 294000
+    },
+    {
+      "available": 12,
+      "category": "Sportswear",
+      "color": "Sand",
+      "cost_cents": 24500,
+      "days_since_sale": null,
+      "in_transit": 0,
+      "lifecycle": "sample",
+      "name": "Sculpt Studio Top",
+      "on_hand": 12,
+      "reserved": 0,
+      "sell_through_pct": 0.0,
+      "size": "M",
+      "sku": "var-top-sand",
+      "sold_units": 0,
+      "status": "PRELAUNCH",
+      "value_cents": 294000
+    },
+    {
+      "available": 11,
+      "category": "Sportswear",
+      "color": "Black",
+      "cost_cents": 19800,
+      "days_since_sale": 47,
+      "in_transit": 0,
+      "lifecycle": "clearance",
+      "name": "Move Biker Shorts",
+      "on_hand": 11,
+      "reserved": 0,
+      "sell_through_pct": 8.33,
+      "size": "M",
+      "sku": "var-short-black",
+      "sold_units": 1,
+      "status": "SLOW",
+      "value_cents": 217800
+    },
+    {
+      "available": 10,
+      "category": "Sportswear",
+      "color": "Coral",
+      "cost_cents": 19800,
+      "days_since_sale": null,
+      "in_transit": 30,
+      "lifecycle": "clearance",
+      "name": "Move Biker Shorts",
+      "on_hand": 12,
+      "reserved": 2,
+      "sell_through_pct": 0.0,
+      "size": "M",
+      "sku": "var-short-coral",
+      "sold_units": 0,
+      "status": "SLOW",
+      "value_cents": 237600
+    },
+    {
+      "available": 0,
+      "category": "Sportswear",
+      "color": "Sand",
+      "cost_cents": 29000,
+      "days_since_sale": null,
+      "in_transit": 0,
+      "lifecycle": "idea",
+      "name": "Recovery Wrap Concept",
+      "on_hand": 0,
+      "reserved": 0,
+      "sell_through_pct": null,
+      "size": "M",
+      "sku": "var-wrap-sand",
+      "sold_units": 0,
+      "status": "PRELAUNCH",
+      "value_cents": 0
+    }
+  ],
+  "kpis": {
+    "cash_in_cents": 620200,
+    "cash_out_cents": 828400,
+    "cogs_cents": 136800,
+    "contribution_cents": 119800,
+    "credits_cents": 10000,
+    "delivered_orders": 4,
+    "discounts_cents": 1500,
+    "gross_margin_pct": 65.07,
+    "gross_profit_cents": 254800,
+    "gross_revenue_cents": 403100,
+    "inventory_value_cents": 3844700,
+    "net_cash_cents": -208200,
+    "net_revenue_cents": 391600,
+    "operating_proxy_cents": 34800,
+    "opex_cents": 220000,
+    "orders": 8,
+    "repeat_rate_pct": 33.33,
+    "variable_expenses_cents": 135000
+  },
+  "market": [
+    {
+      "coverage": "Usuario confirmó ropa deportiva y calcetines de Pilates multicolor.",
+      "id": "instagram-brand",
+      "license": "No concedida: no se copian fotos ni publicaciones.",
+      "limitation": "Acceso automático sin contenido verificable. Prendas, precios y colores exactos pendientes de confirmación.",
+      "observed_at": "2026-09-22",
+      "publisher": "Alma de Lujo",
+      "status": "UNVERIFIED",
+      "title": "Catálogo público Alma de Lujo",
+      "url": "https://www.instagram.com/almadelujooo/"
+    },
+    {
+      "coverage": "Contexto nacional de actividad física; cambio conceptual y metodológico en 2025.",
+      "id": "inegi-mopradef",
+      "license": "Consultar términos de libre uso INEGI; aquí se enlaza, no se redistribuye el dataset.",
+      "limitation": "No mide demanda ni ventas de Alma o calcetines de Pilates. Comparabilidad temporal requiere revisar metodología.",
+      "observed_at": "2026-09-22",
+      "publisher": "INEGI",
+      "status": "CONTEXT",
+      "title": "MOPRADEF 2025",
+      "url": "https://www.inegi.org.mx/programas/mopradef/default.html?init=1"
+    },
+    {
+      "coverage": "Página pública del estudio de comercio electrónico mexicano.",
+      "id": "amvo-evo",
+      "license": "Contenido de AMVO. Enlace únicamente; reporte sujeto a condiciones y formulario.",
+      "limitation": "Resumen descargable requiere formulario; no se descargó ni se usaron cifras. Mercado agregado no demuestra oportunidad específica.",
+      "observed_at": "2026-09-22",
+      "publisher": "AMVO",
+      "status": "CONTEXT",
+      "title": "Estudio de Venta Online 2026",
+      "url": "https://amvo.org.mx/descarga-evo-2026"
+    },
+    {
+      "coverage": "Fuente candidata; sin extracción ni observación realizada.",
+      "id": "trends-candidate",
+      "license": "Revisar términos y método permitido antes de usar.",
+      "limitation": "Interés relativo no equivale a demanda, tamaño de mercado ni ventas.",
+      "observed_at": null,
+      "publisher": "Google Trends",
+      "status": "CANDIDATE",
+      "title": "Interés de búsqueda: Pilates y calcetines",
+      "url": "https://trends.google.com/trends/"
+    }
+  ],
+  "meta": {
+    "as_of": "2026-09-21",
+    "coverage": {
+      "credit_notes": true,
+      "customers": true,
+      "expenses": true,
+      "funnel": true,
+      "movements": true,
+      "order_items": true,
+      "orders": true,
+      "payments": true,
+      "products": true,
+      "purchase_orders": true,
+      "refunds": true,
+      "reservations": true,
+      "returns": true,
+      "suppliers": true,
+      "unmet_demand": true,
+      "variants": true
+    },
+    "currency": "MXN",
+    "policy": "Provisional",
+    "scenario": "normal",
+    "seed": 42,
+    "status": "PASS",
+    "synthetic": true
+  },
+  "orders": [
+    {
+      "channel": "Instagram",
+      "customer_id": "cust-001",
+      "date": "2026-07-01",
+      "id": "ord-001",
+      "ordered_cents": 146700,
+      "recognized_cents": 136700,
+      "refunded_cents": 18900,
+      "settled_cents": 146700,
+      "status": "delivered"
+    },
+    {
+      "channel": "Organic",
+      "customer_id": "cust-002",
+      "date": "2026-07-18",
+      "id": "ord-002",
+      "ordered_cents": 118800,
+      "recognized_cents": 118800,
+      "refunded_cents": 0,
+      "settled_cents": 118800,
+      "status": "delivered"
+    },
+    {
+      "channel": "Instagram",
+      "customer_id": "cust-003",
+      "date": "2026-08-04",
+      "id": "ord-003",
+      "ordered_cents": 107200,
+      "recognized_cents": 107200,
+      "refunded_cents": 0,
+      "settled_cents": 107200,
+      "status": "delivered"
+    },
+    {
+      "channel": "DM",
+      "customer_id": "cust-004",
+      "date": "2026-08-20",
+      "id": "ord-004",
+      "ordered_cents": 118800,
+      "recognized_cents": 0,
+      "refunded_cents": 0,
+      "settled_cents": 118800,
+      "status": "shipped"
+    },
+    {
+      "channel": "Paid Social",
+      "customer_id": "cust-005",
+      "date": "2026-08-28",
+      "id": "ord-005",
+      "ordered_cents": 99800,
+      "recognized_cents": 0,
+      "refunded_cents": 0,
+      "settled_cents": 99800,
+      "status": "paid"
+    },
+    {
+      "channel": "DM",
+      "customer_id": "cust-006",
+      "date": "2026-09-07",
+      "id": "ord-006",
+      "ordered_cents": 28900,
+      "recognized_cents": 0,
+      "refunded_cents": 0,
+      "settled_cents": 0,
+      "status": "pending"
+    },
+    {
+      "channel": "Organic",
+      "customer_id": "cust-007",
+      "date": "2026-09-11",
+      "id": "ord-007",
+      "ordered_cents": 28900,
+      "recognized_cents": 0,
+      "refunded_cents": 0,
+      "settled_cents": 0,
+      "status": "cancelled"
+    },
+    {
+      "channel": "Instagram",
+      "customer_id": "cust-001",
+      "date": "2026-09-16",
+      "id": "ord-008",
+      "ordered_cents": 28900,
+      "recognized_cents": 28900,
+      "refunded_cents": 0,
+      "settled_cents": 28900,
+      "status": "delivered"
+    }
+  ],
+  "products": [
+    {
+      "category": "Pilates socks",
+      "collection": "Studio Essentials",
+      "id": "prod-socks",
+      "lifecycle": "launched",
+      "name": "Grip Pilates Socks"
+    },
+    {
+      "category": "Sportswear",
+      "collection": "Flow",
+      "id": "prod-leggings",
+      "lifecycle": "launched",
+      "name": "Flow Leggings"
+    },
+    {
+      "category": "Sportswear",
+      "collection": "Studio Essentials",
+      "id": "prod-tops",
+      "lifecycle": "sample",
+      "name": "Sculpt Studio Top"
+    },
+    {
+      "category": "Sportswear",
+      "collection": "Move",
+      "id": "prod-shorts",
+      "lifecycle": "clearance",
+      "name": "Move Biker Shorts"
+    },
+    {
+      "category": "Sportswear",
+      "collection": "Future Concepts",
+      "id": "prod-wrap",
+      "lifecycle": "idea",
+      "name": "Recovery Wrap Concept"
+    }
+  ],
+  "purchases": [
+    {
+      "id": "po-001",
+      "in_transit": 0,
+      "ordered_cents": 368000,
+      "ordered_qty": 40,
+      "paid_cents": 368000,
+      "received_qty": 40,
+      "sku": "var-sock-rose",
+      "status": "received",
+      "supplier": "Synthetic Grip Goods"
+    },
+    {
+      "id": "po-002",
+      "in_transit": 6,
+      "ordered_cents": 852000,
+      "ordered_qty": 24,
+      "paid_cents": 319500,
+      "received_qty": 18,
+      "sku": "var-legging-black",
+      "status": "partial",
+      "supplier": "Synthetic Studio Textiles"
+    },
+    {
+      "id": "po-003",
+      "in_transit": 30,
+      "ordered_cents": 594000,
+      "ordered_qty": 30,
+      "paid_cents": 0,
+      "received_qty": 0,
+      "sku": "var-short-coral",
+      "status": "in_transit",
+      "supplier": "Synthetic Studio Textiles"
+    }
+  ],
+  "quality": [
+    {
+      "evidence_refs": [
+        "tables/products"
+      ],
+      "id": "unique_products",
+      "message": "IDs únicos: products",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/products"
+      ],
+      "id": "coverage_products",
+      "message": "Cobertura declarada: products",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/variants"
+      ],
+      "id": "unique_variants",
+      "message": "IDs únicos: variants",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/variants"
+      ],
+      "id": "coverage_variants",
+      "message": "Cobertura declarada: variants",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/suppliers"
+      ],
+      "id": "unique_suppliers",
+      "message": "IDs únicos: suppliers",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/suppliers"
+      ],
+      "id": "coverage_suppliers",
+      "message": "Cobertura declarada: suppliers",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/purchase_orders"
+      ],
+      "id": "unique_purchase_orders",
+      "message": "IDs únicos: purchase_orders",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/purchase_orders"
+      ],
+      "id": "coverage_purchase_orders",
+      "message": "Cobertura declarada: purchase_orders",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/customers"
+      ],
+      "id": "unique_customers",
+      "message": "IDs únicos: customers",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/customers"
+      ],
+      "id": "coverage_customers",
+      "message": "Cobertura declarada: customers",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/orders"
+      ],
+      "id": "unique_orders",
+      "message": "IDs únicos: orders",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/orders"
+      ],
+      "id": "coverage_orders",
+      "message": "Cobertura declarada: orders",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/order_items"
+      ],
+      "id": "unique_order_items",
+      "message": "IDs únicos: order_items",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/order_items"
+      ],
+      "id": "coverage_order_items",
+      "message": "Cobertura declarada: order_items",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/payments"
+      ],
+      "id": "unique_payments",
+      "message": "IDs únicos: payments",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/payments"
+      ],
+      "id": "coverage_payments",
+      "message": "Cobertura declarada: payments",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/refunds"
+      ],
+      "id": "unique_refunds",
+      "message": "IDs únicos: refunds",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/refunds"
+      ],
+      "id": "coverage_refunds",
+      "message": "Cobertura declarada: refunds",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/credit_notes"
+      ],
+      "id": "unique_credit_notes",
+      "message": "IDs únicos: credit_notes",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/credit_notes"
+      ],
+      "id": "coverage_credit_notes",
+      "message": "Cobertura declarada: credit_notes",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/returns"
+      ],
+      "id": "unique_returns",
+      "message": "IDs únicos: returns",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/returns"
+      ],
+      "id": "coverage_returns",
+      "message": "Cobertura declarada: returns",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/movements"
+      ],
+      "id": "unique_movements",
+      "message": "IDs únicos: movements",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/movements"
+      ],
+      "id": "coverage_movements",
+      "message": "Cobertura declarada: movements",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/reservations"
+      ],
+      "id": "unique_reservations",
+      "message": "IDs únicos: reservations",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/reservations"
+      ],
+      "id": "coverage_reservations",
+      "message": "Cobertura declarada: reservations",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/expenses"
+      ],
+      "id": "unique_expenses",
+      "message": "IDs únicos: expenses",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/expenses"
+      ],
+      "id": "coverage_expenses",
+      "message": "Cobertura declarada: expenses",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/funnel"
+      ],
+      "id": "unique_funnel",
+      "message": "IDs únicos: funnel",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/funnel"
+      ],
+      "id": "coverage_funnel",
+      "message": "Cobertura declarada: funnel",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/unmet_demand"
+      ],
+      "id": "unique_unmet_demand",
+      "message": "IDs únicos: unmet_demand",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "metadata/coverage/unmet_demand"
+      ],
+      "id": "coverage_unmet_demand",
+      "message": "Cobertura declarada: unmet_demand",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/variants",
+        "tables/products"
+      ],
+      "id": "fk_variants_product_id",
+      "message": "Referencias válidas: variants.product_id",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/purchase_orders",
+        "tables/suppliers"
+      ],
+      "id": "fk_purchase_orders_supplier_id",
+      "message": "Referencias válidas: purchase_orders.supplier_id",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/purchase_orders",
+        "tables/variants"
+      ],
+      "id": "fk_purchase_orders_variant_id",
+      "message": "Referencias válidas: purchase_orders.variant_id",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/orders",
+        "tables/customers"
+      ],
+      "id": "fk_orders_customer_id",
+      "message": "Referencias válidas: orders.customer_id",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/order_items",
+        "tables/variants"
+      ],
+      "id": "fk_order_items_variant_id",
+      "message": "Referencias válidas: order_items.variant_id",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/order_items",
+        "tables/orders"
+      ],
+      "id": "fk_order_items_order_id",
+      "message": "Referencias válidas: order_items.order_id",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/payments",
+        "tables/orders"
+      ],
+      "id": "fk_payments_order_id",
+      "message": "Referencias válidas: payments.order_id",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/refunds",
+        "tables/orders"
+      ],
+      "id": "fk_refunds_order_id",
+      "message": "Referencias válidas: refunds.order_id",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/credit_notes",
+        "tables/order_items"
+      ],
+      "id": "fk_credit_notes_order_item_id",
+      "message": "Referencias válidas: credit_notes.order_item_id",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/returns",
+        "tables/order_items"
+      ],
+      "id": "fk_returns_order_item_id",
+      "message": "Referencias válidas: returns.order_item_id",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/movements",
+        "tables/variants"
+      ],
+      "id": "fk_movements_variant_id",
+      "message": "Referencias válidas: movements.variant_id",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/reservations",
+        "tables/order_items"
+      ],
+      "id": "fk_reservations_order_item_id",
+      "message": "Referencias válidas: reservations.order_item_id",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/unmet_demand",
+        "tables/variants"
+      ],
+      "id": "fk_unmet_demand_variant_id",
+      "message": "Referencias válidas: unmet_demand.variant_id",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/variants",
+        "tables/order_items"
+      ],
+      "id": "cost_coverage",
+      "message": "Costos estándar completos; faltantes retienen márgenes y valoración",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/order_items"
+      ],
+      "id": "line_amounts",
+      "message": "Cantidad positiva y descuento no mayor al bruto",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/orders"
+      ],
+      "id": "delivery_dates",
+      "message": "Entrega y reconocimiento tienen fecha consistente",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/purchase_orders"
+      ],
+      "id": "po_quantities",
+      "message": "Recepción parcial y pago dentro de orden de compra",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/movements"
+      ],
+      "id": "stock_nonnegative",
+      "message": "Ledger no negativo por SKU en cada fecha",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/movements"
+      ],
+      "id": "movement_references",
+      "message": "Movimiento con referencia, signo y estado válidos",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/movements",
+        "tables/order_items"
+      ],
+      "id": "sales_ledger",
+      "message": "Salidas concilian con artículos despachados",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/movements",
+        "tables/purchase_orders"
+      ],
+      "id": "receipt_ledger",
+      "message": "Entradas concilian con recepciones de compra",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/returns",
+        "tables/movements"
+      ],
+      "id": "returns_ledger",
+      "message": "Devolución física separada; cantidad y restock conciliados",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/reservations",
+        "tables/movements"
+      ],
+      "id": "reservations",
+      "message": "Reservas abiertas concilian y no exceden existencia",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/credit_notes",
+        "tables/order_items"
+      ],
+      "id": "credit_limits",
+      "message": "Notas de crédito no exceden ingreso y siguen entrega",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/payments",
+        "tables/refunds",
+        "tables/orders"
+      ],
+      "id": "payment_reconciliation",
+      "message": "Política demo prepago: cobro, pedido y reembolso concilian",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/expenses",
+        "tables/funnel"
+      ],
+      "id": "marketing_spend",
+      "message": "Gasto de marketing registrado una vez en gastos; funnel es descriptivo",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/movements",
+        "tables/payments",
+        "tables/orders"
+      ],
+      "id": "shipment_prepayment",
+      "message": "Cobro completo previo al despacho y despacho no posterior a entrega",
+      "status": "PASS"
+    },
+    {
+      "evidence_refs": [
+        "tables/expenses"
+      ],
+      "id": "expense_payments",
+      "message": "Gastos: efectivo separado del devengo",
+      "status": "PASS"
+    }
+  ],
+  "trend": [
+    {
+      "cogs_cents": 89400,
+      "month": "2026-07",
+      "net_cash_cents": -187400,
+      "net_revenue_cents": 255500,
+      "opex_cents": 66000
+    },
+    {
+      "cogs_cents": 38200,
+      "month": "2026-08",
+      "net_cash_cents": -31700,
+      "net_revenue_cents": 107200,
+      "opex_cents": 123000
+    },
+    {
+      "cogs_cents": 9200,
+      "month": "2026-09",
+      "net_cash_cents": 10900,
+      "net_revenue_cents": 28900,
+      "opex_cents": 31000
+    }
+  ],
+  "unmet_demand": [
+    {
+      "date": "2026-09-18",
+      "id": "unmet-001",
+      "quantity": 7,
+      "reason": "historical hypothetical demand signal; availability not observed",
+      "variant_id": "var-sock-lilac"
+    },
+    {
+      "date": "2026-09-20",
+      "id": "unmet-002",
+      "quantity": 5,
+      "reason": "concept request; no opening stock",
+      "variant_id": "var-wrap-sand"
+    }
+  ]
+}

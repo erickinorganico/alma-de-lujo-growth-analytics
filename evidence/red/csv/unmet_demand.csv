@@ -1,0 +1,3 @@
+id,date,variant_id,quantity,reason
+unmet-001,2026-09-18,var-sock-lilac,7,historical hypothetical demand signal; availability not observed
+unmet-002,2026-09-20,var-wrap-sand,5,concept request; no opening stock

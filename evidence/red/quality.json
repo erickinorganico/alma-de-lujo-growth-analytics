@@ -1,0 +1,506 @@
+[
+  {
+    "evidence_refs": [
+      "tables/products"
+    ],
+    "id": "unique_products",
+    "message": "IDs únicos: products",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/products"
+    ],
+    "id": "coverage_products",
+    "message": "Cobertura declarada: products",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/variants"
+    ],
+    "id": "unique_variants",
+    "message": "IDs únicos: variants",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/variants"
+    ],
+    "id": "coverage_variants",
+    "message": "Cobertura declarada: variants",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/suppliers"
+    ],
+    "id": "unique_suppliers",
+    "message": "IDs únicos: suppliers",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/suppliers"
+    ],
+    "id": "coverage_suppliers",
+    "message": "Cobertura declarada: suppliers",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/purchase_orders"
+    ],
+    "id": "unique_purchase_orders",
+    "message": "IDs únicos: purchase_orders",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/purchase_orders"
+    ],
+    "id": "coverage_purchase_orders",
+    "message": "Cobertura declarada: purchase_orders",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/customers"
+    ],
+    "id": "unique_customers",
+    "message": "IDs únicos: customers",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/customers"
+    ],
+    "id": "coverage_customers",
+    "message": "Cobertura declarada: customers",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/orders"
+    ],
+    "id": "unique_orders",
+    "message": "IDs únicos: orders",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/orders"
+    ],
+    "id": "coverage_orders",
+    "message": "Cobertura declarada: orders",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/order_items"
+    ],
+    "id": "unique_order_items",
+    "message": "IDs únicos: order_items",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/order_items"
+    ],
+    "id": "coverage_order_items",
+    "message": "Cobertura declarada: order_items",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/payments"
+    ],
+    "id": "unique_payments",
+    "message": "IDs únicos: payments",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/payments"
+    ],
+    "id": "coverage_payments",
+    "message": "Cobertura declarada: payments",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/refunds"
+    ],
+    "id": "unique_refunds",
+    "message": "IDs únicos: refunds",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/refunds"
+    ],
+    "id": "coverage_refunds",
+    "message": "Cobertura declarada: refunds",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/credit_notes"
+    ],
+    "id": "unique_credit_notes",
+    "message": "IDs únicos: credit_notes",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/credit_notes"
+    ],
+    "id": "coverage_credit_notes",
+    "message": "Cobertura declarada: credit_notes",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/returns"
+    ],
+    "id": "unique_returns",
+    "message": "IDs únicos: returns",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/returns"
+    ],
+    "id": "coverage_returns",
+    "message": "Cobertura declarada: returns",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/movements"
+    ],
+    "id": "unique_movements",
+    "message": "IDs únicos: movements",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/movements"
+    ],
+    "id": "coverage_movements",
+    "message": "Cobertura declarada: movements",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/reservations"
+    ],
+    "id": "unique_reservations",
+    "message": "IDs únicos: reservations",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/reservations"
+    ],
+    "id": "coverage_reservations",
+    "message": "Cobertura declarada: reservations",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/expenses"
+    ],
+    "id": "unique_expenses",
+    "message": "IDs únicos: expenses",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/expenses"
+    ],
+    "id": "coverage_expenses",
+    "message": "Cobertura declarada: expenses",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/funnel"
+    ],
+    "id": "unique_funnel",
+    "message": "IDs únicos: funnel",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/funnel"
+    ],
+    "id": "coverage_funnel",
+    "message": "Cobertura declarada: funnel",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/unmet_demand"
+    ],
+    "id": "unique_unmet_demand",
+    "message": "IDs únicos: unmet_demand",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "metadata/coverage/unmet_demand"
+    ],
+    "id": "coverage_unmet_demand",
+    "message": "Cobertura declarada: unmet_demand",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/variants",
+      "tables/products"
+    ],
+    "id": "fk_variants_product_id",
+    "message": "Referencias válidas: variants.product_id",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/purchase_orders",
+      "tables/suppliers"
+    ],
+    "id": "fk_purchase_orders_supplier_id",
+    "message": "Referencias válidas: purchase_orders.supplier_id",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/purchase_orders",
+      "tables/variants"
+    ],
+    "id": "fk_purchase_orders_variant_id",
+    "message": "Referencias válidas: purchase_orders.variant_id",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/orders",
+      "tables/customers"
+    ],
+    "id": "fk_orders_customer_id",
+    "message": "Referencias válidas: orders.customer_id",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/order_items",
+      "tables/variants"
+    ],
+    "id": "fk_order_items_variant_id",
+    "message": "Referencias válidas: order_items.variant_id",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/order_items",
+      "tables/orders"
+    ],
+    "id": "fk_order_items_order_id",
+    "message": "Referencias válidas: order_items.order_id",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/payments",
+      "tables/orders"
+    ],
+    "id": "fk_payments_order_id",
+    "message": "Referencias válidas: payments.order_id",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/refunds",
+      "tables/orders"
+    ],
+    "id": "fk_refunds_order_id",
+    "message": "Referencias válidas: refunds.order_id",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/credit_notes",
+      "tables/order_items"
+    ],
+    "id": "fk_credit_notes_order_item_id",
+    "message": "Referencias válidas: credit_notes.order_item_id",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/returns",
+      "tables/order_items"
+    ],
+    "id": "fk_returns_order_item_id",
+    "message": "Referencias válidas: returns.order_item_id",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/movements",
+      "tables/variants"
+    ],
+    "id": "fk_movements_variant_id",
+    "message": "Referencias válidas: movements.variant_id",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/reservations",
+      "tables/order_items"
+    ],
+    "id": "fk_reservations_order_item_id",
+    "message": "Referencias válidas: reservations.order_item_id",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/unmet_demand",
+      "tables/variants"
+    ],
+    "id": "fk_unmet_demand_variant_id",
+    "message": "Referencias válidas: unmet_demand.variant_id",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/variants",
+      "tables/order_items"
+    ],
+    "id": "cost_coverage",
+    "message": "Costos estándar completos; faltantes retienen márgenes y valoración",
+    "status": "UNKNOWN"
+  },
+  {
+    "evidence_refs": [
+      "tables/order_items"
+    ],
+    "id": "line_amounts",
+    "message": "Cantidad positiva y descuento no mayor al bruto",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/orders"
+    ],
+    "id": "delivery_dates",
+    "message": "Entrega y reconocimiento tienen fecha consistente",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/purchase_orders"
+    ],
+    "id": "po_quantities",
+    "message": "Recepción parcial y pago dentro de orden de compra",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/movements"
+    ],
+    "id": "stock_nonnegative",
+    "message": "Ledger no negativo por SKU en cada fecha",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/movements"
+    ],
+    "id": "movement_references",
+    "message": "Movimiento con referencia, signo y estado válidos",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/movements",
+      "tables/order_items"
+    ],
+    "id": "sales_ledger",
+    "message": "Salidas concilian con artículos despachados",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/movements",
+      "tables/purchase_orders"
+    ],
+    "id": "receipt_ledger",
+    "message": "Entradas concilian con recepciones de compra",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/returns",
+      "tables/movements"
+    ],
+    "id": "returns_ledger",
+    "message": "Devolución física separada; cantidad y restock conciliados",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/reservations",
+      "tables/movements"
+    ],
+    "id": "reservations",
+    "message": "Reservas abiertas concilian y no exceden existencia",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/credit_notes",
+      "tables/order_items"
+    ],
+    "id": "credit_limits",
+    "message": "Notas de crédito no exceden ingreso y siguen entrega",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/payments",
+      "tables/refunds",
+      "tables/orders"
+    ],
+    "id": "payment_reconciliation",
+    "message": "Política demo prepago: cobro, pedido y reembolso concilian",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/expenses",
+      "tables/funnel"
+    ],
+    "id": "marketing_spend",
+    "message": "Gasto de marketing registrado una vez en gastos; funnel es descriptivo",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/movements",
+      "tables/payments",
+      "tables/orders"
+    ],
+    "id": "shipment_prepayment",
+    "message": "Cobro completo previo al despacho y despacho no posterior a entrega",
+    "status": "PASS"
+  },
+  {
+    "evidence_refs": [
+      "tables/expenses"
+    ],
+    "id": "expense_payments",
+    "message": "Gastos: efectivo separado del devengo",
+    "status": "PASS"
+  }
+]

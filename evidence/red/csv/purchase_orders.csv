@@ -1,0 +1,4 @@
+id,supplier_id,variant_id,ordered_qty,received_qty,unit_cost_cents,status,date,paid_cents
+po-001,sup-grip,var-sock-rose,40,40,9200,received,2026-07-05,368000
+po-002,sup-textiles,var-legging-black,24,18,35500,partial,2026-08-16,319500
+po-003,sup-textiles,var-short-coral,30,0,19800,in_transit,2026-09-12,0

@@ -1,0 +1,13 @@
+id,product_id,size,color,price_cents,cost_cents
+var-sock-black,prod-socks,M,Black,28900,9200
+var-sock-ivory,prod-socks,M,Ivory,28900,9200
+var-sock-rose,prod-socks,M,Rose,28900,9200
+var-sock-sage,prod-socks,M,Sage,28900,9200
+var-sock-lilac,prod-socks,M,Lilac,28900,9200
+var-legging-black,prod-leggings,M,Black,89900,35500
+var-legging-navy,prod-leggings,M,Navy,89900,35500
+var-top-black,prod-tops,M,Black,64900,24500
+var-top-sand,prod-tops,M,Sand,64900,24500
+var-short-black,prod-shorts,M,Black,49900,19800
+var-short-coral,prod-shorts,M,Coral,49900,19800
+var-wrap-sand,prod-wrap,M,Sand,72900,29000

@@ -1,0 +1,828 @@
+{
+  "metadata": {
+    "as_of": "2026-09-21",
+    "coverage": {
+      "credit_notes": true,
+      "customers": true,
+      "expenses": true,
+      "funnel": true,
+      "movements": true,
+      "order_items": true,
+      "orders": true,
+      "payments": true,
+      "products": true,
+      "purchase_orders": true,
+      "refunds": true,
+      "reservations": true,
+      "returns": true,
+      "suppliers": true,
+      "unmet_demand": true,
+      "variants": true
+    },
+    "currency": "MXN",
+    "scenario": "missing_cost",
+    "seed": 42,
+    "synthetic": true
+  },
+  "tables": {
+    "credit_notes": [
+      {
+        "amount_cents": 10000,
+        "date": "2026-07-13",
+        "id": "credit-001",
+        "order_item_id": "item-001",
+        "reason": "fit adjustment"
+      }
+    ],
+    "customers": [
+      {
+        "acquired_date": "2026-07-04",
+        "id": "cust-001"
+      },
+      {
+        "acquired_date": "2026-07-13",
+        "id": "cust-002"
+      },
+      {
+        "acquired_date": "2026-07-22",
+        "id": "cust-003"
+      },
+      {
+        "acquired_date": "2026-07-31",
+        "id": "cust-004"
+      },
+      {
+        "acquired_date": "2026-08-09",
+        "id": "cust-005"
+      },
+      {
+        "acquired_date": "2026-08-18",
+        "id": "cust-006"
+      },
+      {
+        "acquired_date": "2026-08-27",
+        "id": "cust-007"
+      },
+      {
+        "acquired_date": "2026-09-05",
+        "id": "cust-008"
+      }
+    ],
+    "expenses": [
+      {
+        "amount_cents": 24000,
+        "category": "packaging",
+        "date": "2026-07-08",
+        "id": "expense-001",
+        "paid_cents": 24000,
+        "variable": 1
+      },
+      {
+        "amount_cents": 85000,
+        "category": "photography",
+        "date": "2026-08-07",
+        "id": "expense-002",
+        "paid_cents": 0,
+        "variable": 0
+      },
+      {
+        "amount_cents": 31000,
+        "category": "shipping",
+        "date": "2026-09-09",
+        "id": "expense-003",
+        "paid_cents": 18000,
+        "variable": 1
+      },
+      {
+        "amount_cents": 42000,
+        "category": "marketing",
+        "date": "2026-07-23",
+        "id": "expense-004",
+        "paid_cents": 42000,
+        "variable": 1
+      },
+      {
+        "amount_cents": 38000,
+        "category": "marketing",
+        "date": "2026-08-12",
+        "id": "expense-005",
+        "paid_cents": 38000,
+        "variable": 1
+      }
+    ],
+    "funnel": [
+      {
+        "campaign_id": "camp-studio",
+        "channel": "Instagram",
+        "date": "2026-07-23",
+        "id": "funnel-001",
+        "leads": 74,
+        "spend_cents": 42000,
+        "visits": 620
+      },
+      {
+        "campaign_id": "camp-move",
+        "channel": "Paid Social",
+        "date": "2026-08-12",
+        "id": "funnel-002",
+        "leads": 31,
+        "spend_cents": 38000,
+        "visits": 410
+      },
+      {
+        "campaign_id": "camp-private",
+        "channel": "DM",
+        "date": "2026-09-01",
+        "id": "funnel-003",
+        "leads": null,
+        "spend_cents": 0,
+        "visits": null
+      },
+      {
+        "campaign_id": "organic",
+        "channel": "Organic",
+        "date": "2026-09-06",
+        "id": "funnel-004",
+        "leads": 28,
+        "spend_cents": 0,
+        "visits": 300
+      }
+    ],
+    "movements": [
+      {
+        "date": "2026-06-24",
+        "id": "mov-opening-var-sock-black",
+        "kind": "opening",
+        "quantity": 24,
+        "reference_id": "opening-var-sock-black",
+        "variant_id": "var-sock-black"
+      },
+      {
+        "date": "2026-06-24",
+        "id": "mov-opening-var-sock-ivory",
+        "kind": "opening",
+        "quantity": 24,
+        "reference_id": "opening-var-sock-ivory",
+        "variant_id": "var-sock-ivory"
+      },
+      {
+        "date": "2026-06-24",
+        "id": "mov-opening-var-sock-rose",
+        "kind": "opening",
+        "quantity": 24,
+        "reference_id": "opening-var-sock-rose",
+        "variant_id": "var-sock-rose"
+      },
+      {
+        "date": "2026-06-24",
+        "id": "mov-opening-var-sock-sage",
+        "kind": "opening",
+        "quantity": 24,
+        "reference_id": "opening-var-sock-sage",
+        "variant_id": "var-sock-sage"
+      },
+      {
+        "date": "2026-06-24",
+        "id": "mov-opening-var-sock-lilac",
+        "kind": "opening",
+        "quantity": 24,
+        "reference_id": "opening-var-sock-lilac",
+        "variant_id": "var-sock-lilac"
+      },
+      {
+        "date": "2026-06-24",
+        "id": "mov-opening-var-legging-black",
+        "kind": "opening",
+        "quantity": 12,
+        "reference_id": "opening-var-legging-black",
+        "variant_id": "var-legging-black"
+      },
+      {
+        "date": "2026-06-24",
+        "id": "mov-opening-var-legging-navy",
+        "kind": "opening",
+        "quantity": 12,
+        "reference_id": "opening-var-legging-navy",
+        "variant_id": "var-legging-navy"
+      },
+      {
+        "date": "2026-06-24",
+        "id": "mov-opening-var-top-black",
+        "kind": "opening",
+        "quantity": 12,
+        "reference_id": "opening-var-top-black",
+        "variant_id": "var-top-black"
+      },
+      {
+        "date": "2026-06-24",
+        "id": "mov-opening-var-top-sand",
+        "kind": "opening",
+        "quantity": 12,
+        "reference_id": "opening-var-top-sand",
+        "variant_id": "var-top-sand"
+      },
+      {
+        "date": "2026-06-24",
+        "id": "mov-opening-var-short-black",
+        "kind": "opening",
+        "quantity": 12,
+        "reference_id": "opening-var-short-black",
+        "variant_id": "var-short-black"
+      },
+      {
+        "date": "2026-06-24",
+        "id": "mov-opening-var-short-coral",
+        "kind": "opening",
+        "quantity": 12,
+        "reference_id": "opening-var-short-coral",
+        "variant_id": "var-short-coral"
+      },
+      {
+        "date": "2026-06-24",
+        "id": "mov-opening-var-wrap-sand",
+        "kind": "opening",
+        "quantity": 0,
+        "reference_id": "opening-var-wrap-sand",
+        "variant_id": "var-wrap-sand"
+      },
+      {
+        "date": "2026-07-05",
+        "id": "mov-po-001",
+        "kind": "receipt",
+        "quantity": 40,
+        "reference_id": "po-001",
+        "variant_id": "var-sock-rose"
+      },
+      {
+        "date": "2026-08-16",
+        "id": "mov-po-002",
+        "kind": "receipt",
+        "quantity": 18,
+        "reference_id": "po-002",
+        "variant_id": "var-legging-black"
+      },
+      {
+        "date": "2026-07-02",
+        "id": "mov-sale-item-001",
+        "kind": "sale",
+        "quantity": -2,
+        "reference_id": "item-001",
+        "variant_id": "var-sock-rose"
+      },
+      {
+        "date": "2026-07-02",
+        "id": "mov-sale-item-002",
+        "kind": "sale",
+        "quantity": -1,
+        "reference_id": "item-002",
+        "variant_id": "var-legging-black"
+      },
+      {
+        "date": "2026-07-19",
+        "id": "mov-sale-item-003",
+        "kind": "sale",
+        "quantity": -1,
+        "reference_id": "item-003",
+        "variant_id": "var-sock-black"
+      },
+      {
+        "date": "2026-07-19",
+        "id": "mov-sale-item-004",
+        "kind": "sale",
+        "quantity": -1,
+        "reference_id": "item-004",
+        "variant_id": "var-legging-navy"
+      },
+      {
+        "date": "2026-08-05",
+        "id": "mov-sale-item-005",
+        "kind": "sale",
+        "quantity": -2,
+        "reference_id": "item-005",
+        "variant_id": "var-sock-lilac"
+      },
+      {
+        "date": "2026-08-05",
+        "id": "mov-sale-item-006",
+        "kind": "sale",
+        "quantity": -1,
+        "reference_id": "item-006",
+        "variant_id": "var-short-black"
+      },
+      {
+        "date": "2026-08-21",
+        "id": "mov-sale-item-007",
+        "kind": "sale",
+        "quantity": -1,
+        "reference_id": "item-007",
+        "variant_id": "var-sock-sage"
+      },
+      {
+        "date": "2026-08-21",
+        "id": "mov-sale-item-008",
+        "kind": "sale",
+        "quantity": -1,
+        "reference_id": "item-008",
+        "variant_id": "var-legging-navy"
+      },
+      {
+        "date": "2026-09-17",
+        "id": "mov-sale-item-012",
+        "kind": "sale",
+        "quantity": -1,
+        "reference_id": "item-012",
+        "variant_id": "var-sock-rose"
+      },
+      {
+        "date": "2026-07-13",
+        "id": "mov-return-001",
+        "kind": "return",
+        "quantity": 1,
+        "reference_id": "return-001",
+        "variant_id": "var-sock-rose"
+      }
+    ],
+    "order_items": [
+      {
+        "discount_cents": 0,
+        "id": "item-001",
+        "order_id": "ord-001",
+        "quantity": 2,
+        "unit_cost_cents": 9200,
+        "unit_price_cents": 28900,
+        "variant_id": "var-sock-rose"
+      },
+      {
+        "discount_cents": 1000,
+        "id": "item-002",
+        "order_id": "ord-001",
+        "quantity": 1,
+        "unit_cost_cents": 35500,
+        "unit_price_cents": 89900,
+        "variant_id": "var-legging-black"
+      },
+      {
+        "discount_cents": 0,
+        "id": "item-003",
+        "order_id": "ord-002",
+        "quantity": 1,
+        "unit_cost_cents": 9200,
+        "unit_price_cents": 28900,
+        "variant_id": "var-sock-black"
+      },
+      {
+        "discount_cents": 0,
+        "id": "item-004",
+        "order_id": "ord-002",
+        "quantity": 1,
+        "unit_cost_cents": 35500,
+        "unit_price_cents": 89900,
+        "variant_id": "var-legging-navy"
+      },
+      {
+        "discount_cents": 500,
+        "id": "item-005",
+        "order_id": "ord-003",
+        "quantity": 2,
+        "unit_cost_cents": null,
+        "unit_price_cents": 28900,
+        "variant_id": "var-sock-lilac"
+      },
+      {
+        "discount_cents": 0,
+        "id": "item-006",
+        "order_id": "ord-003",
+        "quantity": 1,
+        "unit_cost_cents": 19800,
+        "unit_price_cents": 49900,
+        "variant_id": "var-short-black"
+      },
+      {
+        "discount_cents": 0,
+        "id": "item-007",
+        "order_id": "ord-004",
+        "quantity": 1,
+        "unit_cost_cents": 9200,
+        "unit_price_cents": 28900,
+        "variant_id": "var-sock-sage"
+      },
+      {
+        "discount_cents": 0,
+        "id": "item-008",
+        "order_id": "ord-004",
+        "quantity": 1,
+        "unit_cost_cents": 35500,
+        "unit_price_cents": 89900,
+        "variant_id": "var-legging-navy"
+      },
+      {
+        "discount_cents": 0,
+        "id": "item-009",
+        "order_id": "ord-005",
+        "quantity": 2,
+        "unit_cost_cents": 19800,
+        "unit_price_cents": 49900,
+        "variant_id": "var-short-coral"
+      },
+      {
+        "discount_cents": 0,
+        "id": "item-010",
+        "order_id": "ord-006",
+        "quantity": 1,
+        "unit_cost_cents": 9200,
+        "unit_price_cents": 28900,
+        "variant_id": "var-sock-ivory"
+      },
+      {
+        "discount_cents": 0,
+        "id": "item-011",
+        "order_id": "ord-007",
+        "quantity": 1,
+        "unit_cost_cents": 9200,
+        "unit_price_cents": 28900,
+        "variant_id": "var-sock-black"
+      },
+      {
+        "discount_cents": 0,
+        "id": "item-012",
+        "order_id": "ord-008",
+        "quantity": 1,
+        "unit_cost_cents": 9200,
+        "unit_price_cents": 28900,
+        "variant_id": "var-sock-rose"
+      }
+    ],
+    "orders": [
+      {
+        "campaign_id": "camp-studio",
+        "channel": "Instagram",
+        "customer_id": "cust-001",
+        "date": "2026-07-01",
+        "delivered_date": "2026-07-05",
+        "id": "ord-001",
+        "status": "delivered"
+      },
+      {
+        "campaign_id": "organic",
+        "channel": "Organic",
+        "customer_id": "cust-002",
+        "date": "2026-07-18",
+        "delivered_date": "2026-07-22",
+        "id": "ord-002",
+        "status": "delivered"
+      },
+      {
+        "campaign_id": "camp-color",
+        "channel": "Instagram",
+        "customer_id": "cust-003",
+        "date": "2026-08-04",
+        "delivered_date": "2026-08-08",
+        "id": "ord-003",
+        "status": "delivered"
+      },
+      {
+        "campaign_id": "camp-private",
+        "channel": "DM",
+        "customer_id": "cust-004",
+        "date": "2026-08-20",
+        "delivered_date": null,
+        "id": "ord-004",
+        "status": "shipped"
+      },
+      {
+        "campaign_id": "camp-move",
+        "channel": "Paid Social",
+        "customer_id": "cust-005",
+        "date": "2026-08-28",
+        "delivered_date": null,
+        "id": "ord-005",
+        "status": "paid"
+      },
+      {
+        "campaign_id": "camp-private",
+        "channel": "DM",
+        "customer_id": "cust-006",
+        "date": "2026-09-07",
+        "delivered_date": null,
+        "id": "ord-006",
+        "status": "pending"
+      },
+      {
+        "campaign_id": "organic",
+        "channel": "Organic",
+        "customer_id": "cust-007",
+        "date": "2026-09-11",
+        "delivered_date": null,
+        "id": "ord-007",
+        "status": "cancelled"
+      },
+      {
+        "campaign_id": "camp-studio",
+        "channel": "Instagram",
+        "customer_id": "cust-001",
+        "date": "2026-09-16",
+        "delivered_date": "2026-09-19",
+        "id": "ord-008",
+        "status": "delivered"
+      }
+    ],
+    "payments": [
+      {
+        "amount_cents": 146700,
+        "date": "2026-07-02",
+        "id": "pay-001",
+        "order_id": "ord-001",
+        "status": "settled"
+      },
+      {
+        "amount_cents": 118800,
+        "date": "2026-07-19",
+        "id": "pay-002",
+        "order_id": "ord-002",
+        "status": "settled"
+      },
+      {
+        "amount_cents": 107200,
+        "date": "2026-08-05",
+        "id": "pay-003",
+        "order_id": "ord-003",
+        "status": "settled"
+      },
+      {
+        "amount_cents": 118800,
+        "date": "2026-08-21",
+        "id": "pay-004",
+        "order_id": "ord-004",
+        "status": "settled"
+      },
+      {
+        "amount_cents": 99800,
+        "date": "2026-08-29",
+        "id": "pay-005",
+        "order_id": "ord-005",
+        "status": "settled"
+      },
+      {
+        "amount_cents": 28900,
+        "date": "2026-09-08",
+        "id": "pay-006",
+        "order_id": "ord-006",
+        "status": "pending"
+      },
+      {
+        "amount_cents": 28900,
+        "date": "2026-09-17",
+        "id": "pay-008",
+        "order_id": "ord-008",
+        "status": "settled"
+      }
+    ],
+    "products": [
+      {
+        "category": "Pilates socks",
+        "collection": "Studio Essentials",
+        "id": "prod-socks",
+        "lifecycle": "launched",
+        "name": "Grip Pilates Socks"
+      },
+      {
+        "category": "Sportswear",
+        "collection": "Flow",
+        "id": "prod-leggings",
+        "lifecycle": "launched",
+        "name": "Flow Leggings"
+      },
+      {
+        "category": "Sportswear",
+        "collection": "Studio Essentials",
+        "id": "prod-tops",
+        "lifecycle": "sample",
+        "name": "Sculpt Studio Top"
+      },
+      {
+        "category": "Sportswear",
+        "collection": "Move",
+        "id": "prod-shorts",
+        "lifecycle": "clearance",
+        "name": "Move Biker Shorts"
+      },
+      {
+        "category": "Sportswear",
+        "collection": "Future Concepts",
+        "id": "prod-wrap",
+        "lifecycle": "idea",
+        "name": "Recovery Wrap Concept"
+      }
+    ],
+    "purchase_orders": [
+      {
+        "date": "2026-07-05",
+        "id": "po-001",
+        "ordered_qty": 40,
+        "paid_cents": 368000,
+        "received_qty": 40,
+        "status": "received",
+        "supplier_id": "sup-grip",
+        "unit_cost_cents": 9200,
+        "variant_id": "var-sock-rose"
+      },
+      {
+        "date": "2026-08-16",
+        "id": "po-002",
+        "ordered_qty": 24,
+        "paid_cents": 319500,
+        "received_qty": 18,
+        "status": "partial",
+        "supplier_id": "sup-textiles",
+        "unit_cost_cents": 35500,
+        "variant_id": "var-legging-black"
+      },
+      {
+        "date": "2026-09-12",
+        "id": "po-003",
+        "ordered_qty": 30,
+        "paid_cents": 0,
+        "received_qty": 0,
+        "status": "in_transit",
+        "supplier_id": "sup-textiles",
+        "unit_cost_cents": 19800,
+        "variant_id": "var-short-coral"
+      }
+    ],
+    "refunds": [
+      {
+        "amount_cents": 18900,
+        "date": "2026-07-11",
+        "id": "refund-001",
+        "order_id": "ord-001",
+        "status": "settled"
+      }
+    ],
+    "reservations": [
+      {
+        "id": "reservation-001",
+        "order_item_id": "item-009",
+        "quantity": 2,
+        "status": "active"
+      },
+      {
+        "id": "reservation-002",
+        "order_item_id": "item-010",
+        "quantity": 1,
+        "status": "active"
+      },
+      {
+        "id": "reservation-003",
+        "order_item_id": "item-007",
+        "quantity": 1,
+        "status": "released"
+      },
+      {
+        "id": "reservation-004",
+        "order_item_id": "item-008",
+        "quantity": 1,
+        "status": "released"
+      }
+    ],
+    "returns": [
+      {
+        "date": "2026-07-13",
+        "id": "return-001",
+        "order_item_id": "item-001",
+        "quantity": 1,
+        "restock": 1
+      },
+      {
+        "date": "2026-08-14",
+        "id": "return-002",
+        "order_item_id": "item-005",
+        "quantity": 1,
+        "restock": 0
+      }
+    ],
+    "suppliers": [
+      {
+        "id": "sup-textiles",
+        "name": "Synthetic Studio Textiles"
+      },
+      {
+        "id": "sup-grip",
+        "name": "Synthetic Grip Goods"
+      }
+    ],
+    "unmet_demand": [
+      {
+        "date": "2026-09-18",
+        "id": "unmet-001",
+        "quantity": 7,
+        "reason": "historical hypothetical demand signal; availability not observed",
+        "variant_id": "var-sock-lilac"
+      },
+      {
+        "date": "2026-09-20",
+        "id": "unmet-002",
+        "quantity": 5,
+        "reason": "concept request; no opening stock",
+        "variant_id": "var-wrap-sand"
+      }
+    ],
+    "variants": [
+      {
+        "color": "Black",
+        "cost_cents": 9200,
+        "id": "var-sock-black",
+        "price_cents": 28900,
+        "product_id": "prod-socks",
+        "size": "M"
+      },
+      {
+        "color": "Ivory",
+        "cost_cents": 9200,
+        "id": "var-sock-ivory",
+        "price_cents": 28900,
+        "product_id": "prod-socks",
+        "size": "M"
+      },
+      {
+        "color": "Rose",
+        "cost_cents": 9200,
+        "id": "var-sock-rose",
+        "price_cents": 28900,
+        "product_id": "prod-socks",
+        "size": "M"
+      },
+      {
+        "color": "Sage",
+        "cost_cents": 9200,
+        "id": "var-sock-sage",
+        "price_cents": 28900,
+        "product_id": "prod-socks",
+        "size": "M"
+      },
+      {
+        "color": "Lilac",
+        "cost_cents": null,
+        "id": "var-sock-lilac",
+        "price_cents": 28900,
+        "product_id": "prod-socks",
+        "size": "M"
+      },
+      {
+        "color": "Black",
+        "cost_cents": 35500,
+        "id": "var-legging-black",
+        "price_cents": 89900,
+        "product_id": "prod-leggings",
+        "size": "M"
+      },
+      {
+        "color": "Navy",
+        "cost_cents": 35500,
+        "id": "var-legging-navy",
+        "price_cents": 89900,
+        "product_id": "prod-leggings",
+        "size": "M"
+      },
+      {
+        "color": "Black",
+        "cost_cents": 24500,
+        "id": "var-top-black",
+        "price_cents": 64900,
+        "product_id": "prod-tops",
+        "size": "M"
+      },
+      {
+        "color": "Sand",
+        "cost_cents": 24500,
+        "id": "var-top-sand",
+        "price_cents": 64900,
+        "product_id": "prod-tops",
+        "size": "M"
+      },
+      {
+        "color": "Black",
+        "cost_cents": 19800,
+        "id": "var-short-black",
+        "price_cents": 49900,
+        "product_id": "prod-shorts",
+        "size": "M"
+      },
+      {
+        "color": "Coral",
+        "cost_cents": 19800,
+        "id": "var-short-coral",
+        "price_cents": 49900,
+        "product_id": "prod-shorts",
+        "size": "M"
+      },
+      {
+        "color": "Sand",
+        "cost_cents": 29000,
+        "id": "var-wrap-sand",
+        "price_cents": 72900,
+        "product_id": "prod-wrap",
+        "size": "M"
+      }
+    ]
+  }
+}

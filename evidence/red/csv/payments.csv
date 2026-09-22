@@ -1,0 +1,8 @@
+id,order_id,date,amount_cents,status
+pay-001,ord-001,2026-07-02,146700,settled
+pay-002,ord-002,2026-07-19,118800,settled
+pay-003,ord-003,2026-08-05,107200,settled
+pay-004,ord-004,2026-08-21,118800,settled
+pay-005,ord-005,2026-08-29,99800,settled
+pay-006,ord-006,2026-09-08,28900,pending
+pay-008,ord-008,2026-09-17,28900,settled
