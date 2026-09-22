@@ -77,8 +77,36 @@ def main(argv=None):
     sub=parser.add_subparsers(dest='command',required=True)
     demo=sub.add_parser('demo');demo.add_argument('--output',default='build/demo');demo.add_argument('--seed',type=int,default=42);demo.add_argument('--scenario',choices=SCENARIOS,default='normal');demo.add_argument('--csv-input')
     check=sub.add_parser('verify');check.add_argument('--output',default='build/verification')
+    ws=sub.add_parser('workspace',help='Build 30-table v2 analytical workspace and six process requests')
+    ws.add_argument('--output',default='build/workspace-v2');ws.add_argument('--seed',type=int,default=42)
+    ws.add_argument('--scenario',choices=('normal','stock_pressure','promotion_illusion','cash_squeeze','missing_cost','broken_link'),default='normal')
+    ws.add_argument('--days',type=int,default=365);ws.add_argument('--orders',type=int,default=1200);ws.add_argument('--input',help='Synthetic v2 JSON file or CSV directory')
+    proc=sub.add_parser('process',help='Inspect, start or resume durable analytical processes')
+    proc.add_argument('action',choices=('list','start','resume','status','submit'))
+    proc.add_argument('--workspace',default='build/workspace-v2');proc.add_argument('--id')
+    proc.add_argument('--response');proc.add_argument('--receipt')
+    mart=sub.add_parser('query',help='Run a registered read-only SQL mart')
+    mart.add_argument('--workspace',default='build/workspace-v2');mart.add_argument('--mart',required=True)
     args=parser.parse_args(argv)
     try:
+        if args.command=='workspace':
+            from .workspace import build_workspace
+            result=build_workspace(args.output,args.seed,args.scenario,args.days,args.orders,args.input)
+            print(json.dumps(result,ensure_ascii=False,indent=2));return 2 if result['status']=='BLOCKED' else 0
+        if args.command=='process':
+            from . import process_engine as engine
+            if args.action=='list':result=engine.definitions()
+            elif args.action=='status':result=engine.status(args.workspace)
+            else:
+                if not args.id:raise ValueError('--id required')
+                if args.action=='submit':
+                    if not args.response or not args.receipt:raise ValueError('--response and --receipt required')
+                    result=engine.submit(args.workspace,args.id,args.response,args.receipt)
+                else:result=getattr(engine,args.action)(args.workspace,args.id)
+            print(json.dumps(result,ensure_ascii=False,indent=2));return 0
+        if args.command=='query':
+            from .warehouse import query_mart
+            print(json.dumps(query_mart(Path(args.workspace)/'warehouse.sqlite3',args.mart),ensure_ascii=False,indent=2));return 0
         if args.command=='verify':return verify(args.output)
         report=build(args.output,args.seed,args.scenario,args.csv_input)
         print(json.dumps(dict(output=str(Path(args.output).resolve()),status=report['meta']['status'],scenario=report['meta']['scenario'],synthetic=True),ensure_ascii=False))

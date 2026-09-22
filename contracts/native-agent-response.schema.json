@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "challenges": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "evidence_hash": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "facts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence_refs": {
+            "items": {
+              "pattern": "^/",
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "observation",
+              "inference"
+            ]
+          },
+          "statement": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "value": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "null",
+              "object",
+              "array"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "statement",
+          "kind",
+          "evidence_refs",
+          "value"
+        ],
+        "type": "object"
+      },
+      "minItems": 2,
+      "type": "array"
+    },
+    "hypotheses": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "recommendations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "approval_required": {
+            "const": true
+          },
+          "closure_rule": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "evidence_refs": {
+            "items": {
+              "pattern": "^/",
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "execution": {
+            "const": "PROHIBITED"
+          },
+          "guardrail": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "population": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "primary_metric": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "window": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "action",
+          "primary_metric",
+          "guardrail",
+          "window",
+          "population",
+          "closure_rule",
+          "evidence_refs",
+          "approval_required",
+          "execution"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "request_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "role": {
+      "enum": [
+        "merchandiser",
+        "commerce_analyst",
+        "returns_analyst",
+        "finance_analyst",
+        "growth_analyst",
+        "market_researcher",
+        "evidence_reviewer"
+      ]
+    },
+    "summary": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "unknowns": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "verdict": {
+      "enum": [
+        "REVIEW",
+        "BLOCKED",
+        "READY_FOR_OWNER"
+      ]
+    },
+    "version": {
+      "const": "2.0"
+    }
+  },
+  "required": [
+    "version",
+    "request_id",
+    "role",
+    "evidence_hash",
+    "summary",
+    "facts",
+    "unknowns",
+    "hypotheses",
+    "recommendations",
+    "challenges",
+    "verdict"
+  ],
+  "type": "object"
+}

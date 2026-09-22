@@ -1,0 +1,17 @@
+{
+  "contract_id": "FCL-01",
+  "id": "finance-close",
+  "version": "2.0.0",
+  "owner": "management_finance_reviewer",
+  "initial_state": "NEW",
+  "terminal_states": ["CLOSED", "BLOCKED"],
+  "transitions": [
+    {"event": "period_opened", "from": ["NEW", "REOPENED"], "to": "OPEN", "gate": "period_contract"},
+    {"event": "cutoff_applied", "from": ["OPEN"], "to": "DATA_CUTOFF", "gate": "cutoff"},
+    {"event": "controls_started", "from": ["DATA_CUTOFF"], "to": "VALIDATING", "gate": "control_totals"},
+    {"event": "controls_passed", "from": ["VALIDATING"], "to": "RECONCILING", "gate": "controls_pass"},
+    {"event": "bridges_reconciled", "from": ["RECONCILING"], "to": "REVIEW_READY", "gate": "finance_bridge"},
+    {"event": "close_approved", "from": ["REVIEW_READY"], "to": "CLOSED", "gate": "synthetic_approval"},
+    {"event": "period_reopened", "from": ["CLOSED"], "to": "REOPENED", "gate": "reopen_approval"}
+  ]
+}

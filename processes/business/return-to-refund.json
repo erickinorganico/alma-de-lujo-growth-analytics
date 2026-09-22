@@ -1,0 +1,19 @@
+{
+  "contract_id": "RTR-01",
+  "id": "return-to-refund",
+  "version": "2.0.0",
+  "owner": "after_sales_owner",
+  "initial_state": "NEW",
+  "terminal_states": ["CLOSED", "REJECTED", "BLOCKED"],
+  "transitions": [
+    {"event": "return_requested", "from": ["NEW"], "to": "REQUESTED", "gate": "return_eligibility"},
+    {"event": "return_authorized", "from": ["REQUESTED"], "to": "AUTHORIZED", "gate": "return_approval"},
+    {"event": "return_rejected", "from": ["REQUESTED"], "to": "REJECTED", "gate": "reason"},
+    {"event": "return_in_transit", "from": ["AUTHORIZED"], "to": "IN_TRANSIT", "gate": "tracking_status"},
+    {"event": "return_received", "from": ["AUTHORIZED", "IN_TRANSIT"], "to": "RECEIVED", "gate": "return_receipt"},
+    {"event": "return_inspected", "from": ["RECEIVED"], "to": "INSPECTED", "gate": "disposition"},
+    {"event": "refund_requested", "from": ["INSPECTED"], "to": "REFUND_PENDING", "gate": "refund_approval"},
+    {"event": "refund_settled", "from": ["REFUND_PENDING"], "to": "REFUNDED", "gate": "refund_limit"},
+    {"event": "case_closed", "from": ["INSPECTED", "REFUNDED"], "to": "CLOSED", "gate": "return_bridge"}
+  ]
+}

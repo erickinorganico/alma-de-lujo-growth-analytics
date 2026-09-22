@@ -1,0 +1,68 @@
+{
+  "agent": "growth_analyst",
+  "business_flow": "cohort eligibility → funnel diagnosis → contribution check → experiment guardrails → decision",
+  "completion": "validated analyst response + separate native reviewer + immutable decision packet",
+  "external_execution": "PROHIBITED",
+  "id": "weekly-growth-review",
+  "idempotency": "canonical workspace manifest + versioned process definition",
+  "marts": [
+    "channel_performance",
+    "customer_cohorts",
+    "experiment_results",
+    "funnel_conversion",
+    "finance_monthly"
+  ],
+  "owner": "Responsable de crecimiento",
+  "owner_status": "provisional functional role; no invented person",
+  "required_tables": [
+    "customers",
+    "orders",
+    "campaigns",
+    "leads",
+    "sessions",
+    "experiments",
+    "experiment_assignments",
+    "experiment_outcomes"
+  ],
+  "retry": "resume same inputs; changed data or contract requires new workspace",
+  "reviewer": "evidence_reviewer",
+  "states": [
+    "NEW",
+    "VALIDATING",
+    "ANALYZING",
+    "WAITING_AGENT",
+    "WAITING_REVIEW",
+    "REVIEW",
+    "READY_FOR_OWNER",
+    "BLOCKED"
+  ],
+  "steps": [
+    {
+      "failure": "BLOCKED",
+      "id": "source_contract",
+      "type": "deterministic"
+    },
+    {
+      "failure": "BLOCKED",
+      "id": "sql_marts",
+      "type": "deterministic"
+    },
+    {
+      "failure": "WAITING_AGENT",
+      "id": "native_analysis",
+      "type": "native_agent"
+    },
+    {
+      "failure": "WAITING_REVIEW",
+      "id": "independent_review",
+      "type": "native_agent"
+    },
+    {
+      "failure": "BLOCKED",
+      "id": "decision_packet",
+      "type": "deterministic"
+    }
+  ],
+  "trigger": "Revisión semanal de adquisición y recompra",
+  "version": "2.0"
+}
