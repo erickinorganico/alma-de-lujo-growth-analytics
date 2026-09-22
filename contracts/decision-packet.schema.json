@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:alma:decision-packet:1.0",
+  "title": "Alma read-only DecisionPacket v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id","version","status","facts","unknowns","hypotheses","actions"],
+  "properties": {
+    "id": {"type":"string","minLength":1},
+    "version": {"const":"1.0"},
+    "status": {"enum":["REVIEW","BLOCKED"]},
+    "facts": {"type":"array","minItems":1,"items":{"type":"object","additionalProperties":false,"required":["text","evidence_refs"],"properties":{"text":{"type":"string","minLength":1},"evidence_refs":{"type":"array","minItems":1,"items":{"type":"string","minLength":1}}}}},
+    "unknowns": {"type":"array","minItems":1,"items":{"type":"string","minLength":1}},
+    "hypotheses": {"type":"array","minItems":1,"items":{"type":"string","minLength":1}},
+    "actions": {"type":"array","minItems":1,"items":{"type":"object","additionalProperties":false,"required":["description","approval_required","execution"],"properties":{"description":{"type":"string","minLength":1},"approval_required":{"const":true},"execution":{"const":"BLOCKED"}}}}
+  }
+}
