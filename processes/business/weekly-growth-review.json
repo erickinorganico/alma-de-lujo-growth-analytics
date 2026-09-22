@@ -1,0 +1,17 @@
+{
+  "contract_id": "WGR-01",
+  "id": "weekly-growth-review",
+  "version": "2.0.0",
+  "owner": "growth_owner",
+  "initial_state": "NEW",
+  "terminal_states": ["ARCHIVED", "BLOCKED"],
+  "transitions": [
+    {"event": "review_opened", "from": ["NEW"], "to": "DRAFT", "gate": "review_period"},
+    {"event": "data_bound", "from": ["DRAFT"], "to": "DATA_READY", "gate": "evidence_binding"},
+    {"event": "agent_task_emitted", "from": ["DATA_READY"], "to": "ANALYSIS_REQUESTED", "gate": "agent_request"},
+    {"event": "agent_response_submitted", "from": ["ANALYSIS_REQUESTED"], "to": "ANALYZED", "gate": "evidence_response"},
+    {"event": "review_packet_built", "from": ["ANALYZED"], "to": "REVIEW_READY", "gate": "proposal_limit"},
+    {"event": "owner_decision_recorded", "from": ["REVIEW_READY"], "to": "DECIDED", "gate": "synthetic_approval"},
+    {"event": "review_archived", "from": ["DECIDED"], "to": "ARCHIVED", "gate": "next_review"}
+  ]
+}

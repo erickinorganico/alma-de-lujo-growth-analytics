@@ -1,0 +1,135 @@
+{
+  "challenges": [
+    "Los totales reconcilian dentro del warehouse, pero no prueban la existencia de efectivo, proveedores, facturas ni obligaciones fuera del snapshot.",
+    "La diferencia entre caja y resultado depende de fechas de evento; sin calendario real, una recomendación de pago o compra sería especulativa."
+  ],
+  "evidence_hash": "fb881b2b18d348b1f41210fb6120e18d39709fbdbf290ae87cfc2e9d4acca844",
+  "facts": [
+    {
+      "evidence_refs": [
+        "/lineage/schema/manifest/control_results/0/mart_cents"
+      ],
+      "id": "period_net_revenue_reconciled",
+      "kind": "observation",
+      "statement": "El control de ventas reconcilia 37,087,457 centavos MXN de ingreso neto entre fuente y mart del snapshot.",
+      "value": 37087457
+    },
+    {
+      "evidence_refs": [
+        "/lineage/schema/manifest/control_results/4/mart_cents"
+      ],
+      "id": "supplier_payments_reconciled",
+      "kind": "observation",
+      "statement": "El control de pagos a proveedor reconcilia 4,158,000 centavos MXN entre fuente y mart del snapshot.",
+      "value": 4158000
+    },
+    {
+      "evidence_refs": [
+        "/marts/finance_monthly/1/net_cash_change_cents"
+      ],
+      "id": "october_negative_cash",
+      "kind": "observation",
+      "statement": "Octubre de 2025 reporta -3,528,734 centavos MXN de movimiento neto de efectivo sintético.",
+      "value": -3528734
+    },
+    {
+      "evidence_refs": [
+        "/marts/finance_monthly/12/operating_after_all_expenses_cents"
+      ],
+      "id": "september_operating_after_expenses",
+      "kind": "observation",
+      "statement": "Septiembre de 2026 reporta 2,684,568 centavos MXN de resultado operativo sintético después de todos los gastos.",
+      "value": 2684568
+    },
+    {
+      "evidence_refs": [
+        "/marts/finance_monthly"
+      ],
+      "id": "period_formula",
+      "kind": "inference",
+      "statement": "Cálculo del periodo desde las 13 filas mensuales: SUM(net_revenue_cents)=37,087,457; SUM(gross_profit_cents)=22,527,657; SUM(expense_accrual_cents)=361,353; SUM(operating_after_all_expenses_cents)=22,166,304; SUM(net_cash_change_cents)=44,207,671 centavos MXN. Son agregados derivados del escenario, no resultados reales.",
+      "value": null
+    },
+    {
+      "evidence_refs": [
+        "/marts/cash_daily"
+      ],
+      "id": "october_cash_components",
+      "kind": "inference",
+      "statement": "Cálculo sobre las filas diarias de 2025-10: SUM(cash_in_cents)=659,680, SUM(refund_out_cents)=0, SUM(supplier_out_cents)=4,158,000 y SUM(expense_out_cents)=30,414; la identidad 659,680-0-4,158,000-30,414=-3,528,734 explica la caída sintética sin invocar saldo inicial.",
+      "value": null
+    },
+    {
+      "evidence_refs": [
+        "/marts/procurement"
+      ],
+      "id": "open_procurement_exposure",
+      "kind": "inference",
+      "statement": "Cálculo sobre procurement: SUM(open_qty)=332; SUM(open_qty*unit_cost_cents)=2,089,000; SUM(paid_cents)=4,158,000 centavos MXN. El primer importe es valor de costo pendiente en el snapshot, no una cuenta por pagar real ni una instrucción de pago.",
+      "value": null
+    }
+  ],
+  "hypotheses": [
+    "En la simulación, concentrar 4,158,000 centavos de pago a proveedor en octubre explica la caída mensual aunque el resultado operativo del mes sea positivo.",
+    "Con datos reales, el riesgo de fecha de pago puede ser más decisivo que el margen mensual si los cobros no están liquidados antes del vencimiento."
+  ],
+  "recommendations": [
+    {
+      "action": "Proponer al responsable del negocio una prueba analítica de sensibilidad, sin ejecutar pagos: comparar el octubre sintético observado con dos escenarios de fecha para el pago a proveedor (fecha observada y +7 días), manteniendo cobros, reembolsos y gastos del snapshot fijos.",
+      "approval_required": true,
+      "closure_rule": "El responsable del negocio decide si el patrón merece vigilancia real sólo tras contrastarlo con extracto, facturas y vencimientos aprobados; la prueba no ejecuta cambios.",
+      "evidence_refs": [
+        "/marts/cash_daily",
+        "/marts/finance_monthly/1/net_cash_change_cents"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "No convertir la simulación en pago, crédito, promesa a proveedor ni afirmación de saldo bancario; bloquearla si faltan fechas reales de vencimiento y cobro.",
+      "id": "rank-1-timing-sensitivity",
+      "population": "Eventos cash_daily de octubre de 2025 y el pago a proveedor que concentra 4,158,000 centavos en el escenario.",
+      "primary_metric": "mínimo net_cash_change_cents diario y mensual del escenario",
+      "window": "Ventana fija de 31 días de octubre de 2025 del snapshot; una sola comparación predefinida."
+    },
+    {
+      "action": "Someter a revisión un tope provisional de compromiso: no proponer compras nuevas mientras el responsable del negocio no clasifique las 332 unidades abiertas y los 2,089,000 centavos de valor pendiente del snapshot por recepción, factura, vencimiento y necesidad real.",
+      "approval_required": true,
+      "closure_rule": "La puerta se cierra cuando el responsable del negocio aprueba una lista real con proveedor, cantidad, costo, recepción, factura, vencimiento y fuente de caja para cada compromiso.",
+      "evidence_refs": [
+        "/marts/procurement",
+        "/lineage/schema/manifest/control_results/4/passed"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "No tratar paid_cents como cuenta por pagar ni tratar open_qty como entrega garantizada; requerir soporte real antes de fijar un tope.",
+      "id": "rank-2-open-commitment-gate",
+      "population": "Purchase orders con open_qty mayor que cero en procurement.",
+      "primary_metric": "open_qty y valor pendiente en centavos por purchase_order_id",
+      "window": "Corte único al 2026-09-21 y revisión de las 46 órdenes simuladas."
+    },
+    {
+      "action": "Preparar una decisión de una página para el responsable del negocio: en el caso sintético, posponer aumentos de compromiso y priorizar fecha de pago; adjuntar qué datos reales faltan para confirmar o rechazar esa conclusión.",
+      "approval_required": true,
+      "closure_rule": "La conclusión se reemplaza sólo cuando el responsable del negocio apruebe datos bancarios, cobros, pagos y obligaciones reales conciliados.",
+      "evidence_refs": [
+        "/marts/finance_monthly",
+        "/marts/procurement",
+        "/lineage/schema/manifest/metadata/limitations"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "No etiquetar la diferencia como utilidad, saldo, solvencia o capital de trabajo real.",
+      "id": "rank-3-real-decision-bridge",
+      "population": "finance_monthly, cash_daily y procurement del paquete de cierre.",
+      "primary_metric": "diferencia entre net_cash_change_cents y operating_after_all_expenses_cents",
+      "window": "Periodo completo de 13 meses sintéticos y el siguiente cierre real documentado."
+    }
+  ],
+  "request_id": "fb1bc78aa9e1c79680a282b330d18cba2172057d88f29ea6963b586600d44e57",
+  "role": "finance_analyst",
+  "summary": "Conclusión del caso sintético: el periodo acumula 44,207,671 centavos MXN de movimiento neto de efectivo frente a 22,166,304 centavos de resultado operativo después de gastos; por ello no justifica una compra adicional en el escenario sin antes revisar los compromisos abiertos. La caída de caja de octubre de 2025 no proviene de reembolsos: 659,680 centavos de entradas menos 4,158,000 de salidas a proveedor y 30,414 de gastos explican los -3,528,734 centavos del mes. Procurement contiene 332 unidades abiertas valoradas mecánicamente en 2,089,000 centavos y 4,158,000 ya pagados. La acción pertinente es una prueba de sensibilidad de fechas y compromiso dentro del snapshot, seguida de decisión del responsable del negocio con banco, vencimientos y autorización reales; nada en estos importes prueba caja, utilidad o capacidad de pago reales.",
+  "unknowns": [
+    "No hay extracto bancario, saldo de apertura ni saldo de cierre; el movimiento acumulado no es caja disponible.",
+    "No hay vencimientos, crédito, impuestos, nómina, costos ni precios reales para transformar los compromisos sintéticos en liquidez real.",
+    "El costo pendiente de procurement no demuestra una obligación exigible sin contrato, recepción, factura y calendario reales.",
+    "No se conoce qué precio, descuento, mezcla o compra sería óptima para la marca real."
+  ],
+  "verdict": "REVIEW",
+  "version": "2.0"
+}

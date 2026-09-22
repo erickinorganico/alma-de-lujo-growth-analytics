@@ -1,3 +1,5 @@
+> Historical v0.1 reference. Current implementation and acceptance: [v0.2 PRD](../specs/PRD.md), [runbook](RUNBOOK-v2.md), and [release evidence](RELEASE.md).
+
 # Synthetic fixture guide
 
 `alma.fixtures.generate(seed=42, scenario="normal")` returns a deterministic

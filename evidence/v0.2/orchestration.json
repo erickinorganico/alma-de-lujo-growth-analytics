@@ -1,0 +1,113 @@
+{
+  "version": "2.0",
+  "scope": "Actual native analytical task dispatch windows, not development elapsed time",
+  "jobs": [
+    {
+      "agent_id": "/root/terra_warehouse_v2",
+      "model": "gpt-5.6-terra",
+      "effort": "high",
+      "started_at_utc": "2026-09-22T08:45:14Z",
+      "roles": {
+        "finance_analyst": "finance-close",
+        "merchandiser": "procure-to-stock"
+      },
+      "completed_at_utc": "2026-09-22T08:58:33Z",
+      "retry_history": [
+        {
+          "reason": "Parent requested stronger evidence-specific prioritization and financial decomposition",
+          "revision": 2
+        }
+      ]
+    },
+    {
+      "agent_id": "/root/luna_simulation_v2",
+      "model": "gpt-5.6-luna",
+      "effort": "high",
+      "started_at_utc": "2026-09-22T08:46:42Z",
+      "roles": {
+        "commerce_analyst": "lead-to-delivery",
+        "returns_analyst": "return-to-refund"
+      },
+      "completed_at_utc": "2026-09-22T09:05:01Z",
+      "retry_history": [
+        {
+          "reason": "Corrected Windows default JSON decoding in local analysis validation to explicit UTF-8; original request and response hashes unchanged",
+          "revision": 2
+        }
+      ]
+    },
+    {
+      "agent_id": "/root/astra_v2_review",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "started_at_utc": "2026-09-22T08:58:33Z",
+      "assignments": [
+        {
+          "role": "evidence_reviewer",
+          "process_id": "finance-close"
+        },
+        {
+          "role": "evidence_reviewer",
+          "process_id": "procure-to-stock"
+        }
+      ],
+      "completed_at_utc": "2026-09-22T09:03:53Z"
+    },
+    {
+      "agent_id": "/root/astra_v2_review",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "started_at_utc": "2026-09-22T09:05:30Z",
+      "assignments": [
+        {
+          "role": "evidence_reviewer",
+          "process_id": "lead-to-delivery"
+        },
+        {
+          "role": "evidence_reviewer",
+          "process_id": "return-to-refund"
+        }
+      ],
+      "completed_at_utc": "2026-09-22T09:13:31Z"
+    },
+    {
+      "agent_id": "/root/sol_scope_v2",
+      "model": "gpt-5.6-sol",
+      "effort": "high",
+      "started_at_utc": "2026-09-22T09:13:31Z",
+      "roles": {
+        "growth_analyst": "weekly-growth-review",
+        "market_researcher": "market-to-experiment"
+      },
+      "completed_at_utc": "2026-09-22T09:21:36Z",
+      "retry_history": [
+        {
+          "reason": "Corrected trace self-identification using actual native dispatch and runtime turn_context metadata; analytical response unchanged",
+          "revision": 2
+        }
+      ]
+    },
+    {
+      "agent_id": "/root/astra_v2_review",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "started_at_utc": "2026-09-22T09:22:26Z",
+      "assignments": [
+        {
+          "role": "evidence_reviewer",
+          "process_id": "weekly-growth-review"
+        },
+        {
+          "role": "evidence_reviewer",
+          "process_id": "market-to-experiment"
+        }
+      ],
+      "completed_at_utc": "2026-09-22T09:25:39Z"
+    }
+  ],
+  "distinct_native_tasks": 4,
+  "analyst_outputs": 6,
+  "reviewer_outputs": 6,
+  "authority": "No external business execution",
+  "limits": "Parent attestations of native dispatch/return bounds. No measured token/cost/performance savings."
+}

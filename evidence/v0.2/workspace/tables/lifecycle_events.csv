@@ -1,0 +1,10 @@
+id,product_id,date,from_stage,to_stage,reason
+lifecycle-01-01,prod-socks,2025-09-26,idea,sample,synthetic catalog lifecycle example
+lifecycle-01-02,prod-socks,2025-10-20,sample,launched,synthetic catalog lifecycle example
+lifecycle-02-01,prod-leggings,2025-09-29,idea,sample,synthetic catalog lifecycle example
+lifecycle-02-02,prod-leggings,2025-10-23,sample,launched,synthetic catalog lifecycle example
+lifecycle-03-01,prod-tops,2025-10-02,idea,sample,synthetic catalog lifecycle example
+lifecycle-03-02,prod-tops,2025-10-26,sample,launched,synthetic catalog lifecycle example
+lifecycle-04-01,prod-shorts,2025-10-05,idea,sample,synthetic catalog lifecycle example
+lifecycle-04-02,prod-shorts,2025-10-29,sample,clearance,synthetic catalog lifecycle example
+lifecycle-05-01,prod-wrap,2025-10-08,idea,sample,synthetic catalog lifecycle example

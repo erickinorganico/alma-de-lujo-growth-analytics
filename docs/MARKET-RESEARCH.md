@@ -1,3 +1,5 @@
+> Historical v0.1 reference. Current implementation and acceptance: [v0.2 PRD](../specs/PRD.md), [runbook](RUNBOOK-v2.md), and [release evidence](RELEASE.md).
+
 # Market research brief — Pilates socks as a testable entry product
 
 As of 2026-09-22. Public context and user input are separate from synthetic commerce. No market-size, demand forecast or actual Alma performance estimate is established.

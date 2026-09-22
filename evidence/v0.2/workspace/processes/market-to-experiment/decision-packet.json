@@ -1,0 +1,245 @@
+{
+  "agent_receipts": {
+    "evidence_reviewer": {
+      "agent_id": "/root/astra_v2_review",
+      "dispatch_hash": "af269224c4656ddf82f25fbeb622186d96cf9d504631e13a5836bfc798fc4bf8",
+      "model": "gpt-6-astra",
+      "request_id": "8044572b2fd6d4dcc0fe3b01a16fb0a93a0a09580331a82f2d69d695076bbe34",
+      "sha256": "f526ea720f6ea0cb6e7fe8f482b430e170e22254f65d0ef00074d23cf7f12be3"
+    },
+    "market_researcher": {
+      "agent_id": "/root/sol_scope_v2",
+      "dispatch_hash": "2a41ea6c4bd5799ec828029c97168c38fd39aa23b71f8da622f136102587a381",
+      "model": "gpt-5.6-sol",
+      "request_id": "2be050bc89703b393c8a50068bdaf0ff23278633bac33d71c96f4edf81aa1e85",
+      "sha256": "20c57ecf7911993215d52497ea5bfb89a023c7ca9e96d301e305ea915bc67eaf"
+    }
+  },
+  "external_execution": "PROHIBITED",
+  "facts": [
+    {
+      "evidence_refs": [
+        "/sources/observations/0/value"
+      ],
+      "id": "MARKET-F01",
+      "kind": "observation",
+      "statement": "INEGI reporta 44.5% de actividad física para población de 18 años o más en 32 ciudades urbanas.",
+      "value": 44.5
+    },
+    {
+      "evidence_refs": [
+        "/sources/sources/0/observed_period"
+      ],
+      "id": "MARKET-F02",
+      "kind": "observation",
+      "statement": "El periodo observado por la fuente INEGI fue 2025-06-02/2025-06-27.",
+      "value": "2025-06-02/2025-06-27"
+    },
+    {
+      "evidence_refs": [
+        "/sources/sources/0/limitations"
+      ],
+      "id": "MARKET-F03",
+      "kind": "observation",
+      "statement": "La fuente declara que actividad física no es demanda de Pilates, prendas, calcetines ni de esta marca.",
+      "value": "Physical activity is not demand for Pilates, apparel, socks or this brand; not TAM, conversion or sales."
+    },
+    {
+      "evidence_refs": [
+        "/sources/sources/2/status"
+      ],
+      "id": "MARKET-F04",
+      "kind": "observation",
+      "statement": "El perfil de Instagram suministrado permanece sin acceso verificado.",
+      "value": "ACCESS_FAILED"
+    },
+    {
+      "evidence_refs": [
+        "/sources/hypotheses/0/status"
+      ],
+      "id": "MARKET-F05",
+      "kind": "observation",
+      "statement": "La hipótesis de calcetines como producto de entrada sigue sin probarse en el negocio real.",
+      "value": "UNTESTED_REAL_BUSINESS"
+    },
+    {
+      "evidence_refs": [
+        "/experiment_analysis/experiments/0/arms/control/assigned"
+      ],
+      "id": "MARKET-F06",
+      "kind": "observation",
+      "statement": "El brazo control de la viñeta sintética tiene 32 asignaciones.",
+      "value": 32
+    },
+    {
+      "evidence_refs": [
+        "/experiment_analysis/experiments/0/arms/treatment/assigned"
+      ],
+      "id": "MARKET-F07",
+      "kind": "observation",
+      "statement": "El brazo tratamiento de la viñeta sintética tiene 35 asignaciones.",
+      "value": 35
+    },
+    {
+      "evidence_refs": [
+        "/experiment_analysis/experiments/0/balanced_assignment_srm_p"
+      ],
+      "id": "MARKET-F08",
+      "kind": "observation",
+      "statement": "La comprobación descriptiva de balance de asignación reporta SRM p=0.713985795669382.",
+      "value": 0.713985795669382
+    }
+  ],
+  "hypotheses": [
+    "Los calcetines de Pilates podrían funcionar como producto de entrada si una prueba real predeclarada demuestra contribución por visita suficiente sin elevar devoluciones.",
+    "Color o bundle podrían cambiar conversión y contribución, pero la dirección del efecto permanece desconocida.",
+    "El contexto de actividad física puede ayudar a formular una pregunta de investigación, pero no justifica una previsión de demanda."
+  ],
+  "input_hash": "56f06666848c1ff8f11794cc1f58f075e2758e4f6121f6cdf763b12d1e98c947",
+  "process_id": "market-to-experiment",
+  "recommendations": [
+    {
+      "action": "Someter a aprobación un protocolo de validación de calcetines con dos brazos definidos antes de observar resultados y sin reutilizar la viñeta sintética como evidencia de demanda.",
+      "approval_required": true,
+      "closure_rule": "Declarar inconcluso si no se alcanza el tamaño predeclarado, falla SRM, falta cobertura o se viola un guardrail; no elegir ganador sólo por conversión observada.",
+      "evidence_refs": [
+        "/sources/hypotheses/0",
+        "/experiment_analysis/experiments/0",
+        "/experiment_analysis/planning_example"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "return_rate_under_10_percent, SRM, cobertura completa de outcomes y límite de inventario aprobado.",
+      "id": "MARKET-R01",
+      "population": "Tráfico real elegible definido y consentido por el dueño; excluir datos sintéticos de cualquier conclusión comercial.",
+      "primary_metric": "contribution_cents_per_visit",
+      "window": "Ventana fija aprobada antes del inicio; el ejemplo sintético usa 2025-09-22 a 2025-11-17, pero no prescribe una ventana real."
+    },
+    {
+      "action": "Resolver el registro mínimo de evidencia pública y propia antes de usar contexto de mercado en una decisión de surtido.",
+      "approval_required": true,
+      "closure_rule": "Cerrar sólo cuando las fuentes que soporten el diseño estén verificadas; mantener REVIEW si Instagram o el reporte de categoría siguen inaccesibles.",
+      "evidence_refs": [
+        "/sources/sources/0",
+        "/sources/sources/1",
+        "/sources/sources/2",
+        "/sources/sources/3"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "Ninguna observación de actividad se convierte en TAM, demanda, conversión o ventas de Alma de Lujo.",
+      "id": "MARKET-R02",
+      "population": "Fuentes públicas y contexto empresarial explícitamente incluidos en el registro; sin cuentas privadas ni PII.",
+      "primary_metric": "proporción de fuentes usadas con autoridad, periodo, método, licencia y limitaciones verificadas",
+      "window": "Antes del siguiente gate de aprobación experimental o de surtido."
+    },
+    {
+      "action": "Comparar color o bundle únicamente dentro de un diseño gobernado que separe preferencia declarada, conversión y contribución.",
+      "approval_required": true,
+      "closure_rule": "Aceptar una conclusión sólo con métrica y guardrails completos bajo la regla predeclarada; en otro caso registrar incertidumbre y no ejecutar.",
+      "evidence_refs": [
+        "/sources/hypotheses/0/statement",
+        "/marts/inventory_position/18",
+        "/marts/inventory_position/24",
+        "/marts/experiment_results/0",
+        "/marts/experiment_results/1"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "Tasa de devolución, cobertura de stock y exposición balanceada; ninguna compra o cambio de inventario automático.",
+      "id": "MARKET-R03",
+      "population": "Variantes de calcetines y tráfico elegible dentro de un surtido aprobado, sin extrapolar a toda la categoría deportiva.",
+      "primary_metric": "contribution_cents_per_visit por brazo predeclarado",
+      "window": "Una ventana fija que cubra el ciclo de devolución aprobado, sin parada por lectura intermedia favorable."
+    }
+  ],
+  "review": {
+    "challenges": [
+      "Corregir única observación pública verificada por una fuente pública verificada con cuatro observaciones registradas. Las poblaciones urbana adulta, nacional de 12+, mujeres y hombres se solapan o difieren; no sumarlas, promediarlas ni interpretarlas como una tendencia homogénea.",
+      "Las limitaciones sobre TAM y demanda son advertencias de la ficha del proyecto; no presentarlas como cita textual o conclusión comercial emitida por INEGI sin verificar esa atribución.",
+      "Conversión, Wilson y SRM se recalcularon y coinciden; el análisis correctamente no declara ganador. Sin embargo, la métrica primaria es monetaria: 71,200/32=2,225 y 77,140/35=2,204 centavos por asignación, no evidencia de contribución por visita. No comparar sólo totales de brazos desiguales.",
+      "Antes de aprobar el protocolo, definir visitas elegibles, asignación por persona o visita, exposición repetida y estimador de contribución con incertidumbre. Los intervalos Wilson y el ejemplo de tamaño binomial no sustituyen ese diseño monetario.",
+      "Predeclarar denominador y ventana de devoluciones, umbral de SRM, información mínima, regla de decisión y abandono. Tener un texto que solicita futura aprobación no equivale a contar con un protocolo ejecutable ya aprobado.",
+      "El acceso fallido a Instagram o una landing AMVO no prueban demanda. Verificar sólo las fuentes efectivamente necesarias para la hipótesis, sin convertir la adquisición de un informe de categoría específico en requisito universal."
+    ],
+    "evidence_hash": "3412062569902e2053fbc8fb40596a83551655b24a260b24af063f36a35aab1a",
+    "facts": [
+      {
+        "evidence_refs": [
+          "/sources/observations/0/value"
+        ],
+        "id": "urban_activity",
+        "kind": "observation",
+        "statement": "El registro ligado contiene 44.5% para población de 18 años o más en 32 ciudades urbanas; es contexto de actividad física.",
+        "value": 44.5
+      },
+      {
+        "evidence_refs": [
+          "/sources/observations/1/value"
+        ],
+        "id": "national_activity",
+        "kind": "observation",
+        "statement": "El mismo registro contiene otra observación, 41.7%, para población nacional de 12 años o más.",
+        "value": 41.7
+      },
+      {
+        "evidence_refs": [
+          "/sources/observations/2/value"
+        ],
+        "id": "national_women",
+        "kind": "observation",
+        "statement": "El registro contiene 37.4% para mujeres de 12 años o más a nivel nacional.",
+        "value": 37.4
+      },
+      {
+        "evidence_refs": [
+          "/sources/observations/3/value"
+        ],
+        "id": "national_men",
+        "kind": "observation",
+        "statement": "El registro contiene 46.7% para hombres de 12 años o más a nivel nacional.",
+        "value": 46.7
+      },
+      {
+        "evidence_refs": [
+          "/sources/hypotheses/0/status"
+        ],
+        "id": "business_hypothesis",
+        "kind": "observation",
+        "statement": "La hipótesis del producto de entrada permanece UNTESTED_REAL_BUSINESS.",
+        "value": "UNTESTED_REAL_BUSINESS"
+      },
+      {
+        "evidence_refs": [
+          "/marts/experiment_results/0/primary_metric"
+        ],
+        "id": "primary_metric",
+        "kind": "observation",
+        "statement": "La métrica primaria declarada del experimento es contribution_cents_per_visit.",
+        "value": "contribution_cents_per_visit"
+      }
+    ],
+    "hypotheses": [
+      "La actividad física puede motivar preguntas de investigación; un test de producto requeriría evidencia de comportamiento y contribución en una población elegible, sin convertir prevalencia de actividad en tamaño de mercado."
+    ],
+    "recommendations": [],
+    "request_id": "8044572b2fd6d4dcc0fe3b01a16fb0a93a0a09580331a82f2d69d695076bbe34",
+    "role": "evidence_reviewer",
+    "summary": "REVIEW: el registro respalda una fuente pública INEGI verificada con cuatro observaciones de actividad física, no una única observación. El resumen debe corregir esa distinción y conservar las diferentes poblaciones. Ninguna observación demuestra demanda de calcetines ni un producto ganador. Las cifras experimentales coinciden, pero una futura prueba de contribución por visita todavía necesita definir exposición, unidad de análisis, incertidumbre monetaria, tamaño y guardrail; el diagnóstico binomial actual no completa ese protocolo.",
+    "unknowns": [
+      "Esta revisión comprobó el registro inmutable, no volvió a consultar las páginas públicas ni certifica acceso o actualización nuevos.",
+      "No hay demanda real, intención de compra, precios actuales, disponibilidad real ni desempeño de Instagram verificados en esta evidencia.",
+      "No están definidos ni aprobados población, exposición por visita, presupuesto, MDE monetario, duración, método inferencial y umbrales de cierre de una prueba real."
+    ],
+    "verdict": "REVIEW",
+    "version": "2.0"
+  },
+  "run_id": "c04e4974d854d1bb0eb0cb43",
+  "status": "REVIEW",
+  "synthetic": true,
+  "unknowns": [
+    "No se verificaron prendas, colores, precios, disponibilidad, audiencia ni desempeño del perfil de Instagram.",
+    "La landing de AMVO está disponible, pero no se obtuvo el reporte ni se verificaron método muestral o demanda de la categoría.",
+    "La actividad física medida por INEGI no estima mercado direccionable, intención de compra, conversión ni ventas de Alma de Lujo.",
+    "No hay baseline, MDE, población elegible, duración, presupuesto ni política de inventario aprobados para una prueba real.",
+    "Los outcomes, ventas, inventario y contribución incluidos en el workspace son enteramente sintéticos."
+  ],
+  "version": "2.0"
+}

@@ -1,0 +1,65 @@
+{
+  "agent": "returns_analyst",
+  "business_flow": "return request → physical inspection → restock or loss → credit note → refund reconciliation",
+  "completion": "validated analyst response + separate native reviewer + immutable decision packet",
+  "external_execution": "PROHIBITED",
+  "id": "return-to-refund",
+  "idempotency": "canonical workspace manifest + versioned process definition",
+  "marts": [
+    "finance_monthly",
+    "reconciliation",
+    "inventory_position",
+    "cash_daily"
+  ],
+  "owner": "Responsable de postventa",
+  "owner_status": "provisional functional role; no invented person",
+  "required_tables": [
+    "orders",
+    "order_items",
+    "returns",
+    "credit_notes",
+    "refunds",
+    "movements"
+  ],
+  "retry": "resume same inputs; changed data or contract requires new workspace",
+  "reviewer": "evidence_reviewer",
+  "states": [
+    "NEW",
+    "VALIDATING",
+    "ANALYZING",
+    "WAITING_AGENT",
+    "WAITING_REVIEW",
+    "REVIEW",
+    "READY_FOR_OWNER",
+    "BLOCKED"
+  ],
+  "steps": [
+    {
+      "failure": "BLOCKED",
+      "id": "source_contract",
+      "type": "deterministic"
+    },
+    {
+      "failure": "BLOCKED",
+      "id": "sql_marts",
+      "type": "deterministic"
+    },
+    {
+      "failure": "WAITING_AGENT",
+      "id": "native_analysis",
+      "type": "native_agent"
+    },
+    {
+      "failure": "WAITING_REVIEW",
+      "id": "independent_review",
+      "type": "native_agent"
+    },
+    {
+      "failure": "BLOCKED",
+      "id": "decision_packet",
+      "type": "deterministic"
+    }
+  ],
+  "trigger": "Nueva devolución o cierre semanal",
+  "version": "2.0"
+}

@@ -1,0 +1,173 @@
+{
+  "checks": {
+    "accepted_snapshot_states_validate_off_repo": true,
+    "all_eleven_marts_match_json_and_csv": true,
+    "all_thirty_source_csv_tables_match": true,
+    "fresh_workspace_build": true,
+    "manifest_and_binary_hashes_verify": true,
+    "no_native_responses_or_dispatches_created": true,
+    "six_waiting_agent_requests": true,
+    "two_snapshot_databases_copied_byte_exact": true
+  },
+  "commands": [
+    "python -m venv --without-pip .local/clean-install-v2/venv-without-pip",
+    "python -m alma workspace --output build/cycle",
+    "python -m alma process status --workspace build/cycle",
+    "python -m alma process status --workspace ../original-snapshot",
+    "python compare_workspace.py evidence/v0.2/workspace build/cycle"
+  ],
+  "comparison_to_v02_workspace": {
+    "canonical_data_equal": true,
+    "data_sha256": "0da93fd12ab587f70bc596a618b202d3d7ffe9b7f99b5fe703c21ad5f1699af7",
+    "fresh_warehouse_sha256": "795e12bd7e56a983134382bddad63de99963834551fe546be7def9bf1385294f",
+    "manifest_binary_entries_verified": true,
+    "manifest_hash_entries_verified": true,
+    "mart_csv_equal": true,
+    "mart_json_equal": true,
+    "marts": [
+      "cash_daily",
+      "channel_performance",
+      "customer_cohorts",
+      "experiment_results",
+      "finance_monthly",
+      "funnel_conversion",
+      "inventory_aging",
+      "inventory_position",
+      "procurement",
+      "reconciliation",
+      "sales_daily"
+    ],
+    "reference": "evidence/v0.2/workspace",
+    "reference_warehouse_sha256": "50491052693f72d669fc9f80dd1c00c14b8ffac9ae5d6e29f24d17e9a7079419",
+    "schema_manifest_lists_thirty_source_tables": true,
+    "source_table_csv_count": 30,
+    "source_table_csv_equal": true,
+    "warehouse_bytes_equal": false,
+    "warehouse_comparison_scope": "Byte equality is not required for a newly built SQLite file. The fresh database is verified by its own workspace manifest; canonical data plus every exported mart JSON/CSV exactly match the reference."
+  },
+  "copied_project": {
+    "git_commands": false,
+    "included": [
+      "alma",
+      "specs",
+      "contracts",
+      "processes",
+      "models",
+      "agents",
+      "research",
+      "docs",
+      "README.md",
+      "README.en.md"
+    ],
+    "network_access": false,
+    "root": ".local/clean-install-v2/project"
+  },
+  "final_native_replay": {
+    "all_six_review_packets_verified": true,
+    "copied_to": ".local/release-portability-final",
+    "interpreter": "fresh no-pip venv",
+    "new_model_calls": 0,
+    "returncode": 0,
+    "source": "evidence/v0.2/workspace",
+    "status": [
+      {
+        "process_id": "finance-close",
+        "run_id": "9c11cff2c4641b9a606d2f7f",
+        "status": "REVIEW",
+        "step": "decision_packet"
+      },
+      {
+        "process_id": "lead-to-delivery",
+        "run_id": "ee8fa46d9f1f5d1c9263d077",
+        "status": "REVIEW",
+        "step": "decision_packet"
+      },
+      {
+        "process_id": "market-to-experiment",
+        "run_id": "c04e4974d854d1bb0eb0cb43",
+        "status": "REVIEW",
+        "step": "decision_packet"
+      },
+      {
+        "process_id": "procure-to-stock",
+        "run_id": "0cb80284742b5834d9292358",
+        "status": "REVIEW",
+        "step": "decision_packet"
+      },
+      {
+        "process_id": "return-to-refund",
+        "run_id": "ab428a1d2682fe9a31a4d634",
+        "status": "REVIEW",
+        "step": "decision_packet"
+      },
+      {
+        "process_id": "weekly-growth-review",
+        "run_id": "59cccb92c86e35f1b44f1281",
+        "status": "REVIEW",
+        "step": "decision_packet"
+      }
+    ]
+  },
+  "fresh_workspace": {
+    "marts": 11,
+    "native_outputs": {
+      "dispatch_files": 0,
+      "request_files": 6,
+      "response_files": 0
+    },
+    "orders": 1200,
+    "path": ".local/clean-install-v2/project/build/cycle",
+    "process_status": {
+      "finance-close": "WAITING_AGENT",
+      "lead-to-delivery": "WAITING_AGENT",
+      "market-to-experiment": "WAITING_AGENT",
+      "procure-to-stock": "WAITING_AGENT",
+      "return-to-refund": "WAITING_AGENT",
+      "weekly-growth-review": "WAITING_AGENT"
+    },
+    "source_tables": 30,
+    "workspace_status": "PASS"
+  },
+  "interpreter": {
+    "dependencies_installed": false,
+    "environment": ".local/clean-install-v2/venv-without-pip",
+    "note": "An earlier disposable venv received an accidental ensurepip check and was not used. The executed build used the separate fresh venv-without-pip, where python -m pip reported No module named pip.",
+    "pip_absent": true,
+    "version": "Python 3.12.14"
+  },
+  "portable_snapshot": {
+    "copy_method": "Copied all immutable workspace artifacts, then copied each process sequentially. Each process directory was hashed immediately before and after copying; all were stable on the first attempt.",
+    "databases": {
+      "lifecycle/lifecycle.sqlite3": {
+        "byte_exact_copy": true,
+        "sha256": "16d8dab4b79262ce8e80b8a15c65fb3eda67fa953e16606c4136ed7b14478971"
+      },
+      "warehouse.sqlite3": {
+        "byte_exact_copy": true,
+        "sha256": "50491052693f72d669fc9f80dd1c00c14b8ffac9ae5d6e29f24d17e9a7079419"
+      }
+    },
+    "path": ".local/clean-install-v2/original-snapshot",
+    "portability_verified": true,
+    "process_copy_attempts": {
+      "finance-close": 1,
+      "lead-to-delivery": 1,
+      "market-to-experiment": 1,
+      "procure-to-stock": 1,
+      "return-to-refund": 1,
+      "weekly-growth-review": 1
+    },
+    "process_status_from_copied_code": {
+      "finance-close": "REVIEW",
+      "lead-to-delivery": "WAITING_REVIEW",
+      "market-to-experiment": "WAITING_AGENT",
+      "procure-to-stock": "REVIEW",
+      "return-to-refund": "WAITING_REVIEW",
+      "weekly-growth-review": "WAITING_AGENT"
+    },
+    "processes_stable_during_copy": true
+  },
+  "result": "PASSED",
+  "scope": "Clean local installation and portable workspace verification; synthetic data only; no native analytical output was created.",
+  "version": "0.2"
+}

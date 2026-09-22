@@ -1,0 +1,100 @@
+{
+  "business_metrics": "synthetic only",
+  "hypotheses": [
+    {
+      "id": "H-SOCKS",
+      "source_id": "user-business-context",
+      "statement": "Pilates socks may be the best entry product; colors and bundles require a demand test.",
+      "status": "UNTESTED_REAL_BUSINESS"
+    }
+  ],
+  "observations": [
+    {
+      "id": "activity-urban-adult",
+      "metric": "physically_active_percent",
+      "page": 4,
+      "population": "18+ in 32 urban cities",
+      "source_id": "inegi-mopradef-2025",
+      "unit": "percent",
+      "value": 44.5,
+      "year": 2025
+    },
+    {
+      "id": "activity-national",
+      "metric": "physically_active_percent",
+      "page": 6,
+      "population": "12+ national",
+      "source_id": "inegi-mopradef-2025",
+      "unit": "percent",
+      "value": 41.7,
+      "year": 2025
+    },
+    {
+      "id": "activity-national-women",
+      "metric": "physically_active_percent",
+      "page": 6,
+      "population": "Women 12+ national",
+      "source_id": "inegi-mopradef-2025",
+      "unit": "percent",
+      "value": 37.4,
+      "year": 2025
+    },
+    {
+      "id": "activity-national-men",
+      "metric": "physically_active_percent",
+      "page": 6,
+      "population": "Men 12+ national",
+      "source_id": "inegi-mopradef-2025",
+      "unit": "percent",
+      "value": 46.7,
+      "year": 2025
+    }
+  ],
+  "retrieved_at": "2026-09-22",
+  "sources": [
+    {
+      "id": "inegi-mopradef-2025",
+      "license": "Términos de Libre Uso de la Información del INEGI; attribution required; no endorsement",
+      "license_url": "https://www.inegi.org.mx/inegi/terminos.html",
+      "limitations": "Physical activity is not demand for Pilates, apparel, socks or this brand; not TAM, conversion or sales.",
+      "method": "National survey; 4818 dwellings; 2025 expanded scope. Historical urban adult series has a different population.",
+      "observed_period": "2025-06-02/2025-06-27",
+      "published": "2026-01-27",
+      "publisher": "INEGI",
+      "status": "VERIFIED_PUBLIC",
+      "title": "MOPRADEF 2025. Reporte de resultados 4/26",
+      "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/mopradef/mopradef2025_RR.pdf"
+    },
+    {
+      "id": "amvo-evo-2026",
+      "license": "Link and short factual paraphrase only; report redistribution not established",
+      "limitations": "Full report not acquired; form not submitted. Category demand and sampling method unverified.",
+      "published": "2026",
+      "publisher": "AMVO",
+      "status": "LANDING_ONLY",
+      "title": "Estudio de Venta Online 2026 landing",
+      "url": "https://amvo.org.mx/descarga-evo-2026"
+    },
+    {
+      "id": "brand-instagram",
+      "license": "No media copied",
+      "limitations": "Latest garments, images, prices and availability not verified.",
+      "published": null,
+      "publisher": "Alma de Lujo",
+      "status": "ACCESS_FAILED",
+      "title": "User supplied profile",
+      "url": "https://www.instagram.com/almadelujooo/"
+    },
+    {
+      "id": "user-business-context",
+      "license": "Business scope only, no personal data",
+      "limitations": "Sportswear and multicolor Pilates socks confirmed; winning-product statement is an unmeasured hypothesis.",
+      "published": null,
+      "publisher": "Owner via task",
+      "status": "USER_SUPPLIED",
+      "title": "User business description",
+      "url": null
+    }
+  ],
+  "version": "2.0"
+}

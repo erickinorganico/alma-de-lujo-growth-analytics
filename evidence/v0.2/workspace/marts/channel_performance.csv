@@ -1,0 +1,5 @@
+channel,campaign_id,delivered_orders,customers,gross_revenue_cents,discount_cents,credit_note_cents,net_revenue_cents,cogs_cents,marketing_spend_cents,attribution_unknown,revenue_coverage_known
+DM,camp-private,139,112,7327700,412842,186070,6728788,2645800,31522,1,1
+Instagram,camp-studio,279,209,15158200,831138,377217,13949845,5492500,40338,1,1
+Organic,organic,188,160,9072100,484104,229094,8358902,3274800,36767,1,1
+Paid Social,camp-move,166,139,8674200,487540,136738,8049922,3146700,38899,1,1

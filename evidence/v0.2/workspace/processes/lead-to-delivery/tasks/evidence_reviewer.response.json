@@ -1,0 +1,80 @@
+{
+  "challenges": [
+    "La suma comprobada es 9,230 sesiones, 2,830 leads y 1,140 órdenes vinculadas. No usar las 1,200 órdenes totales como numerador de la tasa de leads vinculados; deben explicarse aparte las 60 órdenes fuera de ese vínculo.",
+    "Las tasas publicadas se reproducen desde sesiones distintas con lead/sesiones y órdenes distintas vinculadas/todos los leads. Son cocientes descriptivos del corte; una tasa de conversión por cohorte necesita plazo fijo y tratamiento explícito de leads abiertos e inmaduros.",
+    "No dividir 924 filas de shipment entre 1,200 órdenes para afirmar tasa de entrega. El análisis reconoce esta limitación correctamente; el siguiente reporte debe contar órdenes distintas por estado y ventana.",
+    "La conciliación de prepago previo al despacho ya pasa. La mejora propuesta debe ser un reporte de excepciones, estados y trazabilidad reutilizando ese control, no afirmar que falta una regla de prepago.",
+    "La población de la auditoría de leads no debe excluir los no vinculados por exigir una orden vinculable. Separar sesiones anónimas de leads identificados y preservar el denominador completo de elegibles.",
+    "Usar responsable del negocio en las reglas de cierre; la evidencia no establece identidad ni género de quien aprueba."
+  ],
+  "evidence_hash": "95ccea6a1ac8149345da541e9cdb0fa10d671e8726de61b4bf41ad899156d6db",
+  "facts": [
+    {
+      "evidence_refs": [
+        "/marts/funnel_conversion/1/sessions"
+      ],
+      "id": "instagram_sessions",
+      "kind": "observation",
+      "statement": "Instagram contiene 2,443 sesiones sintéticas en el denominador del mart.",
+      "value": 2443
+    },
+    {
+      "evidence_refs": [
+        "/marts/funnel_conversion/1/all_leads"
+      ],
+      "id": "instagram_leads",
+      "kind": "observation",
+      "statement": "Instagram contiene 843 leads sintéticos y sesiones distintas con lead en este corte.",
+      "value": 843
+    },
+    {
+      "evidence_refs": [
+        "/marts/funnel_conversion/1/linked_orders"
+      ],
+      "id": "instagram_orders",
+      "kind": "observation",
+      "statement": "Instagram contiene 409 órdenes sintéticas vinculadas.",
+      "value": 409
+    },
+    {
+      "evidence_refs": [
+        "/counts/orders"
+      ],
+      "id": "all_orders",
+      "kind": "observation",
+      "statement": "El universo completo contiene 1,200 órdenes sintéticas, incluidos registros fuera de la población vinculada del embudo.",
+      "value": 1200
+    },
+    {
+      "evidence_refs": [
+        "/counts/shipments"
+      ],
+      "id": "shipment_rows",
+      "kind": "observation",
+      "statement": "El snapshot contiene 924 filas de shipment; este conteo no demuestra 924 órdenes únicas entregadas.",
+      "value": 924
+    },
+    {
+      "evidence_refs": [
+        "/quality/58/status"
+      ],
+      "id": "existing_prepayment_control",
+      "kind": "observation",
+      "statement": "El control shipment_prepayment ya está implementado y tiene estado PASS en la evidencia.",
+      "value": "PASS"
+    }
+  ],
+  "hypotheses": [
+    "Diferencias de madurez, mezcla de intención o definición de lead pueden explicar parte de las tasas por canal sin implicar fallas de seguimiento."
+  ],
+  "recommendations": [],
+  "request_id": "b171a09299f5e634e19d50200fc4dd31d8cc26c2e86a80201cdbe1b815694fc3",
+  "role": "evidence_reviewer",
+  "summary": "Las cifras y las tasas citadas coinciden con los marts sintéticos. REVIEW: los cuatro canales suman 1,140 órdenes vinculadas, frente a 1,200 órdenes totales; no representan exactamente la misma población. El término fuga debe limitarse a diferencias descriptivas entre eventos del corte, sin convertirlas en abandono definitivo, retraso o falla operativa. El análisis distingue correctamente filas de shipment de una tasa de entrega y evita atribuir impacto causal real.",
+  "unknowns": [
+    "Faltan una ventana de conversión fija, madurez por fecha de sesión/lead y motivos de salida para interpretar no vinculación como abandono.",
+    "El mart agregado no identifica estados ni pagos por orden, ni identidad real, demanda real o impacto causal de canales."
+  ],
+  "verdict": "REVIEW",
+  "version": "2.0"
+}

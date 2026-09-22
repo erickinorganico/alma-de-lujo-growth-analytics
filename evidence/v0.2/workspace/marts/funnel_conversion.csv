@@ -1,0 +1,5 @@
+channel,campaign_id,sessions,all_leads,linked_leads,unlinked_leads,session_linked_leads,linked_orders,marketing_spend_cents,session_to_lead_rate,lead_to_linked_order_rate,funnel_coverage_known
+DM,camp-private,2204,604,604,0,604,189,31522,0.274,0.3129,1
+Instagram,camp-studio,2443,843,843,0,843,409,40338,0.3451,0.4852,1
+Organic,organic,2297,697,697,0,697,278,36767,0.3034,0.3989,1
+Paid Social,camp-move,2286,686,686,0,686,264,38899,0.3001,0.3848,1

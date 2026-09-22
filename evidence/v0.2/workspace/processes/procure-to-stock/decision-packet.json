@@ -1,0 +1,221 @@
+{
+  "agent_receipts": {
+    "evidence_reviewer": {
+      "agent_id": "/root/astra_v2_review",
+      "dispatch_hash": "4475e981ff0bf22dcf010b98fb9694c535cb56c0a4e0249aa89f9037af864fac",
+      "model": "gpt-6-astra",
+      "request_id": "02a7c6b52f15e948cacad9079b91eba1b91ca371a0e233af0dc47d7b6ec7915f",
+      "sha256": "663f3c7fec27428acb286155d118ffdbcb485271ab7ffb8f0b8eee0e0f1eae79"
+    },
+    "merchandiser": {
+      "agent_id": "/root/terra_warehouse_v2",
+      "dispatch_hash": "33079dd661adf200f328f457355b0207271fd9abf7de1a9c974acb79e782b310",
+      "model": "gpt-5.6-terra",
+      "request_id": "7e9246d514491d67384faa8e65c7336a61c0cd41f51a91daf9948425666f0c5f",
+      "sha256": "588ac08268482a9d0ef36f2decdb67eca7291320d239b30a8181e60f230460ca"
+    }
+  },
+  "external_execution": "PROHIBITED",
+  "facts": [
+    {
+      "evidence_refs": [
+        "/marts/inventory_position/32/cover_days"
+      ],
+      "id": "rose_s_lowest_cover",
+      "kind": "observation",
+      "statement": "Grip Pilates Socks Rose talla S reporta 46.67 días de cobertura sintética.",
+      "value": 46.67
+    },
+    {
+      "evidence_refs": [
+        "/marts/inventory_position/24/cover_days"
+      ],
+      "id": "ivory_l_second_cover",
+      "kind": "observation",
+      "statement": "Grip Pilates Socks Ivory talla L reporta 49.41 días de cobertura sintética.",
+      "value": 49.41
+    },
+    {
+      "evidence_refs": [
+        "/marts/inventory_position/30/cover_days"
+      ],
+      "id": "rose_l_alternative_cover",
+      "kind": "observation",
+      "statement": "Grip Pilates Socks Rose talla L reporta 210.0 días de cobertura sintética.",
+      "value": 210.0
+    },
+    {
+      "evidence_refs": [
+        "/marts/procurement/12/open_qty"
+      ],
+      "id": "rose_open_receipt_offset",
+      "kind": "observation",
+      "statement": "La orden po-00007 de Grip Pilates Socks Rose talla S reporta 10 unidades abiertas en procurement sintético.",
+      "value": 10
+    },
+    {
+      "evidence_refs": [
+        "/marts/inventory_position/32/count_date"
+      ],
+      "id": "snapshot_count_date",
+      "kind": "observation",
+      "statement": "El conteo de la variante Rose talla S está fechado 2026-09-21 dentro del snapshot.",
+      "value": "2026-09-21"
+    },
+    {
+      "evidence_refs": [
+        "/marts/inventory_position"
+      ],
+      "id": "inventory_capital_and_concentration",
+      "kind": "inference",
+      "statement": "Cálculo sobre inventory_position: SUM(inventory_value_cents)=12,836,500; las calcetas suman 3,712,800 (28.9%) y leggings 3,696,000 (28.8%) centavos MXN. Es valuación sintética de costo, no capital de trabajo real.",
+      "value": null
+    },
+    {
+      "evidence_refs": [
+        "/marts/inventory_position",
+        "/marts/procurement"
+      ],
+      "id": "provisional_reorder_baseline",
+      "kind": "inference",
+      "statement": "Al ordenar las 36 variantes launched por cover_days, Rose S (46.67) es la menor. Bajo el escenario provisional explícito de 21 días de lead time + 21 días de seguridad=42 días, ninguna variante launched cruza el umbral; las 10 unidades abiertas/en tránsito de Rose S y las 12 de Ivory L refuerzan que el baseline no pide recompra. Es una regla de escenario, no un forecast real.",
+      "value": null
+    }
+  ],
+  "hypotheses": [
+    "La menor cobertura de Rose S puede venir de la señal generada de mix color/talla y no de preferencia observada.",
+    "El tránsito y las cantidades abiertas pueden resolver la necesidad simulada sin compra nueva, pero su recepción real requiere evidencia externa."
+  ],
+  "input_hash": "a3a5428f9fd4eecd8e8333408f4a4827ee84b731fca864eac3e6860f2df166ff",
+  "process_id": "procure-to-stock",
+  "recommendations": [
+    {
+      "action": "Presentar al responsable del negocio el baseline provisional de 42 días (21 lead time + 21 seguridad): no proponer recompra para ninguna variante launched en este snapshot y mantener Rose S e Ivory L en vigilancia prioritaria; no crear, aprobar ni enviar una orden.",
+      "approval_required": true,
+      "closure_rule": "El responsable del negocio decide una compra sólo cuando la cobertura real cruce el umbral y exista conteo, tránsito, costo, MOQ, fecha de entrega y fuente de caja aprobados.",
+      "evidence_refs": [
+        "/marts/inventory_position",
+        "/marts/procurement"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "Bloquear el baseline si falta conteo físico, ventas reales, cobertura conocida, costo, lead time o presupuesto; excluir PRELAUNCH y clearance de la regla de recompra.",
+      "id": "rank-1-no-buy-baseline",
+      "population": "Las 36 variantes launched; foco analítico en Rose S, Ivory L, Ivory M, Ivory S y Sage S, las cinco coberturas más bajas del snapshot.",
+      "primary_metric": "cover_days por variante frente al umbral provisional de 42 días",
+      "window": "21 días de lead time más 21 días de seguridad; revisión de un corte real semanal durante 30 días."
+    },
+    {
+      "action": "Proponer un registro analítico de 30 días para comparar ventas netas reales, disponibilidad y agotados de Rose S contra Ivory L, Rose M, Rose L y Black L; no cambiar precio, contenido, compra ni catálogo.",
+      "approval_required": true,
+      "closure_rule": "La comparación termina cuando el responsable del negocio revise días disponibles, ventas netas, devoluciones y agotados; no produce una compra automática.",
+      "evidence_refs": [
+        "/marts/inventory_position/32/cover_days",
+        "/marts/inventory_position/24/cover_days",
+        "/marts/inventory_position/30/cover_days",
+        "/marts/inventory_position/18/cover_days"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "No declarar color ganador si faltan días en stock, tráfico comparable, devoluciones o tamaño de muestra; separar demanda censurada por agotado.",
+      "id": "rank-2-color_size_observation_design",
+      "population": "Grip Pilates Socks Rose S, Ivory L, Rose M, Rose L y Black L, excluyendo PRELAUNCH.",
+      "primary_metric": "unidades netas vendidas por color-talla con disponibilidad observada",
+      "window": "30 días consecutivos después de un conteo físico aprobado."
+    },
+    {
+      "action": "Mantener Recovery Wrap Concept Sand como PRELAUNCH y fuera del cálculo de venta, cobertura, recompra y capital de trabajo operativo; no publicarla, venderla, ajustarla ni reabastecerla.",
+      "approval_required": true,
+      "closure_rule": "El responsable del negocio autoriza un cambio de lifecycle sólo con ficha de producto, inventario físico, costo, precio y canal de venta verificados.",
+      "evidence_refs": [
+        "/marts/inventory_position/45/stock_status",
+        "/marts/inventory_position/45/cover_days"
+      ],
+      "execution": "PROHIBITED",
+      "guardrail": "Cero inclusión de PRELAUNCH en disponibilidad comercial o compras hasta que producto, costo, precio, inventario físico y canal se aprueben.",
+      "id": "rank-3-prelaunch_separation",
+      "population": "Recovery Wrap Concept Sand y cualquier variante cuyo lifecycle no sea launched.",
+      "primary_metric": "variantes PRELAUNCH incluidas erróneamente en decisiones operativas",
+      "window": "Hasta aprobación explícita de lanzamiento por el responsable del negocio."
+    }
+  ],
+  "review": {
+    "challenges": [
+      "Independent registered queries match every bound mart; cover formulas, top-five ranking, open PO quantities, total valuation 12,836,500 cents, socks 3,712,800 cents and leggings 3,696,000 cents recompute correctly.",
+      "A 42-day threshold may support the stated no-reorder scenario, but it is not calibrated to lead-time or demand distributions. The 4.67-day buffer for Rose S is conditional on the assumed demand rate and should not be called a validated service guarantee.",
+      "Open PO units and in-transit units are the same underlying exposure in these marts; they should not be added together. They also cannot substitute for available stock before receipt.",
+      "Recommendation rank-3 names any lifecycle other than launched in its population, while its action and guardrail describe PRELAUNCH. Restrict that population to idea/sample concepts or separately specify treatment of clearance and retired items; clearance is not automatically a prelaunch concept.",
+      "The 12,836,500-cent total includes 274,400 cents of sample stock. Keep total asset cost valuation separate from the narrower launched/operational capital population."
+    ],
+    "evidence_hash": "88f23969cc6638cb094e3876d667bbdd0ab0df192cef7d9884626aee70784f5f",
+    "facts": [
+      {
+        "evidence_refs": [
+          "/marts/inventory_position/32/cover_days"
+        ],
+        "id": "rose_cover",
+        "kind": "observation",
+        "statement": "Rose S has 46.67 days of synthetic cover.",
+        "value": 46.67
+      },
+      {
+        "evidence_refs": [
+          "/marts/inventory_position/32/in_transit_qty"
+        ],
+        "id": "rose_transit",
+        "kind": "observation",
+        "statement": "Rose S has 10 synthetic units in transit, a quantity distinct from its 28 available units.",
+        "value": 10
+      },
+      {
+        "evidence_refs": [
+          "/marts/inventory_position/24/cover_days"
+        ],
+        "id": "ivory_cover",
+        "kind": "observation",
+        "statement": "Ivory L has 49.41 days of synthetic cover.",
+        "value": 49.41
+      },
+      {
+        "evidence_refs": [
+          "/marts/inventory_position/45/stock_status"
+        ],
+        "id": "concept_status",
+        "kind": "observation",
+        "statement": "Recovery Wrap Concept Sand is PRELAUNCH in the bound snapshot.",
+        "value": "PRELAUNCH"
+      },
+      {
+        "evidence_refs": [
+          "/marts/inventory_position/45/inventory_value_cents"
+        ],
+        "id": "concept_valuation",
+        "kind": "observation",
+        "statement": "The sample concept contributes 274,400 MXN cents to total synthetic inventory cost valuation, despite exclusion from operational reorder decisions.",
+        "value": 274400
+      }
+    ],
+    "hypotheses": [
+      "The lower Rose S cover is explained mechanically by 28 available units against 18 trailing net units sold; equal availability with different trailing sales can create the ranking without proving color preference."
+    ],
+    "recommendations": [],
+    "request_id": "02a7c6b52f15e948cacad9079b91eba1b91ca371a0e233af0dc47d7b6ec7915f",
+    "role": "evidence_reviewer",
+    "summary": "The synthetic stock calculations are correct: Rose S is the lowest-cover launched variant at 46.67 days, none of the 36 launched variants falls below the explicitly assumed 42-day threshold, and the inventory valuation and category comparisons reconcile. REVIEW: the no-reorder conclusion is valid only inside that assumed scenario. Actual lead-time variation, demand uncertainty, MOQ, available budget and promised receipt dates are unverified; the broad non-launched population in the prelaunch recommendation should be narrowed before owner approval.",
+    "unknowns": [
+      "The 21-day lead time plus 21-day safety allowance is an analyst assumption, not an estimated or approved service-level policy.",
+      "Transit quantities have no verified real arrival date, and the same-day synthetic count is not current physical evidence.",
+      "Demand, availability exposure, supplier MOQ, budget and commercial status outside the synthetic snapshot remain unknown."
+    ],
+    "verdict": "REVIEW",
+    "version": "2.0"
+  },
+  "run_id": "0cb80284742b5834d9292358",
+  "status": "REVIEW",
+  "synthetic": true,
+  "unknowns": [
+    "No hay conteo físico, tránsito, recepción ni existencia real confirmados; todos los saldos son simulados.",
+    "No se conoce la demanda real por color, talla, canal, temporada ni la pérdida de demanda por agotado.",
+    "No se dispone de costo, precio, MOQ, plazo real de proveedor, presupuesto de compra ni capital de trabajo reales.",
+    "No está verificado que las calcetas sean el producto ganador ni que el catálogo/Instagram actual tenga disponibilidad o precios vigentes."
+  ],
+  "version": "2.0"
+}

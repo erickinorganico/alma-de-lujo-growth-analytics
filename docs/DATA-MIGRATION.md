@@ -1,3 +1,5 @@
+> Historical v0.1 reference. Current implementation and acceptance: [v0.2 PRD](../specs/PRD.md), [runbook](RUNBOOK-v2.md), and [release evidence](RELEASE.md).
+
 # Data migration and owner discovery
 
 Confirmed by user: Alma de Lujo sells sportswear and will sell Pilates socks in multiple colors. The user believes socks may be the winning product. Instagram URL is recorded in the market register; latest garments could not be verified by the available public-page retrieval. No photo, price, customer information or post was imported. Product labels/colors/prices/costs and activity in this repository are invented examples.

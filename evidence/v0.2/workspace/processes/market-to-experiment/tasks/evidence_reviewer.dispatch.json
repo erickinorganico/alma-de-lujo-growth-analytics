@@ -1,0 +1,15 @@
+{
+  "agent_id": "/root/astra_v2_review",
+  "completed_at_utc": "2026-09-22T09:25:39Z",
+  "effort": "high",
+  "mode": "live",
+  "model": "gpt-6-astra",
+  "parent_review": "schema-and-evidence-validated",
+  "provider": "native-codex",
+  "recorded_by": "parent-runtime",
+  "request_id": "8044572b2fd6d4dcc0fe3b01a16fb0a93a0a09580331a82f2d69d695076bbe34",
+  "response_sha256": "f526ea720f6ea0cb6e7fe8f482b430e170e22254f65d0ef00074d23cf7f12be3",
+  "retry_history": [],
+  "role": "evidence_reviewer",
+  "started_at_utc": "2026-09-22T09:22:26Z"
+}

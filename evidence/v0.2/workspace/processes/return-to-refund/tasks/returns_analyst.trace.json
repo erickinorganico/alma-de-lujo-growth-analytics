@@ -1,0 +1,51 @@
+{
+  "alternative_explanations": [
+    "Un refund puede ocurrir después de una credit note o de una inspección; el orden no se puede inferir del conteo agregado.",
+    "Una unidad puede clasificarse como merma aunque exista refund, por lo que efectivo y stock no tienen que moverse juntos.",
+    "El movimiento neto mensual puede combinar cobros, refunds, pagos de proveedor y gastos; no debe atribuirse sólo a devoluciones."
+  ],
+  "completed_at_utc": "2026-09-22T08:55:00Z",
+  "effort": "high",
+  "model": "gpt-5.6-luna",
+  "native_job": "/root/luna_simulation_v2",
+  "observations": [
+    "Los tres conteos agregados son 61, pero la igualdad de conteos no prueba coincidencia de líneas, importes o fechas.",
+    "El control returns_ledger está aprobado y confirma la reconciliación definida por el warehouse sintético.",
+    "El evento de caja del 2025-09-28 muestra un refund separado de cash_in y produce salida neta de 17,606 centavos MXN.",
+    "La posición de ejemplo tiene discrepancia física cero, pero una sola variante no demuestra que todas las inspecciones o devoluciones reales estén completas."
+  ],
+  "process_id": "return-to-refund",
+  "queries": [
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart inventory_position",
+      "mart": "inventory_position",
+      "mode": "registered read-only",
+      "purpose": "Comparar ledger físico, conteo, disponibilidad, ventas recientes y discrepancias por variante.",
+      "result": "46 variantes; var-legging-black-l muestra ledger_on_hand=36, counted=36, discrepancy=0, available=28 y trailing_30d_net_sold=13."
+    },
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart cash_daily",
+      "mart": "cash_daily",
+      "mode": "registered read-only",
+      "purpose": "Observar refunds por fecha de efectivo y separarlos de cobros, proveedores y gastos.",
+      "result": "2025-09-28 muestra refund_out_cents=17606, cash_in_cents=0 y net_cash_change_cents=-17606."
+    },
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart finance_monthly",
+      "mart": "finance_monthly",
+      "mode": "registered read-only",
+      "purpose": "Contrastar el movimiento de caja mensual con ingreso, COGS y gastos por fecha de evento.",
+      "result": "2026-09 reporta net_revenue_cents=4455806 y net_cash_change_cents=4579725; ambos son sintéticos."
+    }
+  ],
+  "questions": [
+    "¿Se reconcilian los eventos físicos, las notas de crédito y los reembolsos por línea y por fecha?",
+    "¿Qué ejemplo de caja muestra el efecto de un refund separado de inventario y COGS?",
+    "¿La evidencia permite distinguir restock de merma y explicar la diferencia entre unidades, ingreso y efectivo?"
+  ],
+  "request_id": "d961da889a78ad917a5719e082ae43988029a2a4af01e6b94fb0db901171d3e9",
+  "request_read_encoding": "utf-8-sig",
+  "role": "returns_analyst",
+  "task_started_at_utc": "2026-09-22T08:46:42Z",
+  "validation": "Direct validate_response PASS after loading the immutable request with UTF-8 BOM handling; request_id and evidence_hash matched exactly."
+}

@@ -1,0 +1,18 @@
+{
+  "contract_id": "PTS-01",
+  "id": "procure-to-stock",
+  "version": "2.0.0",
+  "owner": "operations_owner",
+  "initial_state": "NEW",
+  "terminal_states": ["CLOSED", "CANCELLED", "BLOCKED"],
+  "transitions": [
+    {"event": "po_drafted", "from": ["NEW"], "to": "DRAFT", "gate": "valid_po"},
+    {"event": "po_submitted", "from": ["DRAFT"], "to": "WAITING_APPROVAL", "gate": "po_totals"},
+    {"event": "po_approved", "from": ["WAITING_APPROVAL"], "to": "APPROVED", "gate": "synthetic_approval"},
+    {"event": "po_rejected", "from": ["WAITING_APPROVAL"], "to": "CANCELLED", "gate": "reason"},
+    {"event": "supplier_dispatched", "from": ["APPROVED"], "to": "IN_TRANSIT", "gate": "dispatch_quantity"},
+    {"event": "goods_partially_received", "from": ["APPROVED", "IN_TRANSIT", "PARTIALLY_RECEIVED"], "to": "PARTIALLY_RECEIVED", "gate": "receipt_quantity"},
+    {"event": "goods_fully_received", "from": ["APPROVED", "IN_TRANSIT", "PARTIALLY_RECEIVED"], "to": "RECEIVED", "gate": "full_receipt"},
+    {"event": "po_reconciled", "from": ["RECEIVED"], "to": "CLOSED", "gate": "receipt_inventory_bridge"}
+  ]
+}

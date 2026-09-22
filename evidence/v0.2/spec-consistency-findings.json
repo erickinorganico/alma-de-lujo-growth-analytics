@@ -1,0 +1,98 @@
+{
+  "checked_on": "2026-09-22",
+  "findings": [
+    {
+      "claim": "El DecisionPacket tiene un contrato exacto y no permite campos adicionales.",
+      "id": "SC-001",
+      "impact": "Un paquete producido por el runner no puede validar contra el esquema normativo; el gate de contrato queda indeterminado.",
+      "observed": "El esquema exige id, version=1.0, status REVIEW|BLOCKED, facts con text, actions con execution=BLOCKED y additionalProperties=false. _packet() genera version=2.0, no genera id ni actions, añade run_id/process_id/synthetic/input_hash/review/agent_receipts/external_execution y usa READY_FOR_OWNER y PROHIBITED.",
+      "precise_correction": "Elegir un contrato canónico para MVP. Si el paquete v2 del runner es el diseño vigente, versionar y reemplazar decision-packet.schema.json y sus referencias por ese contrato; si el esquema v1 es normativo, adaptar _packet() y las comprobaciones del runner a sus campos y enums exactos.",
+      "references": [
+        "contracts/decision-packet.schema.json:5-16",
+        "alma/process_engine.py:159-164"
+      ],
+      "severity": "HIGH",
+      "status": "IMPLEMENTATION_SCHEMA_MISMATCH"
+    },
+    {
+      "claim": "El replay idempotente y el duplicado contradictorio tienen estados normativos estables.",
+      "id": "SC-002",
+      "impact": "La misma aceptación puede ser evaluada como PASS o FAIL según el documento que se use, aunque el bloqueo de la instancia y la conservación de hechos sí están implementados.",
+      "observed": "PRD/SCOPE-MATRIX nombran CONTRADICTORY y NO_OP; PROCESS-CATALOG y runtime usan NO_OP_REPLAY y CONFLICT, con exception_code CTR_DUPLICATE_EVENT_CONFLICT. El checker y tests ya esperan NO_OP_REPLAY/CONFLICT.",
+      "precise_correction": "Normalizar PRD.md y SCOPE-MATRIX.md a NO_OP_REPLAY y CONFLICT, documentando CTR_DUPLICATE_EVENT_CONFLICT como exception_code; o cambiar runtime, tests y checker conjuntamente a CONTRADICTORY/NO_OP. No mezclar ambos vocabularios.",
+      "references": [
+        "specs/PRD.md:59",
+        "specs/SCOPE-MATRIX.md:19",
+        "specs/PROCESS-CATALOG.md:31-32",
+        "alma/lifecycle.py:545-556",
+        "scripts/check_scope_v2.py:451-454"
+      ],
+      "severity": "MEDIUM",
+      "status": "NORMATIVE_TOKEN_MISMATCH"
+    },
+    {
+      "claim": "Cada instancia persiste referencias de entrada/salida, resultados de gates, excepciones y la última idempotency key.",
+      "id": "SC-003",
+      "impact": "ACC-PROC-002 no se puede comprobar consultando la instancia; un consumidor debe reconstruir campos exigidos desde varias relaciones sin un contrato declarado.",
+      "observed": "lifecycle_instances sólo tiene process_id, contract/version, instance_id, owner, scenario/run, current_state, blocked_reason, last_event_hash, updated_at_utc y synthetic. input_refs, output_refs, gate_results, exception_codes y last idempotency key no son columnas ni aparecen en instances.json; quedan dispersos en eventos/recibos.",
+      "precise_correction": "Añadir esos campos al registro/export de instancia y actualizarlos atómicamente con cada transición, o cambiar PRD/CATALOG para declarar explícitamente que son campos derivados de events/receipts y publicar una vista/query canónica que los materialice.",
+      "references": [
+        "specs/PRD.md:57",
+        "specs/PROCESS-CATALOG.md:9-26",
+        "alma/lifecycle.py:60-76",
+        "alma/lifecycle.py:480-488",
+        "alma/lifecycle.py:610-615"
+      ],
+      "severity": "HIGH",
+      "status": "PERSISTENCE_GAP"
+    },
+    {
+      "claim": "Toda definición de proceso usa el Common process envelope normativo.",
+      "id": "SC-004",
+      "impact": "La frase normativa 'Every process definition and instance uses these fields' contradice el esquema exacto que el loader acepta.",
+      "observed": "El envelope exige process_id, process_contract_id y definition_version, pero las seis definiciones business usan id, contract_id y version; además no contienen process_instance_id, scenario_id/run_id, timestamps, refs, gate_results o idempotency_key. definitions() valida deliberadamente este esquema separado de siete campos.",
+      "precise_correction": "Separar y nombrar el contrato de definición (id/contract_id/version) del envelope de ejecución en PROCESS-CATALOG, o renombrar las definiciones y actualizar definitions(), hashes y acceptance checks. La opción elegida debe quedar explícita, sin exigir campos de instancia a un archivo de definición estático.",
+      "references": [
+        "specs/PROCESS-CATALOG.md:7-26",
+        "specs/SCOPE-MATRIX.md:16-17",
+        "processes/business/lead-to-delivery.json:1-24",
+        "alma/lifecycle.py:33-38"
+      ],
+      "severity": "MEDIUM",
+      "status": "DEFINITION_ENVELOPE_MISMATCH"
+    },
+    {
+      "claim": "El runner rechaza campos no declarados en los límites de contrato.",
+      "id": "SC-005",
+      "impact": "Un evento con campos no declarados puede producir APPLIED y entrar al hash chain, por lo que la garantía de frontera no es verificable.",
+      "observed": "apply_event sólo exige que payload sea dict y recorre claves para prohibir ejecución; no existe allow-list por event_type ni rechazo de claves extra antes de evaluar/aplicar el gate. Los JSON business tampoco declaran schemas de payload.",
+      "precise_correction": "Publicar schemas exactos por event_type y rechazar claves desconocidas antes de _gate(), o declarar payload como extensible versionado y retirar la afirmación de rechazo universal del catálogo.",
+      "references": [
+        "specs/PROCESS-CATALOG.md:9",
+        "alma/lifecycle.py:516-518",
+        "alma/lifecycle.py:570-582"
+      ],
+      "severity": "MEDIUM",
+      "status": "BOUNDARY_ENFORCEMENT_GAP"
+    }
+  ],
+  "limits": [
+    "Este reporte compara contratos y comportamiento local; no propone cambios de código ni afirma validación de una release completa.",
+    "Los campos de proceso nativo en processes/*.json siguen un contrato distinto; el hallazgo SC-004 aplica a la afirmación universal del catálogo y a las definiciones business cargadas por alma.lifecycle."
+  ],
+  "report_version": "2.0",
+  "scope": "Comparación de PROCESS-CATALOG, PRD y SCOPE-MATRIX contra procesos/business, alma/lifecycle.py, alma/process_engine.py y los esquemas exactos usados por el runtime.",
+  "status": "MATERIAL_MISMATCHES_FOUND",
+  "verified_consistency": [
+    {
+      "area": "idempotency_conflict_state",
+      "evidence": "alma/lifecycle.py:550-558 marca la instancia existente BLOCKED con CTR_DUPLICATE_EVENT_CONFLICT y no agrega lifecycle_events; tests/test_lifecycle.py:126-144 lo verifica.",
+      "result": "PASS"
+    },
+    {
+      "area": "failed_gate_business_effect",
+      "evidence": "alma/lifecycle.py:577-582 devuelve WAITING o REJECTED, conserva state_before/state_after y no inserta lifecycle_events; coincide con specs/PROCESS-CATALOG.md:34 y specs/SCOPE-MATRIX.md:18-20. El recibo y la clave de idempotencia son la evidencia esperada del intento.",
+      "result": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,1063 @@
+{
+  "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+  "counts": {
+    "BLOCKED": 0,
+    "FAIL": 0,
+    "PASS": 32
+  },
+  "limits": "Acceptance of reproducible synthetic analytics and native run evidence; not proof of real Alma performance, adoption, causal impact, or authorization for external business action.",
+  "results": [
+    {
+      "acceptance_id": "ACC-PROC-001",
+      "check_type": "contract",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "load processes/*.json and processes/business/*.json",
+      "evidence_refs": [
+        "processes/",
+        "processes/business/"
+      ],
+      "expected": "six exact process slugs with PTS/LTD/RTR/FCL/WGR/MTE contract IDs",
+      "observed": {
+        "business_mapping": {
+          "finance-close": "FCL-01",
+          "lead-to-delivery": "LTD-01",
+          "market-to-experiment": "MTE-01",
+          "procure-to-stock": "PTS-01",
+          "return-to-refund": "RTR-01",
+          "weekly-growth-review": "WGR-01"
+        },
+        "native_processes": [
+          "finance-close",
+          "lead-to-delivery",
+          "market-to-experiment",
+          "procure-to-stock",
+          "return-to-refund",
+          "weekly-growth-review"
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-PROC-002",
+      "check_type": "sqlite+artifact",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "query lifecycle registry; validate native process journals",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/lifecycle/summary.json",
+        "evidence/v0.2/workspace/processes"
+      ],
+      "expected": "six persisted business lifecycles plus six hashed native task journals",
+      "observed": {
+        "events": 42,
+        "hash_chain": {
+          "events_checked": 42,
+          "status": "PASS",
+          "synthetic": true
+        },
+        "instances": 6,
+        "native_journals": 6,
+        "receipts": 48,
+        "relations": [
+          "lifecycle_events",
+          "lifecycle_idempotency",
+          "lifecycle_instances",
+          "lifecycle_receipts"
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-PROC-003",
+      "check_type": "behavioral",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "read lifecycle summary illegal-transition controls",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/lifecycle/summary.json",
+        "tests/test_lifecycle.py"
+      ],
+      "expected": "six illegal first transitions rejected with no instance effect",
+      "observed": {
+        "checks": {
+          "golden_events_applied": true,
+          "golden_terminal_states": true,
+          "hash_chain": true,
+          "illegal_transitions_rejected": true
+        },
+        "controlled_illegal_transitions": 6,
+        "status": "PASS"
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-PROC-004",
+      "check_type": "behavioral",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "disposable apply_event replay and changed-key probe",
+      "evidence_refs": [
+        "alma/lifecycle.py",
+        "tests/test_lifecycle.py"
+      ],
+      "expected": "same event NO_OP; changed payload CONFLICT; one applied business event",
+      "observed": {
+        "approval_attempt": "WAITING",
+        "approval_code": "APPROVAL_MISSING",
+        "approval_state": "WAITING_APPROVAL",
+        "conflict": "CONFLICT",
+        "conflict_code": "CTR_DUPLICATE_EVENT_CONFLICT",
+        "first": "APPLIED",
+        "hash_chain": {
+          "events_checked": 3,
+          "status": "PASS",
+          "synthetic": true
+        },
+        "idempotency_business_events": 1,
+        "replay": "NO_OP_REPLAY",
+        "unsafe_payload_rejected": true
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-PROC-005",
+      "check_type": "behavioral",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "disposable missing-approval lifecycle probe",
+      "evidence_refs": [
+        "alma/lifecycle.py",
+        "specs/PROCESS-CATALOG.md"
+      ],
+      "expected": "WAITING/APPROVAL_MISSING while state remains WAITING_APPROVAL",
+      "observed": {
+        "approval_attempt": "WAITING",
+        "approval_code": "APPROVAL_MISSING",
+        "approval_state": "WAITING_APPROVAL"
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-PROC-006",
+      "check_type": "authority",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "inspect packets and reject unsafe lifecycle payload",
+      "evidence_refs": [
+        "alma/lifecycle.py",
+        "alma/process_engine.py",
+        "evidence/v0.2/workspace/processes"
+      ],
+      "expected": "synthetic-only evidence and external execution prohibited",
+      "observed": {
+        "packets_present": 6,
+        "unsafe_packets": [],
+        "unsafe_payload_rejected": true
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-DATA-001",
+      "check_type": "sqlite",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "PRAGMA table_info/foreign_key_list and broken-batch control",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/warehouse.sqlite3",
+        "evidence/v0.2/verification.json"
+      ],
+      "expected": "STRICT typed PK/FK/check relations; invalid batch rejected and prior marts preserved",
+      "observed": {
+        "bad_batch_preserved": true,
+        "expected_foreign_keys": 35,
+        "observed_foreign_keys": 35,
+        "source_tables": 30,
+        "strict_tables": 30
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-DATA-002",
+      "check_type": "catalog",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "inspect_schema plus lifecycle sqlite_master",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/lineage.json",
+        "evidence/v0.2/workspace/lifecycle/lifecycle.sqlite3"
+      ],
+      "expected": "30 canonical tables, control relations, 11 marts, 4 lifecycle registry tables and declared grains",
+      "observed": {
+        "canonical_tables": 30,
+        "catalog_grains_complete": true,
+        "controls": [
+          "coverage",
+          "ingest_batches",
+          "rejected_batches",
+          "warehouse_manifest"
+        ],
+        "lifecycle_relations": [
+          "lifecycle_events",
+          "lifecycle_idempotency",
+          "lifecycle_instances",
+          "lifecycle_receipts"
+        ],
+        "marts": 11,
+        "warehouse_relations": 45
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-DATA-003",
+      "check_type": "reconciliation",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "compare mart JSON exports to query_mart",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/warehouse.sqlite3",
+        "evidence/v0.2/workspace/marts"
+      ],
+      "expected": "all 11 exported marts equal named SQLite queries",
+      "observed": {
+        "marts_checked": 11,
+        "mismatches": [],
+        "missing_csv": []
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-DATA-004",
+      "check_type": "lineage",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "recompute models/marts SQL hashes and compare lineage.json",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/lineage.json",
+        "models/marts/"
+      ],
+      "expected": "11 named mart SQL files exactly bound by hash and text",
+      "observed": {
+        "mart_sql_checked": 11,
+        "mismatches": [],
+        "missing": [],
+        "sql_entries": 13
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-DATA-005",
+      "check_type": "integrity",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "recompute workspace.json hashes and inspect metadata",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/workspace.json",
+        "evidence/v0.2/workspace/lineage.json"
+      ],
+      "expected": "scenario/seed/as-of/synthetic metadata bound; every manifest hash verifies",
+      "observed": {
+        "binary_hashes": 2,
+        "failed": [],
+        "metadata": {
+          "as_of": "2026-09-21",
+          "contract_version": "2.0",
+          "scenario": "normal",
+          "seed": 42,
+          "start_date": "2025-09-22",
+          "synthetic": true
+        },
+        "text_hashes": 69
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-DATA-006",
+      "check_type": "behavioral",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "read verify_v2 bad-batch preservation control",
+      "evidence_refs": [
+        "evidence/v0.2/verification.json",
+        "scripts/verify_v2.py"
+      ],
+      "expected": "changed invalid batch rejected atomically and prior marts preserved",
+      "observed": {
+        "bad_batch_rejected_prior_marts_preserved": true
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-DATA-007",
+      "check_type": "quality",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "read warehouse controls, scenario failures and full tests",
+      "evidence_refs": [
+        "evidence/v0.2/verification.json",
+        "evidence/v0.2/workspace/warehouse-load.json"
+      ],
+      "expected": "all normal SQL controls and tests pass; controlled failure behavior verified",
+      "observed": {
+        "controlled_failures": {
+          "broken_link": true,
+          "missing_cost": true
+        },
+        "tests": {
+          "errors": 0,
+          "failures": 0,
+          "passed": true,
+          "run": 67
+        },
+        "warehouse_controls": [
+          {
+            "check_id": "sales_net_revenue",
+            "passed": 1
+          },
+          {
+            "check_id": "cash_in",
+            "passed": 1
+          },
+          {
+            "check_id": "cash_out",
+            "passed": 1
+          },
+          {
+            "check_id": "purchase_receipts",
+            "passed": 1
+          },
+          {
+            "check_id": "supplier_payments",
+            "passed": 1
+          },
+          {
+            "check_id": "marketing_spend",
+            "passed": 1
+          }
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-SCEN-001",
+      "check_type": "source-profile",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "inspect normal data.json counts and date window",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/data.json",
+        "evidence/v0.2/verification.json"
+      ],
+      "expected": "365 days, >=36 variants, exactly 1200 orders, multi-item baskets and required domain sources",
+      "observed": {
+        "checks": {
+          "campaigns": true,
+          "days": true,
+          "experiments": true,
+          "leads": true,
+          "multi_item_orders": true,
+          "orders": true,
+          "sessions": true,
+          "synthetic": true,
+          "twelve_expense_months": true,
+          "variants": true
+        },
+        "counts": {
+          "campaigns": 4,
+          "expenses": 26,
+          "experiments": 1,
+          "leads": 2830,
+          "order_items": 1805,
+          "orders": 1200,
+          "sessions": 9230,
+          "variants": 46
+        }
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-SCEN-002",
+      "check_type": "source-profile",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "derive normal lifecycle coverage from canonical rows",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/data.json"
+      ],
+      "expected": "multi-item, split settlement/receipt, lifecycle, return, count, cohort and experiment evidence present",
+      "observed": {
+        "checks": {
+          "cancellations": true,
+          "colors": true,
+          "experiment_assignment_outcomes": true,
+          "inventory_counts": true,
+          "lifecycles": true,
+          "mature_and_immature": true,
+          "multi_item_baskets": true,
+          "refunds_and_credits": true,
+          "return_dispositions": true,
+          "sizes": true,
+          "split_payments": true,
+          "split_receipts": true
+        }
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-SCEN-003",
+      "check_type": "scenario+tests",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "verify scenario index, six scenario records, mechanisms and lifecycle fault test names",
+      "evidence_refs": [
+        "evidence/v0.2/scenarios/index.json",
+        "evidence/v0.2/verification.json",
+        "evidence/v0.2/tests.log",
+        "evidence/v0.2/workspace/lifecycle/summary.json"
+      ],
+      "expected": "exact six indexed dataset scenarios plus declared lifecycle/idempotency/agent fault controls pass",
+      "observed": {
+        "illegal_transitions": 6,
+        "indexed_scenarios": [
+          "broken_link",
+          "cash_squeeze",
+          "missing_cost",
+          "normal",
+          "promotion_illusion",
+          "stock_pressure"
+        ],
+        "mechanisms": {
+          "cash_squeeze_increases_supplier_cash_out": true,
+          "promotion_volume_rises_contribution_falls": true,
+          "stock_pressure_changes_inventory": true
+        },
+        "missing_fault_tests": [],
+        "scenario_index_valid": true,
+        "scenario_pass": true,
+        "scenarios": [
+          "broken_link",
+          "cash_squeeze",
+          "missing_cost",
+          "normal",
+          "promotion_illusion",
+          "stock_pressure"
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-SCEN-004",
+      "check_type": "scenario-manifest",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "validate per-scenario verification record fields and interpretation limit",
+      "evidence_refs": [
+        "evidence/v0.2/verification.json"
+      ],
+      "expected": "six source hashes/statuses/issues/counts/mart hashes/summaries plus synthetic limits",
+      "observed": {
+        "broken_link": {
+          "mart_hashes": 0,
+          "passed": true,
+          "quality_issues": [
+            "fk_order_items_variant_id"
+          ],
+          "source_hash": "6199baf9adb7b536844cddf6189130f4732491932ad37dbed25a4bed1192ad61",
+          "status": "BLOCKED"
+        },
+        "cash_squeeze": {
+          "mart_hashes": 11,
+          "passed": true,
+          "quality_issues": [],
+          "source_hash": "c84aabac71541052048a3e839209eae4316fea525652f23bc3013fa3d97ab931",
+          "status": "PASS"
+        },
+        "missing_cost": {
+          "mart_hashes": 11,
+          "passed": true,
+          "quality_issues": [
+            "cost_coverage"
+          ],
+          "source_hash": "56cdd8b38fae49c7326f23d871080bb857021ec853d8eb595bad4fad62b8d93e",
+          "status": "REVIEW"
+        },
+        "normal": {
+          "mart_hashes": 11,
+          "passed": true,
+          "quality_issues": [],
+          "source_hash": "0da93fd12ab587f70bc596a618b202d3d7ffe9b7f99b5fe703c21ad5f1699af7",
+          "status": "PASS"
+        },
+        "promotion_illusion": {
+          "mart_hashes": 11,
+          "passed": true,
+          "quality_issues": [],
+          "source_hash": "83bb94f3239694292f4f6d710ef861d605623ae8a8452976c69d0f6a28429f7f",
+          "status": "PASS"
+        },
+        "stock_pressure": {
+          "mart_hashes": 11,
+          "passed": true,
+          "quality_issues": [],
+          "source_hash": "20f61415f2b4d0067c4b9d8c8f4325953a403edff56f78ad40d28124cf1a4aa1",
+          "status": "PASS"
+        }
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-SCEN-005",
+      "check_type": "replay",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "read same-seed/different-seed/idempotent-load controls",
+      "evidence_refs": [
+        "evidence/v0.2/verification.json"
+      ],
+      "expected": "same seed identical; second seed different and valid; exact batch no-op",
+      "observed": {
+        "bad_batch_rejected_prior_marts_preserved": true,
+        "same_batch_noop": true,
+        "same_seed_source_replay": true,
+        "second_seed_valid_and_different": true
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-AGENT-001",
+      "check_type": "boundary",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "inspect deterministic modules and native task requests",
+      "evidence_refs": [
+        "alma/warehouse.py",
+        "alma/lifecycle.py",
+        "alma/native_agents.py",
+        "evidence/v0.2/workspace/processes"
+      ],
+      "expected": "SQL/Python own truth calculations; native tasks consume immutable evidence for analysis",
+      "observed": {
+        "authority": [
+          "PROHIBITED"
+        ],
+        "execution_modes": [
+          "native-codex-task-bridge"
+        ],
+        "requests": 12
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-AGENT-002",
+      "check_type": "contract",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "validate role contracts, requests and response schema",
+      "evidence_refs": [
+        "agents/",
+        "contracts/native-agent-response.schema.json",
+        "evidence/v0.2/workspace/processes"
+      ],
+      "expected": "seven versioned roles with bounded authority/completion/fail-closed rules and hashed requests",
+      "observed": {
+        "invalid_roles": [],
+        "request_failures": [],
+        "requests_checked": 12,
+        "roles": 7,
+        "schema_required_fields": [
+          "version",
+          "request_id",
+          "role",
+          "evidence_hash",
+          "summary",
+          "facts",
+          "unknowns",
+          "hypotheses",
+          "recommendations",
+          "challenges",
+          "verdict"
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-AGENT-003",
+      "check_type": "native-runtime",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "validate six analyst and six reviewer dispatches and release run index",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/processes",
+        "evidence/v0.2/agents/task-runs.json"
+      ],
+      "expected": "12 live native dispatches, reviewer differs from analyst per process, >=2 models, Astra reviewer",
+      "observed": {
+        "astra_reviewer": true,
+        "distinct_models": [
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-6-astra"
+        ],
+        "processes": {
+          "finance-close": {
+            "analyst_agent_id": "/root/terra_warehouse_v2",
+            "analyst_model": "gpt-5.6-terra",
+            "analyst_role": "finance_analyst",
+            "facts": 7,
+            "packet_hash": "64c4082ff372e9c6bf93734081f22dad39badcfc286ebbbd8a23e524b763f304",
+            "recommendations": 3,
+            "reviewer_agent_id": "/root/astra_v2_review",
+            "reviewer_model": "gpt-6-astra",
+            "status": "REVIEW"
+          },
+          "lead-to-delivery": {
+            "analyst_agent_id": "/root/luna_simulation_v2",
+            "analyst_model": "gpt-5.6-luna",
+            "analyst_role": "commerce_analyst",
+            "facts": 10,
+            "packet_hash": "f38dc3a2ecbb2a09610ba9240ec40bc834a5aa74bd4e16cde033a4041991b265",
+            "recommendations": 3,
+            "reviewer_agent_id": "/root/astra_v2_review",
+            "reviewer_model": "gpt-6-astra",
+            "status": "REVIEW"
+          },
+          "market-to-experiment": {
+            "analyst_agent_id": "/root/sol_scope_v2",
+            "analyst_model": "gpt-5.6-sol",
+            "analyst_role": "market_researcher",
+            "facts": 8,
+            "packet_hash": "e3c470cc6d2dbd9bc5481aa4cef213d745cdda9a746925687a93bca38139511b",
+            "recommendations": 3,
+            "reviewer_agent_id": "/root/astra_v2_review",
+            "reviewer_model": "gpt-6-astra",
+            "status": "REVIEW"
+          },
+          "procure-to-stock": {
+            "analyst_agent_id": "/root/terra_warehouse_v2",
+            "analyst_model": "gpt-5.6-terra",
+            "analyst_role": "merchandiser",
+            "facts": 7,
+            "packet_hash": "32371a0a07534fa9cd95d89d73b260eda64561da41208f812b78a15474331953",
+            "recommendations": 3,
+            "reviewer_agent_id": "/root/astra_v2_review",
+            "reviewer_model": "gpt-6-astra",
+            "status": "REVIEW"
+          },
+          "return-to-refund": {
+            "analyst_agent_id": "/root/luna_simulation_v2",
+            "analyst_model": "gpt-5.6-luna",
+            "analyst_role": "returns_analyst",
+            "facts": 9,
+            "packet_hash": "faf204a467add406fa1ebe9674bb9ece7e7cf578bfe6c076d16b20aca06e64ba",
+            "recommendations": 3,
+            "reviewer_agent_id": "/root/astra_v2_review",
+            "reviewer_model": "gpt-6-astra",
+            "status": "REVIEW"
+          },
+          "weekly-growth-review": {
+            "analyst_agent_id": "/root/sol_scope_v2",
+            "analyst_model": "gpt-5.6-sol",
+            "analyst_role": "growth_analyst",
+            "facts": 8,
+            "packet_hash": "8a17425fa7de0c58b2225b7edfa9d05a76d3e59ce20c531ed1093e08e5c59e2f",
+            "recommendations": 3,
+            "reviewer_agent_id": "/root/astra_v2_review",
+            "reviewer_model": "gpt-6-astra",
+            "status": "REVIEW"
+          }
+        },
+        "reviewer_independent_per_process": true,
+        "run_index": {
+          "distinct_native_tasks": 4,
+          "models": [
+            "gpt-5.6-luna",
+            "gpt-5.6-sol",
+            "gpt-5.6-terra",
+            "gpt-6-astra"
+          ],
+          "path": "evidence/v0.2/agents/task-runs.json",
+          "runs": 12,
+          "trace_paths": [
+            "evidence/v0.2/workspace/processes/finance-close/tasks/evidence_reviewer.trace.json",
+            "evidence/v0.2/workspace/processes/finance-close/tasks/finance_analyst.trace.json",
+            "evidence/v0.2/workspace/processes/lead-to-delivery/tasks/commerce_analyst.trace.json",
+            "evidence/v0.2/workspace/processes/lead-to-delivery/tasks/evidence_reviewer.trace.json",
+            "evidence/v0.2/workspace/processes/market-to-experiment/tasks/evidence_reviewer.trace.json",
+            "evidence/v0.2/workspace/processes/market-to-experiment/tasks/market_researcher.trace.json",
+            "evidence/v0.2/workspace/processes/procure-to-stock/tasks/evidence_reviewer.trace.json",
+            "evidence/v0.2/workspace/processes/procure-to-stock/tasks/merchandiser.trace.json",
+            "evidence/v0.2/workspace/processes/return-to-refund/tasks/evidence_reviewer.trace.json",
+            "evidence/v0.2/workspace/processes/return-to-refund/tasks/returns_analyst.trace.json",
+            "evidence/v0.2/workspace/processes/weekly-growth-review/tasks/evidence_reviewer.trace.json",
+            "evidence/v0.2/workspace/processes/weekly-growth-review/tasks/growth_analyst.trace.json"
+          ]
+        },
+        "unique_analysts": 3,
+        "unique_reviewers": 1
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-AGENT-004",
+      "check_type": "schema+evidence",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "validate native responses and terminal packets",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/processes",
+        "alma/native_agents.py"
+      ],
+      "expected": "all facts resolve; facts/unknowns/hypotheses/recommendations/review remain separate",
+      "observed": {
+        "finance-close": {
+          "facts": 7,
+          "packet_hash": "64c4082ff372e9c6bf93734081f22dad39badcfc286ebbbd8a23e524b763f304",
+          "recommendations": 3,
+          "status": "REVIEW"
+        },
+        "lead-to-delivery": {
+          "facts": 10,
+          "packet_hash": "f38dc3a2ecbb2a09610ba9240ec40bc834a5aa74bd4e16cde033a4041991b265",
+          "recommendations": 3,
+          "status": "REVIEW"
+        },
+        "market-to-experiment": {
+          "facts": 8,
+          "packet_hash": "e3c470cc6d2dbd9bc5481aa4cef213d745cdda9a746925687a93bca38139511b",
+          "recommendations": 3,
+          "status": "REVIEW"
+        },
+        "procure-to-stock": {
+          "facts": 7,
+          "packet_hash": "32371a0a07534fa9cd95d89d73b260eda64561da41208f812b78a15474331953",
+          "recommendations": 3,
+          "status": "REVIEW"
+        },
+        "return-to-refund": {
+          "facts": 9,
+          "packet_hash": "faf204a467add406fa1ebe9674bb9ece7e7cf578bfe6c076d16b20aca06e64ba",
+          "recommendations": 3,
+          "status": "REVIEW"
+        },
+        "weekly-growth-review": {
+          "facts": 8,
+          "packet_hash": "8a17425fa7de0c58b2225b7edfa9d05a76d3e59ce20c531ed1093e08e5c59e2f",
+          "recommendations": 3,
+          "status": "REVIEW"
+        }
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-AGENT-005",
+      "check_type": "receipt+index",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "validate request/response hashes, dispatches, traces and release run index",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/processes",
+        "evidence/v0.2/agents/task-runs.json"
+      ],
+      "expected": "12 accepted bundles with matching native receipts and indexed trace paths",
+      "observed": {
+        "efforts": [
+          "high"
+        ],
+        "models": [
+          "gpt-5.6-luna",
+          "gpt-5.6-sol",
+          "gpt-5.6-terra",
+          "gpt-6-astra"
+        ],
+        "receipts": 12,
+        "retry_entries": 6,
+        "run_index": {
+          "distinct_native_tasks": 4,
+          "models": [
+            "gpt-5.6-luna",
+            "gpt-5.6-sol",
+            "gpt-5.6-terra",
+            "gpt-6-astra"
+          ],
+          "path": "evidence/v0.2/agents/task-runs.json",
+          "runs": 12,
+          "trace_paths": [
+            "evidence/v0.2/workspace/processes/finance-close/tasks/evidence_reviewer.trace.json",
+            "evidence/v0.2/workspace/processes/finance-close/tasks/finance_analyst.trace.json",
+            "evidence/v0.2/workspace/processes/lead-to-delivery/tasks/commerce_analyst.trace.json",
+            "evidence/v0.2/workspace/processes/lead-to-delivery/tasks/evidence_reviewer.trace.json",
+            "evidence/v0.2/workspace/processes/market-to-experiment/tasks/evidence_reviewer.trace.json",
+            "evidence/v0.2/workspace/processes/market-to-experiment/tasks/market_researcher.trace.json",
+            "evidence/v0.2/workspace/processes/procure-to-stock/tasks/evidence_reviewer.trace.json",
+            "evidence/v0.2/workspace/processes/procure-to-stock/tasks/merchandiser.trace.json",
+            "evidence/v0.2/workspace/processes/return-to-refund/tasks/evidence_reviewer.trace.json",
+            "evidence/v0.2/workspace/processes/return-to-refund/tasks/returns_analyst.trace.json",
+            "evidence/v0.2/workspace/processes/weekly-growth-review/tasks/evidence_reviewer.trace.json",
+            "evidence/v0.2/workspace/processes/weekly-growth-review/tasks/growth_analyst.trace.json"
+          ]
+        },
+        "validated_by_native_bundle": true
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-AGENT-006",
+      "check_type": "adversarial",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "validate Astra review probes, findings and reviewed file hashes",
+      "evidence_refs": [
+        "docs/review-summary-v2.json",
+        "docs/ADVERSARIAL-REVIEW-v2.md",
+        "evidence/v0.2/verification.json"
+      ],
+      "expected": "all probes pass, all findings independently resolved, no material unresolved finding, reviewed hashes current",
+      "observed": {
+        "findings": [
+          {
+            "id": "ADV2-01",
+            "original_severity": "P1",
+            "status": "RESOLVED_INDEPENDENTLY_RECHECKED"
+          },
+          {
+            "id": "ADV2-02",
+            "original_severity": "P2",
+            "status": "RESOLVED_INDEPENDENTLY_RECHECKED"
+          },
+          {
+            "id": "ADV2-03",
+            "original_severity": "P2",
+            "status": "RESOLVED_INDEPENDENTLY_RECHECKED"
+          },
+          {
+            "id": "ADV2-04",
+            "original_severity": "P2",
+            "status": "RESOLVED_INDEPENDENTLY_RECHECKED"
+          },
+          {
+            "id": "ADV2-05",
+            "original_severity": "P2",
+            "status": "RESOLVED_INDEPENDENTLY_RECHECKED"
+          },
+          {
+            "id": "ADV2-06",
+            "original_severity": "P2",
+            "status": "RESOLVED_INDEPENDENTLY_RECHECKED"
+          }
+        ],
+        "full_tests_passed": true,
+        "probes": 13,
+        "probes_passed": 13,
+        "reviewed_hash_failures": [],
+        "reviewer": "/root/astra_v2_review",
+        "unresolved": []
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-AGENT-007",
+      "check_type": "authority+immutability",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "hash sources before/after process validation and inspect packets",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/processes",
+        "evidence/v0.2/workspace/workspace.json"
+      ],
+      "expected": "native validation leaves source/warehouse/lifecycle unchanged and every action remains prohibited",
+      "observed": {
+        "immutable_hashes_unchanged": true,
+        "targets": {
+          "evidence/v0.2/workspace/data.json": "0da93fd12ab587f70bc596a618b202d3d7ffe9b7f99b5fe703c21ad5f1699af7",
+          "evidence/v0.2/workspace/lifecycle/lifecycle.sqlite3": "16d8dab4b79262ce8e80b8a15c65fb3eda67fa953e16606c4136ed7b14478971",
+          "evidence/v0.2/workspace/warehouse.sqlite3": "50491052693f72d669fc9f80dd1c00c14b8ffac9ae5d6e29f24d17e9a7079419"
+        },
+        "unsafe_packets": []
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-OUT-001",
+      "check_type": "export",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "compare mart/lifecycle exports with both SQLite databases",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/marts",
+        "evidence/v0.2/workspace/lifecycle/exports"
+      ],
+      "expected": "all mart and lifecycle exports reconcile to database rows",
+      "observed": {
+        "lifecycle_export_mismatches": [],
+        "mart_exports": {
+          "marts_checked": 11,
+          "mismatches": [],
+          "missing_csv": []
+        }
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-OUT-002",
+      "check_type": "decision-packet",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "validate weekly-growth-review terminal packet",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/processes/weekly-growth-review/decision-packet.json"
+      ],
+      "expected": "<=5 evidence-bound recommendations with metric, guardrail, population, window, closure and blocked execution",
+      "observed": {
+        "facts": 8,
+        "recommendation_contract": true,
+        "recommendations": 3,
+        "status": "REVIEW",
+        "unknowns": 5
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-OUT-003",
+      "check_type": "finance",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "query finance_monthly/cash_daily/reconciliation and validate finance packet",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/marts/finance_monthly.json",
+        "evidence/v0.2/workspace/marts/cash_daily.json",
+        "evidence/v0.2/workspace/marts/reconciliation.json",
+        "evidence/v0.2/workspace/processes/finance-close/decision-packet.json"
+      ],
+      "expected": "finance components remain distinct and every bridge control passes",
+      "observed": {
+        "cash_days": 335,
+        "cash_fields": [
+          "cash_in_cents",
+          "cumulative_cash_movement_cents",
+          "expense_out_cents",
+          "net_cash_change_cents",
+          "refund_out_cents",
+          "supplier_out_cents"
+        ],
+        "finance_fields": [
+          "cogs_cents",
+          "contribution_after_variable_cents",
+          "expense_accrual_cents",
+          "gross_profit_cents",
+          "net_cash_change_cents",
+          "net_revenue_cents",
+          "operating_after_all_expenses_cents",
+          "variable_expense_cents"
+        ],
+        "finance_months": 13,
+        "packet_status": "REVIEW",
+        "reconciliation": [
+          {
+            "check_id": "sales_net_revenue",
+            "passed": 1
+          },
+          {
+            "check_id": "cash_in",
+            "passed": 1
+          },
+          {
+            "check_id": "cash_out",
+            "passed": 1
+          },
+          {
+            "check_id": "purchase_receipts",
+            "passed": 1
+          },
+          {
+            "check_id": "supplier_payments",
+            "passed": 1
+          },
+          {
+            "check_id": "marketing_spend",
+            "passed": 1
+          }
+        ]
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-OUT-004",
+      "check_type": "market-evidence",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "validate research register and market-to-experiment packet",
+      "evidence_refs": [
+        "evidence/v0.2/workspace/research.json",
+        "evidence/v0.2/workspace/processes/market-to-experiment/decision-packet.json"
+      ],
+      "expected": "sources retain provenance/limits and native packet preserves unknowns without demand/sales promotion",
+      "observed": {
+        "limitation_language_present": true,
+        "packet_status": "REVIEW",
+        "source_contract": true,
+        "sources": 4,
+        "unknowns": 5
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-REL-002",
+      "check_type": "end-to-end",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "read clean-install receipt, full verification and complete release workspace",
+      "evidence_refs": [
+        "evidence/v0.2/clean-install.json",
+        "evidence/v0.2/verification.json",
+        "evidence/v0.2/workspace/workspace.json"
+      ],
+      "expected": "fresh offline build exits zero and all deterministic/native artifacts validate",
+      "observed": {
+        "clean_install": {
+          "checks_passed": true,
+          "fresh_workspace_status": "PASS",
+          "marts": 11,
+          "network_access": false,
+          "portable_snapshot": true,
+          "result": "PASSED",
+          "source_tables": 30
+        },
+        "missing": [],
+        "process_statuses": {
+          "finance-close": "REVIEW",
+          "lead-to-delivery": "REVIEW",
+          "market-to-experiment": "REVIEW",
+          "procure-to-stock": "REVIEW",
+          "return-to-refund": "REVIEW",
+          "weekly-growth-review": "REVIEW"
+        },
+        "tests": {
+          "errors": 0,
+          "failures": 0,
+          "passed": true,
+          "run": 67
+        },
+        "verification_passed": true,
+        "workspace_status": "PASS"
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-REL-003",
+      "check_type": "release-audit",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe scripts/audit_release.py",
+      "evidence_refs": [
+        "scripts/audit_release.py",
+        "evidence/v0.2/release-audit.json",
+        "LICENSE"
+      ],
+      "expected": "fresh and persisted secret/PII-like/license/public-path audit pass",
+      "observed": {
+        "findings": [],
+        "license_present": true,
+        "passed": true,
+        "persisted_matches_fresh_audit": true,
+        "returncode": 0,
+        "text_files_checked": 330
+      },
+      "status": "PASS"
+    },
+    {
+      "acceptance_id": "ACC-REL-001",
+      "check_type": "acceptance-registry",
+      "checked_at_utc": "2026-09-22T09:37:43.840389Z",
+      "command_or_query": "parse specs/PRD.md and compare generated acceptance IDs/schema",
+      "evidence_refs": [
+        "specs/PRD.md",
+        "specs/SCOPE-MATRIX.md",
+        "scripts/check_scope_v2.py"
+      ],
+      "expected": "exactly 32 unique PRD IDs, each with required result fields and allowed status",
+      "observed": {
+        "missing": [],
+        "prd_ids": 32,
+        "result_ids": 32,
+        "result_shape_before_self": true,
+        "unexpected": []
+      },
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS",
+  "synthetic": true,
+  "verification": "evidence/v0.2/verification.json",
+  "version": "2.0",
+  "workspace": "evidence/v0.2/workspace"
+}

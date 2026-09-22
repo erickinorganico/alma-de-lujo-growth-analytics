@@ -1,0 +1,38 @@
+{
+  "alternative_explanations": [
+    "La menor cobertura de Rose S puede venir del mix de demanda generado por el escenario, no de preferencia observada por color o talla.",
+    "La igualdad entre tránsito y cantidad abierta puede ser una construcción de los datos, no evidencia de recepción física futura.",
+    "El umbral de 42 días es una hipótesis de trabajo (21 lead + 21 seguridad), no un punto de reorden validado con proveedor o demanda real."
+  ],
+  "evidence_hash": "a3a5428f9fd4eecd8e8333408f4a4827ee84b731fca864eac3e6860f2df166ff",
+  "model": "gpt-5.6-terra",
+  "native_job": null,
+  "observations": [
+    "Entre 36 variantes launched, Rose S tiene 46.67 días de cobertura; Ivory L 49.41; Rose M y Black L 64.62; Rose L 210.00.",
+    "Rose S tiene 10 unidades en tránsito y po-00007 tiene 10 abiertas; Ivory L tiene 12 en tránsito y po-00006 tiene 12 abiertas.",
+    "La valuación sintética agregada es 12,836,500 centavos: calcetas 3,712,800 y leggings 3,696,000; el conteo Rose S y as_of coinciden en 2026-09-21.",
+    "Recovery Wrap Concept Sand está PRELAUNCH y su cobertura no aplica."
+  ],
+  "queries": [
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart inventory_position",
+      "purpose": "Ordenar variantes por cobertura, contrastar color/talla, conteo, tránsito, lifecycle y valuación de inventario.",
+      "read_only": true
+    },
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart procurement",
+      "purpose": "Relacionar las cantidades abiertas de Rose S e Ivory L con tránsito y calcular exposición abierta de todas las órdenes.",
+      "read_only": true
+    }
+  ],
+  "questions": [
+    "¿Qué SKU launched tiene la menor cobertura y cómo se compara con alternativas del mismo producto/color-talla?",
+    "¿Un escenario explícito de 21 días de lead time más seguridad pide una recompra base?",
+    "¿Qué inventario, tránsito y órdenes abiertas concentran el capital sintético y qué parte está PRELAUNCH?"
+  ],
+  "rationale": "La prioridad se centra en no comprar bajo el baseline, vigilar las dos coberturas más bajas y diseñar una comparación color-talla de 30 días; las alternativas seleccionadas muestran por qué Rose S no se eligió arbitrariamente.",
+  "request_id": "7e9246d514491d67384faa8e65c7336a61c0cd41f51a91daf9948425666f0c5f",
+  "role": "merchandiser",
+  "task_started_at_utc": "2026-09-22T08:45:14Z",
+  "version": "2.0"
+}

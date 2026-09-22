@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "decision-packet-v2.schema.json",
+  "title": "Alma native-analysis DecisionPacket v2",
+  "description": "Exact terminal packet emitted by alma.process_engine._packet(). The legacy demo contract remains decision-packet.schema.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "run_id",
+    "process_id",
+    "synthetic",
+    "status",
+    "input_hash",
+    "facts",
+    "unknowns",
+    "hypotheses",
+    "recommendations",
+    "review",
+    "agent_receipts",
+    "external_execution"
+  ],
+  "properties": {
+    "version": {"const": "2.0"},
+    "run_id": {"type": "string", "pattern": "^[0-9a-f]{24}$"},
+    "process_id": {
+      "enum": [
+        "procure-to-stock",
+        "lead-to-delivery",
+        "return-to-refund",
+        "finance-close",
+        "weekly-growth-review",
+        "market-to-experiment"
+      ]
+    },
+    "synthetic": {"const": true},
+    "status": {"enum": ["REVIEW", "READY_FOR_OWNER"]},
+    "input_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "facts": {"$ref": "native-agent-response.schema.json#/properties/facts"},
+    "unknowns": {"$ref": "native-agent-response.schema.json#/properties/unknowns"},
+    "hypotheses": {"$ref": "native-agent-response.schema.json#/properties/hypotheses"},
+    "recommendations": {"$ref": "native-agent-response.schema.json#/properties/recommendations"},
+    "review": {
+      "allOf": [
+        {"$ref": "native-agent-response.schema.json"},
+        {
+          "type": "object",
+          "properties": {"role": {"const": "evidence_reviewer"}}
+        }
+      ]
+    },
+    "agent_receipts": {
+      "type": "object",
+      "minProperties": 2,
+      "maxProperties": 2,
+      "required": ["evidence_reviewer"],
+      "propertyNames": {
+        "enum": [
+          "merchandiser",
+          "commerce_analyst",
+          "returns_analyst",
+          "finance_analyst",
+          "growth_analyst",
+          "market_researcher",
+          "evidence_reviewer"
+        ]
+      },
+      "additionalProperties": {"$ref": "#/$defs/acceptedAgentReceipt"}
+    },
+    "external_execution": {"const": "PROHIBITED"}
+  },
+  "$defs": {
+    "acceptedAgentReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256", "request_id", "agent_id", "model", "dispatch_hash"],
+      "properties": {
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "request_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "agent_id": {"type": "string", "pattern": "^/root/"},
+        "model": {"type": "string", "pattern": "^gpt-(5\\.6-(sol|luna|terra)|6-astra|5\\.5)$"},
+        "dispatch_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

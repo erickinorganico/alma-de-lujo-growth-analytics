@@ -1,0 +1,42 @@
+{
+  "alternative_explanations": [
+    "La caída de octubre puede ser un efecto de concentrar pagos sintéticos en una fecha, no un hallazgo de insolvencia.",
+    "El valor abierto puede representar costo de bienes no recibidos o no pagados bajo la simulación; sin facturas y vencimientos no identifica una cuenta por pagar real.",
+    "El movimiento acumulado positivo no demuestra saldo de banco, porque no existe saldo inicial ni extracto."
+  ],
+  "evidence_hash": "fb881b2b18d348b1f41210fb6120e18d39709fbdbf290ae87cfc2e9d4acca844",
+  "model": "gpt-5.6-terra",
+  "native_job": null,
+  "observations": [
+    "El control de ventas reconcilia 37,087,457 centavos MXN y el de pagos a proveedor 4,158,000 centavos MXN dentro del warehouse sintético.",
+    "La fila financiera de octubre tiene -3,528,734 centavos de movimiento de efectivo; sus filas cash_daily agregan 659,680 de entrada, 4,158,000 de proveedor, cero reembolso y 30,414 de gasto.",
+    "Las 46 órdenes de procurement agregan 332 unidades abiertas, 2,089,000 centavos de costo pendiente calculado y 4,158,000 centavos pagados."
+  ],
+  "queries": [
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart finance_monthly",
+      "purpose": "Obtener las 13 filas mensuales para sumar ingreso neto, gross profit, gasto, resultado y movimiento de efectivo.",
+      "read_only": true
+    },
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart cash_daily",
+      "purpose": "Descomponer octubre de 2025 en entradas, reembolsos, pagos a proveedor y gastos por fecha de evento.",
+      "read_only": true
+    },
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart procurement",
+      "purpose": "Medir cantidad abierta, valor a costo derivado, valor ordenado y pagos registrados por orden.",
+      "read_only": true
+    }
+  ],
+  "questions": [
+    "¿Cuál es la relación del periodo completo entre ingreso, gross profit, gasto, resultado y movimiento de efectivo?",
+    "¿Qué componente de caja explica octubre negativo sin asumir un saldo de apertura?",
+    "¿Qué valor y cantidad siguen abiertos en procurement frente a los pagos ya registrados?"
+  ],
+  "rationale": "La recomendación se redujo a una sensibilidad de fecha de pago y una puerta de compromiso, porque el caso evidencia timing y exposición abierta, pero no autoriza pagos, compras ni conclusiones financieras reales.",
+  "request_id": "fb1bc78aa9e1c79680a282b330d18cba2172057d88f29ea6963b586600d44e57",
+  "role": "finance_analyst",
+  "task_started_at_utc": "2026-09-22T08:45:14Z",
+  "version": "2.0"
+}

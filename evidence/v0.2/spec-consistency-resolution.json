@@ -1,0 +1,176 @@
+{
+  "acceptance_id_integrity": {
+    "prd_unique_ids": 32,
+    "scope_matrix_unique_ids": 32
+  },
+  "findings": [
+    {
+      "checks": {
+        "current_packets_checked": 6,
+        "current_packets_exact_validation": "PASS",
+        "legacy_v1_sha256": "2212a8e2ef895bb9fbd3efa1e7d2997ca938bc7918ff632443a178b163ee8da4",
+        "v2_sha256": "b19e960e20b944ebb181a0ffccb217c676bd9dc42a0167a6426077f26dfa1db5"
+      },
+      "evidence": [
+        "contracts/decision-packet.schema.json",
+        "contracts/decision-packet-v2.schema.json",
+        "specs/PRD.md",
+        "specs/SCOPE-MATRIX.md",
+        "specs/PROCESS-CATALOG.md"
+      ],
+      "id": "SC-001",
+      "resolution": "Preserved contracts/decision-packet.schema.json as the legacy v1 demo/report schema and added the exact native process packet contract at contracts/decision-packet-v2.schema.json. Current spec references identify the two versions.",
+      "status": "RESOLVED"
+    },
+    {
+      "checks": {
+        "changed_request_exception_code": "CTR_DUPLICATE_EVENT_CONFLICT",
+        "changed_request_status": "CONFLICT",
+        "same_request_status": "NO_OP_REPLAY"
+      },
+      "evidence": [
+        "specs/PRD.md",
+        "specs/SCOPE-MATRIX.md",
+        "specs/PROCESS-CATALOG.md",
+        "alma/lifecycle.py"
+      ],
+      "id": "SC-002",
+      "resolution": "Normalized replay receipt status to NO_OP_REPLAY and changed-request duplicate status to CONFLICT with exception_code CTR_DUPLICATE_EVENT_CONFLICT. Prior business-event count remains unchanged.",
+      "status": "RESOLVED"
+    },
+    {
+      "checks": {
+        "applied_events": 42,
+        "evidence_sha256": "6a7a47b3cdd60a6f324badbc2a6ade20254a955b589220741409e403b5216c87",
+        "golden_instances": 6,
+        "query_sha256": "3f33155fdc6083da1a56c772fb3d6a357b7afaa52a5d284e09e659631ae815c4",
+        "query_status": "PASS",
+        "receipt_status_counts": {
+          "APPLIED": 42,
+          "REJECTED": 6
+        },
+        "rejected_without_effect": true,
+        "rejected_without_instance_count": 6,
+        "terminal_states": {
+          "finance-close": "CLOSED",
+          "lead-to-delivery": "DELIVERED",
+          "market-to-experiment": "CLOSED",
+          "procure-to-stock": "CLOSED",
+          "return-to-refund": "CLOSED",
+          "weekly-growth-review": "REVIEW_READY"
+        }
+      },
+      "evidence": [
+        "models/lifecycle/instance_context.sql",
+        "evidence/v0.2/lifecycle-instance-context.json",
+        "specs/PRD.md",
+        "specs/SCOPE-MATRIX.md",
+        "specs/PROCESS-CATALOG.md"
+      ],
+      "id": "SC-003",
+      "resolution": "Declared lifecycle_instances as the current-row contract and events/receipts as immutable normalized context. Published and executed the canonical one-row-per-instance reconstruction query.",
+      "status": "RESOLVED"
+    },
+    {
+      "checks": {
+        "definition_count": 6,
+        "definition_top_level_fields": [
+          "contract_id",
+          "id",
+          "version",
+          "owner",
+          "initial_state",
+          "terminal_states",
+          "transitions"
+        ]
+      },
+      "evidence": [
+        "specs/PROCESS-CATALOG.md",
+        "processes/business/*.json",
+        "alma/lifecycle.py"
+      ],
+      "id": "SC-004",
+      "resolution": "Separated the exact seven-field static business definition from submitted-event, current-instance, applied-event, and receipt contracts. Instance-only fields are no longer claimed on definition JSON.",
+      "status": "RESOLVED"
+    },
+    {
+      "checks": {
+        "definition_version": "2.0.0",
+        "gate_validation": "DETERMINISTIC_PER_TRANSITION",
+        "payload_contract": "EXTENSIBLE_VERSIONED_OBJECT",
+        "recursive_external_action_denial": true,
+        "universal_extra_key_rejection_claim": false
+      },
+      "evidence": [
+        "specs/PROCESS-CATALOG.md",
+        "alma/lifecycle.py"
+      ],
+      "id": "SC-005",
+      "resolution": "Documented payload as an extensible JSON object versioned by the business definition. The runtime validates the exact apply_event envelope, synthetic/source/time/action boundaries, legal transitions, and gate-consumed payload fields; it does not claim a universal extra-key rejection.",
+      "status": "RESOLVED"
+    }
+  ],
+  "limits": [
+    "The instance-context query is verified against the checked-in synthetic SQLite snapshot only.",
+    "The schema validation is an exact relevant-contract validation using repository validators; jsonschema/Ajv was unavailable and no dependency was installed."
+  ],
+  "packet_validation": {
+    "method": "Exact top-level field/type/enum/format checks from the v2 contract plus existing verify_request, validate_response, validate_dispatch, process status, response hash, dispatch hash, evidence-pointer, reviewer-role, and packet equality checks. No full JSON Schema interpreter was used or claimed.",
+    "packet_count": 6,
+    "packets": [
+      {
+        "external_execution": "PROHIBITED",
+        "facts": 7,
+        "process_id": "finance-close",
+        "recommendations": 3,
+        "review_role": "evidence_reviewer",
+        "status": "REVIEW"
+      },
+      {
+        "external_execution": "PROHIBITED",
+        "facts": 10,
+        "process_id": "lead-to-delivery",
+        "recommendations": 3,
+        "review_role": "evidence_reviewer",
+        "status": "REVIEW"
+      },
+      {
+        "external_execution": "PROHIBITED",
+        "facts": 8,
+        "process_id": "market-to-experiment",
+        "recommendations": 3,
+        "review_role": "evidence_reviewer",
+        "status": "REVIEW"
+      },
+      {
+        "external_execution": "PROHIBITED",
+        "facts": 7,
+        "process_id": "procure-to-stock",
+        "recommendations": 3,
+        "review_role": "evidence_reviewer",
+        "status": "REVIEW"
+      },
+      {
+        "external_execution": "PROHIBITED",
+        "facts": 9,
+        "process_id": "return-to-refund",
+        "recommendations": 3,
+        "review_role": "evidence_reviewer",
+        "status": "REVIEW"
+      },
+      {
+        "external_execution": "PROHIBITED",
+        "facts": 8,
+        "process_id": "weekly-growth-review",
+        "recommendations": 3,
+        "review_role": "evidence_reviewer",
+        "status": "REVIEW"
+      }
+    ],
+    "status": "PASS"
+  },
+  "report_version": "2.0",
+  "scope": "Contract and documentation reconciliation only; runtime, process definitions, and immutable workspace were not changed.",
+  "source_findings": "evidence/v0.2/spec-consistency-findings.json",
+  "status": "RESOLVED"
+}

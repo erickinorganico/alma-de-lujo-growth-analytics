@@ -1,0 +1,7 @@
+check_id,source_cents,mart_cents,passed
+sales_net_revenue,37087457,37087457,1
+cash_in,49622444,49622444,1
+cash_out,5414773,5414773,1
+purchase_receipts,663,663,1
+supplier_payments,4158000,4158000,1
+marketing_spend,147526,147526,1

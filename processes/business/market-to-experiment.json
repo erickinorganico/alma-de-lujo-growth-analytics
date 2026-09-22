@@ -1,0 +1,20 @@
+{
+  "contract_id": "MTE-01",
+  "id": "market-to-experiment",
+  "version": "2.0.0",
+  "owner": "market_growth_researcher",
+  "initial_state": "NEW",
+  "terminal_states": ["CLOSED", "INCONCLUSIVE", "REJECTED", "BLOCKED"],
+  "transitions": [
+    {"event": "question_opened", "from": ["NEW"], "to": "QUESTION_OPEN", "gate": "research_question"},
+    {"event": "research_started", "from": ["QUESTION_OPEN"], "to": "RESEARCHING", "gate": "source_plan"},
+    {"event": "evidence_submitted", "from": ["RESEARCHING"], "to": "EVIDENCE_REVIEW", "gate": "market_provenance"},
+    {"event": "evidence_accepted", "from": ["EVIDENCE_REVIEW"], "to": "HYPOTHESIS_DRAFT", "gate": "market_freshness"},
+    {"event": "experiment_designed", "from": ["HYPOTHESIS_DRAFT"], "to": "APPROVAL_PENDING", "gate": "experiment_contract"},
+    {"event": "experiment_approved", "from": ["APPROVAL_PENDING"], "to": "APPROVED", "gate": "synthetic_approval"},
+    {"event": "experiment_rejected", "from": ["APPROVAL_PENDING"], "to": "REJECTED", "gate": "reason"},
+    {"event": "assignment_started", "from": ["APPROVED"], "to": "RUNNING", "gate": "prospective_assignment"},
+    {"event": "window_ended", "from": ["RUNNING"], "to": "ANALYZING", "gate": "experiment_window"},
+    {"event": "analysis_completed", "from": ["ANALYZING"], "to": "CLOSED", "gate": "experiment_evidence"}
+  ]
+}

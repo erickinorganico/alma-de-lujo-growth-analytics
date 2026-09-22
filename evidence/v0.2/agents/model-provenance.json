@@ -1,0 +1,68 @@
+{
+  "agents": [
+    {
+      "agent_id": "/root/sol_scope_v2",
+      "latest_recorded_turn": {
+        "effort": "high",
+        "model": "gpt-5.6-sol",
+        "turn_id": "01a0c849-1109-7e71-9150-cfcfe13ecf0d"
+      },
+      "model_effort": [
+        [
+          "gpt-5.6-sol",
+          "high"
+        ]
+      ],
+      "runtime_session_id": "01a0c822-c783-72a2-a894-0231ae9da48b"
+    },
+    {
+      "agent_id": "/root/terra_warehouse_v2",
+      "latest_recorded_turn": {
+        "effort": "high",
+        "model": "gpt-5.6-terra",
+        "turn_id": "01a0c85b-f6ad-79a0-a007-e8f1776178b0"
+      },
+      "model_effort": [
+        [
+          "gpt-5.6-terra",
+          "high"
+        ]
+      ],
+      "runtime_session_id": "01a0c827-661e-72a3-a229-26c89f55fe15"
+    },
+    {
+      "agent_id": "/root/luna_simulation_v2",
+      "latest_recorded_turn": {
+        "effort": "high",
+        "model": "gpt-5.6-luna",
+        "turn_id": "01a0c867-2a25-7881-948a-196fdb4b02f1"
+      },
+      "model_effort": [
+        [
+          "gpt-5.6-luna",
+          "high"
+        ]
+      ],
+      "runtime_session_id": "01a0c827-9488-72c2-a270-cb125d3e2cfe"
+    },
+    {
+      "agent_id": "/root/astra_v2_review",
+      "latest_recorded_turn": {
+        "effort": "high",
+        "model": "gpt-6-astra",
+        "turn_id": "01a0c85d-392a-7d43-8a1e-cbd3b0fcfcbf"
+      },
+      "model_effort": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "runtime_session_id": "01a0c840-83bc-7201-907c-e3f71e16df9d"
+    }
+  ],
+  "correction": "The Sol task initially self-described as generic GPT-6/Astra. Actual dispatch and turn_context metadata consistently record gpt-5.6-sol/high; routing metadata determines the release receipt.",
+  "limits": "Parent runtime attestation, not a provider-signed inference certificate",
+  "source": "Parent read of local Codex session_meta and turn_context routing metadata; no session content copied",
+  "version": "2.0"
+}

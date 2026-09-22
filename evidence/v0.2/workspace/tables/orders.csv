@@ -1,0 +1,1201 @@
+id,customer_id,channel,campaign_id,date,delivered_date,status
+ord-00001,cust-0001,Instagram,camp-studio,2025-09-22,2025-09-25,delivered
+ord-00002,cust-0002,Instagram,camp-studio,2025-09-23,,shipped
+ord-00003,cust-0003,Organic,organic,2025-09-24,,paid
+ord-00004,cust-0004,Paid Social,camp-move,2025-09-25,,pending
+ord-00005,cust-0005,Instagram,camp-studio,2025-09-26,,cancelled
+ord-00006,cust-0006,Organic,organic,2026-08-15,2026-08-19,delivered
+ord-00007,cust-0007,Instagram,camp-studio,2026-09-16,,pending
+ord-00008,cust-0008,Instagram,camp-studio,2026-01-16,,shipped
+ord-00009,cust-0009,Organic,organic,2026-02-09,2026-02-13,delivered
+ord-00010,cust-0010,Instagram,camp-studio,2026-07-14,2026-07-19,delivered
+ord-00011,cust-0011,Organic,organic,2026-01-14,,pending
+ord-00012,cust-0012,Instagram,camp-studio,2026-06-08,2026-06-13,delivered
+ord-00013,cust-0013,DM,camp-private,2026-04-04,,pending
+ord-00014,cust-0014,Paid Social,camp-move,2026-09-03,2026-09-07,delivered
+ord-00015,cust-0015,DM,camp-private,2026-06-28,2026-07-02,delivered
+ord-00016,cust-0016,DM,camp-private,2026-05-23,,shipped
+ord-00017,cust-0017,Paid Social,camp-move,2026-07-21,2026-07-23,delivered
+ord-00018,cust-0018,Paid Social,camp-move,2026-09-13,2026-09-16,delivered
+ord-00019,cust-0019,Paid Social,camp-move,2026-06-29,2026-07-04,delivered
+ord-00020,cust-0020,Paid Social,camp-move,2026-06-15,2026-06-20,delivered
+ord-00021,cust-0021,Instagram,camp-studio,2026-09-12,2026-09-17,delivered
+ord-00022,cust-0022,Organic,organic,2026-01-11,2026-01-16,delivered
+ord-00023,cust-0023,Organic,organic,2026-06-28,,pending
+ord-00024,cust-0024,DM,camp-private,2026-08-30,2026-09-02,delivered
+ord-00025,cust-0025,DM,camp-private,2026-07-27,,shipped
+ord-00026,cust-0026,Instagram,camp-studio,2026-04-04,,cancelled
+ord-00027,cust-0027,Organic,organic,2026-07-06,2026-07-08,delivered
+ord-00028,cust-0028,Organic,organic,2026-01-02,2026-01-05,delivered
+ord-00029,cust-0029,Organic,organic,2026-08-20,2026-08-24,delivered
+ord-00030,cust-0030,DM,camp-private,2026-09-16,2026-09-18,delivered
+ord-00031,cust-0031,Paid Social,camp-move,2026-06-28,,shipped
+ord-00032,cust-0032,DM,camp-private,2026-05-15,2026-05-19,delivered
+ord-00033,cust-0033,Instagram,camp-studio,2026-07-22,,paid
+ord-00034,cust-0034,DM,camp-private,2026-07-10,2026-07-12,delivered
+ord-00035,cust-0035,Instagram,camp-studio,2026-07-20,,pending
+ord-00036,cust-0036,Organic,organic,2026-05-09,2026-05-12,delivered
+ord-00037,cust-0037,Instagram,camp-studio,2026-05-12,2026-05-14,delivered
+ord-00038,cust-0038,DM,camp-private,2026-01-10,2026-01-14,delivered
+ord-00039,cust-0039,Instagram,camp-studio,2026-09-14,2026-09-18,delivered
+ord-00040,cust-0040,Paid Social,camp-move,2026-04-26,2026-05-01,delivered
+ord-00041,cust-0041,Instagram,camp-studio,2026-09-08,2026-09-12,delivered
+ord-00042,cust-0042,Instagram,camp-studio,2026-05-06,2026-05-11,delivered
+ord-00043,cust-0043,Instagram,camp-studio,2025-12-10,2025-12-12,delivered
+ord-00044,cust-0044,DM,camp-private,2026-01-10,,pending
+ord-00045,cust-0045,Instagram,camp-studio,2026-06-27,2026-07-01,delivered
+ord-00046,cust-0046,Organic,organic,2026-07-10,2026-07-15,delivered
+ord-00047,cust-0047,Instagram,camp-studio,2026-05-04,2026-05-09,delivered
+ord-00048,cust-0048,Organic,organic,2026-09-02,2026-09-04,delivered
+ord-00049,cust-0049,Paid Social,camp-move,2025-12-20,,shipped
+ord-00050,cust-0050,Paid Social,camp-move,2026-03-24,2026-03-28,delivered
+ord-00051,cust-0051,DM,camp-private,2026-03-17,2026-03-19,delivered
+ord-00052,cust-0052,Organic,organic,2026-07-28,,paid
+ord-00053,cust-0053,Paid Social,camp-move,2026-02-16,,shipped
+ord-00054,cust-0054,Organic,organic,2026-01-15,,pending
+ord-00055,cust-0055,Paid Social,camp-move,2026-05-15,2026-05-20,delivered
+ord-00056,cust-0056,Paid Social,camp-move,2026-07-25,,pending
+ord-00057,cust-0057,Instagram,camp-studio,2026-06-08,2026-06-12,delivered
+ord-00058,cust-0058,Instagram,camp-studio,2026-05-27,2026-06-01,delivered
+ord-00059,cust-0059,Instagram,camp-studio,2026-04-06,,paid
+ord-00060,cust-0060,Organic,organic,2026-07-01,2026-07-05,delivered
+ord-00061,cust-0061,Instagram,camp-studio,2026-05-13,2026-05-16,delivered
+ord-00062,cust-0062,Paid Social,camp-move,2026-08-09,2026-08-14,delivered
+ord-00063,cust-0063,Organic,organic,2026-08-04,,shipped
+ord-00064,cust-0064,Organic,organic,2026-03-26,2026-03-28,delivered
+ord-00065,cust-0065,Organic,organic,2026-07-31,2026-08-03,delivered
+ord-00066,cust-0066,Instagram,camp-studio,2026-05-15,2026-05-20,delivered
+ord-00067,cust-0067,Organic,organic,2026-09-17,2026-09-21,delivered
+ord-00068,cust-0068,Instagram,camp-studio,2026-05-27,2026-05-31,delivered
+ord-00069,cust-0069,Paid Social,camp-move,2026-08-25,2026-08-27,delivered
+ord-00070,cust-0070,Organic,organic,2026-09-05,2026-09-07,delivered
+ord-00071,cust-0071,Instagram,camp-studio,2026-01-16,2026-01-20,delivered
+ord-00072,cust-0072,Organic,organic,2026-05-26,2026-05-30,delivered
+ord-00073,cust-0073,Organic,organic,2026-01-15,,shipped
+ord-00074,cust-0074,Instagram,camp-studio,2026-04-12,2026-04-17,delivered
+ord-00075,cust-0075,Instagram,camp-studio,2026-05-21,,pending
+ord-00076,cust-0076,Organic,organic,2026-05-17,2026-05-22,delivered
+ord-00077,cust-0077,Paid Social,camp-move,2026-05-12,,pending
+ord-00078,cust-0078,DM,camp-private,2026-05-30,,pending
+ord-00079,cust-0079,Paid Social,camp-move,2026-08-13,,cancelled
+ord-00080,cust-0080,DM,camp-private,2026-08-15,2026-08-19,delivered
+ord-00081,cust-0081,Instagram,camp-studio,2026-07-24,,paid
+ord-00082,cust-0082,DM,camp-private,2026-03-30,2026-04-03,delivered
+ord-00083,cust-0083,Paid Social,camp-move,2026-05-11,,pending
+ord-00084,cust-0084,Paid Social,camp-move,2026-04-15,2026-04-20,delivered
+ord-00085,cust-0085,Organic,organic,2026-08-31,2026-09-05,delivered
+ord-00086,cust-0086,DM,camp-private,2026-07-01,2026-07-06,delivered
+ord-00087,cust-0087,Instagram,camp-studio,2026-09-16,2026-09-21,delivered
+ord-00088,cust-0088,Paid Social,camp-move,2026-09-06,,pending
+ord-00089,cust-0089,Instagram,camp-studio,2026-08-19,2026-08-22,delivered
+ord-00090,cust-0090,Instagram,camp-studio,2026-03-29,2026-04-01,delivered
+ord-00091,cust-0091,Paid Social,camp-move,2026-08-17,2026-08-21,delivered
+ord-00092,cust-0092,Instagram,camp-studio,2026-08-13,2026-08-15,delivered
+ord-00093,cust-0093,DM,camp-private,2026-07-09,,pending
+ord-00094,cust-0094,Instagram,camp-studio,2026-06-22,,shipped
+ord-00095,cust-0095,Instagram,camp-studio,2026-07-25,2026-07-28,delivered
+ord-00096,cust-0096,DM,camp-private,2026-06-03,2026-06-08,delivered
+ord-00097,cust-0097,Paid Social,camp-move,2026-05-16,,shipped
+ord-00098,cust-0098,Paid Social,camp-move,2026-07-12,,shipped
+ord-00099,cust-0099,Paid Social,camp-move,2026-02-07,2026-02-12,delivered
+ord-00100,cust-0100,Instagram,camp-studio,2026-08-15,2026-08-17,delivered
+ord-00101,cust-0101,Organic,organic,2026-09-09,2026-09-12,delivered
+ord-00102,cust-0102,Organic,organic,2026-07-07,2026-07-11,delivered
+ord-00103,cust-0103,DM,camp-private,2026-05-06,,paid
+ord-00104,cust-0104,Paid Social,camp-move,2026-09-07,2026-09-09,delivered
+ord-00105,cust-0105,Paid Social,camp-move,2026-05-23,,cancelled
+ord-00106,cust-0106,Paid Social,camp-move,2025-11-04,2025-11-07,delivered
+ord-00107,cust-0107,Paid Social,camp-move,2026-03-27,2026-04-01,delivered
+ord-00108,cust-0108,Instagram,camp-studio,2025-10-25,2025-10-30,delivered
+ord-00109,cust-0109,DM,camp-private,2026-08-23,2026-08-25,delivered
+ord-00110,cust-0110,DM,camp-private,2026-04-15,2026-04-19,delivered
+ord-00111,cust-0111,Organic,organic,2026-02-20,2026-02-22,delivered
+ord-00112,cust-0112,Instagram,camp-studio,2025-12-09,,paid
+ord-00113,cust-0113,Paid Social,camp-move,2026-04-20,,shipped
+ord-00114,cust-0114,Paid Social,camp-move,2026-07-09,2026-07-14,delivered
+ord-00115,cust-0115,Paid Social,camp-move,2026-04-05,2026-04-08,delivered
+ord-00116,cust-0116,Organic,organic,2026-05-26,2026-05-28,delivered
+ord-00117,cust-0117,Instagram,camp-studio,2026-08-23,,pending
+ord-00118,cust-0118,Instagram,camp-studio,2026-06-04,,cancelled
+ord-00119,cust-0119,DM,camp-private,2026-05-21,2026-05-26,delivered
+ord-00120,cust-0120,Paid Social,camp-move,2026-08-17,,shipped
+ord-00121,cust-0121,DM,camp-private,2026-05-14,2026-05-17,delivered
+ord-00122,cust-0122,Organic,organic,2025-12-04,2025-12-06,delivered
+ord-00123,cust-0123,DM,camp-private,2026-08-24,,paid
+ord-00124,cust-0124,Instagram,camp-studio,2026-08-17,,paid
+ord-00125,cust-0125,DM,camp-private,2026-01-26,,pending
+ord-00126,cust-0126,Organic,organic,2026-07-06,2026-07-10,delivered
+ord-00127,cust-0127,Paid Social,camp-move,2026-06-24,2026-06-29,delivered
+ord-00128,cust-0128,Organic,organic,2026-03-29,2026-03-31,delivered
+ord-00129,cust-0129,Instagram,camp-studio,2026-07-18,,shipped
+ord-00130,cust-0130,DM,camp-private,2026-04-29,2026-05-01,delivered
+ord-00131,cust-0131,Organic,organic,2026-09-04,2026-09-06,delivered
+ord-00132,cust-0132,Paid Social,camp-move,2026-04-14,,shipped
+ord-00133,cust-0133,Organic,organic,2026-03-26,2026-03-29,delivered
+ord-00134,cust-0134,DM,camp-private,2026-02-02,2026-02-06,delivered
+ord-00135,cust-0135,Paid Social,camp-move,2025-12-01,,pending
+ord-00136,cust-0136,Paid Social,camp-move,2026-06-09,2026-06-13,delivered
+ord-00137,cust-0137,Paid Social,camp-move,2026-06-01,2026-06-04,delivered
+ord-00138,cust-0138,Paid Social,camp-move,2026-05-25,,shipped
+ord-00139,cust-0139,DM,camp-private,2026-05-18,2026-05-21,delivered
+ord-00140,cust-0140,Instagram,camp-studio,2026-06-14,2026-06-18,delivered
+ord-00141,cust-0141,Instagram,camp-studio,2026-01-28,,cancelled
+ord-00142,cust-0142,DM,camp-private,2026-08-25,,pending
+ord-00143,cust-0143,Organic,organic,2026-01-07,2026-01-09,delivered
+ord-00144,cust-0144,Instagram,camp-studio,2026-09-05,,paid
+ord-00145,cust-0145,Organic,organic,2026-04-26,2026-04-30,delivered
+ord-00146,cust-0146,Instagram,camp-studio,2026-07-24,2026-07-29,delivered
+ord-00147,cust-0147,Instagram,camp-studio,2026-03-01,2026-03-06,delivered
+ord-00148,cust-0148,Paid Social,camp-move,2026-06-07,2026-06-11,delivered
+ord-00149,cust-0149,Organic,organic,2026-04-05,2026-04-10,delivered
+ord-00150,cust-0150,DM,camp-private,2026-08-07,2026-08-09,delivered
+ord-00151,cust-0151,Instagram,camp-studio,2026-06-05,2026-06-09,delivered
+ord-00152,cust-0152,Instagram,camp-studio,2026-06-19,2026-06-22,delivered
+ord-00153,cust-0153,Instagram,camp-studio,2026-07-07,,paid
+ord-00154,cust-0154,Instagram,camp-studio,2026-07-02,,shipped
+ord-00155,cust-0155,Instagram,camp-studio,2026-01-24,,pending
+ord-00156,cust-0156,Organic,organic,2026-09-05,,shipped
+ord-00157,cust-0157,Paid Social,camp-move,2025-12-19,2025-12-23,delivered
+ord-00158,cust-0158,DM,camp-private,2026-09-06,2026-09-09,delivered
+ord-00159,cust-0159,Organic,organic,2026-07-05,,paid
+ord-00160,cust-0160,Organic,organic,2026-02-16,2026-02-21,delivered
+ord-00161,cust-0161,Organic,organic,2026-08-16,,shipped
+ord-00162,cust-0162,Instagram,camp-studio,2026-03-15,2026-03-20,delivered
+ord-00163,cust-0163,Instagram,camp-studio,2026-02-16,,shipped
+ord-00164,cust-0164,Organic,organic,2026-02-19,2026-02-22,delivered
+ord-00165,cust-0165,Organic,organic,2026-05-02,2026-05-04,delivered
+ord-00166,cust-0166,Organic,organic,2026-06-01,2026-06-06,delivered
+ord-00167,cust-0167,Organic,organic,2026-05-12,2026-05-15,delivered
+ord-00168,cust-0168,Instagram,camp-studio,2026-05-24,2026-05-28,delivered
+ord-00169,cust-0169,Instagram,camp-studio,2026-09-11,,shipped
+ord-00170,cust-0170,Instagram,camp-studio,2026-09-10,,pending
+ord-00171,cust-0171,Organic,organic,2026-05-21,,paid
+ord-00172,cust-0172,Instagram,camp-studio,2026-06-08,2026-06-11,delivered
+ord-00173,cust-0173,Paid Social,camp-move,2025-11-15,2025-11-20,delivered
+ord-00174,cust-0174,Organic,organic,2026-08-08,,shipped
+ord-00175,cust-0175,Organic,organic,2026-02-21,2026-02-26,delivered
+ord-00176,cust-0176,Paid Social,camp-move,2026-08-15,,pending
+ord-00177,cust-0177,DM,camp-private,2026-06-08,2026-06-10,delivered
+ord-00178,cust-0178,Paid Social,camp-move,2026-07-30,,paid
+ord-00179,cust-0179,DM,camp-private,2026-04-24,,pending
+ord-00180,cust-0180,DM,camp-private,2026-05-08,,shipped
+ord-00181,cust-0181,Instagram,camp-studio,2026-04-01,,pending
+ord-00182,cust-0182,Organic,organic,2025-12-13,2025-12-18,delivered
+ord-00183,cust-0183,Paid Social,camp-move,2026-08-31,2026-09-05,delivered
+ord-00184,cust-0184,Organic,organic,2026-06-20,2026-06-25,delivered
+ord-00185,cust-0185,Instagram,camp-studio,2026-08-19,2026-08-23,delivered
+ord-00186,cust-0186,Organic,organic,2026-07-25,2026-07-28,delivered
+ord-00187,cust-0187,Instagram,camp-studio,2026-03-06,2026-03-08,delivered
+ord-00188,cust-0188,Paid Social,camp-move,2026-05-30,2026-06-03,delivered
+ord-00189,cust-0189,Organic,organic,2026-03-04,2026-03-09,delivered
+ord-00190,cust-0190,Instagram,camp-studio,2026-03-09,2026-03-12,delivered
+ord-00191,cust-0191,Organic,organic,2026-05-30,,shipped
+ord-00192,cust-0192,Paid Social,camp-move,2026-06-28,,pending
+ord-00193,cust-0193,Organic,organic,2026-01-22,,shipped
+ord-00194,cust-0194,Instagram,camp-studio,2025-10-21,2025-10-23,delivered
+ord-00195,cust-0195,Instagram,camp-studio,2026-01-23,2026-01-25,delivered
+ord-00196,cust-0196,Instagram,camp-studio,2026-07-09,2026-07-12,delivered
+ord-00197,cust-0197,Organic,organic,2026-01-24,2026-01-26,delivered
+ord-00198,cust-0198,Paid Social,camp-move,2026-04-04,2026-04-06,delivered
+ord-00199,cust-0199,Organic,organic,2026-07-08,,cancelled
+ord-00200,cust-0200,Organic,organic,2026-09-11,2026-09-13,delivered
+ord-00201,cust-0201,Instagram,camp-studio,2026-06-21,,paid
+ord-00202,cust-0202,Organic,organic,2026-07-09,2026-07-13,delivered
+ord-00203,cust-0203,Organic,organic,2026-01-18,2026-01-23,delivered
+ord-00204,cust-0204,Paid Social,camp-move,2026-08-25,2026-08-28,delivered
+ord-00205,cust-0205,DM,camp-private,2026-05-23,2026-05-26,delivered
+ord-00206,cust-0206,Paid Social,camp-move,2026-06-30,2026-07-05,delivered
+ord-00207,cust-0207,Organic,organic,2026-04-08,,shipped
+ord-00208,cust-0208,Paid Social,camp-move,2026-09-07,2026-09-11,delivered
+ord-00209,cust-0209,DM,camp-private,2026-06-19,2026-06-22,delivered
+ord-00210,cust-0210,Paid Social,camp-move,2026-08-05,,pending
+ord-00211,cust-0211,Instagram,camp-studio,2026-09-12,2026-09-17,delivered
+ord-00212,cust-0212,Paid Social,camp-move,2026-03-07,,paid
+ord-00213,cust-0213,Organic,organic,2026-06-25,2026-06-29,delivered
+ord-00214,cust-0214,Instagram,camp-studio,2026-09-10,2026-09-13,delivered
+ord-00215,cust-0215,DM,camp-private,2026-05-25,2026-05-30,delivered
+ord-00216,cust-0216,DM,camp-private,2026-06-23,,pending
+ord-00217,cust-0217,Instagram,camp-studio,2026-04-30,2026-05-03,delivered
+ord-00218,cust-0218,Organic,organic,2026-08-31,2026-09-03,delivered
+ord-00219,cust-0219,Instagram,camp-studio,2026-08-20,,paid
+ord-00220,cust-0220,Instagram,camp-studio,2026-05-11,2026-05-13,delivered
+ord-00221,cust-0221,Instagram,camp-studio,2026-07-01,2026-07-06,delivered
+ord-00222,cust-0222,Paid Social,camp-move,2026-06-13,2026-06-15,delivered
+ord-00223,cust-0223,Organic,organic,2026-06-19,2026-06-24,delivered
+ord-00224,cust-0224,Instagram,camp-studio,2026-08-04,,shipped
+ord-00225,cust-0225,Instagram,camp-studio,2026-03-01,2026-03-04,delivered
+ord-00226,cust-0226,DM,camp-private,2026-06-24,,shipped
+ord-00227,cust-0227,Organic,organic,2026-03-02,2026-03-06,delivered
+ord-00228,cust-0228,DM,camp-private,2026-06-07,2026-06-12,delivered
+ord-00229,cust-0229,Paid Social,camp-move,2026-01-15,2026-01-20,delivered
+ord-00230,cust-0230,Instagram,camp-studio,2026-07-20,,paid
+ord-00231,cust-0231,Organic,organic,2026-07-02,2026-07-05,delivered
+ord-00232,cust-0232,DM,camp-private,2026-07-20,,pending
+ord-00233,cust-0233,Paid Social,camp-move,2026-07-20,2026-07-23,delivered
+ord-00234,cust-0234,Organic,organic,2026-04-20,,cancelled
+ord-00235,cust-0235,Organic,organic,2026-03-05,,shipped
+ord-00236,cust-0236,Instagram,camp-studio,2026-05-11,,paid
+ord-00237,cust-0237,Paid Social,camp-move,2026-09-19,,pending
+ord-00238,cust-0238,Paid Social,camp-move,2026-08-11,,cancelled
+ord-00239,cust-0239,Instagram,camp-studio,2026-07-14,,paid
+ord-00240,cust-0240,Instagram,camp-studio,2026-04-29,,shipped
+ord-00241,cust-0241,Instagram,camp-studio,2026-08-20,2026-08-24,delivered
+ord-00242,cust-0242,Instagram,camp-studio,2025-11-09,2025-11-12,delivered
+ord-00243,cust-0243,Organic,organic,2026-03-16,,cancelled
+ord-00244,cust-0244,Instagram,camp-studio,2025-11-13,2025-11-17,delivered
+ord-00245,cust-0245,DM,camp-private,2026-07-31,2026-08-03,delivered
+ord-00246,cust-0246,Instagram,camp-studio,2026-01-21,2026-01-23,delivered
+ord-00247,cust-0247,Instagram,camp-studio,2026-02-11,2026-02-15,delivered
+ord-00248,cust-0248,Paid Social,camp-move,2026-08-30,,shipped
+ord-00249,cust-0249,Organic,organic,2026-05-28,,pending
+ord-00250,cust-0250,Instagram,camp-studio,2026-01-09,2026-01-13,delivered
+ord-00251,cust-0251,Instagram,camp-studio,2026-06-25,2026-06-28,delivered
+ord-00252,cust-0252,DM,camp-private,2026-08-20,2026-08-25,delivered
+ord-00253,cust-0253,Instagram,camp-studio,2026-07-11,2026-07-13,delivered
+ord-00254,cust-0254,Paid Social,camp-move,2026-07-14,,paid
+ord-00255,cust-0255,DM,camp-private,2026-05-22,2026-05-24,delivered
+ord-00256,cust-0256,Paid Social,camp-move,2026-06-10,2026-06-13,delivered
+ord-00257,cust-0257,Organic,organic,2026-05-22,2026-05-24,delivered
+ord-00258,cust-0258,Instagram,camp-studio,2026-04-18,,pending
+ord-00259,cust-0259,Organic,organic,2026-06-13,,cancelled
+ord-00260,cust-0260,Organic,organic,2026-07-07,,shipped
+ord-00261,cust-0261,Instagram,camp-studio,2026-04-19,2026-04-21,delivered
+ord-00262,cust-0262,Instagram,camp-studio,2026-08-25,,cancelled
+ord-00263,cust-0263,Paid Social,camp-move,2026-04-30,,shipped
+ord-00264,cust-0264,Paid Social,camp-move,2026-03-22,,cancelled
+ord-00265,cust-0265,Organic,organic,2026-04-26,2026-04-28,delivered
+ord-00266,cust-0266,Organic,organic,2026-04-20,2026-04-24,delivered
+ord-00267,cust-0267,Instagram,camp-studio,2026-05-19,,shipped
+ord-00268,cust-0268,Instagram,camp-studio,2025-12-20,2025-12-25,delivered
+ord-00269,cust-0269,Instagram,camp-studio,2026-09-01,2026-09-04,delivered
+ord-00270,cust-0270,Instagram,camp-studio,2026-08-22,2026-08-27,delivered
+ord-00271,cust-0271,Instagram,camp-studio,2026-08-18,,pending
+ord-00272,cust-0272,Instagram,camp-studio,2026-04-28,2026-05-01,delivered
+ord-00273,cust-0273,Paid Social,camp-move,2026-06-30,2026-07-05,delivered
+ord-00274,cust-0274,Instagram,camp-studio,2026-05-28,2026-06-01,delivered
+ord-00275,cust-0275,Paid Social,camp-move,2026-05-21,,shipped
+ord-00276,cust-0276,Paid Social,camp-move,2026-02-05,,paid
+ord-00277,cust-0277,Instagram,camp-studio,2026-04-08,,paid
+ord-00278,cust-0278,Instagram,camp-studio,2026-07-21,,shipped
+ord-00279,cust-0279,Paid Social,camp-move,2025-12-28,2025-12-31,delivered
+ord-00280,cust-0280,Instagram,camp-studio,2026-08-02,2026-08-05,delivered
+ord-00281,cust-0281,DM,camp-private,2026-07-19,2026-07-21,delivered
+ord-00282,cust-0282,Paid Social,camp-move,2026-08-27,2026-08-31,delivered
+ord-00283,cust-0283,DM,camp-private,2026-07-06,,pending
+ord-00284,cust-0284,Instagram,camp-studio,2026-09-09,2026-09-11,delivered
+ord-00285,cust-0285,Instagram,camp-studio,2026-07-27,,paid
+ord-00286,cust-0286,Instagram,camp-studio,2026-05-16,,cancelled
+ord-00287,cust-0287,Instagram,camp-studio,2026-01-27,2026-01-31,delivered
+ord-00288,cust-0288,Organic,organic,2026-04-24,,pending
+ord-00289,cust-0289,Organic,organic,2026-05-25,2026-05-28,delivered
+ord-00290,cust-0290,Instagram,camp-studio,2026-06-30,2026-07-02,delivered
+ord-00291,cust-0291,Paid Social,camp-move,2025-12-28,2026-01-01,delivered
+ord-00292,cust-0292,Organic,organic,2026-06-30,2026-07-04,delivered
+ord-00293,cust-0293,Instagram,camp-studio,2026-08-21,2026-08-26,delivered
+ord-00294,cust-0294,Paid Social,camp-move,2026-06-25,2026-06-29,delivered
+ord-00295,cust-0295,DM,camp-private,2026-09-13,2026-09-17,delivered
+ord-00296,cust-0296,Organic,organic,2026-04-08,2026-04-13,delivered
+ord-00297,cust-0297,Paid Social,camp-move,2026-01-21,,pending
+ord-00298,cust-0298,Instagram,camp-studio,2026-05-09,,cancelled
+ord-00299,cust-0299,Paid Social,camp-move,2026-09-06,,cancelled
+ord-00300,cust-0300,Instagram,camp-studio,2026-05-28,2026-06-01,delivered
+ord-00301,cust-0301,Organic,organic,2026-06-16,2026-06-19,delivered
+ord-00302,cust-0302,Organic,organic,2026-03-17,2026-03-22,delivered
+ord-00303,cust-0303,DM,camp-private,2026-08-04,,shipped
+ord-00304,cust-0304,Instagram,camp-studio,2026-02-24,,paid
+ord-00305,cust-0305,Organic,organic,2026-05-06,2026-05-11,delivered
+ord-00306,cust-0306,DM,camp-private,2026-04-18,,shipped
+ord-00307,cust-0307,Paid Social,camp-move,2026-09-20,,paid
+ord-00308,cust-0308,Organic,organic,2026-04-09,2026-04-11,delivered
+ord-00309,cust-0309,DM,camp-private,2026-05-22,2026-05-25,delivered
+ord-00310,cust-0310,Instagram,camp-studio,2026-05-12,2026-05-15,delivered
+ord-00311,cust-0311,Paid Social,camp-move,2026-04-19,,pending
+ord-00312,cust-0312,Organic,organic,2026-07-26,2026-07-30,delivered
+ord-00313,cust-0313,Paid Social,camp-move,2026-09-13,2026-09-17,delivered
+ord-00314,cust-0314,Organic,organic,2026-07-03,,cancelled
+ord-00315,cust-0315,Instagram,camp-studio,2026-08-26,,cancelled
+ord-00316,cust-0316,Instagram,camp-studio,2026-08-21,2026-08-24,delivered
+ord-00317,cust-0317,DM,camp-private,2026-03-04,,shipped
+ord-00318,cust-0318,DM,camp-private,2025-12-28,,cancelled
+ord-00319,cust-0319,Organic,organic,2026-05-23,,shipped
+ord-00320,cust-0320,Instagram,camp-studio,2026-01-11,2026-01-15,delivered
+ord-00321,cust-0321,Instagram,camp-studio,2026-08-23,2026-08-27,delivered
+ord-00322,cust-0322,Organic,organic,2026-07-15,2026-07-17,delivered
+ord-00323,cust-0323,Paid Social,camp-move,2026-06-26,,pending
+ord-00324,cust-0324,Organic,organic,2025-12-23,2025-12-26,delivered
+ord-00325,cust-0325,Paid Social,camp-move,2026-08-12,2026-08-17,delivered
+ord-00326,cust-0326,Instagram,camp-studio,2026-09-03,,shipped
+ord-00327,cust-0327,Instagram,camp-studio,2025-10-17,2025-10-21,delivered
+ord-00328,cust-0328,Instagram,camp-studio,2026-07-18,2026-07-23,delivered
+ord-00329,cust-0329,Organic,organic,2026-08-21,2026-08-25,delivered
+ord-00330,cust-0330,Organic,organic,2026-08-22,2026-08-24,delivered
+ord-00331,cust-0331,DM,camp-private,2026-06-20,2026-06-23,delivered
+ord-00332,cust-0332,Organic,organic,2026-01-02,,paid
+ord-00333,cust-0333,Paid Social,camp-move,2026-06-29,2026-07-04,delivered
+ord-00334,cust-0334,DM,camp-private,2026-06-09,2026-06-13,delivered
+ord-00335,cust-0335,Organic,organic,2025-11-12,,pending
+ord-00336,cust-0336,Organic,organic,2025-12-26,,pending
+ord-00337,cust-0337,Instagram,camp-studio,2026-03-16,2026-03-21,delivered
+ord-00338,cust-0338,Organic,organic,2026-07-23,,paid
+ord-00339,cust-0339,Organic,organic,2026-09-07,,shipped
+ord-00340,cust-0340,Instagram,camp-studio,2026-09-02,2026-09-06,delivered
+ord-00341,cust-0341,DM,camp-private,2026-09-15,2026-09-18,delivered
+ord-00342,cust-0342,Instagram,camp-studio,2026-04-16,2026-04-19,delivered
+ord-00343,cust-0343,Paid Social,camp-move,2026-07-12,,paid
+ord-00344,cust-0344,Paid Social,camp-move,2026-07-10,2026-07-12,delivered
+ord-00345,cust-0345,Paid Social,camp-move,2026-06-09,,shipped
+ord-00346,cust-0346,Paid Social,camp-move,2026-07-15,2026-07-20,delivered
+ord-00347,cust-0347,Instagram,camp-studio,2026-08-25,2026-08-29,delivered
+ord-00348,cust-0348,Instagram,camp-studio,2026-06-01,,shipped
+ord-00349,cust-0349,Instagram,camp-studio,2026-08-05,,paid
+ord-00350,cust-0350,Paid Social,camp-move,2026-05-10,2026-05-13,delivered
+ord-00351,cust-0351,Paid Social,camp-move,2026-07-18,2026-07-21,delivered
+ord-00352,cust-0352,DM,camp-private,2026-08-24,2026-08-29,delivered
+ord-00353,cust-0353,Paid Social,camp-move,2026-07-17,,shipped
+ord-00354,cust-0354,DM,camp-private,2026-07-08,2026-07-12,delivered
+ord-00355,cust-0355,Paid Social,camp-move,2026-06-16,,shipped
+ord-00356,cust-0356,Instagram,camp-studio,2026-06-22,,paid
+ord-00357,cust-0357,Instagram,camp-studio,2026-08-31,2026-09-03,delivered
+ord-00358,cust-0358,Instagram,camp-studio,2026-02-20,2026-02-24,delivered
+ord-00359,cust-0359,Paid Social,camp-move,2026-08-30,,cancelled
+ord-00360,cust-0360,Instagram,camp-studio,2026-03-01,,pending
+ord-00361,cust-0361,Paid Social,camp-move,2026-08-19,2026-08-22,delivered
+ord-00362,cust-0362,Instagram,camp-studio,2026-09-06,,cancelled
+ord-00363,cust-0363,Instagram,camp-studio,2026-04-12,2026-04-16,delivered
+ord-00364,cust-0364,Instagram,camp-studio,2026-08-26,,paid
+ord-00365,cust-0365,Paid Social,camp-move,2026-08-31,,paid
+ord-00366,cust-0366,Instagram,camp-studio,2026-08-18,,shipped
+ord-00367,cust-0367,Instagram,camp-studio,2026-08-30,2026-09-02,delivered
+ord-00368,cust-0368,Paid Social,camp-move,2026-05-14,2026-05-18,delivered
+ord-00369,cust-0369,Instagram,camp-studio,2026-03-02,2026-03-04,delivered
+ord-00370,cust-0370,Instagram,camp-studio,2025-11-14,,paid
+ord-00371,cust-0371,DM,camp-private,2025-10-28,2025-11-02,delivered
+ord-00372,cust-0372,Paid Social,camp-move,2026-05-14,2026-05-17,delivered
+ord-00373,cust-0373,Instagram,camp-studio,2026-08-06,,shipped
+ord-00374,cust-0374,Instagram,camp-studio,2026-07-18,,paid
+ord-00375,cust-0375,Instagram,camp-studio,2026-08-26,2026-08-29,delivered
+ord-00376,cust-0376,Paid Social,camp-move,2026-07-24,2026-07-26,delivered
+ord-00377,cust-0377,DM,camp-private,2026-06-24,2026-06-26,delivered
+ord-00378,cust-0378,Instagram,camp-studio,2026-01-09,2026-01-13,delivered
+ord-00379,cust-0379,DM,camp-private,2026-06-08,2026-06-11,delivered
+ord-00380,cust-0380,Instagram,camp-studio,2026-03-01,2026-03-06,delivered
+ord-00381,cust-0381,DM,camp-private,2025-12-20,2025-12-24,delivered
+ord-00382,cust-0382,Instagram,camp-studio,2026-08-08,2026-08-10,delivered
+ord-00383,cust-0383,Instagram,camp-studio,2026-07-21,2026-07-25,delivered
+ord-00384,cust-0384,Paid Social,camp-move,2026-03-28,,pending
+ord-00385,cust-0385,Paid Social,camp-move,2026-03-30,2026-04-02,delivered
+ord-00386,cust-0386,Instagram,camp-studio,2026-06-12,2026-06-15,delivered
+ord-00387,cust-0387,Instagram,camp-studio,2026-05-29,2026-06-01,delivered
+ord-00388,cust-0388,Instagram,camp-studio,2026-05-04,,cancelled
+ord-00389,cust-0389,Paid Social,camp-move,2026-06-27,2026-06-29,delivered
+ord-00390,cust-0390,Paid Social,camp-move,2026-09-17,2026-09-19,delivered
+ord-00391,cust-0391,Instagram,camp-studio,2026-08-17,2026-08-20,delivered
+ord-00392,cust-0392,Paid Social,camp-move,2026-08-01,2026-08-06,delivered
+ord-00393,cust-0393,DM,camp-private,2026-08-22,,pending
+ord-00394,cust-0394,Organic,organic,2026-06-19,2026-06-24,delivered
+ord-00395,cust-0395,Instagram,camp-studio,2026-06-10,,shipped
+ord-00396,cust-0396,DM,camp-private,2026-08-29,,paid
+ord-00397,cust-0397,Instagram,camp-studio,2026-07-02,,shipped
+ord-00398,cust-0398,Paid Social,camp-move,2026-06-16,,pending
+ord-00399,cust-0399,Paid Social,camp-move,2026-09-13,2026-09-17,delivered
+ord-00400,cust-0400,Paid Social,camp-move,2026-06-27,2026-06-29,delivered
+ord-00401,cust-0353,Paid Social,camp-move,2026-07-17,2026-07-22,delivered
+ord-00402,cust-0314,Organic,organic,2026-07-03,2026-07-06,delivered
+ord-00403,cust-0397,Paid Social,camp-move,2026-09-18,,paid
+ord-00404,cust-0359,Instagram,camp-studio,2026-08-30,2026-09-03,delivered
+ord-00405,cust-0200,Instagram,camp-studio,2026-08-13,2026-08-16,delivered
+ord-00406,cust-0190,DM,camp-private,2025-11-18,,shipped
+ord-00407,cust-0306,Organic,organic,2026-04-04,,paid
+ord-00408,cust-0266,Instagram,camp-studio,2026-04-20,,paid
+ord-00409,cust-0185,DM,camp-private,2026-01-22,,cancelled
+ord-00410,cust-0287,Instagram,camp-studio,2026-07-17,,cancelled
+ord-00411,cust-0055,Instagram,camp-studio,2026-07-05,2026-07-07,delivered
+ord-00412,cust-0227,Paid Social,camp-move,2026-04-03,,shipped
+ord-00413,cust-0301,Paid Social,camp-move,2026-05-26,2026-05-31,delivered
+ord-00414,cust-0162,Organic,organic,2026-04-21,2026-04-23,delivered
+ord-00415,cust-0384,Instagram,camp-studio,2026-03-16,,pending
+ord-00416,cust-0350,Paid Social,camp-move,2025-12-28,2025-12-31,delivered
+ord-00417,cust-0183,Organic,organic,2026-06-25,2026-06-27,delivered
+ord-00418,cust-0278,Organic,organic,2025-12-29,2026-01-02,delivered
+ord-00419,cust-0392,Instagram,camp-studio,2026-08-01,2026-08-04,delivered
+ord-00420,cust-0358,Paid Social,camp-move,2026-06-14,,shipped
+ord-00421,cust-0138,Organic,organic,2026-05-21,2026-05-24,delivered
+ord-00422,cust-0144,Instagram,camp-studio,2026-09-05,2026-09-08,delivered
+ord-00423,cust-0196,Instagram,camp-studio,2026-07-09,,cancelled
+ord-00424,cust-0162,Instagram,camp-studio,2026-05-29,2026-05-31,delivered
+ord-00425,cust-0134,Paid Social,camp-move,2026-03-25,2026-03-29,delivered
+ord-00426,cust-0146,Instagram,camp-studio,2026-07-24,2026-07-29,delivered
+ord-00427,cust-0176,Instagram,camp-studio,2026-08-15,,shipped
+ord-00428,cust-0400,DM,camp-private,2026-03-26,2026-03-31,delivered
+ord-00429,cust-0108,Paid Social,camp-move,2025-12-16,2025-12-21,delivered
+ord-00430,cust-0043,Instagram,camp-studio,2025-12-10,2025-12-15,delivered
+ord-00431,cust-0183,Organic,organic,2026-06-25,2026-06-29,delivered
+ord-00432,cust-0234,DM,camp-private,2026-08-11,,pending
+ord-00433,cust-0247,Instagram,camp-studio,2026-06-25,2026-06-29,delivered
+ord-00434,cust-0274,DM,camp-private,2026-04-16,2026-04-21,delivered
+ord-00435,cust-0288,Paid Social,camp-move,2026-05-03,2026-05-08,delivered
+ord-00436,cust-0265,Organic,organic,2026-08-01,,shipped
+ord-00437,cust-0327,DM,camp-private,2026-05-13,2026-05-18,delivered
+ord-00438,cust-0225,Instagram,camp-studio,2026-01-26,2026-01-31,delivered
+ord-00439,cust-0075,Instagram,camp-studio,2025-11-12,2025-11-17,delivered
+ord-00440,cust-0227,DM,camp-private,2026-01-26,2026-01-31,delivered
+ord-00441,cust-0160,Instagram,camp-studio,2026-03-06,,shipped
+ord-00442,cust-0153,Paid Social,camp-move,2026-01-28,2026-01-31,delivered
+ord-00443,cust-0142,Instagram,camp-studio,2026-08-09,,paid
+ord-00444,cust-0183,Instagram,camp-studio,2026-08-18,2026-08-20,delivered
+ord-00445,cust-0353,Instagram,camp-studio,2026-07-17,2026-07-19,delivered
+ord-00446,cust-0098,Instagram,camp-studio,2026-07-09,2026-07-14,delivered
+ord-00447,cust-0233,Organic,organic,2026-07-20,2026-07-23,delivered
+ord-00448,cust-0370,DM,camp-private,2025-10-29,2025-11-03,delivered
+ord-00449,cust-0050,DM,camp-private,2026-06-16,2026-06-19,delivered
+ord-00450,cust-0320,DM,camp-private,2026-09-16,2026-09-19,delivered
+ord-00451,cust-0041,Organic,organic,2026-05-19,2026-05-24,delivered
+ord-00452,cust-0021,Organic,organic,2025-11-08,2025-11-11,delivered
+ord-00453,cust-0099,DM,camp-private,2026-06-18,2026-06-21,delivered
+ord-00454,cust-0346,DM,camp-private,2026-07-15,2026-07-17,delivered
+ord-00455,cust-0282,Organic,organic,2026-03-07,2026-03-12,delivered
+ord-00456,cust-0193,Organic,organic,2026-06-30,2026-07-05,delivered
+ord-00457,cust-0266,Organic,organic,2026-04-20,2026-04-24,delivered
+ord-00458,cust-0354,Organic,organic,2026-07-08,2026-07-11,delivered
+ord-00459,cust-0154,Paid Social,camp-move,2026-07-02,2026-07-05,delivered
+ord-00460,cust-0354,Paid Social,camp-move,2026-09-16,,pending
+ord-00461,cust-0309,DM,camp-private,2026-02-04,2026-02-06,delivered
+ord-00462,cust-0375,Organic,organic,2026-04-11,,shipped
+ord-00463,cust-0076,Instagram,camp-studio,2026-04-04,2026-04-06,delivered
+ord-00464,cust-0358,Organic,organic,2026-01-04,2026-01-07,delivered
+ord-00465,cust-0377,Instagram,camp-studio,2026-06-24,2026-06-29,delivered
+ord-00466,cust-0305,Instagram,camp-studio,2026-08-23,2026-08-27,delivered
+ord-00467,cust-0023,Instagram,camp-studio,2026-01-19,2026-01-21,delivered
+ord-00468,cust-0012,Instagram,camp-studio,2026-03-10,2026-03-13,delivered
+ord-00469,cust-0073,DM,camp-private,2026-09-12,2026-09-14,delivered
+ord-00470,cust-0139,Organic,organic,2026-08-27,,shipped
+ord-00471,cust-0261,Instagram,camp-studio,2026-09-20,,pending
+ord-00472,cust-0235,Organic,organic,2026-07-06,2026-07-09,delivered
+ord-00473,cust-0010,DM,camp-private,2026-03-18,2026-03-22,delivered
+ord-00474,cust-0144,Instagram,camp-studio,2026-09-05,,pending
+ord-00475,cust-0314,DM,camp-private,2026-08-08,2026-08-11,delivered
+ord-00476,cust-0106,Instagram,camp-studio,2026-08-22,2026-08-25,delivered
+ord-00477,cust-0395,DM,camp-private,2025-12-05,2025-12-08,delivered
+ord-00478,cust-0382,Organic,organic,2026-08-14,2026-08-17,delivered
+ord-00479,cust-0184,DM,camp-private,2026-06-20,2026-06-25,delivered
+ord-00480,cust-0084,Instagram,camp-studio,2026-01-07,2026-01-09,delivered
+ord-00481,cust-0104,Instagram,camp-studio,2026-09-07,,pending
+ord-00482,cust-0235,Paid Social,camp-move,2026-01-26,,paid
+ord-00483,cust-0381,DM,camp-private,2026-07-11,2026-07-13,delivered
+ord-00484,cust-0203,Paid Social,camp-move,2025-11-26,2025-11-28,delivered
+ord-00485,cust-0073,Organic,organic,2026-05-17,2026-05-19,delivered
+ord-00486,cust-0303,Organic,organic,2026-09-21,,pending
+ord-00487,cust-0269,Paid Social,camp-move,2026-09-19,,shipped
+ord-00488,cust-0088,Paid Social,camp-move,2026-09-06,,shipped
+ord-00489,cust-0061,Organic,organic,2026-02-19,2026-02-23,delivered
+ord-00490,cust-0338,Paid Social,camp-move,2026-07-23,2026-07-25,delivered
+ord-00491,cust-0017,Paid Social,camp-move,2026-08-29,2026-09-02,delivered
+ord-00492,cust-0146,DM,camp-private,2026-07-31,,shipped
+ord-00493,cust-0019,Organic,organic,2025-11-08,2025-11-13,delivered
+ord-00494,cust-0242,Instagram,camp-studio,2025-11-29,,paid
+ord-00495,cust-0312,Instagram,camp-studio,2026-04-26,2026-04-30,delivered
+ord-00496,cust-0255,Organic,organic,2026-06-01,,pending
+ord-00497,cust-0316,Paid Social,camp-move,2026-05-29,2026-06-01,delivered
+ord-00498,cust-0004,DM,camp-private,2025-11-19,2025-11-21,delivered
+ord-00499,cust-0243,DM,camp-private,2026-03-10,2026-03-15,delivered
+ord-00500,cust-0212,Organic,organic,2026-01-08,2026-01-12,delivered
+ord-00501,cust-0077,Organic,organic,2026-02-12,2026-02-17,delivered
+ord-00502,cust-0305,Organic,organic,2025-12-15,,shipped
+ord-00503,cust-0255,Paid Social,camp-move,2026-05-22,,paid
+ord-00504,cust-0013,Organic,organic,2026-05-27,2026-05-31,delivered
+ord-00505,cust-0074,Organic,organic,2026-01-19,,pending
+ord-00506,cust-0268,Instagram,camp-studio,2025-11-20,,pending
+ord-00507,cust-0024,Paid Social,camp-move,2026-06-07,,shipped
+ord-00508,cust-0164,DM,camp-private,2026-05-05,2026-05-08,delivered
+ord-00509,cust-0361,Paid Social,camp-move,2026-02-14,2026-02-18,delivered
+ord-00510,cust-0242,Instagram,camp-studio,2026-09-02,2026-09-04,delivered
+ord-00511,cust-0171,DM,camp-private,2026-01-01,,shipped
+ord-00512,cust-0115,Organic,organic,2026-03-02,2026-03-06,delivered
+ord-00513,cust-0244,Instagram,camp-studio,2025-11-18,2025-11-21,delivered
+ord-00514,cust-0333,Organic,organic,2025-10-28,2025-11-02,delivered
+ord-00515,cust-0247,Instagram,camp-studio,2026-04-06,2026-04-11,delivered
+ord-00516,cust-0089,DM,camp-private,2026-08-27,,shipped
+ord-00517,cust-0167,Instagram,camp-studio,2026-07-03,2026-07-07,delivered
+ord-00518,cust-0395,Instagram,camp-studio,2026-04-04,,shipped
+ord-00519,cust-0232,Instagram,camp-studio,2026-06-21,2026-06-26,delivered
+ord-00520,cust-0177,DM,camp-private,2026-06-08,2026-06-13,delivered
+ord-00521,cust-0028,DM,camp-private,2026-01-01,,paid
+ord-00522,cust-0208,Paid Social,camp-move,2026-04-05,2026-04-08,delivered
+ord-00523,cust-0079,Organic,organic,2026-08-13,,shipped
+ord-00524,cust-0329,Organic,organic,2026-05-24,,pending
+ord-00525,cust-0218,Organic,organic,2026-08-31,2026-09-03,delivered
+ord-00526,cust-0280,Paid Social,camp-move,2026-07-14,,cancelled
+ord-00527,cust-0354,Instagram,camp-studio,2026-07-08,,shipped
+ord-00528,cust-0041,Organic,organic,2026-06-16,2026-06-21,delivered
+ord-00529,cust-0241,DM,camp-private,2026-07-12,2026-07-16,delivered
+ord-00530,cust-0027,Organic,organic,2026-08-24,,paid
+ord-00531,cust-0143,Instagram,camp-studio,2026-01-29,2026-02-02,delivered
+ord-00532,cust-0359,Paid Social,camp-move,2026-08-30,,paid
+ord-00533,cust-0079,Organic,organic,2026-08-13,2026-08-18,delivered
+ord-00534,cust-0060,Instagram,camp-studio,2026-07-01,2026-07-05,delivered
+ord-00535,cust-0362,Paid Social,camp-move,2026-04-09,2026-04-14,delivered
+ord-00536,cust-0273,Instagram,camp-studio,2026-08-14,,paid
+ord-00537,cust-0051,DM,camp-private,2026-03-17,2026-03-20,delivered
+ord-00538,cust-0354,Instagram,camp-studio,2026-07-08,2026-07-10,delivered
+ord-00539,cust-0229,Instagram,camp-studio,2026-03-20,2026-03-23,delivered
+ord-00540,cust-0062,Organic,organic,2026-08-09,2026-08-12,delivered
+ord-00541,cust-0039,Paid Social,camp-move,2026-09-14,,cancelled
+ord-00542,cust-0400,Instagram,camp-studio,2025-11-14,2025-11-19,delivered
+ord-00543,cust-0331,Instagram,camp-studio,2026-06-20,2026-06-25,delivered
+ord-00544,cust-0398,Instagram,camp-studio,2026-05-08,2026-05-10,delivered
+ord-00545,cust-0201,Instagram,camp-studio,2026-07-13,,shipped
+ord-00546,cust-0275,Instagram,camp-studio,2026-03-24,2026-03-26,delivered
+ord-00547,cust-0175,Organic,organic,2026-02-21,,shipped
+ord-00548,cust-0055,DM,camp-private,2026-08-10,2026-08-15,delivered
+ord-00549,cust-0304,Paid Social,camp-move,2026-01-22,2026-01-26,delivered
+ord-00550,cust-0009,Instagram,camp-studio,2026-02-09,2026-02-11,delivered
+ord-00551,cust-0120,Instagram,camp-studio,2026-08-17,2026-08-19,delivered
+ord-00552,cust-0067,Instagram,camp-studio,2026-09-17,2026-09-21,delivered
+ord-00553,cust-0055,Paid Social,camp-move,2026-05-15,,paid
+ord-00554,cust-0351,Paid Social,camp-move,2026-07-13,2026-07-16,delivered
+ord-00555,cust-0073,Instagram,camp-studio,2026-04-22,2026-04-25,delivered
+ord-00556,cust-0324,Paid Social,camp-move,2026-08-01,2026-08-06,delivered
+ord-00557,cust-0396,DM,camp-private,2026-08-29,2026-09-02,delivered
+ord-00558,cust-0306,DM,camp-private,2026-04-04,2026-04-06,delivered
+ord-00559,cust-0121,Instagram,camp-studio,2026-05-14,2026-05-16,delivered
+ord-00560,cust-0395,DM,camp-private,2026-08-08,2026-08-11,delivered
+ord-00561,cust-0146,Paid Social,camp-move,2026-07-24,2026-07-29,delivered
+ord-00562,cust-0121,DM,camp-private,2026-05-14,2026-05-17,delivered
+ord-00563,cust-0224,Instagram,camp-studio,2025-12-05,2025-12-08,delivered
+ord-00564,cust-0292,Instagram,camp-studio,2025-10-22,2025-10-27,delivered
+ord-00565,cust-0310,Organic,organic,2026-05-12,2026-05-15,delivered
+ord-00566,cust-0268,Organic,organic,2026-05-30,2026-06-04,delivered
+ord-00567,cust-0127,Paid Social,camp-move,2026-06-24,2026-06-27,delivered
+ord-00568,cust-0241,Instagram,camp-studio,2026-06-07,2026-06-12,delivered
+ord-00569,cust-0043,Organic,organic,2026-07-04,,shipped
+ord-00570,cust-0083,Paid Social,camp-move,2026-09-17,2026-09-19,delivered
+ord-00571,cust-0190,Paid Social,camp-move,2026-08-08,2026-08-10,delivered
+ord-00572,cust-0107,Instagram,camp-studio,2026-09-07,,pending
+ord-00573,cust-0188,DM,camp-private,2026-05-30,2026-06-02,delivered
+ord-00574,cust-0071,Instagram,camp-studio,2026-03-12,2026-03-17,delivered
+ord-00575,cust-0390,Instagram,camp-studio,2026-09-17,,pending
+ord-00576,cust-0232,Paid Social,camp-move,2026-05-28,,paid
+ord-00577,cust-0189,Organic,organic,2026-09-01,,paid
+ord-00578,cust-0092,Organic,organic,2026-08-13,2026-08-16,delivered
+ord-00579,cust-0350,Organic,organic,2026-06-26,2026-07-01,delivered
+ord-00580,cust-0168,DM,camp-private,2026-05-28,,shipped
+ord-00581,cust-0157,Organic,organic,2025-12-18,2025-12-22,delivered
+ord-00582,cust-0234,DM,camp-private,2026-01-12,2026-01-16,delivered
+ord-00583,cust-0134,Instagram,camp-studio,2026-03-30,2026-04-01,delivered
+ord-00584,cust-0084,Instagram,camp-studio,2026-06-22,,pending
+ord-00585,cust-0362,Paid Social,camp-move,2026-02-20,2026-02-23,delivered
+ord-00586,cust-0375,Organic,organic,2026-05-25,2026-05-27,delivered
+ord-00587,cust-0393,Instagram,camp-studio,2026-08-22,2026-08-27,delivered
+ord-00588,cust-0163,DM,camp-private,2026-07-27,,pending
+ord-00589,cust-0190,Paid Social,camp-move,2026-04-07,2026-04-11,delivered
+ord-00590,cust-0148,Organic,organic,2026-04-07,,cancelled
+ord-00591,cust-0074,Instagram,camp-studio,2026-01-19,,cancelled
+ord-00592,cust-0328,Paid Social,camp-move,2026-07-18,2026-07-21,delivered
+ord-00593,cust-0379,Instagram,camp-studio,2026-06-08,,paid
+ord-00594,cust-0353,Instagram,camp-studio,2026-08-18,2026-08-22,delivered
+ord-00595,cust-0247,Paid Social,camp-move,2026-07-08,2026-07-13,delivered
+ord-00596,cust-0009,Instagram,camp-studio,2026-02-09,2026-02-13,delivered
+ord-00597,cust-0322,Organic,organic,2026-07-15,2026-07-18,delivered
+ord-00598,cust-0139,DM,camp-private,2026-09-07,2026-09-11,delivered
+ord-00599,cust-0249,Instagram,camp-studio,2026-05-28,,pending
+ord-00600,cust-0360,Paid Social,camp-move,2026-03-01,,pending
+ord-00601,cust-0306,Organic,organic,2026-06-16,2026-06-20,delivered
+ord-00602,cust-0067,Paid Social,camp-move,2026-09-17,,shipped
+ord-00603,cust-0061,Instagram,camp-studio,2026-02-19,2026-02-21,delivered
+ord-00604,cust-0103,DM,camp-private,2026-01-12,2026-01-15,delivered
+ord-00605,cust-0257,Instagram,camp-studio,2026-08-01,2026-08-03,delivered
+ord-00606,cust-0145,Organic,organic,2026-04-26,2026-04-28,delivered
+ord-00607,cust-0302,Paid Social,camp-move,2026-01-09,,cancelled
+ord-00608,cust-0057,Instagram,camp-studio,2026-06-15,,shipped
+ord-00609,cust-0060,Instagram,camp-studio,2026-07-01,2026-07-05,delivered
+ord-00610,cust-0220,Organic,organic,2026-04-01,,pending
+ord-00611,cust-0346,DM,camp-private,2026-07-15,2026-07-17,delivered
+ord-00612,cust-0174,DM,camp-private,2026-08-08,,cancelled
+ord-00613,cust-0330,Instagram,camp-studio,2026-06-06,,shipped
+ord-00614,cust-0028,Paid Social,camp-move,2026-01-01,2026-01-04,delivered
+ord-00615,cust-0393,Organic,organic,2026-08-22,2026-08-27,delivered
+ord-00616,cust-0392,Organic,organic,2026-08-01,,pending
+ord-00617,cust-0156,Instagram,camp-studio,2026-09-18,,pending
+ord-00618,cust-0241,Paid Social,camp-move,2026-05-23,2026-05-25,delivered
+ord-00619,cust-0303,Instagram,camp-studio,2026-04-15,2026-04-17,delivered
+ord-00620,cust-0183,Instagram,camp-studio,2026-06-25,,shipped
+ord-00621,cust-0011,Instagram,camp-studio,2026-06-24,2026-06-29,delivered
+ord-00622,cust-0302,Organic,organic,2026-01-09,2026-01-14,delivered
+ord-00623,cust-0315,Paid Social,camp-move,2026-08-26,2026-08-31,delivered
+ord-00624,cust-0136,Instagram,camp-studio,2026-06-09,2026-06-12,delivered
+ord-00625,cust-0173,Instagram,camp-studio,2026-02-08,,paid
+ord-00626,cust-0259,Paid Social,camp-move,2026-02-22,2026-02-25,delivered
+ord-00627,cust-0096,Paid Social,camp-move,2026-07-14,,shipped
+ord-00628,cust-0315,Organic,organic,2026-08-26,,shipped
+ord-00629,cust-0211,Organic,organic,2026-04-26,,pending
+ord-00630,cust-0132,DM,camp-private,2026-09-08,2026-09-10,delivered
+ord-00631,cust-0143,Paid Social,camp-move,2026-08-25,,shipped
+ord-00632,cust-0033,Organic,organic,2026-04-18,,shipped
+ord-00633,cust-0377,Organic,organic,2026-06-24,2026-06-28,delivered
+ord-00634,cust-0300,Organic,organic,2026-05-28,,shipped
+ord-00635,cust-0141,Paid Social,camp-move,2026-05-05,,pending
+ord-00636,cust-0075,Paid Social,camp-move,2026-03-26,2026-03-30,delivered
+ord-00637,cust-0344,Instagram,camp-studio,2026-07-10,2026-07-14,delivered
+ord-00638,cust-0199,Organic,organic,2026-05-28,2026-06-01,delivered
+ord-00639,cust-0393,Paid Social,camp-move,2026-08-22,2026-08-24,delivered
+ord-00640,cust-0171,Organic,organic,2026-04-26,,paid
+ord-00641,cust-0309,DM,camp-private,2026-06-29,2026-07-01,delivered
+ord-00642,cust-0329,Instagram,camp-studio,2026-05-24,2026-05-28,delivered
+ord-00643,cust-0305,Paid Social,camp-move,2026-09-08,,pending
+ord-00644,cust-0304,Organic,organic,2026-03-08,2026-03-13,delivered
+ord-00645,cust-0118,Organic,organic,2026-06-04,2026-06-07,delivered
+ord-00646,cust-0368,Paid Social,camp-move,2026-06-18,,pending
+ord-00647,cust-0098,Instagram,camp-studio,2026-04-04,2026-04-07,delivered
+ord-00648,cust-0128,DM,camp-private,2026-03-30,,shipped
+ord-00649,cust-0306,Instagram,camp-studio,2026-04-04,2026-04-06,delivered
+ord-00650,cust-0024,Instagram,camp-studio,2026-06-07,2026-06-11,delivered
+ord-00651,cust-0092,Instagram,camp-studio,2026-08-13,2026-08-17,delivered
+ord-00652,cust-0073,Instagram,camp-studio,2026-02-02,2026-02-05,delivered
+ord-00653,cust-0221,Organic,organic,2026-05-04,2026-05-08,delivered
+ord-00654,cust-0252,Paid Social,camp-move,2025-12-08,,pending
+ord-00655,cust-0094,Paid Social,camp-move,2026-06-22,2026-06-27,delivered
+ord-00656,cust-0364,Paid Social,camp-move,2026-07-06,2026-07-09,delivered
+ord-00657,cust-0340,Instagram,camp-studio,2026-09-02,,cancelled
+ord-00658,cust-0169,Instagram,camp-studio,2026-02-03,,cancelled
+ord-00659,cust-0138,DM,camp-private,2026-07-23,2026-07-25,delivered
+ord-00660,cust-0292,Instagram,camp-studio,2025-11-27,2025-12-01,delivered
+ord-00661,cust-0395,Instagram,camp-studio,2026-04-14,,paid
+ord-00662,cust-0222,Organic,organic,2026-06-13,2026-06-17,delivered
+ord-00663,cust-0199,Instagram,camp-studio,2026-05-28,2026-05-30,delivered
+ord-00664,cust-0219,Instagram,camp-studio,2026-08-20,2026-08-25,delivered
+ord-00665,cust-0066,Organic,organic,2026-09-07,,paid
+ord-00666,cust-0024,Instagram,camp-studio,2026-06-11,2026-06-13,delivered
+ord-00667,cust-0300,Organic,organic,2026-05-28,2026-06-02,delivered
+ord-00668,cust-0233,Paid Social,camp-move,2026-08-31,,paid
+ord-00669,cust-0274,Instagram,camp-studio,2026-04-16,2026-04-19,delivered
+ord-00670,cust-0309,Instagram,camp-studio,2026-05-29,,paid
+ord-00671,cust-0155,Instagram,camp-studio,2025-11-05,2025-11-07,delivered
+ord-00672,cust-0333,DM,camp-private,2025-12-05,2025-12-08,delivered
+ord-00673,cust-0249,Instagram,camp-studio,2026-05-28,2026-05-31,delivered
+ord-00674,cust-0378,DM,camp-private,2026-07-15,2026-07-19,delivered
+ord-00675,cust-0032,Instagram,camp-studio,2026-06-19,2026-06-21,delivered
+ord-00676,cust-0011,Instagram,camp-studio,2026-01-14,2026-01-18,delivered
+ord-00677,cust-0367,Paid Social,camp-move,2026-08-24,,pending
+ord-00678,cust-0185,Organic,organic,2026-05-21,,paid
+ord-00679,cust-0089,Instagram,camp-studio,2026-08-19,2026-08-24,delivered
+ord-00680,cust-0010,Organic,organic,2026-03-24,2026-03-27,delivered
+ord-00681,cust-0288,Paid Social,camp-move,2026-01-14,,cancelled
+ord-00682,cust-0387,Organic,organic,2025-12-11,,paid
+ord-00683,cust-0054,DM,camp-private,2025-12-16,,pending
+ord-00684,cust-0260,DM,camp-private,2026-06-04,2026-06-08,delivered
+ord-00685,cust-0243,Instagram,camp-studio,2026-03-15,2026-03-19,delivered
+ord-00686,cust-0071,Paid Social,camp-move,2026-04-29,2026-05-04,delivered
+ord-00687,cust-0395,DM,camp-private,2025-09-27,2025-09-29,delivered
+ord-00688,cust-0295,Organic,organic,2025-10-21,,cancelled
+ord-00689,cust-0349,Paid Social,camp-move,2026-09-15,2026-09-19,delivered
+ord-00690,cust-0076,Paid Social,camp-move,2026-09-15,,shipped
+ord-00691,cust-0177,Paid Social,camp-move,2026-08-20,2026-08-24,delivered
+ord-00692,cust-0048,Paid Social,camp-move,2026-06-10,2026-06-13,delivered
+ord-00693,cust-0259,DM,camp-private,2025-12-28,,paid
+ord-00694,cust-0003,Instagram,camp-studio,2026-05-12,2026-05-15,delivered
+ord-00695,cust-0099,Paid Social,camp-move,2026-03-25,2026-03-30,delivered
+ord-00696,cust-0244,Paid Social,camp-move,2026-01-09,2026-01-14,delivered
+ord-00697,cust-0326,Organic,organic,2026-04-26,,shipped
+ord-00698,cust-0066,DM,camp-private,2026-05-28,2026-05-30,delivered
+ord-00699,cust-0268,Instagram,camp-studio,2025-12-09,2025-12-13,delivered
+ord-00700,cust-0379,Instagram,camp-studio,2026-06-08,2026-06-10,delivered
+ord-00701,cust-0173,Paid Social,camp-move,2026-04-03,,shipped
+ord-00702,cust-0231,Paid Social,camp-move,2026-08-29,,pending
+ord-00703,cust-0344,DM,camp-private,2026-07-10,,shipped
+ord-00704,cust-0363,Paid Social,camp-move,2026-04-12,2026-04-14,delivered
+ord-00705,cust-0062,Organic,organic,2026-08-25,2026-08-27,delivered
+ord-00706,cust-0012,Paid Social,camp-move,2026-03-15,2026-03-19,delivered
+ord-00707,cust-0209,Instagram,camp-studio,2026-09-04,2026-09-08,delivered
+ord-00708,cust-0062,Instagram,camp-studio,2026-08-09,,shipped
+ord-00709,cust-0138,Instagram,camp-studio,2025-11-07,2025-11-09,delivered
+ord-00710,cust-0301,Instagram,camp-studio,2026-09-02,,shipped
+ord-00711,cust-0326,Instagram,camp-studio,2026-06-05,,cancelled
+ord-00712,cust-0238,Instagram,camp-studio,2026-08-11,,cancelled
+ord-00713,cust-0109,Organic,organic,2026-07-18,2026-07-21,delivered
+ord-00714,cust-0063,DM,camp-private,2026-08-04,,cancelled
+ord-00715,cust-0176,Instagram,camp-studio,2026-08-15,,shipped
+ord-00716,cust-0005,Instagram,camp-studio,2026-09-01,2026-09-06,delivered
+ord-00717,cust-0344,DM,camp-private,2026-07-10,2026-07-15,delivered
+ord-00718,cust-0064,Paid Social,camp-move,2026-05-16,2026-05-18,delivered
+ord-00719,cust-0368,Instagram,camp-studio,2026-05-14,2026-05-18,delivered
+ord-00720,cust-0292,Paid Social,camp-move,2026-06-05,2026-06-08,delivered
+ord-00721,cust-0141,Organic,organic,2025-12-29,2026-01-02,delivered
+ord-00722,cust-0333,Organic,organic,2025-10-21,2025-10-26,delivered
+ord-00723,cust-0216,Paid Social,camp-move,2026-06-21,2026-06-24,delivered
+ord-00724,cust-0101,Instagram,camp-studio,2026-09-09,2026-09-11,delivered
+ord-00725,cust-0243,Organic,organic,2026-03-10,,paid
+ord-00726,cust-0318,Organic,organic,2026-05-04,2026-05-06,delivered
+ord-00727,cust-0227,Instagram,camp-studio,2025-10-24,2025-10-26,delivered
+ord-00728,cust-0338,Instagram,camp-studio,2026-08-07,2026-08-12,delivered
+ord-00729,cust-0014,Paid Social,camp-move,2026-09-03,2026-09-05,delivered
+ord-00730,cust-0182,Paid Social,camp-move,2026-04-25,2026-04-28,delivered
+ord-00731,cust-0278,Instagram,camp-studio,2025-12-29,2026-01-02,delivered
+ord-00732,cust-0287,Paid Social,camp-move,2026-01-27,2026-01-30,delivered
+ord-00733,cust-0215,Instagram,camp-studio,2026-03-09,2026-03-11,delivered
+ord-00734,cust-0239,Instagram,camp-studio,2026-08-07,2026-08-11,delivered
+ord-00735,cust-0004,Instagram,camp-studio,2026-03-26,2026-03-28,delivered
+ord-00736,cust-0135,Instagram,camp-studio,2025-12-20,2025-12-23,delivered
+ord-00737,cust-0057,Organic,organic,2026-03-14,2026-03-17,delivered
+ord-00738,cust-0074,Organic,organic,2026-01-19,2026-01-24,delivered
+ord-00739,cust-0024,DM,camp-private,2026-08-03,,paid
+ord-00740,cust-0251,DM,camp-private,2026-06-25,,paid
+ord-00741,cust-0331,Paid Social,camp-move,2026-06-20,2026-06-23,delivered
+ord-00742,cust-0299,Instagram,camp-studio,2026-08-20,2026-08-23,delivered
+ord-00743,cust-0194,Instagram,camp-studio,2026-07-11,,paid
+ord-00744,cust-0173,Paid Social,camp-move,2026-04-28,2026-05-02,delivered
+ord-00745,cust-0120,DM,camp-private,2026-08-17,2026-08-19,delivered
+ord-00746,cust-0185,Paid Social,camp-move,2025-10-11,2025-10-15,delivered
+ord-00747,cust-0134,Organic,organic,2026-01-12,2026-01-16,delivered
+ord-00748,cust-0007,DM,camp-private,2026-05-21,,cancelled
+ord-00749,cust-0108,Instagram,camp-studio,2026-05-22,2026-05-27,delivered
+ord-00750,cust-0066,Organic,organic,2026-02-25,2026-03-01,delivered
+ord-00751,cust-0072,Organic,organic,2026-02-17,,cancelled
+ord-00752,cust-0196,Organic,organic,2026-07-09,2026-07-14,delivered
+ord-00753,cust-0017,DM,camp-private,2026-09-09,2026-09-12,delivered
+ord-00754,cust-0266,Instagram,camp-studio,2026-04-20,,paid
+ord-00755,cust-0106,Organic,organic,2025-11-27,2025-12-02,delivered
+ord-00756,cust-0074,Instagram,camp-studio,2026-05-08,2026-05-11,delivered
+ord-00757,cust-0021,Instagram,camp-studio,2025-11-08,,pending
+ord-00758,cust-0090,Instagram,camp-studio,2026-04-22,,pending
+ord-00759,cust-0202,Organic,organic,2026-09-14,2026-09-17,delivered
+ord-00760,cust-0211,Instagram,camp-studio,2026-07-02,2026-07-04,delivered
+ord-00761,cust-0107,Instagram,camp-studio,2026-06-08,2026-06-13,delivered
+ord-00762,cust-0238,Paid Social,camp-move,2026-08-11,2026-08-14,delivered
+ord-00763,cust-0088,DM,camp-private,2026-09-06,2026-09-08,delivered
+ord-00764,cust-0347,Instagram,camp-studio,2026-07-23,2026-07-26,delivered
+ord-00765,cust-0025,Organic,organic,2026-08-13,,shipped
+ord-00766,cust-0027,Instagram,camp-studio,2026-07-25,,paid
+ord-00767,cust-0050,Instagram,camp-studio,2026-08-28,2026-09-02,delivered
+ord-00768,cust-0320,Organic,organic,2026-01-11,2026-01-16,delivered
+ord-00769,cust-0235,Instagram,camp-studio,2026-01-12,,paid
+ord-00770,cust-0393,Paid Social,camp-move,2026-08-22,,cancelled
+ord-00771,cust-0049,Instagram,camp-studio,2026-07-26,2026-07-31,delivered
+ord-00772,cust-0326,Instagram,camp-studio,2026-09-09,,paid
+ord-00773,cust-0380,Paid Social,camp-move,2026-02-04,,shipped
+ord-00774,cust-0071,Paid Social,camp-move,2026-04-01,2026-04-06,delivered
+ord-00775,cust-0021,Organic,organic,2026-06-15,2026-06-19,delivered
+ord-00776,cust-0277,Organic,organic,2026-01-27,,shipped
+ord-00777,cust-0004,Organic,organic,2025-10-25,2025-10-28,delivered
+ord-00778,cust-0041,DM,camp-private,2026-04-28,2026-05-01,delivered
+ord-00779,cust-0247,Organic,organic,2026-02-11,2026-02-16,delivered
+ord-00780,cust-0196,Organic,organic,2026-07-09,,shipped
+ord-00781,cust-0132,Paid Social,camp-move,2026-04-14,2026-04-19,delivered
+ord-00782,cust-0101,Organic,organic,2026-09-09,2026-09-13,delivered
+ord-00783,cust-0251,DM,camp-private,2026-06-25,2026-06-30,delivered
+ord-00784,cust-0326,Paid Social,camp-move,2026-09-09,2026-09-14,delivered
+ord-00785,cust-0186,DM,camp-private,2026-08-11,2026-08-14,delivered
+ord-00786,cust-0048,DM,camp-private,2026-08-17,2026-08-19,delivered
+ord-00787,cust-0130,Instagram,camp-studio,2026-09-11,,cancelled
+ord-00788,cust-0373,Instagram,camp-studio,2026-08-06,2026-08-10,delivered
+ord-00789,cust-0158,Organic,organic,2026-09-06,,paid
+ord-00790,cust-0361,Instagram,camp-studio,2026-01-22,2026-01-24,delivered
+ord-00791,cust-0094,Instagram,camp-studio,2026-06-22,,pending
+ord-00792,cust-0142,Instagram,camp-studio,2026-08-09,2026-08-14,delivered
+ord-00793,cust-0004,DM,camp-private,2026-08-28,,cancelled
+ord-00794,cust-0243,DM,camp-private,2026-03-13,2026-03-17,delivered
+ord-00795,cust-0313,Organic,organic,2026-09-13,,pending
+ord-00796,cust-0072,DM,camp-private,2026-02-17,,pending
+ord-00797,cust-0339,Instagram,camp-studio,2025-12-27,2025-12-31,delivered
+ord-00798,cust-0042,Paid Social,camp-move,2026-03-19,,pending
+ord-00799,cust-0151,Instagram,camp-studio,2026-07-29,2026-07-31,delivered
+ord-00800,cust-0060,DM,camp-private,2026-07-01,2026-07-04,delivered
+ord-00801,cust-0132,Paid Social,camp-move,2026-08-28,,pending
+ord-00802,cust-0393,Instagram,camp-studio,2026-08-22,2026-08-27,delivered
+ord-00803,cust-0060,Instagram,camp-studio,2026-07-01,2026-07-04,delivered
+ord-00804,cust-0195,DM,camp-private,2026-07-14,2026-07-17,delivered
+ord-00805,cust-0065,DM,camp-private,2026-07-14,2026-07-16,delivered
+ord-00806,cust-0234,DM,camp-private,2026-01-12,2026-01-14,delivered
+ord-00807,cust-0362,Paid Social,camp-move,2026-07-12,,paid
+ord-00808,cust-0171,Organic,organic,2025-12-22,2025-12-25,delivered
+ord-00809,cust-0154,Organic,organic,2026-08-25,2026-08-27,delivered
+ord-00810,cust-0201,Paid Social,camp-move,2026-06-21,2026-06-24,delivered
+ord-00811,cust-0298,Organic,organic,2025-12-16,,shipped
+ord-00812,cust-0150,Instagram,camp-studio,2026-07-24,,paid
+ord-00813,cust-0219,Organic,organic,2026-09-04,,pending
+ord-00814,cust-0077,DM,camp-private,2026-08-09,2026-08-11,delivered
+ord-00815,cust-0399,Organic,organic,2026-08-27,,shipped
+ord-00816,cust-0261,Instagram,camp-studio,2026-01-15,2026-01-20,delivered
+ord-00817,cust-0051,Instagram,camp-studio,2026-03-17,,pending
+ord-00818,cust-0334,Organic,organic,2026-06-09,2026-06-11,delivered
+ord-00819,cust-0106,Instagram,camp-studio,2026-08-22,2026-08-24,delivered
+ord-00820,cust-0266,DM,camp-private,2026-04-20,2026-04-25,delivered
+ord-00821,cust-0108,Instagram,camp-studio,2026-09-09,,paid
+ord-00822,cust-0066,Paid Social,camp-move,2026-08-06,2026-08-10,delivered
+ord-00823,cust-0105,DM,camp-private,2026-03-07,2026-03-10,delivered
+ord-00824,cust-0079,Organic,organic,2026-08-13,2026-08-15,delivered
+ord-00825,cust-0351,Paid Social,camp-move,2026-06-29,2026-07-01,delivered
+ord-00826,cust-0114,Organic,organic,2026-07-09,,paid
+ord-00827,cust-0145,Instagram,camp-studio,2026-07-01,2026-07-03,delivered
+ord-00828,cust-0207,DM,camp-private,2026-05-24,2026-05-27,delivered
+ord-00829,cust-0328,DM,camp-private,2026-07-18,2026-07-23,delivered
+ord-00830,cust-0142,Paid Social,camp-move,2026-08-09,,shipped
+ord-00831,cust-0161,DM,camp-private,2026-08-16,2026-08-19,delivered
+ord-00832,cust-0284,Organic,organic,2026-06-01,2026-06-06,delivered
+ord-00833,cust-0351,Organic,organic,2026-09-03,,shipped
+ord-00834,cust-0379,Organic,organic,2026-08-26,,paid
+ord-00835,cust-0027,Paid Social,camp-move,2026-07-06,2026-07-08,delivered
+ord-00836,cust-0136,Instagram,camp-studio,2026-06-09,2026-06-14,delivered
+ord-00837,cust-0316,Instagram,camp-studio,2026-05-29,2026-05-31,delivered
+ord-00838,cust-0079,Instagram,camp-studio,2026-08-13,2026-08-16,delivered
+ord-00839,cust-0187,Organic,organic,2026-04-29,2026-05-03,delivered
+ord-00840,cust-0364,Instagram,camp-studio,2026-01-01,2026-01-04,delivered
+ord-00841,cust-0251,Paid Social,camp-move,2026-06-30,,shipped
+ord-00842,cust-0056,Instagram,camp-studio,2026-06-23,2026-06-25,delivered
+ord-00843,cust-0378,Paid Social,camp-move,2026-01-09,2026-01-14,delivered
+ord-00844,cust-0127,Organic,organic,2026-08-29,2026-08-31,delivered
+ord-00845,cust-0303,DM,camp-private,2026-08-10,2026-08-13,delivered
+ord-00846,cust-0269,DM,camp-private,2026-09-01,,cancelled
+ord-00847,cust-0180,Paid Social,camp-move,2026-09-21,,pending
+ord-00848,cust-0165,Instagram,camp-studio,2026-05-02,2026-05-04,delivered
+ord-00849,cust-0058,DM,camp-private,2026-04-03,,shipped
+ord-00850,cust-0381,Paid Social,camp-move,2026-07-20,2026-07-24,delivered
+ord-00851,cust-0336,Instagram,camp-studio,2025-12-28,2025-12-30,delivered
+ord-00852,cust-0130,Organic,organic,2026-07-05,,pending
+ord-00853,cust-0269,Organic,organic,2026-09-01,2026-09-05,delivered
+ord-00854,cust-0356,DM,camp-private,2026-03-02,2026-03-04,delivered
+ord-00855,cust-0082,Instagram,camp-studio,2026-07-11,,shipped
+ord-00856,cust-0269,Instagram,camp-studio,2026-09-01,2026-09-05,delivered
+ord-00857,cust-0021,Instagram,camp-studio,2026-08-15,,pending
+ord-00858,cust-0108,Instagram,camp-studio,2026-06-22,,shipped
+ord-00859,cust-0282,DM,camp-private,2026-02-04,2026-02-08,delivered
+ord-00860,cust-0276,Organic,organic,2026-08-24,,paid
+ord-00861,cust-0321,DM,camp-private,2026-08-12,2026-08-17,delivered
+ord-00862,cust-0246,Paid Social,camp-move,2026-01-21,2026-01-24,delivered
+ord-00863,cust-0036,Instagram,camp-studio,2026-02-11,2026-02-16,delivered
+ord-00864,cust-0330,Instagram,camp-studio,2026-06-06,,paid
+ord-00865,cust-0174,Instagram,camp-studio,2026-09-19,,paid
+ord-00866,cust-0246,Instagram,camp-studio,2026-01-21,2026-01-25,delivered
+ord-00867,cust-0053,Organic,organic,2026-06-10,2026-06-12,delivered
+ord-00868,cust-0336,Instagram,camp-studio,2026-02-15,,pending
+ord-00869,cust-0185,Organic,organic,2025-11-04,2025-11-07,delivered
+ord-00870,cust-0342,Instagram,camp-studio,2026-09-08,,paid
+ord-00871,cust-0077,Instagram,camp-studio,2026-08-23,2026-08-28,delivered
+ord-00872,cust-0219,Instagram,camp-studio,2026-08-20,2026-08-23,delivered
+ord-00873,cust-0171,Organic,organic,2025-12-22,,shipped
+ord-00874,cust-0367,Paid Social,camp-move,2026-04-25,,paid
+ord-00875,cust-0105,Paid Social,camp-move,2026-03-07,2026-03-10,delivered
+ord-00876,cust-0399,Instagram,camp-studio,2026-08-27,2026-09-01,delivered
+ord-00877,cust-0014,Organic,organic,2026-09-13,2026-09-15,delivered
+ord-00878,cust-0073,Instagram,camp-studio,2025-11-01,2025-11-06,delivered
+ord-00879,cust-0228,DM,camp-private,2026-08-18,2026-08-21,delivered
+ord-00880,cust-0233,DM,camp-private,2026-07-20,2026-07-24,delivered
+ord-00881,cust-0268,Organic,organic,2026-04-03,2026-04-06,delivered
+ord-00882,cust-0240,Instagram,camp-studio,2026-05-24,,shipped
+ord-00883,cust-0139,Instagram,camp-studio,2025-11-16,2025-11-20,delivered
+ord-00884,cust-0104,Organic,organic,2026-09-07,2026-09-09,delivered
+ord-00885,cust-0048,Instagram,camp-studio,2026-04-04,2026-04-08,delivered
+ord-00886,cust-0397,Instagram,camp-studio,2026-07-02,,paid
+ord-00887,cust-0350,Instagram,camp-studio,2026-05-17,2026-05-20,delivered
+ord-00888,cust-0083,Paid Social,camp-move,2026-06-05,,shipped
+ord-00889,cust-0174,Paid Social,camp-move,2026-08-08,,paid
+ord-00890,cust-0107,DM,camp-private,2026-07-31,,cancelled
+ord-00891,cust-0159,Organic,organic,2026-06-29,,paid
+ord-00892,cust-0152,Instagram,camp-studio,2026-06-19,2026-06-23,delivered
+ord-00893,cust-0072,Organic,organic,2026-02-17,2026-02-21,delivered
+ord-00894,cust-0320,Paid Social,camp-move,2026-03-01,,shipped
+ord-00895,cust-0030,DM,camp-private,2026-09-16,2026-09-19,delivered
+ord-00896,cust-0038,Paid Social,camp-move,2026-01-14,2026-01-16,delivered
+ord-00897,cust-0103,Instagram,camp-studio,2026-04-15,2026-04-20,delivered
+ord-00898,cust-0164,Instagram,camp-studio,2026-07-09,2026-07-14,delivered
+ord-00899,cust-0351,Instagram,camp-studio,2026-04-26,2026-04-28,delivered
+ord-00900,cust-0133,Organic,organic,2026-03-26,2026-03-31,delivered
+ord-00901,cust-0083,Paid Social,camp-move,2026-09-13,,pending
+ord-00902,cust-0371,Paid Social,camp-move,2026-08-29,2026-09-02,delivered
+ord-00903,cust-0328,Instagram,camp-studio,2026-07-18,2026-07-21,delivered
+ord-00904,cust-0179,Organic,organic,2026-01-07,,cancelled
+ord-00905,cust-0158,Organic,organic,2026-09-06,2026-09-11,delivered
+ord-00906,cust-0278,Paid Social,camp-move,2026-04-28,,shipped
+ord-00907,cust-0338,DM,camp-private,2026-09-09,2026-09-11,delivered
+ord-00908,cust-0316,Instagram,camp-studio,2026-05-29,,shipped
+ord-00909,cust-0017,Instagram,camp-studio,2026-08-29,2026-09-01,delivered
+ord-00910,cust-0064,Organic,organic,2026-03-26,,pending
+ord-00911,cust-0138,Instagram,camp-studio,2026-08-25,,paid
+ord-00912,cust-0213,Instagram,camp-studio,2026-06-25,2026-06-29,delivered
+ord-00913,cust-0293,Instagram,camp-studio,2026-08-21,,cancelled
+ord-00914,cust-0373,Paid Social,camp-move,2026-08-06,2026-08-09,delivered
+ord-00915,cust-0296,Organic,organic,2026-04-10,2026-04-14,delivered
+ord-00916,cust-0014,Instagram,camp-studio,2026-09-03,,paid
+ord-00917,cust-0399,Instagram,camp-studio,2026-08-27,,shipped
+ord-00918,cust-0141,Organic,organic,2025-12-09,2025-12-11,delivered
+ord-00919,cust-0186,Paid Social,camp-move,2026-07-25,2026-07-27,delivered
+ord-00920,cust-0092,Paid Social,camp-move,2026-08-25,2026-08-27,delivered
+ord-00921,cust-0131,Instagram,camp-studio,2026-07-17,2026-07-19,delivered
+ord-00922,cust-0112,Instagram,camp-studio,2025-10-25,2025-10-28,delivered
+ord-00923,cust-0224,Organic,organic,2026-06-11,,pending
+ord-00924,cust-0106,Paid Social,camp-move,2026-05-29,2026-06-02,delivered
+ord-00925,cust-0291,Paid Social,camp-move,2026-03-21,2026-03-23,delivered
+ord-00926,cust-0151,Organic,organic,2026-07-28,,shipped
+ord-00927,cust-0166,Organic,organic,2026-04-29,2026-05-01,delivered
+ord-00928,cust-0239,Organic,organic,2026-07-09,,pending
+ord-00929,cust-0288,DM,camp-private,2026-02-11,,pending
+ord-00930,cust-0388,Instagram,camp-studio,2026-05-04,2026-05-07,delivered
+ord-00931,cust-0197,Paid Social,camp-move,2026-01-21,2026-01-23,delivered
+ord-00932,cust-0271,Instagram,camp-studio,2026-08-18,2026-08-23,delivered
+ord-00933,cust-0161,DM,camp-private,2026-08-16,2026-08-21,delivered
+ord-00934,cust-0053,Instagram,camp-studio,2026-02-04,,paid
+ord-00935,cust-0189,Organic,organic,2026-06-24,,pending
+ord-00936,cust-0156,Instagram,camp-studio,2026-09-05,,shipped
+ord-00937,cust-0063,Paid Social,camp-move,2026-08-04,2026-08-09,delivered
+ord-00938,cust-0393,DM,camp-private,2026-08-22,2026-08-25,delivered
+ord-00939,cust-0254,Instagram,camp-studio,2026-07-14,,shipped
+ord-00940,cust-0303,Paid Social,camp-move,2026-06-19,2026-06-23,delivered
+ord-00941,cust-0113,Paid Social,camp-move,2026-03-27,2026-03-30,delivered
+ord-00942,cust-0158,DM,camp-private,2026-09-06,2026-09-08,delivered
+ord-00943,cust-0244,Paid Social,camp-move,2026-08-26,2026-08-28,delivered
+ord-00944,cust-0258,Paid Social,camp-move,2026-04-30,2026-05-04,delivered
+ord-00945,cust-0142,DM,camp-private,2026-08-09,2026-08-11,delivered
+ord-00946,cust-0019,Instagram,camp-studio,2026-07-13,2026-07-15,delivered
+ord-00947,cust-0355,Paid Social,camp-move,2026-06-16,2026-06-19,delivered
+ord-00948,cust-0353,Instagram,camp-studio,2026-07-17,,shipped
+ord-00949,cust-0136,Instagram,camp-studio,2026-06-09,,shipped
+ord-00950,cust-0009,DM,camp-private,2026-07-09,2026-07-12,delivered
+ord-00951,cust-0377,Paid Social,camp-move,2026-06-24,,shipped
+ord-00952,cust-0007,Instagram,camp-studio,2026-03-21,2026-03-26,delivered
+ord-00953,cust-0183,Instagram,camp-studio,2026-06-25,2026-06-30,delivered
+ord-00954,cust-0348,Organic,organic,2026-03-19,2026-03-24,delivered
+ord-00955,cust-0360,Organic,organic,2026-03-16,2026-03-21,delivered
+ord-00956,cust-0005,Organic,organic,2026-06-04,2026-06-07,delivered
+ord-00957,cust-0250,Instagram,camp-studio,2026-02-16,2026-02-21,delivered
+ord-00958,cust-0026,Instagram,camp-studio,2026-01-28,,pending
+ord-00959,cust-0366,Instagram,camp-studio,2026-08-18,,shipped
+ord-00960,cust-0182,Organic,organic,2026-01-27,2026-02-01,delivered
+ord-00961,cust-0297,DM,camp-private,2026-01-21,2026-01-24,delivered
+ord-00962,cust-0224,Instagram,camp-studio,2025-11-22,2025-11-26,delivered
+ord-00963,cust-0239,Organic,organic,2026-04-25,2026-04-27,delivered
+ord-00964,cust-0125,Paid Social,camp-move,2026-07-16,2026-07-20,delivered
+ord-00965,cust-0044,Instagram,camp-studio,2026-01-10,,cancelled
+ord-00966,cust-0346,DM,camp-private,2026-07-15,2026-07-18,delivered
+ord-00967,cust-0346,Organic,organic,2026-08-15,2026-08-19,delivered
+ord-00968,cust-0103,Instagram,camp-studio,2026-01-12,2026-01-14,delivered
+ord-00969,cust-0259,Paid Social,camp-move,2026-05-07,,pending
+ord-00970,cust-0222,DM,camp-private,2026-06-13,2026-06-16,delivered
+ord-00971,cust-0055,Paid Social,camp-move,2026-05-17,2026-05-19,delivered
+ord-00972,cust-0182,Paid Social,camp-move,2025-12-13,,shipped
+ord-00973,cust-0263,Instagram,camp-studio,2026-04-30,2026-05-04,delivered
+ord-00974,cust-0338,Organic,organic,2026-07-23,2026-07-28,delivered
+ord-00975,cust-0166,Organic,organic,2026-07-20,2026-07-25,delivered
+ord-00976,cust-0396,Instagram,camp-studio,2026-08-29,,pending
+ord-00977,cust-0129,Instagram,camp-studio,2026-07-18,,shipped
+ord-00978,cust-0358,Paid Social,camp-move,2026-05-10,,cancelled
+ord-00979,cust-0147,Instagram,camp-studio,2026-01-15,2026-01-18,delivered
+ord-00980,cust-0291,Organic,organic,2026-06-28,2026-07-03,delivered
+ord-00981,cust-0225,DM,camp-private,2026-04-28,,pending
+ord-00982,cust-0256,Instagram,camp-studio,2026-01-24,2026-01-26,delivered
+ord-00983,cust-0295,Organic,organic,2026-01-23,,pending
+ord-00984,cust-0057,Paid Social,camp-move,2026-07-17,,pending
+ord-00985,cust-0376,Organic,organic,2026-03-09,,shipped
+ord-00986,cust-0360,Instagram,camp-studio,2026-03-01,2026-03-06,delivered
+ord-00987,cust-0067,DM,camp-private,2026-09-17,2026-09-21,delivered
+ord-00988,cust-0195,DM,camp-private,2026-09-06,2026-09-11,delivered
+ord-00989,cust-0316,Instagram,camp-studio,2026-05-29,2026-05-31,delivered
+ord-00990,cust-0008,Organic,organic,2026-01-27,2026-01-30,delivered
+ord-00991,cust-0126,Instagram,camp-studio,2026-07-06,2026-07-08,delivered
+ord-00992,cust-0377,Organic,organic,2026-06-24,,paid
+ord-00993,cust-0335,Paid Social,camp-move,2026-01-25,2026-01-27,delivered
+ord-00994,cust-0380,Instagram,camp-studio,2026-07-02,2026-07-05,delivered
+ord-00995,cust-0139,DM,camp-private,2026-02-11,2026-02-13,delivered
+ord-00996,cust-0195,DM,camp-private,2026-01-23,2026-01-27,delivered
+ord-00997,cust-0015,DM,camp-private,2026-06-28,2026-07-03,delivered
+ord-00998,cust-0284,Organic,organic,2026-04-08,,pending
+ord-00999,cust-0196,DM,camp-private,2026-07-09,,pending
+ord-01000,cust-0020,Instagram,camp-studio,2026-08-03,2026-08-07,delivered
+ord-01001,cust-0292,Instagram,camp-studio,2026-08-26,2026-08-29,delivered
+ord-01002,cust-0184,DM,camp-private,2026-06-20,2026-06-25,delivered
+ord-01003,cust-0142,Organic,organic,2026-08-09,2026-08-12,delivered
+ord-01004,cust-0022,DM,camp-private,2026-07-02,2026-07-06,delivered
+ord-01005,cust-0167,Paid Social,camp-move,2026-07-11,,paid
+ord-01006,cust-0334,Paid Social,camp-move,2026-06-09,,cancelled
+ord-01007,cust-0303,Instagram,camp-studio,2026-04-15,2026-04-19,delivered
+ord-01008,cust-0111,Organic,organic,2026-04-03,2026-04-06,delivered
+ord-01009,cust-0323,DM,camp-private,2026-06-29,2026-07-01,delivered
+ord-01010,cust-0269,Paid Social,camp-move,2026-09-01,2026-09-05,delivered
+ord-01011,cust-0384,DM,camp-private,2026-01-25,2026-01-30,delivered
+ord-01012,cust-0215,Paid Social,camp-move,2026-01-17,,paid
+ord-01013,cust-0061,Paid Social,camp-move,2026-02-19,2026-02-22,delivered
+ord-01014,cust-0233,Instagram,camp-studio,2026-07-20,2026-07-25,delivered
+ord-01015,cust-0086,Instagram,camp-studio,2026-02-05,,pending
+ord-01016,cust-0286,DM,camp-private,2026-05-16,2026-05-20,delivered
+ord-01017,cust-0182,Organic,organic,2026-05-09,2026-05-14,delivered
+ord-01018,cust-0004,DM,camp-private,2026-07-22,,shipped
+ord-01019,cust-0144,Instagram,camp-studio,2026-09-05,2026-09-07,delivered
+ord-01020,cust-0219,Instagram,camp-studio,2026-08-20,2026-08-23,delivered
+ord-01021,cust-0295,Instagram,camp-studio,2026-08-03,2026-08-06,delivered
+ord-01022,cust-0106,Organic,organic,2026-07-01,,shipped
+ord-01023,cust-0293,DM,camp-private,2026-08-21,2026-08-26,delivered
+ord-01024,cust-0375,Instagram,camp-studio,2026-08-30,2026-09-01,delivered
+ord-01025,cust-0172,Paid Social,camp-move,2026-06-08,,shipped
+ord-01026,cust-0362,Instagram,camp-studio,2026-06-15,,paid
+ord-01027,cust-0126,DM,camp-private,2026-07-06,,pending
+ord-01028,cust-0046,Organic,organic,2026-06-13,,shipped
+ord-01029,cust-0195,DM,camp-private,2026-08-11,2026-08-16,delivered
+ord-01030,cust-0343,Paid Social,camp-move,2026-05-28,2026-06-01,delivered
+ord-01031,cust-0387,Paid Social,camp-move,2026-02-16,2026-02-19,delivered
+ord-01032,cust-0178,Paid Social,camp-move,2026-09-13,2026-09-18,delivered
+ord-01033,cust-0015,Instagram,camp-studio,2026-06-28,2026-07-03,delivered
+ord-01034,cust-0028,Paid Social,camp-move,2026-02-06,2026-02-08,delivered
+ord-01035,cust-0310,Instagram,camp-studio,2026-06-25,,shipped
+ord-01036,cust-0284,DM,camp-private,2025-12-24,2025-12-28,delivered
+ord-01037,cust-0368,Instagram,camp-studio,2026-05-14,2026-05-18,delivered
+ord-01038,cust-0249,Instagram,camp-studio,2026-05-28,2026-05-31,delivered
+ord-01039,cust-0259,Organic,organic,2026-09-17,2026-09-19,delivered
+ord-01040,cust-0201,Organic,organic,2026-06-21,,paid
+ord-01041,cust-0104,Instagram,camp-studio,2026-09-07,,shipped
+ord-01042,cust-0288,Paid Social,camp-move,2026-02-11,,pending
+ord-01043,cust-0191,DM,camp-private,2026-06-28,2026-06-30,delivered
+ord-01044,cust-0043,Paid Social,camp-move,2025-12-10,2025-12-15,delivered
+ord-01045,cust-0268,Organic,organic,2026-07-09,2026-07-14,delivered
+ord-01046,cust-0138,Instagram,camp-studio,2026-09-10,2026-09-15,delivered
+ord-01047,cust-0248,Paid Social,camp-move,2026-08-30,,shipped
+ord-01048,cust-0066,Instagram,camp-studio,2025-12-29,,shipped
+ord-01049,cust-0281,Paid Social,camp-move,2026-05-09,2026-05-14,delivered
+ord-01050,cust-0315,Paid Social,camp-move,2026-08-26,2026-08-30,delivered
+ord-01051,cust-0242,Instagram,camp-studio,2026-05-16,2026-05-19,delivered
+ord-01052,cust-0003,DM,camp-private,2026-02-28,2026-03-02,delivered
+ord-01053,cust-0081,Instagram,camp-studio,2025-12-14,2025-12-17,delivered
+ord-01054,cust-0189,Organic,organic,2026-08-07,,pending
+ord-01055,cust-0053,Instagram,camp-studio,2026-02-04,2026-02-06,delivered
+ord-01056,cust-0002,Organic,organic,2026-01-18,2026-01-21,delivered
+ord-01057,cust-0218,Paid Social,camp-move,2026-08-31,2026-09-02,delivered
+ord-01058,cust-0310,Organic,organic,2026-05-12,,pending
+ord-01059,cust-0251,Organic,organic,2026-09-12,,shipped
+ord-01060,cust-0188,Organic,organic,2026-05-30,2026-06-04,delivered
+ord-01061,cust-0270,Instagram,camp-studio,2026-08-22,2026-08-24,delivered
+ord-01062,cust-0018,Instagram,camp-studio,2026-08-19,2026-08-21,delivered
+ord-01063,cust-0293,Organic,organic,2026-08-21,,pending
+ord-01064,cust-0332,Organic,organic,2026-06-28,2026-06-30,delivered
+ord-01065,cust-0068,Paid Social,camp-move,2025-11-03,,paid
+ord-01066,cust-0009,Organic,organic,2026-03-11,,paid
+ord-01067,cust-0343,Instagram,camp-studio,2025-11-22,,paid
+ord-01068,cust-0142,Instagram,camp-studio,2026-08-09,2026-08-12,delivered
+ord-01069,cust-0180,Instagram,camp-studio,2025-12-09,2025-12-11,delivered
+ord-01070,cust-0045,Instagram,camp-studio,2026-03-13,2026-03-15,delivered
+ord-01071,cust-0042,Instagram,camp-studio,2026-02-11,,shipped
+ord-01072,cust-0028,DM,camp-private,2026-04-04,2026-04-07,delivered
+ord-01073,cust-0179,Paid Social,camp-move,2026-08-16,,paid
+ord-01074,cust-0108,Paid Social,camp-move,2026-09-16,,shipped
+ord-01075,cust-0283,Instagram,camp-studio,2026-04-26,,paid
+ord-01076,cust-0166,Paid Social,camp-move,2026-03-31,,shipped
+ord-01077,cust-0005,Paid Social,camp-move,2025-12-12,2025-12-14,delivered
+ord-01078,cust-0295,Paid Social,camp-move,2026-09-12,2026-09-15,delivered
+ord-01079,cust-0219,Organic,organic,2026-08-20,2026-08-22,delivered
+ord-01080,cust-0067,Instagram,camp-studio,2026-09-17,,cancelled
+ord-01081,cust-0085,Instagram,camp-studio,2026-08-31,2026-09-03,delivered
+ord-01082,cust-0398,Instagram,camp-studio,2026-04-01,2026-04-03,delivered
+ord-01083,cust-0343,Organic,organic,2026-04-02,,shipped
+ord-01084,cust-0069,Organic,organic,2026-04-14,,pending
+ord-01085,cust-0037,Paid Social,camp-move,2026-03-18,,shipped
+ord-01086,cust-0175,Organic,organic,2026-06-05,2026-06-10,delivered
+ord-01087,cust-0109,Paid Social,camp-move,2026-03-02,2026-03-05,delivered
+ord-01088,cust-0018,Organic,organic,2026-04-26,2026-04-29,delivered
+ord-01089,cust-0007,Instagram,camp-studio,2025-12-13,2025-12-18,delivered
+ord-01090,cust-0400,DM,camp-private,2026-05-22,,paid
+ord-01091,cust-0197,Instagram,camp-studio,2026-09-02,2026-09-06,delivered
+ord-01092,cust-0236,Instagram,camp-studio,2026-03-28,2026-04-01,delivered
+ord-01093,cust-0167,DM,camp-private,2026-05-12,2026-05-16,delivered
+ord-01094,cust-0274,Instagram,camp-studio,2026-04-16,2026-04-21,delivered
+ord-01095,cust-0376,Paid Social,camp-move,2026-06-17,2026-06-21,delivered
+ord-01096,cust-0217,Instagram,camp-studio,2026-04-15,,cancelled
+ord-01097,cust-0316,Paid Social,camp-move,2026-06-12,,paid
+ord-01098,cust-0224,DM,camp-private,2026-02-09,,paid
+ord-01099,cust-0010,DM,camp-private,2026-04-22,2026-04-27,delivered
+ord-01100,cust-0010,Instagram,camp-studio,2026-09-20,,paid
+ord-01101,cust-0326,Instagram,camp-studio,2026-07-23,2026-07-25,delivered
+ord-01102,cust-0345,Instagram,camp-studio,2026-04-09,2026-04-11,delivered
+ord-01103,cust-0272,Instagram,camp-studio,2026-03-30,,shipped
+ord-01104,cust-0320,Paid Social,camp-move,2026-03-21,2026-03-23,delivered
+ord-01105,cust-0276,Paid Social,camp-move,2025-11-28,,pending
+ord-01106,cust-0282,Instagram,camp-studio,2026-04-19,2026-04-23,delivered
+ord-01107,cust-0254,Instagram,camp-studio,2026-07-14,,pending
+ord-01108,cust-0350,Paid Social,camp-move,2025-11-11,,shipped
+ord-01109,cust-0313,Paid Social,camp-move,2026-09-13,2026-09-18,delivered
+ord-01110,cust-0242,Instagram,camp-studio,2026-09-07,2026-09-12,delivered
+ord-01111,cust-0123,Paid Social,camp-move,2026-02-04,,shipped
+ord-01112,cust-0124,Organic,organic,2025-12-21,2025-12-23,delivered
+ord-01113,cust-0036,DM,camp-private,2026-02-11,,shipped
+ord-01114,cust-0367,DM,camp-private,2026-07-29,2026-07-31,delivered
+ord-01115,cust-0372,Paid Social,camp-move,2026-05-14,,shipped
+ord-01116,cust-0135,Organic,organic,2026-07-15,2026-07-18,delivered
+ord-01117,cust-0038,Organic,organic,2026-05-14,2026-05-17,delivered
+ord-01118,cust-0359,Paid Social,camp-move,2026-08-30,2026-09-02,delivered
+ord-01119,cust-0325,Paid Social,camp-move,2026-03-01,2026-03-05,delivered
+ord-01120,cust-0109,Instagram,camp-studio,2026-07-17,2026-07-21,delivered
+ord-01121,cust-0257,Paid Social,camp-move,2026-05-22,2026-05-27,delivered
+ord-01122,cust-0195,DM,camp-private,2026-01-23,2026-01-26,delivered
+ord-01123,cust-0236,Organic,organic,2026-07-10,,pending
+ord-01124,cust-0284,Organic,organic,2026-06-22,2026-06-24,delivered
+ord-01125,cust-0379,DM,camp-private,2026-06-08,,shipped
+ord-01126,cust-0098,Organic,organic,2026-04-04,2026-04-08,delivered
+ord-01127,cust-0038,Paid Social,camp-move,2025-12-31,2026-01-05,delivered
+ord-01128,cust-0227,Instagram,camp-studio,2026-08-17,,paid
+ord-01129,cust-0308,Paid Social,camp-move,2026-04-09,2026-04-14,delivered
+ord-01130,cust-0128,Instagram,camp-studio,2026-03-15,2026-03-19,delivered
+ord-01131,cust-0261,Paid Social,camp-move,2026-05-20,2026-05-25,delivered
+ord-01132,cust-0276,Instagram,camp-studio,2025-12-24,2025-12-27,delivered
+ord-01133,cust-0080,Instagram,camp-studio,2026-03-27,,shipped
+ord-01134,cust-0265,DM,camp-private,2026-05-22,,paid
+ord-01135,cust-0156,Instagram,camp-studio,2026-09-05,2026-09-09,delivered
+ord-01136,cust-0391,Instagram,camp-studio,2026-04-23,,pending
+ord-01137,cust-0132,Organic,organic,2026-04-14,2026-04-19,delivered
+ord-01138,cust-0111,Paid Social,camp-move,2026-08-04,,paid
+ord-01139,cust-0200,Organic,organic,2026-09-09,,shipped
+ord-01140,cust-0225,Instagram,camp-studio,2026-02-14,2026-02-16,delivered
+ord-01141,cust-0339,Paid Social,camp-move,2026-02-02,,paid
+ord-01142,cust-0161,Organic,organic,2026-08-16,2026-08-19,delivered
+ord-01143,cust-0383,Instagram,camp-studio,2025-10-27,,shipped
+ord-01144,cust-0031,Paid Social,camp-move,2026-06-28,2026-06-30,delivered
+ord-01145,cust-0295,DM,camp-private,2026-03-11,,shipped
+ord-01146,cust-0263,Paid Social,camp-move,2026-04-30,2026-05-03,delivered
+ord-01147,cust-0379,DM,camp-private,2026-06-08,2026-06-12,delivered
+ord-01148,cust-0206,Instagram,camp-studio,2026-07-13,2026-07-18,delivered
+ord-01149,cust-0341,Organic,organic,2026-01-20,2026-01-24,delivered
+ord-01150,cust-0076,Instagram,camp-studio,2026-04-04,2026-04-06,delivered
+ord-01151,cust-0118,Instagram,camp-studio,2026-08-24,2026-08-29,delivered
+ord-01152,cust-0226,Organic,organic,2026-01-15,2026-01-20,delivered
+ord-01153,cust-0225,Instagram,camp-studio,2026-04-14,,paid
+ord-01154,cust-0371,Instagram,camp-studio,2026-06-13,,shipped
+ord-01155,cust-0185,Instagram,camp-studio,2026-05-24,2026-05-29,delivered
+ord-01156,cust-0223,Instagram,camp-studio,2026-08-21,,cancelled
+ord-01157,cust-0024,Organic,organic,2026-06-07,2026-06-09,delivered
+ord-01158,cust-0090,Organic,organic,2026-06-14,,shipped
+ord-01159,cust-0105,Paid Social,camp-move,2026-03-07,2026-03-11,delivered
+ord-01160,cust-0241,DM,camp-private,2025-10-26,2025-10-31,delivered
+ord-01161,cust-0034,Organic,organic,2026-05-09,2026-05-14,delivered
+ord-01162,cust-0001,Paid Social,camp-move,2026-02-28,,pending
+ord-01163,cust-0293,Instagram,camp-studio,2026-08-21,2026-08-24,delivered
+ord-01164,cust-0095,Instagram,camp-studio,2026-08-25,,shipped
+ord-01165,cust-0137,Instagram,camp-studio,2026-06-01,2026-06-04,delivered
+ord-01166,cust-0198,Instagram,camp-studio,2026-08-11,2026-08-14,delivered
+ord-01167,cust-0097,Organic,organic,2026-08-09,,cancelled
+ord-01168,cust-0173,Organic,organic,2026-03-13,2026-03-17,delivered
+ord-01169,cust-0343,Organic,organic,2026-03-16,2026-03-20,delivered
+ord-01170,cust-0235,Instagram,camp-studio,2025-11-17,,shipped
+ord-01171,cust-0262,Instagram,camp-studio,2026-08-25,,shipped
+ord-01172,cust-0078,Organic,organic,2026-07-07,2026-07-11,delivered
+ord-01173,cust-0052,Instagram,camp-studio,2026-09-05,2026-09-08,delivered
+ord-01174,cust-0313,Organic,organic,2026-09-13,2026-09-18,delivered
+ord-01175,cust-0376,DM,camp-private,2026-08-01,2026-08-06,delivered
+ord-01176,cust-0128,Instagram,camp-studio,2026-03-20,,cancelled
+ord-01177,cust-0345,Organic,organic,2026-02-10,2026-02-12,delivered
+ord-01178,cust-0153,Paid Social,camp-move,2026-01-28,2026-01-31,delivered
+ord-01179,cust-0131,DM,camp-private,2026-07-17,2026-07-20,delivered
+ord-01180,cust-0116,Instagram,camp-studio,2026-06-16,,cancelled
+ord-01181,cust-0341,Organic,organic,2026-06-02,,cancelled
+ord-01182,cust-0376,Organic,organic,2026-02-10,,shipped
+ord-01183,cust-0114,Paid Social,camp-move,2026-07-21,2026-07-26,delivered
+ord-01184,cust-0342,Instagram,camp-studio,2026-04-16,2026-04-18,delivered
+ord-01185,cust-0364,Paid Social,camp-move,2026-07-28,2026-07-30,delivered
+ord-01186,cust-0222,Organic,organic,2026-08-30,2026-09-02,delivered
+ord-01187,cust-0130,Organic,organic,2026-04-29,2026-05-02,delivered
+ord-01188,cust-0395,DM,camp-private,2026-06-29,,shipped
+ord-01189,cust-0171,DM,camp-private,2026-03-21,,shipped
+ord-01190,cust-0047,Paid Social,camp-move,2026-08-15,2026-08-18,delivered
+ord-01191,cust-0225,Organic,organic,2026-03-26,,cancelled
+ord-01192,cust-0365,Organic,organic,2026-08-31,,shipped
+ord-01193,cust-0069,Instagram,camp-studio,2026-04-07,,cancelled
+ord-01194,cust-0043,Organic,organic,2026-03-06,2026-03-08,delivered
+ord-01195,cust-0226,Organic,organic,2026-08-19,2026-08-23,delivered
+ord-01196,cust-0266,Paid Social,camp-move,2026-07-16,2026-07-21,delivered
+ord-01197,cust-0187,Instagram,camp-studio,2026-03-06,2026-03-09,delivered
+ord-01198,cust-0275,Instagram,camp-studio,2026-03-14,,paid
+ord-01199,cust-0255,Paid Social,camp-move,2026-07-21,,cancelled
+ord-01200,cust-0034,Paid Social,camp-move,2026-05-09,,pending

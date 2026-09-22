@@ -1,0 +1,22 @@
+{
+  "contract_id": "LTD-01",
+  "id": "lead-to-delivery",
+  "version": "2.0.0",
+  "owner": "commercial_operations_owner",
+  "initial_state": "NEW",
+  "terminal_states": ["DELIVERED", "LOST", "CANCELLED", "BLOCKED"],
+  "transitions": [
+    {"event": "lead_captured", "from": ["NEW"], "to": "LEAD_OPEN", "gate": "lead_source"},
+    {"event": "lead_qualified", "from": ["LEAD_OPEN"], "to": "LEAD_QUALIFIED", "gate": "reason"},
+    {"event": "lead_lost", "from": ["LEAD_OPEN", "LEAD_QUALIFIED"], "to": "LOST", "gate": "reason"},
+    {"event": "order_placed", "from": ["LEAD_OPEN", "LEAD_QUALIFIED"], "to": "ORDER_PLACED", "gate": "valid_order"},
+    {"event": "order_accepted", "from": ["ORDER_PLACED"], "to": "WAITING_SETTLEMENT", "gate": "order_policy"},
+    {"event": "payment_settled", "from": ["WAITING_SETTLEMENT"], "to": "READY_TO_RESERVE", "gate": "settlement"},
+    {"event": "payment_failed", "from": ["WAITING_SETTLEMENT"], "to": "WAITING_SETTLEMENT", "gate": "payment_attempt"},
+    {"event": "inventory_reserved", "from": ["READY_TO_RESERVE"], "to": "RESERVED", "gate": "available_stock"},
+    {"event": "fulfilment_started", "from": ["RESERVED"], "to": "FULFILMENT_READY", "gate": "reserved_quantity"},
+    {"event": "shipment_posted", "from": ["FULFILMENT_READY", "PARTIALLY_SHIPPED"], "to": "SHIPPED", "gate": "shipment_quantity"},
+    {"event": "delivery_confirmed", "from": ["SHIPPED", "PARTIALLY_DELIVERED"], "to": "DELIVERED", "gate": "delivery_quantity"},
+    {"event": "order_cancelled", "from": ["ORDER_PLACED", "WAITING_SETTLEMENT", "READY_TO_RESERVE", "RESERVED"], "to": "CANCELLED", "gate": "reason"}
+  ]
+}

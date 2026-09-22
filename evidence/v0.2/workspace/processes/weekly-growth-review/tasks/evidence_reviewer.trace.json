@@ -1,0 +1,153 @@
+{
+  "completed_at_utc": "2026-09-22T09:25:19.512859+00:00",
+  "evidence_hash": "93d649c342803d377dffa6a8b93a7e53d285652537a51ee469a8b4a6d78a0959",
+  "external_business_actions": "PROHIBITED",
+  "kind": "native-independent-review-query-trace",
+  "process_id": "weekly-growth-review",
+  "queries": [
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart customer_cohorts",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "5c3b80868f4e6ce33f197946fde850108ffd1dc551546fe4af32de075cdc08f2",
+      "row_count": 13
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart finance_monthly",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "668729a23bc1632e0012d97ae49d3320239ecd8b3b7729dc27fcc220236bd988",
+      "row_count": 13
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart experiment_results",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "f44aac0b132aa6ca8d2a15c46f5427c3fdfa97035a339b40510916c74595fe3f",
+      "row_count": 2
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart funnel_conversion",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "a3528889c352eb61da1204a6c790fda000e13a64bb82e12721732676c8421f78",
+      "row_count": 4
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart channel_performance",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "73f2149cd09e9c396f5add5ca5115d8e01d99c0bddfd6558ee948a1c4006410c",
+      "row_count": 4
+    }
+  ],
+  "questions": [
+    "Coinciden las observaciones de cohorte y el corte parcial con sus denominadores?",
+    "Se está evaluando conversión o la contribución primaria realmente declarada?",
+    "El tamaño muestral y los intervalos corresponden al estimando monetario y a la unidad de asignación?"
+  ],
+  "recomputed": {
+    "as_of": "2026-09-21",
+    "channel_attribution_flags": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "dm_instagram_rate_difference": 0.1723,
+    "experiment_arms": [
+      {
+        "arm": "control",
+        "assigned": 32,
+        "contribution_sum_cents": 71200,
+        "conversion_rate": 0.40625,
+        "converted": 13,
+        "declared_guardrail": "return_rate_under_10_percent",
+        "declared_primary_metric": "contribution_cents_per_visit",
+        "mean_contribution_per_assigned_cents": 2225.0,
+        "returned_count": 0,
+        "wilson_95_recomputed": [
+          0.2551963484266544,
+          0.5773997512461714
+        ]
+      },
+      {
+        "arm": "treatment",
+        "assigned": 35,
+        "contribution_sum_cents": 77140,
+        "conversion_rate": 0.34285714285714286,
+        "converted": 12,
+        "declared_guardrail": "return_rate_under_10_percent",
+        "declared_primary_metric": "contribution_cents_per_visit",
+        "mean_contribution_per_assigned_cents": 2204.0,
+        "returned_count": 0,
+        "wilson_95_recomputed": [
+          0.20831694987048963,
+          0.5084805048600374
+        ]
+      }
+    ],
+    "experiment_comparisons": {
+      "contribution_mean_difference_per_assigned_cents": -21.0,
+      "contribution_uncertainty": "Not recoverable from bound aggregate sums alone; no individual distribution, sum of squares or unit-aligned variance. Wilson intervals and 1774-per-arm binary planning do not quantify monetary mean uncertainty.",
+      "conversion_difference_treatment_minus_control": -0.06339285714285714,
+      "raw_contribution_total_difference_cents": 5940,
+      "srm_p_recomputed": 0.713985795669382
+    },
+    "last_finance_month": {
+      "cash_coverage_known": 1,
+      "cogs_cents": 1744700,
+      "contribution_after_variable_cents": 2700622,
+      "cost_coverage_known": 1,
+      "expense_accrual_cents": 26538,
+      "expense_coverage_known": 1,
+      "gross_profit_cents": 2711106,
+      "month": "2026-09",
+      "net_cash_change_cents": 4579725,
+      "net_revenue_cents": 4455806,
+      "operating_after_all_expenses_cents": 2684568,
+      "revenue_coverage_known": 1,
+      "variable_expense_cents": 10484
+    },
+    "recent_cohorts": [
+      {
+        "cohort_coverage_known": 1,
+        "cohort_customers": 36,
+        "cohort_month": "2026-08",
+        "eligible_customers_30d": 24,
+        "immature_customers": 12,
+        "repeat_within_30d_customers": 13,
+        "repeat_within_30d_rate": 0.5417
+      },
+      {
+        "cohort_coverage_known": 1,
+        "cohort_customers": 27,
+        "cohort_month": "2026-09",
+        "eligible_customers_30d": 0,
+        "immature_customers": 27,
+        "repeat_within_30d_customers": null,
+        "repeat_within_30d_rate": null
+      }
+    ]
+  },
+  "request_id": "019045af923a6f2a3e68948129b5ec2d98e541e9a2c424aa8be4022b04d171bd",
+  "response_sha256": "e0ec6b2b4026da655ae185210a093245ff7ec6f975d38260366dbbd813276463",
+  "response_validation": {
+    "facts_checked": 6,
+    "request_id": "019045af923a6f2a3e68948129b5ec2d98e541e9a2c424aa8be4022b04d171bd",
+    "scope": "schema, immutable evidence, exact observation values and authority; prose meaning requires reviewer",
+    "valid": true
+  },
+  "reviewer": "/root/astra_v2_review",
+  "semantic_challenges": [
+    "Recalculé las tasas, la diferencia de conversión de -0.06339285714285714, ambos intervalos Wilson y SRM p=0.713985795669382; coinciden. Son diagnósticos binomiales y de asignación, no pruebas de efecto sobre contribución.",
+    "La contribución total es 71,200 centavos en 32 controles y 77,140 en 35 tratamientos. El mayor total de tratamiento se debe comparar con su mayor población: las medias son 2,225 y 2,204 centavos por asignación. No sustituir la métrica primaria por conversión ni llamar por visita a un denominador de personas sin explicitar la relación.",
+    "El ejemplo de 1,774 observaciones por brazo usa conversión binaria con baseline 0.10 y MDE 0.03. No dimensiona directamente una prueba de contribución monetaria; predeclarar estimando, unidad, varianza/piloto, MDE monetario y método de incertidumbre adecuados.",
+    "La propuesta de retención debe elegir entre una cohorte mensual completamente madura o un subconjunto maduro dentro de ella. eligible_customers_30d > 0 no significa que toda la cohorte completó la ventana; agosto ilustra esa diferencia.",
+    "Preferir no estimable por inmadurez en la prosa de septiembre: nula puede leerse como cero aunque el valor correcto sea NULL. El análisis identifica correctamente el mes parcial y no debe convertirlo en comparación mensual completa.",
+    "Definir el denominador y la madurez del guardrail de devoluciones. Cero devoluciones observadas en 32/35 asignaciones no garantiza riesgo inferior a 10%, especialmente si el denominador previsto son compras o unidades."
+  ],
+  "synthetic_business_data": true,
+  "verdict": "REVIEW",
+  "version": "2.0"
+}

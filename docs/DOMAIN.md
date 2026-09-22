@@ -1,3 +1,5 @@
+> Historical v0.1 reference. Current implementation and acceptance: [v0.2 PRD](../specs/PRD.md), [runbook](RUNBOOK-v2.md), and [release evidence](RELEASE.md).
+
 # Alma de Lujo Growth OS — provisional domain contract
 
 Status: **v0 provisional; owner discovery required**

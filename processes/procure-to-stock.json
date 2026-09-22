@@ -1,0 +1,67 @@
+{
+  "agent": "merchandiser",
+  "business_flow": "catalog → purchase order → partial receipts → ledger → count reconciliation → replenishment proposal",
+  "completion": "validated analyst response + separate native reviewer + immutable decision packet",
+  "external_execution": "PROHIBITED",
+  "id": "procure-to-stock",
+  "idempotency": "canonical workspace manifest + versioned process definition",
+  "marts": [
+    "inventory_position",
+    "inventory_aging",
+    "procurement",
+    "reconciliation"
+  ],
+  "owner": "Responsable de compras e inventario",
+  "owner_status": "provisional functional role; no invented person",
+  "required_tables": [
+    "products",
+    "variants",
+    "purchase_orders",
+    "purchase_receipts",
+    "supplier_payments",
+    "movements",
+    "reservations",
+    "inventory_counts"
+  ],
+  "retry": "resume same inputs; changed data or contract requires new workspace",
+  "reviewer": "evidence_reviewer",
+  "states": [
+    "NEW",
+    "VALIDATING",
+    "ANALYZING",
+    "WAITING_AGENT",
+    "WAITING_REVIEW",
+    "REVIEW",
+    "READY_FOR_OWNER",
+    "BLOCKED"
+  ],
+  "steps": [
+    {
+      "failure": "BLOCKED",
+      "id": "source_contract",
+      "type": "deterministic"
+    },
+    {
+      "failure": "BLOCKED",
+      "id": "sql_marts",
+      "type": "deterministic"
+    },
+    {
+      "failure": "WAITING_AGENT",
+      "id": "native_analysis",
+      "type": "native_agent"
+    },
+    {
+      "failure": "WAITING_REVIEW",
+      "id": "independent_review",
+      "type": "native_agent"
+    },
+    {
+      "failure": "BLOCKED",
+      "id": "decision_packet",
+      "type": "deterministic"
+    }
+  ],
+  "trigger": "Recepción, conteo o revisión semanal",
+  "version": "2.0"
+}

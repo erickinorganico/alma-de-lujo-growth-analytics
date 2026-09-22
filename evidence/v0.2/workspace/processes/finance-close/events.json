@@ -1,0 +1,158 @@
+[
+  {
+    "checkpoint": {
+      "definition_hash": "c33026f68d33fae8ff34ef5a22ebbd9b558e8575cd359c0710af0b217bb8877c",
+      "input_hash": "fb881b2b18d348b1f41210fb6120e18d39709fbdbf290ae87cfc2e9d4acca844",
+      "owner": "Responsable de finanzas de gestión",
+      "process_id": "finance-close",
+      "responses": {},
+      "run_id": "9c11cff2c4641b9a606d2f7f",
+      "status": "VALIDATING",
+      "step": "source_contract",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "required_tables": [
+        "orders",
+        "order_items",
+        "payments",
+        "refunds",
+        "credit_notes",
+        "expenses",
+        "expense_payments",
+        "supplier_payments"
+      ]
+    },
+    "from_status": "NEW",
+    "hash": "b611685432c91bf0b8022283c05cc39d8dc600ec9e066bff510b4296c7fdf875",
+    "previous_hash": "GENESIS",
+    "sequence": 1,
+    "step": "source_contract",
+    "to_status": "VALIDATING"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "c33026f68d33fae8ff34ef5a22ebbd9b558e8575cd359c0710af0b217bb8877c",
+      "input_hash": "fb881b2b18d348b1f41210fb6120e18d39709fbdbf290ae87cfc2e9d4acca844",
+      "owner": "Responsable de finanzas de gestión",
+      "process_id": "finance-close",
+      "responses": {},
+      "run_id": "9c11cff2c4641b9a606d2f7f",
+      "status": "ANALYZING",
+      "step": "sql_marts",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "evidence_hash": "fb881b2b18d348b1f41210fb6120e18d39709fbdbf290ae87cfc2e9d4acca844",
+      "marts": [
+        "finance_monthly",
+        "cash_daily",
+        "procurement",
+        "reconciliation"
+      ]
+    },
+    "from_status": "VALIDATING",
+    "hash": "793654f152f69649dee8c479533c129c9614bdd55842c5a6256756f69681d6e9",
+    "previous_hash": "b611685432c91bf0b8022283c05cc39d8dc600ec9e066bff510b4296c7fdf875",
+    "sequence": 2,
+    "step": "sql_marts",
+    "to_status": "ANALYZING"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "c33026f68d33fae8ff34ef5a22ebbd9b558e8575cd359c0710af0b217bb8877c",
+      "input_hash": "fb881b2b18d348b1f41210fb6120e18d39709fbdbf290ae87cfc2e9d4acca844",
+      "owner": "Responsable de finanzas de gestión",
+      "process_id": "finance-close",
+      "responses": {},
+      "run_id": "9c11cff2c4641b9a606d2f7f",
+      "status": "WAITING_AGENT",
+      "step": "native_analysis",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "request_id": "fb1bc78aa9e1c79680a282b330d18cba2172057d88f29ea6963b586600d44e57",
+      "role": "finance_analyst"
+    },
+    "from_status": "ANALYZING",
+    "hash": "54521fe7a4c8afc2ea7ca37103c58d9c45e9eb749d96948b844122bde9535272",
+    "previous_hash": "793654f152f69649dee8c479533c129c9614bdd55842c5a6256756f69681d6e9",
+    "sequence": 3,
+    "step": "native_analysis",
+    "to_status": "WAITING_AGENT"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "c33026f68d33fae8ff34ef5a22ebbd9b558e8575cd359c0710af0b217bb8877c",
+      "input_hash": "fb881b2b18d348b1f41210fb6120e18d39709fbdbf290ae87cfc2e9d4acca844",
+      "owner": "Responsable de finanzas de gestión",
+      "process_id": "finance-close",
+      "responses": {
+        "finance_analyst": {
+          "agent_id": "/root/terra_warehouse_v2",
+          "dispatch_hash": "5eb967e054c1eb46596d35f427965835563479bb3e2a4a827d96b7bd05595053",
+          "model": "gpt-5.6-terra",
+          "request_id": "fb1bc78aa9e1c79680a282b330d18cba2172057d88f29ea6963b586600d44e57",
+          "sha256": "381a00e920e0d88e189c23717f4ea676b86633d2e029eb0c1c0b65f218b1c178"
+        }
+      },
+      "run_id": "9c11cff2c4641b9a606d2f7f",
+      "status": "WAITING_REVIEW",
+      "step": "independent_review",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "analyst": "finance_analyst",
+      "request_id": "209158682f660e0b4d08152e97df32136ab4d19d7a1a8573bfca746be8552ae1"
+    },
+    "from_status": "WAITING_AGENT",
+    "hash": "7ce070dae17870976cb186cfac55cb9ee32405053d3028d3b63112ca99d3a7bd",
+    "previous_hash": "54521fe7a4c8afc2ea7ca37103c58d9c45e9eb749d96948b844122bde9535272",
+    "sequence": 4,
+    "step": "independent_review",
+    "to_status": "WAITING_REVIEW"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "c33026f68d33fae8ff34ef5a22ebbd9b558e8575cd359c0710af0b217bb8877c",
+      "input_hash": "fb881b2b18d348b1f41210fb6120e18d39709fbdbf290ae87cfc2e9d4acca844",
+      "owner": "Responsable de finanzas de gestión",
+      "process_id": "finance-close",
+      "responses": {
+        "evidence_reviewer": {
+          "agent_id": "/root/astra_v2_review",
+          "dispatch_hash": "912641e139990db611113446bf126f292ac5fd569c17f2ccb6cd98bfbf4128df",
+          "model": "gpt-6-astra",
+          "request_id": "209158682f660e0b4d08152e97df32136ab4d19d7a1a8573bfca746be8552ae1",
+          "sha256": "0c16312e7f81768e99418a0659c5603a873fa73af374502ce16653ea7866a179"
+        },
+        "finance_analyst": {
+          "agent_id": "/root/terra_warehouse_v2",
+          "dispatch_hash": "5eb967e054c1eb46596d35f427965835563479bb3e2a4a827d96b7bd05595053",
+          "model": "gpt-5.6-terra",
+          "request_id": "fb1bc78aa9e1c79680a282b330d18cba2172057d88f29ea6963b586600d44e57",
+          "sha256": "381a00e920e0d88e189c23717f4ea676b86633d2e029eb0c1c0b65f218b1c178"
+        }
+      },
+      "run_id": "9c11cff2c4641b9a606d2f7f",
+      "status": "REVIEW",
+      "step": "decision_packet",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "external_execution": "PROHIBITED",
+      "sha256": "64c4082ff372e9c6bf93734081f22dad39badcfc286ebbbd8a23e524b763f304"
+    },
+    "from_status": "WAITING_REVIEW",
+    "hash": "23b974554452f1cf53efa33bfb3549c1cae2cf0a8528928eea586e2b05c1ba70",
+    "previous_hash": "7ce070dae17870976cb186cfac55cb9ee32405053d3028d3b63112ca99d3a7bd",
+    "sequence": 5,
+    "step": "decision_packet",
+    "to_status": "REVIEW"
+  }
+]

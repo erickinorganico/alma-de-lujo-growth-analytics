@@ -1,0 +1,119 @@
+[
+  {
+    "cohort_coverage_known": 1,
+    "cohort_customers": 2,
+    "cohort_month": "2025-09",
+    "eligible_customers_30d": 2,
+    "immature_customers": 0,
+    "repeat_within_30d_customers": 0,
+    "repeat_within_30d_rate": 0.0
+  },
+  {
+    "cohort_coverage_known": 1,
+    "cohort_customers": 10,
+    "cohort_month": "2025-10",
+    "eligible_customers_30d": 10,
+    "immature_customers": 0,
+    "repeat_within_30d_customers": 3,
+    "repeat_within_30d_rate": 0.3
+  },
+  {
+    "cohort_coverage_known": 1,
+    "cohort_customers": 16,
+    "cohort_month": "2025-11",
+    "eligible_customers_30d": 16,
+    "immature_customers": 0,
+    "repeat_within_30d_customers": 3,
+    "repeat_within_30d_rate": 0.1875
+  },
+  {
+    "cohort_coverage_known": 1,
+    "cohort_customers": 21,
+    "cohort_month": "2025-12",
+    "eligible_customers_30d": 21,
+    "immature_customers": 0,
+    "repeat_within_30d_customers": 4,
+    "repeat_within_30d_rate": 0.1905
+  },
+  {
+    "cohort_coverage_known": 1,
+    "cohort_customers": 40,
+    "cohort_month": "2026-01",
+    "eligible_customers_30d": 40,
+    "immature_customers": 0,
+    "repeat_within_30d_customers": 16,
+    "repeat_within_30d_rate": 0.4
+  },
+  {
+    "cohort_coverage_known": 1,
+    "cohort_customers": 18,
+    "cohort_month": "2026-02",
+    "eligible_customers_30d": 18,
+    "immature_customers": 0,
+    "repeat_within_30d_customers": 3,
+    "repeat_within_30d_rate": 0.1667
+  },
+  {
+    "cohort_coverage_known": 1,
+    "cohort_customers": 30,
+    "cohort_month": "2026-03",
+    "eligible_customers_30d": 30,
+    "immature_customers": 0,
+    "repeat_within_30d_customers": 10,
+    "repeat_within_30d_rate": 0.3333
+  },
+  {
+    "cohort_coverage_known": 1,
+    "cohort_customers": 28,
+    "cohort_month": "2026-04",
+    "eligible_customers_30d": 28,
+    "immature_customers": 0,
+    "repeat_within_30d_customers": 12,
+    "repeat_within_30d_rate": 0.4286
+  },
+  {
+    "cohort_coverage_known": 1,
+    "cohort_customers": 44,
+    "cohort_month": "2026-05",
+    "eligible_customers_30d": 44,
+    "immature_customers": 0,
+    "repeat_within_30d_customers": 14,
+    "repeat_within_30d_rate": 0.3182
+  },
+  {
+    "cohort_coverage_known": 1,
+    "cohort_customers": 43,
+    "cohort_month": "2026-06",
+    "eligible_customers_30d": 43,
+    "immature_customers": 0,
+    "repeat_within_30d_customers": 17,
+    "repeat_within_30d_rate": 0.3953
+  },
+  {
+    "cohort_coverage_known": 1,
+    "cohort_customers": 42,
+    "cohort_month": "2026-07",
+    "eligible_customers_30d": 42,
+    "immature_customers": 0,
+    "repeat_within_30d_customers": 19,
+    "repeat_within_30d_rate": 0.4524
+  },
+  {
+    "cohort_coverage_known": 1,
+    "cohort_customers": 36,
+    "cohort_month": "2026-08",
+    "eligible_customers_30d": 24,
+    "immature_customers": 12,
+    "repeat_within_30d_customers": 13,
+    "repeat_within_30d_rate": 0.5417
+  },
+  {
+    "cohort_coverage_known": 1,
+    "cohort_customers": 27,
+    "cohort_month": "2026-09",
+    "eligible_customers_30d": 0,
+    "immature_customers": 27,
+    "repeat_within_30d_customers": null,
+    "repeat_within_30d_rate": null
+  }
+]

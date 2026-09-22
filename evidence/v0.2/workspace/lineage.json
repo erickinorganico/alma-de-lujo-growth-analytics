@@ -1,0 +1,4013 @@
+{
+  "schema": {
+    "catalog": {
+      "campaigns": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "cash_daily": {
+        "grain": "cash event date",
+        "owner": "deterministic warehouse",
+        "relation_type": "materialized mart"
+      },
+      "channel_performance": {
+        "grain": "channel and campaign",
+        "owner": "deterministic warehouse",
+        "relation_type": "materialized mart"
+      },
+      "content_assets": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "credit_notes": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "customer_cohorts": {
+        "grain": "first-delivery month",
+        "owner": "deterministic warehouse",
+        "relation_type": "materialized mart"
+      },
+      "customers": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "expense_payments": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "expenses": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "experiment_assignments": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "experiment_outcomes": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "experiment_results": {
+        "grain": "experiment and arm",
+        "owner": "deterministic warehouse",
+        "relation_type": "materialized mart"
+      },
+      "experiments": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "finance_monthly": {
+        "grain": "calendar month",
+        "owner": "deterministic warehouse",
+        "relation_type": "materialized mart"
+      },
+      "funnel": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "funnel_conversion": {
+        "grain": "channel and campaign",
+        "owner": "deterministic warehouse",
+        "relation_type": "materialized mart"
+      },
+      "inventory_aging": {
+        "grain": "variant at snapshot",
+        "owner": "deterministic warehouse",
+        "relation_type": "materialized mart"
+      },
+      "inventory_counts": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "inventory_position": {
+        "grain": "variant at snapshot",
+        "owner": "deterministic warehouse",
+        "relation_type": "materialized mart"
+      },
+      "invoices": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "leads": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "lifecycle_events": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "movements": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "order_items": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "orders": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "payments": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "procurement": {
+        "grain": "purchase order",
+        "owner": "deterministic warehouse",
+        "relation_type": "materialized mart"
+      },
+      "products": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "purchase_orders": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "purchase_receipts": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "reconciliation": {
+        "grain": "named source-to-mart control",
+        "owner": "deterministic warehouse",
+        "relation_type": "materialized mart"
+      },
+      "refunds": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "reservations": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "returns": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "sales_daily": {
+        "grain": "calendar event date",
+        "owner": "deterministic warehouse",
+        "relation_type": "materialized mart"
+      },
+      "sessions": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "shipments": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "supplier_payments": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "suppliers": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "unmet_demand": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      },
+      "variants": {
+        "grain": "one synthetic contract row",
+        "owner": "synthetic snapshot producer",
+        "relation_type": "source"
+      }
+    },
+    "contract_version": "2.0",
+    "manifest": {
+      "control_results": [
+        {
+          "check_id": "sales_net_revenue",
+          "mart_cents": 37087457,
+          "passed": 1,
+          "source_cents": 37087457
+        },
+        {
+          "check_id": "cash_in",
+          "mart_cents": 49622444,
+          "passed": 1,
+          "source_cents": 49622444
+        },
+        {
+          "check_id": "cash_out",
+          "mart_cents": 5414773,
+          "passed": 1,
+          "source_cents": 5414773
+        },
+        {
+          "check_id": "purchase_receipts",
+          "mart_cents": 663,
+          "passed": 1,
+          "source_cents": 663
+        },
+        {
+          "check_id": "supplier_payments",
+          "mart_cents": 4158000,
+          "passed": 1,
+          "source_cents": 4158000
+        },
+        {
+          "check_id": "marketing_spend",
+          "mart_cents": 147526,
+          "passed": 1,
+          "source_cents": 147526
+        }
+      ],
+      "marts": [
+        "sales_daily",
+        "inventory_position",
+        "inventory_aging",
+        "procurement",
+        "cash_daily",
+        "finance_monthly",
+        "channel_performance",
+        "customer_cohorts",
+        "experiment_results",
+        "funnel_conversion",
+        "reconciliation"
+      ],
+      "metadata": {
+        "as_of": "2026-09-21",
+        "contract_version": "2.0",
+        "coverage": {
+          "campaigns": true,
+          "content_assets": true,
+          "credit_notes": true,
+          "customers": true,
+          "expense_payments": true,
+          "expenses": true,
+          "experiment_assignments": true,
+          "experiment_outcomes": true,
+          "experiments": true,
+          "funnel": true,
+          "inventory_counts": true,
+          "invoices": true,
+          "leads": true,
+          "lifecycle_events": true,
+          "movements": true,
+          "order_items": true,
+          "orders": true,
+          "payments": true,
+          "products": true,
+          "purchase_orders": true,
+          "purchase_receipts": true,
+          "refunds": true,
+          "reservations": true,
+          "returns": true,
+          "sessions": true,
+          "shipments": true,
+          "supplier_payments": true,
+          "suppliers": true,
+          "unmet_demand": true,
+          "variants": true
+        },
+        "currency": "MXN",
+        "hypotheses": {
+          "discount_pressure": "Promotion scenarios intentionally trade discount depth for contribution.",
+          "seasonality": "Synthetic order intensity varies by date to exercise monthly trend calculations.",
+          "sock_preference": "Pilates sock color and size mix is a generated hypothesis signal, not observed preference."
+        },
+        "limitations": "Every row is simulated; experiment outcomes and scenario mechanisms are not evidence of real lift, demand, cash, or customer behavior.",
+        "scenario": "normal",
+        "scenario_mechanism": "Balanced synthetic baseline with seasonal demand and repeat customers.",
+        "seed": 42,
+        "start_date": "2025-09-22",
+        "synthetic": true
+      },
+      "model_hashes": {
+        "marts/cash_daily.sql": "89d3e68fbc96f5adee334e665d68a2e070405cc2077fa57b529f2816ff9103cd",
+        "marts/channel_performance.sql": "acdd965e0c89b3f34a873157436d40768935cdaeee1fde5a160e363636094b72",
+        "marts/customer_cohorts.sql": "6654b6ef0a36ea451c526be86d3a42df8f9252b56ddd0939e844fa8174860ada",
+        "marts/experiment_results.sql": "564f1d03774820105b5a8bbeca75039833ae79bd97b007b1e261c58d8dc58d53",
+        "marts/finance_monthly.sql": "f5340240d7b7efee7161862575adc74ff1a7b666b4b9d169762c968af02b9e57",
+        "marts/funnel_conversion.sql": "6785459b1eb7fa0ada73167c485916535e53e9cacb94bec03929993a1f0b4672",
+        "marts/inventory_aging.sql": "3959153eea4949c03974373d20671e693c57d514495edd49d0efdeedb6c47973",
+        "marts/inventory_position.sql": "4bffc82efe8695f607432b791ea90107880e6e9d2871011c43170ca35f311e01",
+        "marts/procurement.sql": "48184d8bb0f6b3f07748d7f8e72cc60a37f3b4e7dbb9f93f11ffbe652899eb42",
+        "marts/reconciliation.sql": "2ebfa62d64cbd357a221b94b0f332a3a305b879ca39233525dab7b76d2380ed7",
+        "marts/sales_daily.sql": "3b852fcebc0db1f174eb40c823a2bfd79091c4ccb4f54a4744320cfff90192ee",
+        "schema.sql": "404104a8031e5bd2862a760f26690cd68ee55b1dcacee284a08c67592714ef39"
+      },
+      "source_content_hash": "d06efe733e4525d731093faa31c86ea51bb9f910856ad62e005032c141eaa3c3",
+      "source_tables": [
+        "products",
+        "variants",
+        "suppliers",
+        "purchase_orders",
+        "customers",
+        "orders",
+        "order_items",
+        "payments",
+        "refunds",
+        "credit_notes",
+        "returns",
+        "movements",
+        "reservations",
+        "expenses",
+        "funnel",
+        "unmet_demand",
+        "campaigns",
+        "content_assets",
+        "sessions",
+        "leads",
+        "purchase_receipts",
+        "supplier_payments",
+        "shipments",
+        "invoices",
+        "expense_payments",
+        "inventory_counts",
+        "experiments",
+        "experiment_assignments",
+        "experiment_outcomes",
+        "lifecycle_events"
+      ],
+      "warehouse_contract_version": "2.0"
+    },
+    "marts": [
+      "sales_daily",
+      "inventory_position",
+      "inventory_aging",
+      "procurement",
+      "cash_daily",
+      "finance_monthly",
+      "channel_performance",
+      "customer_cohorts",
+      "experiment_results",
+      "funnel_conversion",
+      "reconciliation"
+    ],
+    "tables": {
+      "campaigns": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "name",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "channel",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "objective",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "start_date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "end_date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_campaigns_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "cash_daily": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "cash_in_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "refund_out_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "supplier_out_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "expense_out_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "net_cash_change_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "cumulative_cash_movement_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 7,
+            "dflt_value": null,
+            "name": "cash_coverage_known",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": []
+      },
+      "channel_performance": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "channel",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "campaign_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "delivered_orders",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "customers",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "gross_revenue_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "discount_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "credit_note_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 7,
+            "dflt_value": null,
+            "name": "net_revenue_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 8,
+            "dflt_value": null,
+            "name": "cogs_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 9,
+            "dflt_value": null,
+            "name": "marketing_spend_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 10,
+            "dflt_value": null,
+            "name": "attribution_unknown",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 11,
+            "dflt_value": null,
+            "name": "revenue_coverage_known",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": []
+      },
+      "content_assets": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "campaign_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "format",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "theme",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "published_date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "variant_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "variant_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "variants",
+            "to": "id"
+          },
+          {
+            "from": "campaign_id",
+            "id": 1,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "campaigns",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_content_assets_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "coverage": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "table_name",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "covered",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_coverage_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "credit_notes": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "order_item_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "amount_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "reason",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "order_item_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "order_items",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_credit_notes_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "customer_cohorts": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "cohort_month",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "cohort_customers",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "eligible_customers_30d",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "immature_customers",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "repeat_within_30d_customers",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "repeat_within_30d_rate",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "cohort_coverage_known",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": []
+      },
+      "customers": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "acquired_date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_customers_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "expense_payments": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "expense_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "amount_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "expense_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "expenses",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_expense_payments_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "expenses": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "category",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "amount_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "paid_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "variable",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_expenses_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "experiment_assignments": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "experiment_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "customer_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "arm",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "assigned_date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "customer_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "customers",
+            "to": "id"
+          },
+          {
+            "from": "experiment_id",
+            "id": 1,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "experiments",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "idx_experiment_assignments_experiment_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 0,
+            "unique": 0
+          },
+          {
+            "name": "sqlite_autoindex_experiment_assignments_2",
+            "origin": "u",
+            "partial": 0,
+            "seq": 1,
+            "unique": 1
+          },
+          {
+            "name": "sqlite_autoindex_experiment_assignments_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 2,
+            "unique": 1
+          }
+        ]
+      },
+      "experiment_outcomes": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "assignment_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "converted",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "net_revenue_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "contribution_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "returned",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "assignment_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "experiment_assignments",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_experiment_outcomes_2",
+            "origin": "u",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          },
+          {
+            "name": "sqlite_autoindex_experiment_outcomes_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 1,
+            "unique": 1
+          }
+        ]
+      },
+      "experiment_results": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "experiment_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "name",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "status",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "primary_metric",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "guardrail",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "start_date",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "end_date",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 7,
+            "dflt_value": null,
+            "name": "arm",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 8,
+            "dflt_value": null,
+            "name": "assigned_customers",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 9,
+            "dflt_value": null,
+            "name": "converted_customers",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 10,
+            "dflt_value": null,
+            "name": "conversion_rate",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 11,
+            "dflt_value": null,
+            "name": "net_revenue_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 12,
+            "dflt_value": null,
+            "name": "contribution_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 13,
+            "dflt_value": null,
+            "name": "returned_customers",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 14,
+            "dflt_value": null,
+            "name": "outcome_coverage_known",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 15,
+            "dflt_value": null,
+            "name": "synthetic_descriptive_only",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": []
+      },
+      "experiments": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "name",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "hypothesis",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "primary_metric",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "guardrail",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "start_date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "end_date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 7,
+            "dflt_value": null,
+            "name": "status",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_experiments_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "finance_monthly": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "month",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "net_revenue_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "cogs_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "gross_profit_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "variable_expense_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "expense_accrual_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "contribution_after_variable_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 7,
+            "dflt_value": null,
+            "name": "operating_after_all_expenses_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 8,
+            "dflt_value": null,
+            "name": "net_cash_change_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 9,
+            "dflt_value": null,
+            "name": "revenue_coverage_known",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 10,
+            "dflt_value": null,
+            "name": "cost_coverage_known",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 11,
+            "dflt_value": null,
+            "name": "expense_coverage_known",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 12,
+            "dflt_value": null,
+            "name": "cash_coverage_known",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": []
+      },
+      "funnel": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "channel",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "campaign_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "visits",
+            "notnull": 0,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "leads",
+            "notnull": 0,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "spend_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "campaign_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "campaigns",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_funnel_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "funnel_conversion": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "channel",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "campaign_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "sessions",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "all_leads",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "linked_leads",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "unlinked_leads",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "session_linked_leads",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 7,
+            "dflt_value": null,
+            "name": "linked_orders",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 8,
+            "dflt_value": null,
+            "name": "marketing_spend_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 9,
+            "dflt_value": null,
+            "name": "session_to_lead_rate",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 10,
+            "dflt_value": null,
+            "name": "lead_to_linked_order_rate",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 11,
+            "dflt_value": null,
+            "name": "funnel_coverage_known",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": []
+      },
+      "ingest_batches": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "content_hash",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "ingested_at",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "row_count",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_ingest_batches_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "inventory_aging": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "variant_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "product_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "product_name",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "category",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "lifecycle",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "color",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "size",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 7,
+            "dflt_value": null,
+            "name": "cost_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": "INT"
+          },
+          {
+            "cid": 8,
+            "dflt_value": null,
+            "name": "ledger_on_hand_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 9,
+            "dflt_value": null,
+            "name": "reserved_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 10,
+            "dflt_value": null,
+            "name": "available_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 11,
+            "dflt_value": null,
+            "name": "in_transit_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 12,
+            "dflt_value": null,
+            "name": "count_date",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 13,
+            "dflt_value": null,
+            "name": "counted_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 14,
+            "dflt_value": null,
+            "name": "count_discrepancy_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 15,
+            "dflt_value": null,
+            "name": "inventory_value_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 16,
+            "dflt_value": null,
+            "name": "trailing_30d_net_sold_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 17,
+            "dflt_value": null,
+            "name": "cover_days",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 18,
+            "dflt_value": null,
+            "name": "stock_status",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 19,
+            "dflt_value": null,
+            "name": "inventory_coverage_known",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 20,
+            "dflt_value": null,
+            "name": "last_inbound_date",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 21,
+            "dflt_value": null,
+            "name": "days_since_last_inbound",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": []
+      },
+      "inventory_counts": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "variant_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "counted_qty",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "variant_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "variants",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_inventory_counts_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "inventory_position": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "variant_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "product_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "product_name",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "category",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "lifecycle",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "color",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "size",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 7,
+            "dflt_value": null,
+            "name": "cost_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": "INT"
+          },
+          {
+            "cid": 8,
+            "dflt_value": null,
+            "name": "ledger_on_hand_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 9,
+            "dflt_value": null,
+            "name": "reserved_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 10,
+            "dflt_value": null,
+            "name": "available_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 11,
+            "dflt_value": null,
+            "name": "in_transit_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 12,
+            "dflt_value": null,
+            "name": "count_date",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 13,
+            "dflt_value": null,
+            "name": "counted_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 14,
+            "dflt_value": null,
+            "name": "count_discrepancy_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 15,
+            "dflt_value": null,
+            "name": "inventory_value_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 16,
+            "dflt_value": null,
+            "name": "trailing_30d_net_sold_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 17,
+            "dflt_value": null,
+            "name": "cover_days",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 18,
+            "dflt_value": null,
+            "name": "stock_status",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 19,
+            "dflt_value": null,
+            "name": "inventory_coverage_known",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": []
+      },
+      "invoices": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "order_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "amount_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "status",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "kind",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "order_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "orders",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_invoices_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "leads": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "customer_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "session_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "channel",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "campaign_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "intent",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 7,
+            "dflt_value": null,
+            "name": "status",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 8,
+            "dflt_value": null,
+            "name": "order_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 9,
+            "dflt_value": null,
+            "name": "variant_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "variant_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "variants",
+            "to": "id"
+          },
+          {
+            "from": "order_id",
+            "id": 1,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "orders",
+            "to": "id"
+          },
+          {
+            "from": "campaign_id",
+            "id": 2,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "campaigns",
+            "to": "id"
+          },
+          {
+            "from": "session_id",
+            "id": 3,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "sessions",
+            "to": "id"
+          },
+          {
+            "from": "customer_id",
+            "id": 4,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "customers",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "idx_leads_session_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 0,
+            "unique": 0
+          },
+          {
+            "name": "sqlite_autoindex_leads_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 1,
+            "unique": 1
+          }
+        ]
+      },
+      "lifecycle_events": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "product_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "from_stage",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "to_stage",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "reason",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "product_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "products",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_lifecycle_events_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "movements": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "variant_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "kind",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "quantity",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "reference_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "variant_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "variants",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "idx_movements_variant_date",
+            "origin": "c",
+            "partial": 0,
+            "seq": 0,
+            "unique": 0
+          },
+          {
+            "name": "sqlite_autoindex_movements_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 1,
+            "unique": 1
+          }
+        ]
+      },
+      "order_items": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "order_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "variant_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "quantity",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "unit_price_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "discount_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "unit_cost_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": "INTEGER"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "variant_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "variants",
+            "to": "id"
+          },
+          {
+            "from": "order_id",
+            "id": 1,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "orders",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "idx_order_items_variant_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 0,
+            "unique": 0
+          },
+          {
+            "name": "idx_order_items_order_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 1,
+            "unique": 0
+          },
+          {
+            "name": "sqlite_autoindex_order_items_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 2,
+            "unique": 1
+          }
+        ]
+      },
+      "orders": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "customer_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "channel",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "campaign_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "delivered_date",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "status",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "campaign_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "campaigns",
+            "to": "id"
+          },
+          {
+            "from": "customer_id",
+            "id": 1,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "customers",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "idx_orders_campaign_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 0,
+            "unique": 0
+          },
+          {
+            "name": "idx_orders_customer_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 1,
+            "unique": 0
+          },
+          {
+            "name": "idx_orders_delivered_date",
+            "origin": "c",
+            "partial": 0,
+            "seq": 2,
+            "unique": 0
+          },
+          {
+            "name": "sqlite_autoindex_orders_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 3,
+            "unique": 1
+          }
+        ]
+      },
+      "payments": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "order_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "amount_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "status",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "order_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "orders",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "idx_payments_order_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 0,
+            "unique": 0
+          },
+          {
+            "name": "idx_payments_date",
+            "origin": "c",
+            "partial": 0,
+            "seq": 1,
+            "unique": 0
+          },
+          {
+            "name": "sqlite_autoindex_payments_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 2,
+            "unique": 1
+          }
+        ]
+      },
+      "procurement": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "purchase_order_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "ordered_date",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "supplier_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "variant_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "ordered_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": "INT"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "received_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": "INT"
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "open_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 7,
+            "dflt_value": null,
+            "name": "unit_cost_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": "INT"
+          },
+          {
+            "cid": 8,
+            "dflt_value": null,
+            "name": "ordered_value_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 9,
+            "dflt_value": null,
+            "name": "paid_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": "INT"
+          },
+          {
+            "cid": 10,
+            "dflt_value": null,
+            "name": "receipt_event_qty",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 11,
+            "dflt_value": null,
+            "name": "supplier_payment_event_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 12,
+            "dflt_value": null,
+            "name": "reconciled",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 13,
+            "dflt_value": null,
+            "name": "coverage_known",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": []
+      },
+      "products": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "name",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "category",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "collection",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "lifecycle",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_products_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "purchase_orders": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "supplier_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "variant_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "ordered_qty",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "received_qty",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "unit_cost_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "status",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 7,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 8,
+            "dflt_value": null,
+            "name": "paid_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "variant_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "variants",
+            "to": "id"
+          },
+          {
+            "from": "supplier_id",
+            "id": 1,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "suppliers",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "idx_purchase_orders_variant_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 0,
+            "unique": 0
+          },
+          {
+            "name": "idx_purchase_orders_supplier_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 1,
+            "unique": 0
+          },
+          {
+            "name": "sqlite_autoindex_purchase_orders_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 2,
+            "unique": 1
+          }
+        ]
+      },
+      "purchase_receipts": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "purchase_order_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "quantity",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "purchase_order_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "purchase_orders",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "idx_purchase_receipts_po_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 0,
+            "unique": 0
+          },
+          {
+            "name": "sqlite_autoindex_purchase_receipts_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 1,
+            "unique": 1
+          }
+        ]
+      },
+      "reconciliation": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "check_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "source_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "mart_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "passed",
+            "notnull": 0,
+            "pk": 0,
+            "type": "INTEGER"
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": []
+      },
+      "refunds": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "order_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "amount_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "status",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "order_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "orders",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_refunds_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "rejected_batches": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "content_hash",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "rejected_at",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "error",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "payload_json",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_rejected_batches_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "reservations": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "order_item_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "quantity",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "status",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "order_item_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "order_items",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_reservations_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "returns": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "order_item_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "quantity",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "restock",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "order_item_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "order_items",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "idx_returns_order_item_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 0,
+            "unique": 0
+          },
+          {
+            "name": "idx_returns_date",
+            "origin": "c",
+            "partial": 0,
+            "seq": 1,
+            "unique": 0
+          },
+          {
+            "name": "sqlite_autoindex_returns_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 2,
+            "unique": 1
+          }
+        ]
+      },
+      "sales_daily": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "gross_revenue_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "discount_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "credit_note_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "net_revenue_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "cogs_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 6,
+            "dflt_value": null,
+            "name": "gross_profit_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 7,
+            "dflt_value": null,
+            "name": "revenue_coverage_known",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          },
+          {
+            "cid": 8,
+            "dflt_value": null,
+            "name": "cost_coverage_known",
+            "notnull": 0,
+            "pk": 0,
+            "type": ""
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": []
+      },
+      "sessions": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "customer_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "channel",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "campaign_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "content_asset_id",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "content_asset_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "content_assets",
+            "to": "id"
+          },
+          {
+            "from": "campaign_id",
+            "id": 1,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "campaigns",
+            "to": "id"
+          },
+          {
+            "from": "customer_id",
+            "id": 2,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "customers",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "idx_sessions_campaign_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 0,
+            "unique": 0
+          },
+          {
+            "name": "sqlite_autoindex_sessions_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 1,
+            "unique": 1
+          }
+        ]
+      },
+      "shipments": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "order_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "status",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "delivered_date",
+            "notnull": 0,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "order_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "orders",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "idx_shipments_order_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 0,
+            "unique": 0
+          },
+          {
+            "name": "sqlite_autoindex_shipments_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 1,
+            "unique": 1
+          }
+        ]
+      },
+      "supplier_payments": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "purchase_order_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "amount_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "purchase_order_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "purchase_orders",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "idx_supplier_payments_po_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 0,
+            "unique": 0
+          },
+          {
+            "name": "sqlite_autoindex_supplier_payments_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 1,
+            "unique": 1
+          }
+        ]
+      },
+      "suppliers": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "name",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_suppliers_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "unmet_demand": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "date",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "variant_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "quantity",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "reason",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "variant_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "variants",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_unmet_demand_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      },
+      "variants": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "id",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "product_id",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 2,
+            "dflt_value": null,
+            "name": "size",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 3,
+            "dflt_value": null,
+            "name": "color",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          },
+          {
+            "cid": 4,
+            "dflt_value": null,
+            "name": "price_cents",
+            "notnull": 1,
+            "pk": 0,
+            "type": "INTEGER"
+          },
+          {
+            "cid": 5,
+            "dflt_value": null,
+            "name": "cost_cents",
+            "notnull": 0,
+            "pk": 0,
+            "type": "INTEGER"
+          }
+        ],
+        "foreign_keys": [
+          {
+            "from": "product_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "products",
+            "to": "id"
+          }
+        ],
+        "indexes": [
+          {
+            "name": "idx_variants_product_id",
+            "origin": "c",
+            "partial": 0,
+            "seq": 0,
+            "unique": 0
+          },
+          {
+            "name": "sqlite_autoindex_variants_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 1,
+            "unique": 1
+          }
+        ]
+      },
+      "warehouse_manifest": {
+        "columns": [
+          {
+            "cid": 0,
+            "dflt_value": null,
+            "name": "key",
+            "notnull": 1,
+            "pk": 1,
+            "type": "TEXT"
+          },
+          {
+            "cid": 1,
+            "dflt_value": null,
+            "name": "value",
+            "notnull": 1,
+            "pk": 0,
+            "type": "TEXT"
+          }
+        ],
+        "foreign_keys": [],
+        "indexes": [
+          {
+            "name": "sqlite_autoindex_warehouse_manifest_1",
+            "origin": "pk",
+            "partial": 0,
+            "seq": 0,
+            "unique": 1
+          }
+        ]
+      }
+    }
+  },
+  "sql": {
+    "cash_daily.sql": {
+      "sha256": "89d3e68fbc96f5adee334e665d68a2e070405cc2077fa57b529f2816ff9103cd",
+      "text": "WITH known AS (\n SELECT CASE WHEN {{coverage:payments}}=1 AND {{coverage:refunds}}=1 AND {{coverage:supplier_payments}}=1 AND {{coverage:expense_payments}}=1 THEN 1 ELSE 0 END AS value\n), events AS (\n SELECT date,amount_cents AS cash_in_cents,0 AS refund_out_cents,0 AS supplier_out_cents,0 AS expense_out_cents FROM payments WHERE status='settled'\n UNION ALL SELECT date,0,amount_cents,0,0 FROM refunds WHERE status='settled'\n UNION ALL SELECT date,0,0,amount_cents,0 FROM supplier_payments\n UNION ALL SELECT date,0,0,0,amount_cents FROM expense_payments\n), daily AS (\n SELECT date,SUM(cash_in_cents) cash_in_cents,SUM(refund_out_cents) refund_out_cents,SUM(supplier_out_cents) supplier_out_cents,SUM(expense_out_cents) expense_out_cents FROM events GROUP BY date\n)\nSELECT d.date,\n CASE WHEN k.value=1 THEN d.cash_in_cents END cash_in_cents,CASE WHEN k.value=1 THEN d.refund_out_cents END refund_out_cents,\n CASE WHEN k.value=1 THEN d.supplier_out_cents END supplier_out_cents,CASE WHEN k.value=1 THEN d.expense_out_cents END expense_out_cents,\n CASE WHEN k.value=1 THEN d.cash_in_cents-d.refund_out_cents-d.supplier_out_cents-d.expense_out_cents END net_cash_change_cents,\n CASE WHEN k.value=1 THEN SUM(d.cash_in_cents-d.refund_out_cents-d.supplier_out_cents-d.expense_out_cents) OVER (ORDER BY d.date) END cumulative_cash_movement_cents,\n k.value AS cash_coverage_known FROM daily d CROSS JOIN known k ORDER BY d.date\n"
+    },
+    "channel_performance.sql": {
+      "sha256": "acdd965e0c89b3f34a873157436d40768935cdaeee1fde5a160e363636094b72",
+      "text": "WITH dimensions AS (SELECT channel,id campaign_id FROM campaigns UNION SELECT channel,campaign_id FROM funnel UNION SELECT channel,campaign_id FROM orders),\ndelivered AS (SELECT o.channel,o.campaign_id,COUNT(DISTINCT o.id) delivered_orders,COUNT(DISTINCT o.customer_id) customers,SUM(i.quantity*i.unit_price_cents) gross_revenue_cents,SUM(i.discount_cents) discount_cents,SUM(i.quantity*i.unit_cost_cents) delivered_cogs_cents,MIN(CASE WHEN i.unit_cost_cents IS NULL THEN 0 ELSE 1 END) cost_known FROM orders o JOIN order_items i ON i.order_id=o.id WHERE o.status='delivered' GROUP BY o.channel,o.campaign_id),\ncredits AS (SELECT o.channel,o.campaign_id,SUM(cn.amount_cents) credit_note_cents FROM credit_notes cn JOIN order_items i ON i.id=cn.order_item_id JOIN orders o ON o.id=i.order_id GROUP BY o.channel,o.campaign_id),\nrestocks AS (SELECT o.channel,o.campaign_id,SUM(r.quantity*i.unit_cost_cents) restock_cogs_reversal_cents,MIN(CASE WHEN i.unit_cost_cents IS NULL THEN 0 ELSE 1 END) cost_known FROM returns r JOIN order_items i ON i.id=r.order_item_id JOIN orders o ON o.id=i.order_id WHERE r.restock=1 GROUP BY o.channel,o.campaign_id),\nmarketing AS (SELECT channel,campaign_id,SUM(spend_cents) marketing_spend_cents FROM funnel GROUP BY channel,campaign_id)\nSELECT x.channel,x.campaign_id,\n CASE WHEN {{coverage:orders}}=1 THEN COALESCE(d.delivered_orders,0) END delivered_orders,\n CASE WHEN {{coverage:orders}}=1 AND {{coverage:customers}}=1 THEN COALESCE(d.customers,0) END customers,\n CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN COALESCE(d.gross_revenue_cents,0) END gross_revenue_cents,\n CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN COALESCE(d.discount_cents,0) END discount_cents,\n CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN COALESCE(c.credit_note_cents,0) END credit_note_cents,\n CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN COALESCE(d.gross_revenue_cents,0)-COALESCE(d.discount_cents,0)-COALESCE(c.credit_note_cents,0) END net_revenue_cents,\n CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:returns}}=1 AND COALESCE(d.cost_known,1)=1 AND COALESCE(r.cost_known,1)=1 THEN COALESCE(d.delivered_cogs_cents,0)-COALESCE(r.restock_cogs_reversal_cents,0) END cogs_cents,\n CASE WHEN {{coverage:funnel}}=1 THEN COALESCE(m.marketing_spend_cents,0) END marketing_spend_cents,\n 1 AS attribution_unknown,CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN 1 ELSE 0 END revenue_coverage_known\nFROM dimensions x LEFT JOIN delivered d ON d.channel=x.channel AND d.campaign_id=x.campaign_id LEFT JOIN credits c ON c.channel=x.channel AND c.campaign_id=x.campaign_id LEFT JOIN restocks r ON r.channel=x.channel AND r.campaign_id=x.campaign_id LEFT JOIN marketing m ON m.channel=x.channel AND m.campaign_id=x.campaign_id ORDER BY x.channel,x.campaign_id\n"
+    },
+    "customer_cohorts.sql": {
+      "sha256": "6654b6ef0a36ea451c526be86d3a42df8f9252b56ddd0939e844fa8174860ada",
+      "text": "WITH first_date AS (SELECT customer_id,MIN(delivered_date) first_delivered_date FROM orders WHERE status='delivered' GROUP BY customer_id),\nfirst_delivery AS (SELECT d.customer_id,d.first_delivered_date,MIN(o.id) first_order_id FROM first_date d JOIN orders o ON o.customer_id=d.customer_id AND o.status='delivered' AND o.delivered_date=d.first_delivered_date GROUP BY d.customer_id,d.first_delivered_date),\ncustomer_orders AS (\n SELECT f.customer_id,f.first_delivered_date,\n        CASE WHEN f.first_delivered_date<=date((SELECT json_extract(value,'$.as_of') FROM warehouse_manifest WHERE key='metadata'),'-30 day') THEN 1 ELSE 0 END mature_30d,\n        COUNT(DISTINCT CASE WHEN o.id<>f.first_order_id AND o.delivered_date>=f.first_delivered_date AND o.delivered_date<=date(f.first_delivered_date,'+30 day') THEN o.id END) repeat_orders_30d\n FROM first_delivery f LEFT JOIN orders o ON o.customer_id=f.customer_id AND o.status='delivered' GROUP BY f.customer_id,f.first_delivered_date,f.first_order_id\n)\nSELECT substr(first_delivered_date,1,7) cohort_month,\n CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 THEN COUNT(*) END cohort_customers,\n CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 THEN SUM(mature_30d) END eligible_customers_30d,\n CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 THEN SUM(CASE WHEN mature_30d=0 THEN 1 ELSE 0 END) END immature_customers,\n CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 AND SUM(mature_30d)>0 THEN SUM(CASE WHEN mature_30d=1 AND repeat_orders_30d>0 THEN 1 ELSE 0 END) END repeat_within_30d_customers,\n CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 AND SUM(mature_30d)>0 THEN ROUND(1.0*SUM(CASE WHEN mature_30d=1 AND repeat_orders_30d>0 THEN 1 ELSE 0 END)/SUM(mature_30d),4) END repeat_within_30d_rate,\n CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 THEN 1 ELSE 0 END cohort_coverage_known\nFROM customer_orders GROUP BY cohort_month ORDER BY cohort_month\n"
+    },
+    "experiment_results.sql": {
+      "sha256": "564f1d03774820105b5a8bbeca75039833ae79bd97b007b1e261c58d8dc58d53",
+      "text": "SELECT e.id experiment_id,e.name,e.status,e.primary_metric,e.guardrail,e.start_date,e.end_date,a.arm,\n CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 THEN COUNT(a.id) END assigned_customers,\n CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN SUM(CASE WHEN o.converted=1 THEN 1 ELSE 0 END) END converted_customers,\n CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 AND COUNT(a.id)>0 THEN AVG(CASE WHEN o.converted=1 THEN 1.0 ELSE 0.0 END) END conversion_rate,\n CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN SUM(o.net_revenue_cents) END net_revenue_cents,\n CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN SUM(o.contribution_cents) END contribution_cents,\n CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN SUM(o.returned) END returned_customers,\n CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN 1 ELSE 0 END outcome_coverage_known,\n 1 AS synthetic_descriptive_only\nFROM experiments e JOIN experiment_assignments a ON a.experiment_id=e.id LEFT JOIN experiment_outcomes o ON o.assignment_id=a.id GROUP BY e.id,a.arm ORDER BY e.id,a.arm\n"
+    },
+    "finance_monthly.sql": {
+      "sha256": "f5340240d7b7efee7161862575adc74ff1a7b666b4b9d169762c968af02b9e57",
+      "text": "WITH known AS (\n SELECT CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN 1 ELSE 0 END revenue_known,\n        CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:returns}}=1 THEN 1 ELSE 0 END cost_source_known,\n        CASE WHEN {{coverage:expenses}}=1 THEN 1 ELSE 0 END expense_known,\n        CASE WHEN {{coverage:payments}}=1 AND {{coverage:refunds}}=1 AND {{coverage:supplier_payments}}=1 AND {{coverage:expense_payments}}=1 THEN 1 ELSE 0 END cash_known\n), spine AS (SELECT substr(date,1,7) month FROM sales_daily UNION SELECT substr(date,1,7) FROM expenses UNION SELECT substr(date,1,7) FROM cash_daily),\nsales AS (SELECT substr(date,1,7) month,SUM(net_revenue_cents) net_revenue_cents,SUM(cogs_cents) cogs_cents,MIN(cost_coverage_known) cost_coverage_known FROM sales_daily GROUP BY 1),\nexpense_rollup AS (SELECT substr(date,1,7) month,SUM(amount_cents) expense_accrual_cents,SUM(CASE WHEN variable=1 THEN amount_cents ELSE 0 END) variable_expense_cents FROM expenses GROUP BY 1),\ncash AS (SELECT substr(date,1,7) month,SUM(net_cash_change_cents) net_cash_change_cents FROM cash_daily GROUP BY 1),\ncomputed AS (SELECT sp.month,k.*,s.net_revenue_cents,s.cogs_cents,COALESCE(s.cost_coverage_known,1) row_cost_known,e.variable_expense_cents,e.expense_accrual_cents,c.net_cash_change_cents FROM spine sp CROSS JOIN known k LEFT JOIN sales s ON s.month=sp.month LEFT JOIN expense_rollup e ON e.month=sp.month LEFT JOIN cash c ON c.month=sp.month)\nSELECT month,CASE WHEN revenue_known=1 THEN COALESCE(net_revenue_cents,0) END net_revenue_cents,\n CASE WHEN cost_source_known=1 AND row_cost_known=1 THEN COALESCE(cogs_cents,0) END cogs_cents,\n CASE WHEN revenue_known=1 AND cost_source_known=1 AND row_cost_known=1 THEN COALESCE(net_revenue_cents,0)-COALESCE(cogs_cents,0) END gross_profit_cents,\n CASE WHEN expense_known=1 THEN COALESCE(variable_expense_cents,0) END variable_expense_cents,CASE WHEN expense_known=1 THEN COALESCE(expense_accrual_cents,0) END expense_accrual_cents,\n CASE WHEN revenue_known=1 AND cost_source_known=1 AND row_cost_known=1 AND expense_known=1 THEN COALESCE(net_revenue_cents,0)-COALESCE(cogs_cents,0)-COALESCE(variable_expense_cents,0) END contribution_after_variable_cents,\n CASE WHEN revenue_known=1 AND cost_source_known=1 AND row_cost_known=1 AND expense_known=1 THEN COALESCE(net_revenue_cents,0)-COALESCE(cogs_cents,0)-COALESCE(expense_accrual_cents,0) END operating_after_all_expenses_cents,\n CASE WHEN cash_known=1 THEN COALESCE(net_cash_change_cents,0) END net_cash_change_cents,revenue_known AS revenue_coverage_known,\n CASE WHEN cost_source_known=1 AND row_cost_known=1 THEN 1 ELSE 0 END cost_coverage_known,expense_known AS expense_coverage_known,cash_known AS cash_coverage_known FROM computed ORDER BY month\n"
+    },
+    "funnel_conversion.sql": {
+      "sha256": "6785459b1eb7fa0ada73167c485916535e53e9cacb94bec03929993a1f0b4672",
+      "text": "WITH cohorts AS (\n SELECT channel,campaign_id FROM sessions UNION SELECT channel,campaign_id FROM leads UNION SELECT channel,campaign_id FROM orders UNION SELECT channel,campaign_id FROM funnel\n), session_counts AS (SELECT channel,campaign_id,COUNT(DISTINCT id) sessions FROM sessions GROUP BY channel,campaign_id),\nlead_counts AS (SELECT channel,campaign_id,COUNT(DISTINCT id) all_leads,COUNT(DISTINCT CASE WHEN session_id IS NOT NULL THEN id END) linked_leads,COUNT(DISTINCT session_id) linked_sessions,COUNT(DISTINCT CASE WHEN session_id IS NULL THEN id END) unlinked_leads,COUNT(DISTINCT order_id) linked_orders FROM leads GROUP BY channel,campaign_id),\nspend AS (SELECT channel,campaign_id,SUM(spend_cents) marketing_spend_cents,MIN(CASE WHEN visits IS NULL THEN 0 ELSE 1 END) visits_coverage_known FROM funnel GROUP BY channel,campaign_id)\nSELECT c.channel,c.campaign_id,\n CASE WHEN {{coverage:sessions}}=1 THEN COALESCE(s.sessions,0) END sessions,\n CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.all_leads,0) END all_leads,CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.linked_leads,0) END linked_leads,CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.unlinked_leads,0) END unlinked_leads,CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.linked_sessions,0) END session_linked_leads,\n CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.linked_orders,0) END linked_orders,\n CASE WHEN {{coverage:funnel}}=1 THEN f.marketing_spend_cents END marketing_spend_cents,\n CASE WHEN {{coverage:sessions}}=1 AND {{coverage:leads}}=1 AND COALESCE(s.sessions,0)>0 THEN ROUND(1.0*COALESCE(l.linked_sessions,0)/s.sessions,4) END session_to_lead_rate,\n CASE WHEN {{coverage:leads}}=1 AND COALESCE(l.all_leads,0)>0 THEN ROUND(1.0*COALESCE(l.linked_orders,0)/l.all_leads,4) END lead_to_linked_order_rate,\n CASE WHEN {{coverage:sessions}}=1 AND {{coverage:leads}}=1 THEN 1 ELSE 0 END funnel_coverage_known\nFROM cohorts c LEFT JOIN session_counts s ON s.channel=c.channel AND s.campaign_id=c.campaign_id LEFT JOIN lead_counts l ON l.channel=c.channel AND l.campaign_id=c.campaign_id LEFT JOIN spend f ON f.channel=c.channel AND f.campaign_id=c.campaign_id ORDER BY c.channel,c.campaign_id\n"
+    },
+    "inventory_aging.sql": {
+      "sha256": "3959153eea4949c03974373d20671e693c57d514495edd49d0efdeedb6c47973",
+      "text": "WITH positive_events AS (SELECT variant_id,MAX(date) last_inbound_date FROM movements WHERE quantity>0 GROUP BY variant_id)\nSELECT p.*,e.last_inbound_date,\n CASE WHEN p.inventory_coverage_known=1 AND e.last_inbound_date IS NOT NULL THEN CAST(julianday((SELECT json_extract(value,'$.as_of') FROM warehouse_manifest WHERE key='metadata'))-julianday(e.last_inbound_date) AS INTEGER) END days_since_last_inbound\nFROM inventory_position p LEFT JOIN positive_events e ON e.variant_id=p.variant_id ORDER BY p.variant_id\n"
+    },
+    "inventory_position.sql": {
+      "sha256": "4bffc82efe8695f607432b791ea90107880e6e9d2871011c43170ca35f311e01",
+      "text": "WITH latest_count AS (\n SELECT variant_id,date,counted_qty FROM (SELECT c.*,ROW_NUMBER() OVER(PARTITION BY variant_id ORDER BY date DESC,id DESC) rn FROM inventory_counts c) WHERE rn=1\n), ledger_now AS (SELECT variant_id,SUM(quantity) on_hand_qty FROM movements GROUP BY variant_id),\nledger_at_count AS (SELECT c.variant_id,c.date,SUM(m.quantity) qty FROM latest_count c LEFT JOIN movements m ON m.variant_id=c.variant_id AND m.date<=c.date GROUP BY c.variant_id,c.date),\nreserve AS (SELECT i.variant_id,SUM(r.quantity) qty FROM reservations r JOIN order_items i ON i.id=r.order_item_id WHERE r.status='active' GROUP BY i.variant_id),\ntransit AS (SELECT variant_id,SUM(ordered_qty-received_qty) qty FROM purchase_orders WHERE status<>'cancelled' GROUP BY variant_id),\nnet_sold AS (\n SELECT i.variant_id,SUM(i.quantity) qty FROM orders o JOIN order_items i ON i.order_id=o.id WHERE o.status='delivered' AND o.delivered_date>date((SELECT json_extract(value,'$.as_of') FROM warehouse_manifest WHERE key='metadata'),'-30 day') GROUP BY i.variant_id\n UNION ALL SELECT i.variant_id,-SUM(r.quantity) FROM returns r JOIN order_items i ON i.id=r.order_item_id WHERE r.restock=1 AND r.date>date((SELECT json_extract(value,'$.as_of') FROM warehouse_manifest WHERE key='metadata'),'-30 day') GROUP BY i.variant_id\n), sold AS (SELECT variant_id,SUM(qty) qty FROM net_sold GROUP BY variant_id)\nSELECT v.id variant_id,v.product_id,p.name product_name,p.category,p.lifecycle,v.color,v.size,v.cost_cents,\n CASE WHEN {{coverage:movements}}=1 THEN COALESCE(ln.on_hand_qty,0) END ledger_on_hand_qty,\n CASE WHEN {{coverage:reservations}}=1 AND {{coverage:order_items}}=1 THEN COALESCE(r.qty,0) END reserved_qty,\n CASE WHEN {{coverage:movements}}=1 AND {{coverage:reservations}}=1 AND {{coverage:order_items}}=1 THEN COALESCE(ln.on_hand_qty,0)-COALESCE(r.qty,0) END available_qty,\n CASE WHEN {{coverage:purchase_orders}}=1 THEN COALESCE(t.qty,0) END in_transit_qty,\n lc.date count_date,CASE WHEN {{coverage:inventory_counts}}=1 THEN lc.counted_qty END counted_qty,CASE WHEN {{coverage:inventory_counts}}=1 AND {{coverage:movements}}=1 AND lc.date IS NOT NULL THEN lc.counted_qty-lc2.qty END count_discrepancy_qty,\n CASE WHEN {{coverage:movements}}=1 AND v.cost_cents IS NOT NULL THEN COALESCE(ln.on_hand_qty,0)*v.cost_cents END inventory_value_cents,\n CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:returns}}=1 THEN COALESCE(s.qty,0) END trailing_30d_net_sold_qty,\n CASE WHEN {{coverage:movements}}=1 AND {{coverage:reservations}}=1 AND {{coverage:order_items}}=1 AND {{coverage:orders}}=1 AND {{coverage:returns}}=1 AND COALESCE(s.qty,0)>0 THEN ROUND((COALESCE(ln.on_hand_qty,0)-COALESCE(r.qty,0))*30.0/s.qty,2) END cover_days,\n CASE WHEN {{coverage:products}}=0 OR {{coverage:variants}}=0 OR {{coverage:movements}}=0 OR {{coverage:reservations}}=0 OR {{coverage:order_items}}=0 THEN 'UNKNOWN' WHEN p.lifecycle IN ('idea','sample') THEN 'PRELAUNCH' WHEN COALESCE(ln.on_hand_qty,0)-COALESCE(r.qty,0)<=0 THEN 'STOCKOUT' ELSE 'AVAILABLE' END stock_status,\n CASE WHEN {{coverage:products}}=1 AND {{coverage:variants}}=1 AND {{coverage:movements}}=1 AND {{coverage:reservations}}=1 AND {{coverage:order_items}}=1 THEN 1 ELSE 0 END inventory_coverage_known\nFROM variants v JOIN products p ON p.id=v.product_id LEFT JOIN ledger_now ln ON ln.variant_id=v.id LEFT JOIN reserve r ON r.variant_id=v.id LEFT JOIN transit t ON t.variant_id=v.id LEFT JOIN latest_count lc ON lc.variant_id=v.id LEFT JOIN ledger_at_count lc2 ON lc2.variant_id=v.id AND lc2.date=lc.date LEFT JOIN sold s ON s.variant_id=v.id ORDER BY v.id\n"
+    },
+    "marts.sql": {
+      "sha256": "6940bf0715a8ccc001fafc4e0baff9b74339481a0f1a50f509bef0060f38af54",
+      "text": "-- Alma de Lujo warehouse v2 SQL lineage.\n--\n-- Source tables are loaded by alma.warehouse into SQLite STRICT relations.\n-- The Python loader materializes each fixed query below as an identically named\n-- table.  SQL is kept alongside the executable MART_SQL dictionary so reviewers\n-- can inspect grain and intended joins without running arbitrary input SQL.\n\n-- sales_daily       date: delivered line revenue and credit-note events;\n--                   COGS uses sale ledger events and reverses only restocked\n--                   return movements on the return event date.\n-- inventory_position variant: ledger, active reservation, in-transit PO, count.\n-- inventory_aging    variant: snapshot inventory enriched with last positive event.\n-- procurement        purchase_order: PO terms against receipt/payment event sums.\n-- cash_daily         event date: settled customer cash / refunds / supplier / expense payments.\n-- finance_monthly    calendar month: revenue, COGS, expense accrual, cash movement.\n-- channel_performance channel: delivered order lines, one order count per order.\n-- customer_cohorts   acquisition month x delivered order month.\n-- experiment_results experiment x arm: simulated randomized descriptive outcomes.\n-- funnel_conversion  channel x campaign: descriptive funnel and order counts.\n-- reconciliation     named source-to-mart independent total checks.\n\n-- Authoritative executable text is loaded from models/marts/<mart>.sql by\n-- alma.warehouse._materialize_marts.  `{{coverage:table}}` is replaced with a\n-- scalar coverage lookup at materialization time.\n"
+    },
+    "procurement.sql": {
+      "sha256": "48184d8bb0f6b3f07748d7f8e72cc60a37f3b4e7dbb9f93f11ffbe652899eb42",
+      "text": "SELECT po.id purchase_order_id,po.date ordered_date,po.supplier_id,po.variant_id,po.ordered_qty,po.received_qty,po.ordered_qty-po.received_qty open_qty,\n po.unit_cost_cents,po.ordered_qty*po.unit_cost_cents ordered_value_cents,po.paid_cents,\n CASE WHEN {{coverage:purchase_receipts}}=1 THEN COALESCE(r.receipt_qty,0) END receipt_event_qty,\n CASE WHEN {{coverage:supplier_payments}}=1 THEN COALESCE(p.payment_cents,0) END supplier_payment_event_cents,\n CASE WHEN {{coverage:purchase_receipts}}=1 AND {{coverage:supplier_payments}}=1 AND po.received_qty=COALESCE(r.receipt_qty,0) AND po.paid_cents=COALESCE(p.payment_cents,0) THEN 1 ELSE 0 END reconciled,\n CASE WHEN {{coverage:purchase_orders}}=1 AND {{coverage:purchase_receipts}}=1 AND {{coverage:supplier_payments}}=1 THEN 1 ELSE 0 END coverage_known\nFROM purchase_orders po LEFT JOIN (SELECT purchase_order_id,SUM(quantity) receipt_qty FROM purchase_receipts GROUP BY purchase_order_id) r ON r.purchase_order_id=po.id\nLEFT JOIN (SELECT purchase_order_id,SUM(amount_cents) payment_cents FROM supplier_payments GROUP BY purchase_order_id) p ON p.purchase_order_id=po.id ORDER BY po.date,po.id\n"
+    },
+    "reconciliation.sql": {
+      "sha256": "2ebfa62d64cbd357a221b94b0f332a3a305b879ca39233525dab7b76d2380ed7",
+      "text": "SELECT 'sales_net_revenue' check_id,\n (SELECT COALESCE(SUM(i.quantity*i.unit_price_cents-i.discount_cents),0) FROM order_items i JOIN orders o ON o.id=i.order_id WHERE o.status='delivered')-(SELECT COALESCE(SUM(amount_cents),0) FROM credit_notes) source_cents,\n (SELECT COALESCE(SUM(net_revenue_cents),0) FROM sales_daily) mart_cents\nUNION ALL SELECT 'cash_in',(SELECT COALESCE(SUM(amount_cents),0) FROM payments WHERE status='settled'),(SELECT COALESCE(SUM(cash_in_cents),0) FROM cash_daily)\nUNION ALL SELECT 'cash_out',(SELECT COALESCE(SUM(amount_cents),0) FROM refunds WHERE status='settled')+(SELECT COALESCE(SUM(amount_cents),0) FROM supplier_payments)+(SELECT COALESCE(SUM(amount_cents),0) FROM expense_payments),(SELECT COALESCE(SUM(refund_out_cents+supplier_out_cents+expense_out_cents),0) FROM cash_daily)\nUNION ALL SELECT 'purchase_receipts',(SELECT COALESCE(SUM(received_qty),0) FROM purchase_orders),(SELECT COALESCE(SUM(receipt_event_qty),0) FROM procurement)\nUNION ALL SELECT 'supplier_payments',(SELECT COALESCE(SUM(paid_cents),0) FROM purchase_orders),(SELECT COALESCE(SUM(supplier_payment_event_cents),0) FROM procurement)\nUNION ALL SELECT 'marketing_spend',(SELECT COALESCE(SUM(spend_cents),0) FROM funnel),(SELECT COALESCE(SUM(marketing_spend_cents),0) FROM channel_performance)\n"
+    },
+    "sales_daily.sql": {
+      "sha256": "3b852fcebc0db1f174eb40c823a2bfd79091c4ccb4f54a4744320cfff90192ee",
+      "text": "WITH events AS (\n  SELECT o.delivered_date AS date,\n         SUM(i.quantity * i.unit_price_cents) AS gross_revenue_cents,\n         SUM(i.discount_cents) AS discount_cents, 0 AS credit_note_cents,\n         SUM(i.quantity * i.unit_cost_cents) AS cogs_cents,\n         MIN(CASE WHEN i.unit_cost_cents IS NULL THEN 0 ELSE 1 END) AS cost_known\n  FROM orders o JOIN order_items i ON i.order_id=o.id\n  WHERE o.status='delivered' GROUP BY o.delivered_date\n  UNION ALL\n  SELECT cn.date,0,0,SUM(cn.amount_cents),0,1 FROM credit_notes cn GROUP BY cn.date\n  UNION ALL\n  SELECT r.date,0,0,0,-SUM(r.quantity*i.unit_cost_cents),\n         MIN(CASE WHEN i.unit_cost_cents IS NULL THEN 0 ELSE 1 END)\n  FROM returns r JOIN order_items i ON i.id=r.order_item_id\n  WHERE r.restock=1 GROUP BY r.date\n), known AS (\n SELECT CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN 1 ELSE 0 END revenue_known,\n        CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:returns}}=1 THEN 1 ELSE 0 END cost_coverage_known\n)\nSELECT e.date,\n CASE WHEN k.revenue_known=1 THEN SUM(e.gross_revenue_cents) END AS gross_revenue_cents,\n CASE WHEN k.revenue_known=1 THEN SUM(e.discount_cents) END AS discount_cents,\n CASE WHEN k.revenue_known=1 THEN SUM(e.credit_note_cents) END AS credit_note_cents,\n CASE WHEN k.revenue_known=1 THEN SUM(e.gross_revenue_cents)-SUM(e.discount_cents)-SUM(e.credit_note_cents) END AS net_revenue_cents,\n CASE WHEN k.cost_coverage_known=1 AND MIN(e.cost_known)=1 THEN SUM(e.cogs_cents) END AS cogs_cents,\n CASE WHEN k.revenue_known=1 AND k.cost_coverage_known=1 AND MIN(e.cost_known)=1 THEN SUM(e.gross_revenue_cents)-SUM(e.discount_cents)-SUM(e.credit_note_cents)-SUM(e.cogs_cents) END AS gross_profit_cents,\n k.revenue_known AS revenue_coverage_known,\n CASE WHEN k.cost_coverage_known=1 AND MIN(e.cost_known)=1 THEN 1 ELSE 0 END AS cost_coverage_known\nFROM events e CROSS JOIN known k GROUP BY e.date ORDER BY e.date\n"
+    },
+    "schema.sql": {
+      "sha256": "404104a8031e5bd2862a760f26690cd68ee55b1dcacee284a08c67592714ef39",
+      "text": "-- Executed verbatim by alma.warehouse._create_schema. SQLite STRICT source DDL.\nPRAGMA foreign_keys=ON;\nCREATE TABLE products (id TEXT PRIMARY KEY,name TEXT NOT NULL,category TEXT NOT NULL,collection TEXT NOT NULL,lifecycle TEXT NOT NULL) STRICT;\nCREATE TABLE variants (id TEXT PRIMARY KEY,product_id TEXT NOT NULL REFERENCES products(id),size TEXT NOT NULL,color TEXT NOT NULL,price_cents INTEGER NOT NULL CHECK(price_cents>=0),cost_cents INTEGER) STRICT;\nCREATE TABLE suppliers (id TEXT PRIMARY KEY,name TEXT NOT NULL) STRICT;\nCREATE TABLE customers (id TEXT PRIMARY KEY,acquired_date TEXT NOT NULL CHECK(acquired_date LIKE '____-__-__')) STRICT;\nCREATE TABLE campaigns (id TEXT PRIMARY KEY,name TEXT NOT NULL,channel TEXT NOT NULL,objective TEXT NOT NULL,start_date TEXT NOT NULL CHECK(start_date LIKE '____-__-__'),end_date TEXT NOT NULL CHECK(end_date LIKE '____-__-__')) STRICT;\nCREATE TABLE purchase_orders (id TEXT PRIMARY KEY,supplier_id TEXT NOT NULL REFERENCES suppliers(id),variant_id TEXT NOT NULL REFERENCES variants(id),ordered_qty INTEGER NOT NULL CHECK(ordered_qty>=0),received_qty INTEGER NOT NULL CHECK(received_qty>=0),unit_cost_cents INTEGER NOT NULL CHECK(unit_cost_cents>=0),status TEXT NOT NULL,date TEXT NOT NULL CHECK(date LIKE '____-__-__'),paid_cents INTEGER NOT NULL CHECK(paid_cents>=0)) STRICT;\nCREATE TABLE expenses (id TEXT PRIMARY KEY,date TEXT NOT NULL CHECK(date LIKE '____-__-__'),category TEXT NOT NULL,amount_cents INTEGER NOT NULL CHECK(amount_cents>=0),paid_cents INTEGER NOT NULL CHECK(paid_cents>=0),variable INTEGER NOT NULL CHECK(variable IN(0,1))) STRICT;\nCREATE TABLE orders (id TEXT PRIMARY KEY,customer_id TEXT NOT NULL REFERENCES customers(id),channel TEXT NOT NULL,campaign_id TEXT NOT NULL REFERENCES campaigns(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),delivered_date TEXT,status TEXT NOT NULL CHECK(status IN('delivered','shipped','paid','pending','cancelled'))) STRICT;\nCREATE TABLE content_assets (id TEXT PRIMARY KEY,campaign_id TEXT NOT NULL REFERENCES campaigns(id),format TEXT NOT NULL,theme TEXT NOT NULL,published_date TEXT NOT NULL CHECK(published_date LIKE '____-__-__'),variant_id TEXT REFERENCES variants(id)) STRICT;\nCREATE TABLE sessions (id TEXT PRIMARY KEY,customer_id TEXT REFERENCES customers(id),channel TEXT NOT NULL,campaign_id TEXT NOT NULL REFERENCES campaigns(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),content_asset_id TEXT REFERENCES content_assets(id)) STRICT;\nCREATE TABLE order_items (id TEXT PRIMARY KEY,order_id TEXT NOT NULL REFERENCES orders(id),variant_id TEXT NOT NULL REFERENCES variants(id),quantity INTEGER NOT NULL CHECK(quantity>=0),unit_price_cents INTEGER NOT NULL CHECK(unit_price_cents>=0),discount_cents INTEGER NOT NULL CHECK(discount_cents>=0),unit_cost_cents INTEGER) STRICT;\nCREATE TABLE payments (id TEXT PRIMARY KEY,order_id TEXT NOT NULL REFERENCES orders(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),amount_cents INTEGER NOT NULL CHECK(amount_cents>=0),status TEXT NOT NULL CHECK(status IN('settled','pending','failed'))) STRICT;\nCREATE TABLE refunds (id TEXT PRIMARY KEY,order_id TEXT NOT NULL REFERENCES orders(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),amount_cents INTEGER NOT NULL CHECK(amount_cents>=0),status TEXT NOT NULL CHECK(status IN('settled','pending'))) STRICT;\nCREATE TABLE credit_notes (id TEXT PRIMARY KEY,order_item_id TEXT NOT NULL REFERENCES order_items(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),amount_cents INTEGER NOT NULL CHECK(amount_cents>=0),reason TEXT NOT NULL) STRICT;\nCREATE TABLE returns (id TEXT PRIMARY KEY,order_item_id TEXT NOT NULL REFERENCES order_items(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),quantity INTEGER NOT NULL CHECK(quantity>=0),restock INTEGER NOT NULL CHECK(restock IN(0,1))) STRICT;\nCREATE TABLE movements (id TEXT PRIMARY KEY,variant_id TEXT NOT NULL REFERENCES variants(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),kind TEXT NOT NULL CHECK(kind IN('opening','receipt','sale','return','adjustment','supplier_return')),quantity INTEGER NOT NULL,reference_id TEXT NOT NULL) STRICT;\nCREATE TABLE reservations (id TEXT PRIMARY KEY,order_item_id TEXT NOT NULL REFERENCES order_items(id),quantity INTEGER NOT NULL CHECK(quantity>=0),status TEXT NOT NULL CHECK(status IN('active','released'))) STRICT;\nCREATE TABLE funnel (id TEXT PRIMARY KEY,date TEXT NOT NULL CHECK(date LIKE '____-__-__'),channel TEXT NOT NULL,campaign_id TEXT NOT NULL REFERENCES campaigns(id),visits INTEGER,leads INTEGER,spend_cents INTEGER NOT NULL CHECK(spend_cents>=0)) STRICT;\nCREATE TABLE unmet_demand (id TEXT PRIMARY KEY,date TEXT NOT NULL CHECK(date LIKE '____-__-__'),variant_id TEXT NOT NULL REFERENCES variants(id),quantity INTEGER NOT NULL CHECK(quantity>=0),reason TEXT NOT NULL) STRICT;\nCREATE TABLE leads (id TEXT PRIMARY KEY,customer_id TEXT NOT NULL REFERENCES customers(id),session_id TEXT REFERENCES sessions(id),channel TEXT NOT NULL,campaign_id TEXT NOT NULL REFERENCES campaigns(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),intent TEXT NOT NULL,status TEXT NOT NULL CHECK(status IN('open','converted','lost')),order_id TEXT REFERENCES orders(id),variant_id TEXT REFERENCES variants(id)) STRICT;\nCREATE TABLE purchase_receipts (id TEXT PRIMARY KEY,purchase_order_id TEXT NOT NULL REFERENCES purchase_orders(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),quantity INTEGER NOT NULL CHECK(quantity>=0)) STRICT;\nCREATE TABLE supplier_payments (id TEXT PRIMARY KEY,purchase_order_id TEXT NOT NULL REFERENCES purchase_orders(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),amount_cents INTEGER NOT NULL CHECK(amount_cents>=0)) STRICT;\nCREATE TABLE shipments (id TEXT PRIMARY KEY,order_id TEXT NOT NULL REFERENCES orders(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),status TEXT NOT NULL CHECK(status IN('in_transit','delivered')),delivered_date TEXT) STRICT;\nCREATE TABLE invoices (id TEXT PRIMARY KEY,order_id TEXT NOT NULL REFERENCES orders(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),amount_cents INTEGER NOT NULL CHECK(amount_cents>=0),status TEXT NOT NULL CHECK(status IN('issued','void')),kind TEXT NOT NULL CHECK(kind='management_statement')) STRICT;\nCREATE TABLE expense_payments (id TEXT PRIMARY KEY,expense_id TEXT NOT NULL REFERENCES expenses(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),amount_cents INTEGER NOT NULL CHECK(amount_cents>=0)) STRICT;\nCREATE TABLE inventory_counts (id TEXT PRIMARY KEY,variant_id TEXT NOT NULL REFERENCES variants(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),counted_qty INTEGER NOT NULL CHECK(counted_qty>=0)) STRICT;\nCREATE TABLE experiments (id TEXT PRIMARY KEY,name TEXT NOT NULL,hypothesis TEXT NOT NULL,primary_metric TEXT NOT NULL,guardrail TEXT NOT NULL,start_date TEXT NOT NULL CHECK(start_date LIKE '____-__-__'),end_date TEXT NOT NULL CHECK(end_date LIKE '____-__-__'),status TEXT NOT NULL CHECK(status IN('completed','running'))) STRICT;\nCREATE TABLE experiment_assignments (id TEXT PRIMARY KEY,experiment_id TEXT NOT NULL REFERENCES experiments(id),customer_id TEXT NOT NULL REFERENCES customers(id),arm TEXT NOT NULL CHECK(arm IN('control','treatment')),assigned_date TEXT NOT NULL CHECK(assigned_date LIKE '____-__-__'),UNIQUE(experiment_id,customer_id)) STRICT;\nCREATE TABLE experiment_outcomes (id TEXT PRIMARY KEY,assignment_id TEXT NOT NULL REFERENCES experiment_assignments(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),converted INTEGER NOT NULL CHECK(converted IN(0,1)),net_revenue_cents INTEGER NOT NULL CHECK(net_revenue_cents>=0),contribution_cents INTEGER NOT NULL,returned INTEGER NOT NULL CHECK(returned IN(0,1)),UNIQUE(assignment_id)) STRICT;\nCREATE TABLE lifecycle_events (id TEXT PRIMARY KEY,product_id TEXT NOT NULL REFERENCES products(id),date TEXT NOT NULL CHECK(date LIKE '____-__-__'),from_stage TEXT NOT NULL CHECK(from_stage IN('idea','sample','launched','clearance','retired')),to_stage TEXT NOT NULL CHECK(to_stage IN('idea','sample','launched','clearance','retired')),reason TEXT NOT NULL) STRICT;\nCREATE TABLE coverage (table_name TEXT PRIMARY KEY,covered INTEGER NOT NULL CHECK(covered IN(0,1))) STRICT;\nCREATE TABLE warehouse_manifest (key TEXT PRIMARY KEY,value TEXT NOT NULL) STRICT;\nCREATE TABLE ingest_batches (content_hash TEXT PRIMARY KEY,ingested_at TEXT NOT NULL,row_count INTEGER NOT NULL CHECK(row_count>=0)) STRICT;\nCREATE TABLE rejected_batches (content_hash TEXT PRIMARY KEY,rejected_at TEXT NOT NULL,error TEXT NOT NULL,payload_json TEXT NOT NULL) STRICT;\nCREATE INDEX idx_orders_delivered_date ON orders(delivered_date);\nCREATE INDEX idx_movements_variant_date ON movements(variant_id,date);\nCREATE INDEX idx_payments_date ON payments(date);\nCREATE INDEX idx_returns_date ON returns(date);\nCREATE INDEX idx_leads_session_id ON leads(session_id);\nCREATE INDEX idx_shipments_order_id ON shipments(order_id);\nCREATE INDEX idx_variants_product_id ON variants(product_id);\nCREATE INDEX idx_purchase_orders_supplier_id ON purchase_orders(supplier_id);\nCREATE INDEX idx_purchase_orders_variant_id ON purchase_orders(variant_id);\nCREATE INDEX idx_orders_customer_id ON orders(customer_id);\nCREATE INDEX idx_orders_campaign_id ON orders(campaign_id);\nCREATE INDEX idx_order_items_order_id ON order_items(order_id);\nCREATE INDEX idx_order_items_variant_id ON order_items(variant_id);\nCREATE INDEX idx_payments_order_id ON payments(order_id);\nCREATE INDEX idx_returns_order_item_id ON returns(order_item_id);\nCREATE INDEX idx_sessions_campaign_id ON sessions(campaign_id);\nCREATE INDEX idx_purchase_receipts_po_id ON purchase_receipts(purchase_order_id);\nCREATE INDEX idx_supplier_payments_po_id ON supplier_payments(purchase_order_id);\nCREATE INDEX idx_experiment_assignments_experiment_id ON experiment_assignments(experiment_id);\n"
+    }
+  }
+}

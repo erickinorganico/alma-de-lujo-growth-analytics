@@ -1,0 +1,14 @@
+id,date,channel,campaign_id,visits,leads,spend_cents
+funnel-001,2025-09-22,Instagram,camp-studio,361,33,10092
+funnel-002,2025-10-01,Paid Social,camp-move,339,54,12703
+funnel-003,2025-11-01,DM,camp-private,,,11495
+funnel-004,2025-12-01,Organic,organic,405,52,10905
+funnel-005,2026-01-01,Instagram,camp-studio,456,54,10181
+funnel-006,2026-02-01,Paid Social,camp-move,340,20,13807
+funnel-007,2026-03-01,DM,camp-private,,,9433
+funnel-008,2026-04-01,Organic,organic,410,27,11935
+funnel-009,2026-05-01,Instagram,camp-studio,417,24,9581
+funnel-010,2026-06-01,Paid Social,camp-move,446,30,12389
+funnel-011,2026-07-01,DM,camp-private,,,10594
+funnel-012,2026-08-01,Organic,organic,458,68,13927
+funnel-013,2026-09-01,Instagram,camp-studio,267,61,10484

@@ -1,0 +1,153 @@
+[
+  {
+    "checkpoint": {
+      "definition_hash": "c1d813ea27434989e280c9e2d2272d62cf8fa740409c8123aebc14de871bb35b",
+      "input_hash": "56f06666848c1ff8f11794cc1f58f075e2758e4f6121f6cdf763b12d1e98c947",
+      "owner": "Responsable de investigación comercial",
+      "process_id": "market-to-experiment",
+      "responses": {},
+      "run_id": "c04e4974d854d1bb0eb0cb43",
+      "status": "VALIDATING",
+      "step": "source_contract",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "required_tables": [
+        "products",
+        "variants",
+        "unmet_demand",
+        "experiments"
+      ]
+    },
+    "from_status": "NEW",
+    "hash": "e3e2d61abd5094df171e1f63705bb985b1d72d833e1994de595c5eb5b6eb94b7",
+    "previous_hash": "GENESIS",
+    "sequence": 1,
+    "step": "source_contract",
+    "to_status": "VALIDATING"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "c1d813ea27434989e280c9e2d2272d62cf8fa740409c8123aebc14de871bb35b",
+      "input_hash": "56f06666848c1ff8f11794cc1f58f075e2758e4f6121f6cdf763b12d1e98c947",
+      "owner": "Responsable de investigación comercial",
+      "process_id": "market-to-experiment",
+      "responses": {},
+      "run_id": "c04e4974d854d1bb0eb0cb43",
+      "status": "ANALYZING",
+      "step": "sql_marts",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "evidence_hash": "56f06666848c1ff8f11794cc1f58f075e2758e4f6121f6cdf763b12d1e98c947",
+      "marts": [
+        "inventory_position",
+        "channel_performance",
+        "experiment_results"
+      ]
+    },
+    "from_status": "VALIDATING",
+    "hash": "9d4317593be1a698883eb5c395a68c12f96701d006092997bbad543c5a6e4bb8",
+    "previous_hash": "e3e2d61abd5094df171e1f63705bb985b1d72d833e1994de595c5eb5b6eb94b7",
+    "sequence": 2,
+    "step": "sql_marts",
+    "to_status": "ANALYZING"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "c1d813ea27434989e280c9e2d2272d62cf8fa740409c8123aebc14de871bb35b",
+      "input_hash": "56f06666848c1ff8f11794cc1f58f075e2758e4f6121f6cdf763b12d1e98c947",
+      "owner": "Responsable de investigación comercial",
+      "process_id": "market-to-experiment",
+      "responses": {},
+      "run_id": "c04e4974d854d1bb0eb0cb43",
+      "status": "WAITING_AGENT",
+      "step": "native_analysis",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "request_id": "2be050bc89703b393c8a50068bdaf0ff23278633bac33d71c96f4edf81aa1e85",
+      "role": "market_researcher"
+    },
+    "from_status": "ANALYZING",
+    "hash": "872be60d2e3a6f94f3fccfa21d4940eacada11be447ae4ad8e38908f723132f4",
+    "previous_hash": "9d4317593be1a698883eb5c395a68c12f96701d006092997bbad543c5a6e4bb8",
+    "sequence": 3,
+    "step": "native_analysis",
+    "to_status": "WAITING_AGENT"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "c1d813ea27434989e280c9e2d2272d62cf8fa740409c8123aebc14de871bb35b",
+      "input_hash": "56f06666848c1ff8f11794cc1f58f075e2758e4f6121f6cdf763b12d1e98c947",
+      "owner": "Responsable de investigación comercial",
+      "process_id": "market-to-experiment",
+      "responses": {
+        "market_researcher": {
+          "agent_id": "/root/sol_scope_v2",
+          "dispatch_hash": "2a41ea6c4bd5799ec828029c97168c38fd39aa23b71f8da622f136102587a381",
+          "model": "gpt-5.6-sol",
+          "request_id": "2be050bc89703b393c8a50068bdaf0ff23278633bac33d71c96f4edf81aa1e85",
+          "sha256": "20c57ecf7911993215d52497ea5bfb89a023c7ca9e96d301e305ea915bc67eaf"
+        }
+      },
+      "run_id": "c04e4974d854d1bb0eb0cb43",
+      "status": "WAITING_REVIEW",
+      "step": "independent_review",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "analyst": "market_researcher",
+      "request_id": "8044572b2fd6d4dcc0fe3b01a16fb0a93a0a09580331a82f2d69d695076bbe34"
+    },
+    "from_status": "WAITING_AGENT",
+    "hash": "76e64962c11a6c59f2ee270c330d90b46f50f0424e55d317daa49b12de1e55f2",
+    "previous_hash": "872be60d2e3a6f94f3fccfa21d4940eacada11be447ae4ad8e38908f723132f4",
+    "sequence": 4,
+    "step": "independent_review",
+    "to_status": "WAITING_REVIEW"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "c1d813ea27434989e280c9e2d2272d62cf8fa740409c8123aebc14de871bb35b",
+      "input_hash": "56f06666848c1ff8f11794cc1f58f075e2758e4f6121f6cdf763b12d1e98c947",
+      "owner": "Responsable de investigación comercial",
+      "process_id": "market-to-experiment",
+      "responses": {
+        "evidence_reviewer": {
+          "agent_id": "/root/astra_v2_review",
+          "dispatch_hash": "af269224c4656ddf82f25fbeb622186d96cf9d504631e13a5836bfc798fc4bf8",
+          "model": "gpt-6-astra",
+          "request_id": "8044572b2fd6d4dcc0fe3b01a16fb0a93a0a09580331a82f2d69d695076bbe34",
+          "sha256": "f526ea720f6ea0cb6e7fe8f482b430e170e22254f65d0ef00074d23cf7f12be3"
+        },
+        "market_researcher": {
+          "agent_id": "/root/sol_scope_v2",
+          "dispatch_hash": "2a41ea6c4bd5799ec828029c97168c38fd39aa23b71f8da622f136102587a381",
+          "model": "gpt-5.6-sol",
+          "request_id": "2be050bc89703b393c8a50068bdaf0ff23278633bac33d71c96f4edf81aa1e85",
+          "sha256": "20c57ecf7911993215d52497ea5bfb89a023c7ca9e96d301e305ea915bc67eaf"
+        }
+      },
+      "run_id": "c04e4974d854d1bb0eb0cb43",
+      "status": "REVIEW",
+      "step": "decision_packet",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "external_execution": "PROHIBITED",
+      "sha256": "e3c470cc6d2dbd9bc5481aa4cef213d745cdda9a746925687a93bca38139511b"
+    },
+    "from_status": "WAITING_REVIEW",
+    "hash": "ad4b934011d01979cfc5660e3c250f14427e931dc14e4711a177020680547a5d",
+    "previous_hash": "76e64962c11a6c59f2ee270c330d90b46f50f0424e55d317daa49b12de1e55f2",
+    "sequence": 5,
+    "step": "decision_packet",
+    "to_status": "REVIEW"
+  }
+]

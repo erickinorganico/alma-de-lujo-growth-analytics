@@ -1,0 +1,20 @@
+{
+  "agent_id": "/root/luna_simulation_v2",
+  "completed_at_utc": "2026-09-22T09:05:01Z",
+  "effort": "high",
+  "mode": "live",
+  "model": "gpt-5.6-luna",
+  "parent_review": "schema-and-evidence-validated",
+  "provider": "native-codex",
+  "recorded_by": "parent-runtime",
+  "request_id": "d961da889a78ad917a5719e082ae43988029a2a4af01e6b94fb0db901171d3e9",
+  "response_sha256": "dd1d73b6c1da02b35b531311b6a60cf2eee3e6fcffda475dc33d9ceeed8c9abb",
+  "retry_history": [
+    {
+      "reason": "Corrected Windows default JSON decoding in local analysis validation to explicit UTF-8; original request and response hashes unchanged",
+      "revision": 2
+    }
+  ],
+  "role": "returns_analyst",
+  "started_at_utc": "2026-09-22T08:46:42Z"
+}

@@ -1,0 +1,68 @@
+{
+  "agent": "commerce_analyst",
+  "business_flow": "content → session → lead → order → settled payment → shipment → delivery",
+  "completion": "validated analyst response + separate native reviewer + immutable decision packet",
+  "external_execution": "PROHIBITED",
+  "id": "lead-to-delivery",
+  "idempotency": "canonical workspace manifest + versioned process definition",
+  "marts": [
+    "funnel_conversion",
+    "channel_performance",
+    "sales_daily",
+    "reconciliation"
+  ],
+  "owner": "Responsable de operación comercial",
+  "owner_status": "provisional functional role; no invented person",
+  "required_tables": [
+    "campaigns",
+    "content_assets",
+    "sessions",
+    "leads",
+    "orders",
+    "order_items",
+    "payments",
+    "shipments",
+    "invoices"
+  ],
+  "retry": "resume same inputs; changed data or contract requires new workspace",
+  "reviewer": "evidence_reviewer",
+  "states": [
+    "NEW",
+    "VALIDATING",
+    "ANALYZING",
+    "WAITING_AGENT",
+    "WAITING_REVIEW",
+    "REVIEW",
+    "READY_FOR_OWNER",
+    "BLOCKED"
+  ],
+  "steps": [
+    {
+      "failure": "BLOCKED",
+      "id": "source_contract",
+      "type": "deterministic"
+    },
+    {
+      "failure": "BLOCKED",
+      "id": "sql_marts",
+      "type": "deterministic"
+    },
+    {
+      "failure": "WAITING_AGENT",
+      "id": "native_analysis",
+      "type": "native_agent"
+    },
+    {
+      "failure": "WAITING_REVIEW",
+      "id": "independent_review",
+      "type": "native_agent"
+    },
+    {
+      "failure": "BLOCKED",
+      "id": "decision_packet",
+      "type": "deterministic"
+    }
+  ],
+  "trigger": "Cierre diario de pedidos",
+  "version": "2.0"
+}

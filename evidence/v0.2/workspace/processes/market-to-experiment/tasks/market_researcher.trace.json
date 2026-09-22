@@ -1,0 +1,75 @@
+{
+  "alternative_explanations": [
+    "Actividad física puede reflejar caminata, deporte u otras prácticas sin relación con Pilates o compra de ropa.",
+    "La diferencia experimental puede ser ruido muestral y el balance de asignación no prueba efecto.",
+    "Contribución mayor con conversión menor puede provenir de mezcla de tickets sintéticos, no de preferencia.",
+    "Cobertura de inventario sintética no representa capacidad, disponibilidad o política real."
+  ],
+  "calculations": [
+    {
+      "formula": "32 + 35",
+      "interpretation": "Tamaño de la viñeta sintética actual.",
+      "name": "experiment_total_assignments",
+      "result": 67
+    },
+    {
+      "formula": "0.34285714285714286 - 0.40625",
+      "interpretation": "Diferencia descriptiva tratamiento menos control; no estimación causal real.",
+      "name": "observed_conversion_difference",
+      "result": -0.06339285714285714
+    },
+    {
+      "formula": "2025-11-17 - 2025-09-22 + 1",
+      "interpretation": "Ventana inclusiva de la viñeta sintética, no recomendación automática para una prueba real.",
+      "name": "fixed_window_calendar_days",
+      "result": 57
+    },
+    {
+      "formula": "1774 * 2",
+      "interpretation": "Ejemplo de planeación bajo baseline 0.10, MDE 0.03, alpha 0.05 y power 0.8; los supuestos requieren aprobación.",
+      "name": "planning_example_total",
+      "result": 3548
+    }
+  ],
+  "effort": "high",
+  "evidence_hash": "56f06666848c1ff8f11794cc1f58f075e2758e4f6121f6cdf763b12d1e98c947",
+  "kind": "native-analyst-query-trace",
+  "model": "gpt-5.6-sol",
+  "native_job": "/root/sol_scope_v2",
+  "process_id": "market-to-experiment",
+  "queries": [
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart channel_performance",
+      "mode": "registered read-only",
+      "result": "Cuatro filas sintéticas; Instagram tiene 13,949,845 centavos de net revenue, pero attribution_unknown=1 en todos los canales."
+    },
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart experiment_results",
+      "mode": "registered read-only",
+      "result": "Control 32 asignados, 13 conversiones, tasa 0.40625, contribución 71,200; tratamiento 35, 12, 0.34285714285714286 y 77,140; synthetic_descriptive_only=1."
+    },
+    {
+      "command": "python -m alma query --workspace evidence/v0.2/workspace --mart inventory_position",
+      "mode": "registered read-only",
+      "result": "46 variantes sintéticas; las variantes de calcetines consultadas tienen cobertura conocida y available_qty=28, pero esto no prueba capacidad ni demanda real."
+    }
+  ],
+  "questions": [
+    "¿Qué población y periodo describe INEGI y qué no permite inferir sobre demanda?",
+    "¿Qué fuentes siguen inaccesibles o sólo a nivel landing?",
+    "¿Qué tamaño, ventana, balance e incertidumbre tiene la viñeta experimental?",
+    "¿Qué protocolo impediría elegir un ganador arbitrario?"
+  ],
+  "request_id": "2be050bc89703b393c8a50068bdaf0ff23278633bac33d71c96f4edf81aa1e85",
+  "role": "market_researcher",
+  "runtime_identity_source": "Parent-confirmed native dispatch metadata and recorded turn_context for this task.",
+  "source_assessment": [
+    "INEGI: VERIFIED_PUBLIC, población y periodo explícitos, licencia de libre uso con atribución, limitación contra inferencia de demanda.",
+    "AMVO: LANDING_ONLY; no se obtuvo el reporte ni su método.",
+    "Instagram de marca: ACCESS_FAILED; no se verificaron productos, precios ni actividad.",
+    "Contexto del dueño: USER_SUPPLIED; calcetines como ganador permanece hipótesis."
+  ],
+  "synthetic": true,
+  "validation": "validate_response(request, response) must pass before parent dispatch is recorded.",
+  "version": "2.0"
+}

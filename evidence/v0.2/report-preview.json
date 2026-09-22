@@ -1,0 +1,25 @@
+{
+  "checks": {
+    "title": "Alma de Lujo · Business Analytics",
+    "tables": 12,
+    "headings": 15,
+    "images": [
+      {
+        "loaded": true,
+        "source": "charts/finance.svg"
+      },
+      {
+        "loaded": true,
+        "source": "charts/cash.svg"
+      },
+      {
+        "loaded": true,
+        "source": "charts/sock-colors.svg"
+      }
+    ],
+    "scripts": 0,
+    "overflow": false
+  },
+  "errors": [],
+  "passed": true
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "attribution_unknown": 1,
+    "campaign_id": "camp-private",
+    "channel": "DM",
+    "cogs_cents": 2645800,
+    "credit_note_cents": 186070,
+    "customers": 112,
+    "delivered_orders": 139,
+    "discount_cents": 412842,
+    "gross_revenue_cents": 7327700,
+    "marketing_spend_cents": 31522,
+    "net_revenue_cents": 6728788,
+    "revenue_coverage_known": 1
+  },
+  {
+    "attribution_unknown": 1,
+    "campaign_id": "camp-studio",
+    "channel": "Instagram",
+    "cogs_cents": 5492500,
+    "credit_note_cents": 377217,
+    "customers": 209,
+    "delivered_orders": 279,
+    "discount_cents": 831138,
+    "gross_revenue_cents": 15158200,
+    "marketing_spend_cents": 40338,
+    "net_revenue_cents": 13949845,
+    "revenue_coverage_known": 1
+  },
+  {
+    "attribution_unknown": 1,
+    "campaign_id": "organic",
+    "channel": "Organic",
+    "cogs_cents": 3274800,
+    "credit_note_cents": 229094,
+    "customers": 160,
+    "delivered_orders": 188,
+    "discount_cents": 484104,
+    "gross_revenue_cents": 9072100,
+    "marketing_spend_cents": 36767,
+    "net_revenue_cents": 8358902,
+    "revenue_coverage_known": 1
+  },
+  {
+    "attribution_unknown": 1,
+    "campaign_id": "camp-move",
+    "channel": "Paid Social",
+    "cogs_cents": 3146700,
+    "credit_note_cents": 136738,
+    "customers": 139,
+    "delivered_orders": 166,
+    "discount_cents": 487540,
+    "gross_revenue_cents": 8674200,
+    "marketing_spend_cents": 38899,
+    "net_revenue_cents": 8049922,
+    "revenue_coverage_known": 1
+  }
+]

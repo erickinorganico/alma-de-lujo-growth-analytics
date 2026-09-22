@@ -1,0 +1,373 @@
+{
+  "completed_at_utc": "2026-09-22T09:09:42.052670+00:00",
+  "evidence_hash": "109fb2e4628047d4f017e58e247667ece960f17c94d08a23dedacd58ee467d0c",
+  "external_business_actions": "PROHIBITED",
+  "kind": "native-independent-review-query-trace",
+  "process_id": "return-to-refund",
+  "queries": [
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart cash_daily",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "1249bed02a576fafddf79eef10f4b289224915de1a2ac820d6138c9c81983e08",
+      "row_count": 335
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart inventory_position",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "e58278c97e0bd86adcf800d13549b3466e17f45d8fc0db36e15ac58c9ed852da",
+      "row_count": 46
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart finance_monthly",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "668729a23bc1632e0012d97ae49d3320239ecd8b3b7729dc27fcc220236bd988",
+      "row_count": 13
+    },
+    {
+      "command": "C:\\Users\\erick\\OneDrive\\Documentos\\ChatGPT\\Alma de Lujo 2\\.venv\\Scripts\\python.exe -m alma query --workspace evidence\\v0.2\\workspace --mart reconciliation",
+      "equals_bound_mart": true,
+      "exit_code": 0,
+      "result_sha256": "f0a23d8f8e3e12da7fa363f7a192c75cd42b641531ffdeab59db40c3e210db9c",
+      "row_count": 6
+    }
+  ],
+  "questions": [
+    "Coinciden conteos, caja e inventario con las observaciones exactas?",
+    "Puede atribuirse un refund a order_item_id con las claves realmente presentes?",
+    "Qué controles ya pasan y qué detalle adicional aportaría la propuesta?"
+  ],
+  "recomputed": {
+    "cash_example": {
+      "cash_coverage_known": 1,
+      "cash_in_cents": 0,
+      "cumulative_cash_movement_cents": 355595,
+      "date": "2025-09-28",
+      "expense_out_cents": 0,
+      "net_cash_change_cents": -17606,
+      "refund_out_cents": 17606,
+      "supplier_out_cents": 0
+    },
+    "counts": {
+      "credit_notes": 61,
+      "refunds": 61,
+      "returns": 61
+    },
+    "inventory_example": {
+      "available_qty": 28,
+      "category": "Sportswear",
+      "color": "Black",
+      "cost_cents": 11200,
+      "count_date": "2026-09-21",
+      "count_discrepancy_qty": 0,
+      "counted_qty": 36,
+      "cover_days": 64.62,
+      "in_transit_qty": 4,
+      "inventory_coverage_known": 1,
+      "inventory_value_cents": 403200,
+      "ledger_on_hand_qty": 36,
+      "lifecycle": "launched",
+      "product_id": "prod-leggings",
+      "product_name": "Flow Leggings",
+      "reserved_qty": 8,
+      "size": "L",
+      "stock_status": "AVAILABLE",
+      "trailing_30d_net_sold_qty": 13,
+      "variant_id": "var-legging-black-l"
+    },
+    "period_refund_out_cents": 929119,
+    "quality_53": {
+      "evidence_refs": [
+        "tables/returns",
+        "tables/movements"
+      ],
+      "id": "returns_ledger",
+      "message": "Devolución física separada; cantidad y restock conciliados",
+      "status": "PASS"
+    },
+    "relevant_existing_quality": [
+      {
+        "evidence_refs": [
+          "tables/payments"
+        ],
+        "id": "unique_payments",
+        "index": 14,
+        "message": "IDs únicos: payments",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "metadata/coverage/payments"
+        ],
+        "id": "coverage_payments",
+        "index": 15,
+        "message": "Cobertura declarada: payments",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "tables/refunds"
+        ],
+        "id": "unique_refunds",
+        "index": 16,
+        "message": "IDs únicos: refunds",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "metadata/coverage/refunds"
+        ],
+        "id": "coverage_refunds",
+        "index": 17,
+        "message": "Cobertura declarada: refunds",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "tables/credit_notes"
+        ],
+        "id": "unique_credit_notes",
+        "index": 18,
+        "message": "IDs únicos: credit_notes",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "metadata/coverage/credit_notes"
+        ],
+        "id": "coverage_credit_notes",
+        "index": 19,
+        "message": "Cobertura declarada: credit_notes",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "tables/returns"
+        ],
+        "id": "unique_returns",
+        "index": 20,
+        "message": "IDs únicos: returns",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "metadata/coverage/returns"
+        ],
+        "id": "coverage_returns",
+        "index": 21,
+        "message": "Cobertura declarada: returns",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "tables/payments",
+          "tables/orders"
+        ],
+        "id": "fk_payments_order_id",
+        "index": 38,
+        "message": "Referencias válidas: payments.order_id",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "tables/refunds",
+          "tables/orders"
+        ],
+        "id": "fk_refunds_order_id",
+        "index": 39,
+        "message": "Referencias válidas: refunds.order_id",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "tables/credit_notes",
+          "tables/order_items"
+        ],
+        "id": "fk_credit_notes_order_item_id",
+        "index": 40,
+        "message": "Referencias válidas: credit_notes.order_item_id",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "tables/returns",
+          "tables/order_items"
+        ],
+        "id": "fk_returns_order_item_id",
+        "index": 41,
+        "message": "Referencias válidas: returns.order_item_id",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "tables/returns",
+          "tables/movements"
+        ],
+        "id": "returns_ledger",
+        "index": 53,
+        "message": "Devolución física separada; cantidad y restock conciliados",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "tables/credit_notes",
+          "tables/order_items"
+        ],
+        "id": "credit_limits",
+        "index": 55,
+        "message": "Notas de crédito no exceden ingreso y siguen entrega",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "tables/payments",
+          "tables/refunds",
+          "tables/orders"
+        ],
+        "id": "payment_reconciliation",
+        "index": 56,
+        "message": "Política demo prepago: cobro, pedido y reembolso concilian",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "tables/movements",
+          "tables/payments",
+          "tables/orders"
+        ],
+        "id": "shipment_prepayment",
+        "index": 58,
+        "message": "Cobro completo previo al despacho y despacho no posterior a entrega",
+        "status": "PASS"
+      },
+      {
+        "evidence_refs": [
+          "tables/expenses"
+        ],
+        "id": "expense_payments",
+        "index": 59,
+        "message": "Gastos: efectivo separado del devengo",
+        "status": "PASS"
+      }
+    ],
+    "source_link_grains": {
+      "credit_notes": {
+        "columns": [
+          "id",
+          "order_item_id",
+          "date",
+          "amount_cents",
+          "reason"
+        ],
+        "foreign_keys": [
+          {
+            "from": "order_item_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "order_items",
+            "to": "id"
+          }
+        ]
+      },
+      "order_items": {
+        "columns": [
+          "id",
+          "order_id",
+          "variant_id",
+          "quantity",
+          "unit_price_cents",
+          "discount_cents",
+          "unit_cost_cents"
+        ],
+        "foreign_keys": [
+          {
+            "from": "variant_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "variants",
+            "to": "id"
+          },
+          {
+            "from": "order_id",
+            "id": 1,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "orders",
+            "to": "id"
+          }
+        ]
+      },
+      "refunds": {
+        "columns": [
+          "id",
+          "order_id",
+          "date",
+          "amount_cents",
+          "status"
+        ],
+        "foreign_keys": [
+          {
+            "from": "order_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "orders",
+            "to": "id"
+          }
+        ]
+      },
+      "returns": {
+        "columns": [
+          "id",
+          "order_item_id",
+          "date",
+          "quantity",
+          "restock"
+        ],
+        "foreign_keys": [
+          {
+            "from": "order_item_id",
+            "id": 0,
+            "match": "NONE",
+            "on_delete": "NO ACTION",
+            "on_update": "NO ACTION",
+            "seq": 0,
+            "table": "order_items",
+            "to": "id"
+          }
+        ]
+      }
+    }
+  },
+  "request_id": "fa53011afb533d0dd7b32d1421540565018688266b64c542f9be0ae905205b18",
+  "response_sha256": "4adb1fc2dcc4582bcaed71417b3931b322f0d94eb3c4e56666071d8ec04fcdf8",
+  "response_validation": {
+    "facts_checked": 6,
+    "request_id": "fa53011afb533d0dd7b32d1421540565018688266b64c542f9be0ae905205b18",
+    "scope": "schema, immutable evidence, exact observation values and authority; prose meaning requires reviewer",
+    "valid": true
+  },
+  "reviewer": "/root/astra_v2_review",
+  "semantic_challenges": [
+    "La igualdad 61/61/61 no permite emparejar eventos. El análisis lo reconoce; conservar IDs, cantidades físicas y montos monetarios en columnas y niveles de detalle distintos.",
+    "Para los indicadores de monto y días por order_item_id, definir un vínculo verificable o una asignación explícita antes de unir refunds. Si no existe, mantener el reembolso a nivel orden y marcar la atribución por línea como desconocida; no multiplicarlo por cada línea o crédito.",
+    "returns_ledger, credit_limits y payment_reconciliation ya tienen PASS. La recomendación debe aprovecharlos y añadir detalle de excepciones o vínculos, no presentar como ausentes esos controles ya implementados.",
+    "El ejemplo de una variante con discrepancia cero no prueba que cada devolución se reingresó a inventario ni que todo reembolso corresponda a restock. El COGS se revierte para unidades restockeadas; una merma física no debe recibir automáticamente esa reversión.",
+    "Una muestra limitada a unidades con trazabilidad completa puede excluir precisamente los casos fallidos. Reportar elegibles, excluidas y razones; fijar el tamaño o la regla de parada antes de observar resultados y no extrapolar a toda la población sin justificar la cobertura."
+  ],
+  "synthetic": true,
+  "verdict": "REVIEW",
+  "version": "2.0"
+}

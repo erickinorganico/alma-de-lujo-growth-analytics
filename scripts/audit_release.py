@@ -13,6 +13,25 @@ PATTERNS={
 }
 
 
+def approved_synthetic_database(path,name):
+    import hashlib
+    import sqlite3
+    allowed={'evidence/v0.2/workspace/warehouse.sqlite3','evidence/v0.2/workspace/lifecycle/lifecycle.sqlite3'}
+    if name not in allowed:raise ValueError('Database is not an approved synthetic release artifact')
+    workspace=ROOT/'evidence/v0.2/workspace'
+    manifest=json.loads((workspace/'workspace.json').read_text(encoding='utf-8-sig'))
+    relative=path.relative_to(workspace).as_posix()
+    if hashlib.sha256(path.read_bytes()).hexdigest()!=manifest['binary_sha256'].get(relative):raise ValueError('Synthetic database hash mismatch')
+    db=sqlite3.connect(path.resolve().as_uri()+'?mode=ro',uri=True)
+    try:
+        if name.endswith('/warehouse.sqlite3'):
+            metadata=json.loads(db.execute("SELECT value FROM warehouse_manifest WHERE key='metadata'").fetchone()[0])
+            if metadata.get('synthetic') is not True:raise ValueError('Database is not synthetic')
+        elif db.execute('SELECT COUNT(*) FROM lifecycle_events WHERE synthetic<>1').fetchone()[0]:raise ValueError('Lifecycle contains nonsynthetic events')
+        return '\n'.join(db.iterdump())
+    finally:db.close()
+
+
 def audit():
     result=subprocess.run(['git','ls-files','-z','--cached','--others','--exclude-standard'],cwd=ROOT,capture_output=True,check=True)
     names=sorted(set(n for n in result.stdout.decode('utf-8').split('\0') if n))
@@ -23,7 +42,10 @@ def audit():
             findings.append(dict(file=name,issue='excluded_directory_tracked'));continue
         if not path.is_file():continue
         if path.suffix.lower() in {'.png','.pdf','.gif','.zip'}:continue
-        try:content=path.read_text(encoding='utf-8-sig')
+        try:
+            content=approved_synthetic_database(path,name) if path.suffix.lower()=='.sqlite3' else path.read_text(encoding='utf-8-sig')
+        except ValueError:
+            findings.append(dict(file=name,issue='invalid_synthetic_database_or_text'));continue
         except UnicodeDecodeError:
             findings.append(dict(file=name,issue='unexpected_binary'));continue
         checked+=1

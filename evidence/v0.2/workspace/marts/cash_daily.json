@@ -1,0 +1,3352 @@
+[
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 74660,
+    "cumulative_cash_movement_cents": 64568,
+    "date": "2025-09-22",
+    "expense_out_cents": 10092,
+    "net_cash_change_cents": 64568,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 181083,
+    "cumulative_cash_movement_cents": 245651,
+    "date": "2025-09-23",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 181083,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 58071,
+    "cumulative_cash_movement_cents": 295012,
+    "date": "2025-09-24",
+    "expense_out_cents": 8710,
+    "net_cash_change_cents": 49361,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 78189,
+    "cumulative_cash_movement_cents": 373201,
+    "date": "2025-09-27",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 78189,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": 355595,
+    "date": "2025-09-28",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -17606,
+    "refund_out_cents": 17606,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": 190292,
+    "date": "2025-10-01",
+    "expense_out_cents": 12703,
+    "net_cash_change_cents": -165303,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 152600
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": 78292,
+    "date": "2025-10-02",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -112000,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 112000
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -149419,
+    "date": "2025-10-03",
+    "expense_out_cents": 17711,
+    "net_cash_change_cents": -227711,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 210000
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -472819,
+    "date": "2025-10-04",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -323400,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 323400
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -639919,
+    "date": "2025-10-05",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -167100,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 167100
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -777519,
+    "date": "2025-10-06",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -137600,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 137600
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -1020619,
+    "date": "2025-10-07",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -243100,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 243100
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -1260619,
+    "date": "2025-10-08",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -240000,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 240000
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -1398519,
+    "date": "2025-10-09",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -137900,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 137900
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -1531819,
+    "date": "2025-10-10",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -133300,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 133300
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 85349,
+    "cumulative_cash_movement_cents": -1640170,
+    "date": "2025-10-11",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -108351,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 193700
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -1905070,
+    "date": "2025-10-12",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -264900,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 264900
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -2055770,
+    "date": "2025-10-13",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -150700,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 150700
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -2163970,
+    "date": "2025-10-14",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -108200,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 108200
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -2391470,
+    "date": "2025-10-15",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -227500,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 227500
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -2560370,
+    "date": "2025-10-16",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -168900,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 168900
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 54435,
+    "cumulative_cash_movement_cents": -2615535,
+    "date": "2025-10-17",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -55165,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 109600
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -2710485,
+    "date": "2025-10-18",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -94950,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 94950
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -2909685,
+    "date": "2025-10-19",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -199200,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 199200
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -3183635,
+    "date": "2025-10-20",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -273950,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 273950
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 95576,
+    "cumulative_cash_movement_cents": -3225159,
+    "date": "2025-10-21",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -41524,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 137100
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 10924,
+    "cumulative_cash_movement_cents": -3349985,
+    "date": "2025-10-22",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -124826,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 135750
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -3540385,
+    "date": "2025-10-23",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -190400,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 190400
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 16425,
+    "cumulative_cash_movement_cents": -3570110,
+    "date": "2025-10-24",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -29725,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 46150
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 180059,
+    "cumulative_cash_movement_cents": -3390051,
+    "date": "2025-10-25",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 180059,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 64250,
+    "cumulative_cash_movement_cents": -3325801,
+    "date": "2025-10-26",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 64250,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 17422,
+    "cumulative_cash_movement_cents": -3308379,
+    "date": "2025-10-27",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 17422,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 28808,
+    "cumulative_cash_movement_cents": -3279571,
+    "date": "2025-10-28",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 28808,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 61863,
+    "cumulative_cash_movement_cents": -3217708,
+    "date": "2025-10-29",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 61863,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 44569,
+    "cumulative_cash_movement_cents": -3173139,
+    "date": "2025-10-30",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 44569,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 74377,
+    "cumulative_cash_movement_cents": -3110257,
+    "date": "2025-11-01",
+    "expense_out_cents": 11495,
+    "net_cash_change_cents": 62882,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -3124557,
+    "date": "2025-11-02",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -14300,
+    "refund_out_cents": 14300,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 91648,
+    "cumulative_cash_movement_cents": -3047616,
+    "date": "2025-11-03",
+    "expense_out_cents": 14707,
+    "net_cash_change_cents": 76941,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 64715,
+    "cumulative_cash_movement_cents": -2982901,
+    "date": "2025-11-04",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 64715,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 59656,
+    "cumulative_cash_movement_cents": -2923245,
+    "date": "2025-11-05",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 59656,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 5719,
+    "cumulative_cash_movement_cents": -2917526,
+    "date": "2025-11-07",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 5719,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 67397,
+    "cumulative_cash_movement_cents": -2850129,
+    "date": "2025-11-08",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 67397,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 39311,
+    "cumulative_cash_movement_cents": -2810818,
+    "date": "2025-11-09",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 39311,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 17213,
+    "cumulative_cash_movement_cents": -2793605,
+    "date": "2025-11-11",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 17213,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 55801,
+    "cumulative_cash_movement_cents": -2737804,
+    "date": "2025-11-12",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 55801,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 89611,
+    "cumulative_cash_movement_cents": -2648193,
+    "date": "2025-11-13",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 89611,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 126638,
+    "cumulative_cash_movement_cents": -2521555,
+    "date": "2025-11-14",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 126638,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 65247,
+    "cumulative_cash_movement_cents": -2456308,
+    "date": "2025-11-15",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 65247,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 24078,
+    "cumulative_cash_movement_cents": -2432230,
+    "date": "2025-11-16",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 24078,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 67334,
+    "cumulative_cash_movement_cents": -2364896,
+    "date": "2025-11-17",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 67334,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 63889,
+    "cumulative_cash_movement_cents": -2301007,
+    "date": "2025-11-18",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 63889,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 44859,
+    "cumulative_cash_movement_cents": -2256148,
+    "date": "2025-11-19",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 44859,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 70213,
+    "cumulative_cash_movement_cents": -2185935,
+    "date": "2025-11-22",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 70213,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 28125,
+    "cumulative_cash_movement_cents": -2169106,
+    "date": "2025-11-26",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 16829,
+    "refund_out_cents": 11296,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 160547,
+    "cumulative_cash_movement_cents": -2008559,
+    "date": "2025-11-27",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 160547,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 100151,
+    "cumulative_cash_movement_cents": -1908408,
+    "date": "2025-11-29",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 100151,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -1919313,
+    "date": "2025-12-01",
+    "expense_out_cents": 10905,
+    "net_cash_change_cents": -10905,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": -1934648,
+    "date": "2025-12-03",
+    "expense_out_cents": 15335,
+    "net_cash_change_cents": -15335,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 45825,
+    "cumulative_cash_movement_cents": -1888823,
+    "date": "2025-12-04",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 45825,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 206698,
+    "cumulative_cash_movement_cents": -1682125,
+    "date": "2025-12-05",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 206698,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 122913,
+    "cumulative_cash_movement_cents": -1559212,
+    "date": "2025-12-09",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 122913,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 126237,
+    "cumulative_cash_movement_cents": -1432975,
+    "date": "2025-12-10",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 126237,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 88832,
+    "cumulative_cash_movement_cents": -1344143,
+    "date": "2025-12-11",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 88832,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 128523,
+    "cumulative_cash_movement_cents": -1215620,
+    "date": "2025-12-12",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 128523,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 240327,
+    "cumulative_cash_movement_cents": -975293,
+    "date": "2025-12-13",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 240327,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 83883,
+    "cumulative_cash_movement_cents": -891410,
+    "date": "2025-12-14",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 83883,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 11317,
+    "cumulative_cash_movement_cents": -891603,
+    "date": "2025-12-15",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -193,
+    "refund_out_cents": 11510,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 55475,
+    "cumulative_cash_movement_cents": -836128,
+    "date": "2025-12-16",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 55475,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 11083,
+    "cumulative_cash_movement_cents": -825045,
+    "date": "2025-12-17",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 11083,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 28563,
+    "cumulative_cash_movement_cents": -818233,
+    "date": "2025-12-18",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 6812,
+    "refund_out_cents": 21751,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 26188,
+    "cumulative_cash_movement_cents": -792045,
+    "date": "2025-12-19",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 26188,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 101890,
+    "cumulative_cash_movement_cents": -690155,
+    "date": "2025-12-20",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 101890,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 92594,
+    "cumulative_cash_movement_cents": -607163,
+    "date": "2025-12-21",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 82992,
+    "refund_out_cents": 9602,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 67894,
+    "cumulative_cash_movement_cents": -539269,
+    "date": "2025-12-22",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 67894,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 79924,
+    "cumulative_cash_movement_cents": -459345,
+    "date": "2025-12-23",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 79924,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 52785,
+    "cumulative_cash_movement_cents": -406560,
+    "date": "2025-12-24",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 52785,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 52786,
+    "cumulative_cash_movement_cents": -353774,
+    "date": "2025-12-25",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 52786,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 56266,
+    "cumulative_cash_movement_cents": -297508,
+    "date": "2025-12-27",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 56266,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 213792,
+    "cumulative_cash_movement_cents": -83716,
+    "date": "2025-12-28",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 213792,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 157142,
+    "cumulative_cash_movement_cents": 55551,
+    "date": "2025-12-29",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 139267,
+    "refund_out_cents": 17875,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 62842,
+    "cumulative_cash_movement_cents": 90058,
+    "date": "2025-12-30",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 34507,
+    "refund_out_cents": 28335,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 44832,
+    "cumulative_cash_movement_cents": 134890,
+    "date": "2025-12-31",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 44832,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 258619,
+    "cumulative_cash_movement_cents": 383328,
+    "date": "2026-01-01",
+    "expense_out_cents": 10181,
+    "net_cash_change_cents": 248438,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 78901,
+    "cumulative_cash_movement_cents": 462229,
+    "date": "2026-01-02",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 78901,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 14533,
+    "cumulative_cash_movement_cents": 467972,
+    "date": "2026-01-03",
+    "expense_out_cents": 8790,
+    "net_cash_change_cents": 5743,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 84039,
+    "cumulative_cash_movement_cents": 552011,
+    "date": "2026-01-04",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 84039,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 143678,
+    "cumulative_cash_movement_cents": 695689,
+    "date": "2026-01-07",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 143678,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 23214,
+    "cumulative_cash_movement_cents": 718903,
+    "date": "2026-01-08",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 23214,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 204570,
+    "cumulative_cash_movement_cents": 923473,
+    "date": "2026-01-09",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 204570,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 96530,
+    "cumulative_cash_movement_cents": 992095,
+    "date": "2026-01-10",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 68622,
+    "refund_out_cents": 27908,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 97585,
+    "cumulative_cash_movement_cents": 1089680,
+    "date": "2026-01-11",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 97585,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 178365,
+    "cumulative_cash_movement_cents": 1268045,
+    "date": "2026-01-12",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 178365,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 23717,
+    "cumulative_cash_movement_cents": 1291762,
+    "date": "2026-01-13",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 23717,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 61615,
+    "cumulative_cash_movement_cents": 1353377,
+    "date": "2026-01-14",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 61615,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 226955,
+    "cumulative_cash_movement_cents": 1580332,
+    "date": "2026-01-15",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 226955,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 137594,
+    "cumulative_cash_movement_cents": 1717926,
+    "date": "2026-01-16",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 137594,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 28140,
+    "cumulative_cash_movement_cents": 1734979,
+    "date": "2026-01-17",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 17053,
+    "refund_out_cents": 11087,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 156680,
+    "cumulative_cash_movement_cents": 1891659,
+    "date": "2026-01-18",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 156680,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 114398,
+    "cumulative_cash_movement_cents": 2006057,
+    "date": "2026-01-19",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 114398,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 18273,
+    "cumulative_cash_movement_cents": 2024330,
+    "date": "2026-01-20",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 18273,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 135339,
+    "cumulative_cash_movement_cents": 2159669,
+    "date": "2026-01-21",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 135339,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 156735,
+    "cumulative_cash_movement_cents": 2316404,
+    "date": "2026-01-22",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 156735,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 266617,
+    "cumulative_cash_movement_cents": 2565872,
+    "date": "2026-01-23",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 249468,
+    "refund_out_cents": 17149,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 48004,
+    "cumulative_cash_movement_cents": 2613876,
+    "date": "2026-01-24",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 48004,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 146483,
+    "cumulative_cash_movement_cents": 2760359,
+    "date": "2026-01-25",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 146483,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 101399,
+    "cumulative_cash_movement_cents": 2861758,
+    "date": "2026-01-26",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 101399,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 288685,
+    "cumulative_cash_movement_cents": 3150443,
+    "date": "2026-01-27",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 288685,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 101475,
+    "cumulative_cash_movement_cents": 3251918,
+    "date": "2026-01-28",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 101475,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 65852,
+    "cumulative_cash_movement_cents": 3317770,
+    "date": "2026-01-29",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 65852,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": 3307160,
+    "date": "2026-01-30",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -10610,
+    "refund_out_cents": 10610,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": 3293353,
+    "date": "2026-02-01",
+    "expense_out_cents": 13807,
+    "net_cash_change_cents": -13807,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 88443,
+    "cumulative_cash_movement_cents": 3381796,
+    "date": "2026-02-02",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 88443,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 59426,
+    "cumulative_cash_movement_cents": 3424229,
+    "date": "2026-02-03",
+    "expense_out_cents": 16993,
+    "net_cash_change_cents": 42433,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 301811,
+    "cumulative_cash_movement_cents": 3726040,
+    "date": "2026-02-04",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 301811,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 187109,
+    "cumulative_cash_movement_cents": 3913149,
+    "date": "2026-02-05",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 187109,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 88729,
+    "cumulative_cash_movement_cents": 4001878,
+    "date": "2026-02-06",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 88729,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 22082,
+    "cumulative_cash_movement_cents": 4023960,
+    "date": "2026-02-07",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 22082,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 16464,
+    "cumulative_cash_movement_cents": 4040424,
+    "date": "2026-02-08",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 16464,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 240009,
+    "cumulative_cash_movement_cents": 4280433,
+    "date": "2026-02-09",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 240009,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 96030,
+    "cumulative_cash_movement_cents": 4376463,
+    "date": "2026-02-10",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 96030,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 305946,
+    "cumulative_cash_movement_cents": 4682409,
+    "date": "2026-02-11",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 305946,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 72271,
+    "cumulative_cash_movement_cents": 4743060,
+    "date": "2026-02-12",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 60651,
+    "refund_out_cents": 11620,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": 4718423,
+    "date": "2026-02-13",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -24637,
+    "refund_out_cents": 24637,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 83077,
+    "cumulative_cash_movement_cents": 4801500,
+    "date": "2026-02-14",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 83077,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 148287,
+    "cumulative_cash_movement_cents": 4949787,
+    "date": "2026-02-16",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 148287,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 53070,
+    "cumulative_cash_movement_cents": 4992155,
+    "date": "2026-02-17",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 42368,
+    "refund_out_cents": 10702,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 112190,
+    "cumulative_cash_movement_cents": 5104345,
+    "date": "2026-02-19",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 112190,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 111244,
+    "cumulative_cash_movement_cents": 5215589,
+    "date": "2026-02-20",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 111244,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 125636,
+    "cumulative_cash_movement_cents": 5341225,
+    "date": "2026-02-21",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 125636,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 128371,
+    "cumulative_cash_movement_cents": 5469596,
+    "date": "2026-02-22",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 128371,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 14337,
+    "cumulative_cash_movement_cents": 5483933,
+    "date": "2026-02-24",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 14337,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 81004,
+    "cumulative_cash_movement_cents": 5564937,
+    "date": "2026-02-25",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 81004,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 33815,
+    "cumulative_cash_movement_cents": 5598752,
+    "date": "2026-02-28",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 33815,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 321371,
+    "cumulative_cash_movement_cents": 5910690,
+    "date": "2026-03-01",
+    "expense_out_cents": 9433,
+    "net_cash_change_cents": 311938,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 286565,
+    "cumulative_cash_movement_cents": 6197255,
+    "date": "2026-03-02",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 286565,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 16467,
+    "cumulative_cash_movement_cents": 6195889,
+    "date": "2026-03-03",
+    "expense_out_cents": 17833,
+    "net_cash_change_cents": -1366,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 98483,
+    "cumulative_cash_movement_cents": 6294372,
+    "date": "2026-03-04",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 98483,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 16975,
+    "cumulative_cash_movement_cents": 6311347,
+    "date": "2026-03-05",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 16975,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 170962,
+    "cumulative_cash_movement_cents": 6482309,
+    "date": "2026-03-06",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 170962,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 169878,
+    "cumulative_cash_movement_cents": 6652187,
+    "date": "2026-03-07",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 169878,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 124926,
+    "cumulative_cash_movement_cents": 6777113,
+    "date": "2026-03-08",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 124926,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 43347,
+    "cumulative_cash_movement_cents": 6820460,
+    "date": "2026-03-09",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 43347,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 106388,
+    "cumulative_cash_movement_cents": 6926848,
+    "date": "2026-03-10",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 106388,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 65702,
+    "cumulative_cash_movement_cents": 6981293,
+    "date": "2026-03-11",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 54445,
+    "refund_out_cents": 11257,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 45637,
+    "cumulative_cash_movement_cents": 7026930,
+    "date": "2026-03-12",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 45637,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 167982,
+    "cumulative_cash_movement_cents": 7176411,
+    "date": "2026-03-13",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 149481,
+    "refund_out_cents": 18501,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 124525,
+    "cumulative_cash_movement_cents": 7300936,
+    "date": "2026-03-14",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 124525,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 208826,
+    "cumulative_cash_movement_cents": 7509762,
+    "date": "2026-03-15",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 208826,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 122642,
+    "cumulative_cash_movement_cents": 7632404,
+    "date": "2026-03-16",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 122642,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 165634,
+    "cumulative_cash_movement_cents": 7787261,
+    "date": "2026-03-17",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 154857,
+    "refund_out_cents": 10777,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 71805,
+    "cumulative_cash_movement_cents": 7859066,
+    "date": "2026-03-18",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 71805,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 11180,
+    "cumulative_cash_movement_cents": 7860128,
+    "date": "2026-03-19",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 1062,
+    "refund_out_cents": 10118,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 138867,
+    "cumulative_cash_movement_cents": 7988369,
+    "date": "2026-03-20",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 128241,
+    "refund_out_cents": 10626,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 105936,
+    "cumulative_cash_movement_cents": 8094305,
+    "date": "2026-03-21",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 105936,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 94589,
+    "cumulative_cash_movement_cents": 8188894,
+    "date": "2026-03-22",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 94589,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 151811,
+    "cumulative_cash_movement_cents": 8340705,
+    "date": "2026-03-24",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 151811,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 65271,
+    "cumulative_cash_movement_cents": 8405976,
+    "date": "2026-03-25",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 65271,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 264458,
+    "cumulative_cash_movement_cents": 8670434,
+    "date": "2026-03-26",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 264458,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 178927,
+    "cumulative_cash_movement_cents": 8849361,
+    "date": "2026-03-27",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 178927,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 34505,
+    "cumulative_cash_movement_cents": 8883866,
+    "date": "2026-03-28",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 34505,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 87383,
+    "cumulative_cash_movement_cents": 8971249,
+    "date": "2026-03-29",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 87383,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 184175,
+    "cumulative_cash_movement_cents": 9155424,
+    "date": "2026-03-30",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 184175,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 116819,
+    "cumulative_cash_movement_cents": 9272243,
+    "date": "2026-03-31",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 116819,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 83129,
+    "cumulative_cash_movement_cents": 9343437,
+    "date": "2026-04-01",
+    "expense_out_cents": 11935,
+    "net_cash_change_cents": 71194,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 22053,
+    "cumulative_cash_movement_cents": 9365490,
+    "date": "2026-04-02",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 22053,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 233684,
+    "cumulative_cash_movement_cents": 9580829,
+    "date": "2026-04-03",
+    "expense_out_cents": 18345,
+    "net_cash_change_cents": 215339,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 487106,
+    "cumulative_cash_movement_cents": 10067935,
+    "date": "2026-04-04",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 487106,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 262592,
+    "cumulative_cash_movement_cents": 10330527,
+    "date": "2026-04-05",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 262592,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 150142,
+    "cumulative_cash_movement_cents": 10480669,
+    "date": "2026-04-06",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 150142,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 23200,
+    "cumulative_cash_movement_cents": 10503869,
+    "date": "2026-04-07",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 23200,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 135790,
+    "cumulative_cash_movement_cents": 10639659,
+    "date": "2026-04-08",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 135790,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 105990,
+    "cumulative_cash_movement_cents": 10745649,
+    "date": "2026-04-09",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 105990,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 67082,
+    "cumulative_cash_movement_cents": 10812731,
+    "date": "2026-04-10",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 67082,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 22014,
+    "cumulative_cash_movement_cents": 10834745,
+    "date": "2026-04-11",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 22014,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 200925,
+    "cumulative_cash_movement_cents": 11035670,
+    "date": "2026-04-12",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 200925,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 0,
+    "cumulative_cash_movement_cents": 11021864,
+    "date": "2026-04-13",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": -13806,
+    "refund_out_cents": 13806,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 137352,
+    "cumulative_cash_movement_cents": 11159216,
+    "date": "2026-04-14",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 137352,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 317542,
+    "cumulative_cash_movement_cents": 11476758,
+    "date": "2026-04-15",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 317542,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 199073,
+    "cumulative_cash_movement_cents": 11665344,
+    "date": "2026-04-16",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 188586,
+    "refund_out_cents": 10487,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 32931,
+    "cumulative_cash_movement_cents": 11698275,
+    "date": "2026-04-18",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 32931,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 131196,
+    "cumulative_cash_movement_cents": 11829471,
+    "date": "2026-04-19",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 131196,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 136445,
+    "cumulative_cash_movement_cents": 11947551,
+    "date": "2026-04-20",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 118080,
+    "refund_out_cents": 18365,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 50136,
+    "cumulative_cash_movement_cents": 11997687,
+    "date": "2026-04-21",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 50136,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 39654,
+    "cumulative_cash_movement_cents": 12037341,
+    "date": "2026-04-22",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 39654,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 10562,
+    "cumulative_cash_movement_cents": 12047903,
+    "date": "2026-04-23",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 10562,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 63901,
+    "cumulative_cash_movement_cents": 12111804,
+    "date": "2026-04-25",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 63901,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 352753,
+    "cumulative_cash_movement_cents": 12453353,
+    "date": "2026-04-26",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 341549,
+    "refund_out_cents": 11204,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 111248,
+    "cumulative_cash_movement_cents": 12564601,
+    "date": "2026-04-27",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 111248,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 145541,
+    "cumulative_cash_movement_cents": 12710142,
+    "date": "2026-04-28",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 145541,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 340972,
+    "cumulative_cash_movement_cents": 13051114,
+    "date": "2026-04-29",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 340972,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 191486,
+    "cumulative_cash_movement_cents": 13242600,
+    "date": "2026-04-30",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 191486,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 39011,
+    "cumulative_cash_movement_cents": 13272030,
+    "date": "2026-05-01",
+    "expense_out_cents": 9581,
+    "net_cash_change_cents": 29430,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 56397,
+    "cumulative_cash_movement_cents": 13328427,
+    "date": "2026-05-02",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 56397,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 22283,
+    "cumulative_cash_movement_cents": 13342541,
+    "date": "2026-05-03",
+    "expense_out_cents": 8169,
+    "net_cash_change_cents": 14114,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 159689,
+    "cumulative_cash_movement_cents": 13502230,
+    "date": "2026-05-04",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 159689,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 46371,
+    "cumulative_cash_movement_cents": 13538149,
+    "date": "2026-05-05",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 35919,
+    "refund_out_cents": 10452,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 195583,
+    "cumulative_cash_movement_cents": 13716908,
+    "date": "2026-05-06",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 178759,
+    "refund_out_cents": 16824,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 64964,
+    "cumulative_cash_movement_cents": 13781872,
+    "date": "2026-05-07",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 64964,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 108873,
+    "cumulative_cash_movement_cents": 13837800,
+    "date": "2026-05-08",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 55928,
+    "refund_out_cents": 52945,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 217447,
+    "cumulative_cash_movement_cents": 14055247,
+    "date": "2026-05-09",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 217447,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 32649,
+    "cumulative_cash_movement_cents": 14087896,
+    "date": "2026-05-10",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 32649,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 58060,
+    "cumulative_cash_movement_cents": 14145956,
+    "date": "2026-05-11",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 58060,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 160610,
+    "cumulative_cash_movement_cents": 14306566,
+    "date": "2026-05-12",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 160610,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 199430,
+    "cumulative_cash_movement_cents": 14505996,
+    "date": "2026-05-13",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 199430,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 304980,
+    "cumulative_cash_movement_cents": 14810976,
+    "date": "2026-05-14",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 304980,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 209612,
+    "cumulative_cash_movement_cents": 15020588,
+    "date": "2026-05-15",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 209612,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 122550,
+    "cumulative_cash_movement_cents": 15143138,
+    "date": "2026-05-16",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 122550,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 194430,
+    "cumulative_cash_movement_cents": 15337568,
+    "date": "2026-05-17",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 194430,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 33641,
+    "cumulative_cash_movement_cents": 15371209,
+    "date": "2026-05-18",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 33641,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 82843,
+    "cumulative_cash_movement_cents": 15454052,
+    "date": "2026-05-19",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 82843,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 65381,
+    "cumulative_cash_movement_cents": 15519433,
+    "date": "2026-05-20",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 65381,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 180408,
+    "cumulative_cash_movement_cents": 15688342,
+    "date": "2026-05-21",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 168909,
+    "refund_out_cents": 11499,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 285028,
+    "cumulative_cash_movement_cents": 15973370,
+    "date": "2026-05-22",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 285028,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 176026,
+    "cumulative_cash_movement_cents": 16149396,
+    "date": "2026-05-23",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 176026,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 319711,
+    "cumulative_cash_movement_cents": 16459179,
+    "date": "2026-05-24",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 309783,
+    "refund_out_cents": 9928,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 140603,
+    "cumulative_cash_movement_cents": 16599782,
+    "date": "2026-05-25",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 140603,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 134408,
+    "cumulative_cash_movement_cents": 16734190,
+    "date": "2026-05-26",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 134408,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 77705,
+    "cumulative_cash_movement_cents": 16811895,
+    "date": "2026-05-27",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 77705,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 521269,
+    "cumulative_cash_movement_cents": 17333164,
+    "date": "2026-05-28",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 521269,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 436777,
+    "cumulative_cash_movement_cents": 17769941,
+    "date": "2026-05-29",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 436777,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 274228,
+    "cumulative_cash_movement_cents": 18044169,
+    "date": "2026-05-30",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 274228,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 25539,
+    "cumulative_cash_movement_cents": 18069708,
+    "date": "2026-05-31",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 25539,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 203316,
+    "cumulative_cash_movement_cents": 18260635,
+    "date": "2026-06-01",
+    "expense_out_cents": 12389,
+    "net_cash_change_cents": 190927,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 88793,
+    "cumulative_cash_movement_cents": 18323460,
+    "date": "2026-06-02",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 62825,
+    "refund_out_cents": 25968,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 32972,
+    "cumulative_cash_movement_cents": 18329374,
+    "date": "2026-06-03",
+    "expense_out_cents": 18001,
+    "net_cash_change_cents": 5914,
+    "refund_out_cents": 9057,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 207664,
+    "cumulative_cash_movement_cents": 18520184,
+    "date": "2026-06-04",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 190810,
+    "refund_out_cents": 16854,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 159323,
+    "cumulative_cash_movement_cents": 18659544,
+    "date": "2026-06-05",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 139360,
+    "refund_out_cents": 19963,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 105280,
+    "cumulative_cash_movement_cents": 18764824,
+    "date": "2026-06-06",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 105280,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 359674,
+    "cumulative_cash_movement_cents": 19113638,
+    "date": "2026-06-07",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 348814,
+    "refund_out_cents": 10860,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 464951,
+    "cumulative_cash_movement_cents": 19578589,
+    "date": "2026-06-08",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 464951,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 355029,
+    "cumulative_cash_movement_cents": 19933618,
+    "date": "2026-06-09",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 355029,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 274816,
+    "cumulative_cash_movement_cents": 20208434,
+    "date": "2026-06-10",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 274816,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 72726,
+    "cumulative_cash_movement_cents": 20281160,
+    "date": "2026-06-11",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 72726,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 22509,
+    "cumulative_cash_movement_cents": 20292889,
+    "date": "2026-06-12",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 11729,
+    "refund_out_cents": 10780,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 305440,
+    "cumulative_cash_movement_cents": 20598329,
+    "date": "2026-06-13",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 305440,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 190168,
+    "cumulative_cash_movement_cents": 20788497,
+    "date": "2026-06-14",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 190168,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 141079,
+    "cumulative_cash_movement_cents": 20929576,
+    "date": "2026-06-15",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 141079,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 290823,
+    "cumulative_cash_movement_cents": 21220399,
+    "date": "2026-06-16",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 290823,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 161765,
+    "cumulative_cash_movement_cents": 21382164,
+    "date": "2026-06-17",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 161765,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 33546,
+    "cumulative_cash_movement_cents": 21405402,
+    "date": "2026-06-18",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 23238,
+    "refund_out_cents": 10308,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 221045,
+    "cumulative_cash_movement_cents": 21626447,
+    "date": "2026-06-19",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 221045,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 411003,
+    "cumulative_cash_movement_cents": 22037450,
+    "date": "2026-06-20",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 411003,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 251568,
+    "cumulative_cash_movement_cents": 22289018,
+    "date": "2026-06-21",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 251568,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 87258,
+    "cumulative_cash_movement_cents": 22376276,
+    "date": "2026-06-22",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 87258,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 54403,
+    "cumulative_cash_movement_cents": 22409967,
+    "date": "2026-06-23",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 33691,
+    "refund_out_cents": 20712,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 310747,
+    "cumulative_cash_movement_cents": 22720714,
+    "date": "2026-06-24",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 310747,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 615131,
+    "cumulative_cash_movement_cents": 23335845,
+    "date": "2026-06-25",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 615131,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 173130,
+    "cumulative_cash_movement_cents": 23508975,
+    "date": "2026-06-26",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 173130,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 67422,
+    "cumulative_cash_movement_cents": 23576397,
+    "date": "2026-06-27",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 67422,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 416127,
+    "cumulative_cash_movement_cents": 23992524,
+    "date": "2026-06-28",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 416127,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 406279,
+    "cumulative_cash_movement_cents": 24378742,
+    "date": "2026-06-29",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 386218,
+    "refund_out_cents": 20061,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 385432,
+    "cumulative_cash_movement_cents": 24764174,
+    "date": "2026-06-30",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 385432,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 534283,
+    "cumulative_cash_movement_cents": 25287863,
+    "date": "2026-07-01",
+    "expense_out_cents": 10594,
+    "net_cash_change_cents": 523689,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 310999,
+    "cumulative_cash_movement_cents": 25598862,
+    "date": "2026-07-02",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 310999,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 214804,
+    "cumulative_cash_movement_cents": 25799628,
+    "date": "2026-07-03",
+    "expense_out_cents": 14038,
+    "net_cash_change_cents": 200766,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 95206,
+    "cumulative_cash_movement_cents": 25859584,
+    "date": "2026-07-04",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 59956,
+    "refund_out_cents": 35250,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 96489,
+    "cumulative_cash_movement_cents": 25956073,
+    "date": "2026-07-05",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 96489,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 150387,
+    "cumulative_cash_movement_cents": 26085094,
+    "date": "2026-07-06",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 129021,
+    "refund_out_cents": 21366,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 283832,
+    "cumulative_cash_movement_cents": 26357974,
+    "date": "2026-07-07",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 272880,
+    "refund_out_cents": 10952,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 207718,
+    "cumulative_cash_movement_cents": 26533095,
+    "date": "2026-07-08",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 175121,
+    "refund_out_cents": 32597,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 420524,
+    "cumulative_cash_movement_cents": 26953619,
+    "date": "2026-07-09",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 420524,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 316658,
+    "cumulative_cash_movement_cents": 27259546,
+    "date": "2026-07-10",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 305927,
+    "refund_out_cents": 10731,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 281332,
+    "cumulative_cash_movement_cents": 27540878,
+    "date": "2026-07-11",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 281332,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 151675,
+    "cumulative_cash_movement_cents": 27692553,
+    "date": "2026-07-12",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 151675,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 251699,
+    "cumulative_cash_movement_cents": 27944252,
+    "date": "2026-07-13",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 251699,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 385086,
+    "cumulative_cash_movement_cents": 28329338,
+    "date": "2026-07-14",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 385086,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 381383,
+    "cumulative_cash_movement_cents": 28710721,
+    "date": "2026-07-15",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 381383,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 131255,
+    "cumulative_cash_movement_cents": 28841976,
+    "date": "2026-07-16",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 131255,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 289992,
+    "cumulative_cash_movement_cents": 29116413,
+    "date": "2026-07-17",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 274437,
+    "refund_out_cents": 15555,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 317920,
+    "cumulative_cash_movement_cents": 29434333,
+    "date": "2026-07-18",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 317920,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 135626,
+    "cumulative_cash_movement_cents": 29569959,
+    "date": "2026-07-19",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 135626,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 292930,
+    "cumulative_cash_movement_cents": 29862889,
+    "date": "2026-07-20",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 292930,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 229264,
+    "cumulative_cash_movement_cents": 30070796,
+    "date": "2026-07-21",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 207907,
+    "refund_out_cents": 21357,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 58627,
+    "cumulative_cash_movement_cents": 30129423,
+    "date": "2026-07-22",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 58627,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 343446,
+    "cumulative_cash_movement_cents": 30472869,
+    "date": "2026-07-23",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 343446,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 306060,
+    "cumulative_cash_movement_cents": 30778929,
+    "date": "2026-07-24",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 306060,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 184282,
+    "cumulative_cash_movement_cents": 30963211,
+    "date": "2026-07-25",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 184282,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 145825,
+    "cumulative_cash_movement_cents": 31109036,
+    "date": "2026-07-26",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 145825,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 75216,
+    "cumulative_cash_movement_cents": 31184252,
+    "date": "2026-07-27",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 75216,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 177905,
+    "cumulative_cash_movement_cents": 31362157,
+    "date": "2026-07-28",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 177905,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 123199,
+    "cumulative_cash_movement_cents": 31485356,
+    "date": "2026-07-29",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 123199,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 86795,
+    "cumulative_cash_movement_cents": 31555130,
+    "date": "2026-07-30",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 69774,
+    "refund_out_cents": 17021,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 141990,
+    "cumulative_cash_movement_cents": 31697120,
+    "date": "2026-07-31",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 141990,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 283064,
+    "cumulative_cash_movement_cents": 31966257,
+    "date": "2026-08-01",
+    "expense_out_cents": 13927,
+    "net_cash_change_cents": 269137,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 90054,
+    "cumulative_cash_movement_cents": 32056311,
+    "date": "2026-08-02",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 90054,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 82096,
+    "cumulative_cash_movement_cents": 32116021,
+    "date": "2026-08-03",
+    "expense_out_cents": 13469,
+    "net_cash_change_cents": 59710,
+    "refund_out_cents": 8917,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 266695,
+    "cumulative_cash_movement_cents": 32382716,
+    "date": "2026-08-04",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 266695,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 47016,
+    "cumulative_cash_movement_cents": 32429732,
+    "date": "2026-08-05",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 47016,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 168938,
+    "cumulative_cash_movement_cents": 32598670,
+    "date": "2026-08-06",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 168938,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 224588,
+    "cumulative_cash_movement_cents": 32823258,
+    "date": "2026-08-07",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 224588,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 187880,
+    "cumulative_cash_movement_cents": 33011138,
+    "date": "2026-08-08",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 187880,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 478126,
+    "cumulative_cash_movement_cents": 33489264,
+    "date": "2026-08-09",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 478126,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 119626,
+    "cumulative_cash_movement_cents": 33608890,
+    "date": "2026-08-10",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 119626,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 116724,
+    "cumulative_cash_movement_cents": 33725614,
+    "date": "2026-08-11",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 116724,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 88043,
+    "cumulative_cash_movement_cents": 33813657,
+    "date": "2026-08-12",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 88043,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 390485,
+    "cumulative_cash_movement_cents": 34204142,
+    "date": "2026-08-13",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 390485,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 102480,
+    "cumulative_cash_movement_cents": 34306622,
+    "date": "2026-08-14",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 102480,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 188426,
+    "cumulative_cash_movement_cents": 34495048,
+    "date": "2026-08-15",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 188426,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 262034,
+    "cumulative_cash_movement_cents": 34757082,
+    "date": "2026-08-16",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 262034,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 239733,
+    "cumulative_cash_movement_cents": 34968862,
+    "date": "2026-08-17",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 211780,
+    "refund_out_cents": 27953,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 447190,
+    "cumulative_cash_movement_cents": 35416052,
+    "date": "2026-08-18",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 447190,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 205184,
+    "cumulative_cash_movement_cents": 35621236,
+    "date": "2026-08-19",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 205184,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 536523,
+    "cumulative_cash_movement_cents": 36157759,
+    "date": "2026-08-20",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 536523,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 280451,
+    "cumulative_cash_movement_cents": 36438210,
+    "date": "2026-08-21",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 280451,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 385141,
+    "cumulative_cash_movement_cents": 36813582,
+    "date": "2026-08-22",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 375372,
+    "refund_out_cents": 9769,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 125715,
+    "cumulative_cash_movement_cents": 36939297,
+    "date": "2026-08-23",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 125715,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 194615,
+    "cumulative_cash_movement_cents": 37133912,
+    "date": "2026-08-24",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 194615,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 500260,
+    "cumulative_cash_movement_cents": 37605324,
+    "date": "2026-08-25",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 471412,
+    "refund_out_cents": 28848,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 370969,
+    "cumulative_cash_movement_cents": 37965178,
+    "date": "2026-08-26",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 359854,
+    "refund_out_cents": 11115,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 440663,
+    "cumulative_cash_movement_cents": 38405841,
+    "date": "2026-08-27",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 440663,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 61504,
+    "cumulative_cash_movement_cents": 38467345,
+    "date": "2026-08-28",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 61504,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 183460,
+    "cumulative_cash_movement_cents": 38639606,
+    "date": "2026-08-29",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 172261,
+    "refund_out_cents": 11199,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 403705,
+    "cumulative_cash_movement_cents": 39043311,
+    "date": "2026-08-30",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 403705,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 584635,
+    "cumulative_cash_movement_cents": 39627946,
+    "date": "2026-08-31",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 584635,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 312340,
+    "cumulative_cash_movement_cents": 39929802,
+    "date": "2026-09-01",
+    "expense_out_cents": 10484,
+    "net_cash_change_cents": 301856,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 279889,
+    "cumulative_cash_movement_cents": 40209691,
+    "date": "2026-09-02",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 279889,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 342177,
+    "cumulative_cash_movement_cents": 40532462,
+    "date": "2026-09-03",
+    "expense_out_cents": 8027,
+    "net_cash_change_cents": 322771,
+    "refund_out_cents": 11379,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 160623,
+    "cumulative_cash_movement_cents": 40683409,
+    "date": "2026-09-04",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 150947,
+    "refund_out_cents": 9676,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 406044,
+    "cumulative_cash_movement_cents": 41089453,
+    "date": "2026-09-05",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 406044,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 343866,
+    "cumulative_cash_movement_cents": 41417415,
+    "date": "2026-09-06",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 327962,
+    "refund_out_cents": 15904,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 208755,
+    "cumulative_cash_movement_cents": 41626170,
+    "date": "2026-09-07",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 208755,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 281453,
+    "cumulative_cash_movement_cents": 41907623,
+    "date": "2026-09-08",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 281453,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 521954,
+    "cumulative_cash_movement_cents": 42429577,
+    "date": "2026-09-09",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 521954,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 138916,
+    "cumulative_cash_movement_cents": 42568493,
+    "date": "2026-09-10",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 138916,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 128128,
+    "cumulative_cash_movement_cents": 42696621,
+    "date": "2026-09-11",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 128128,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 141060,
+    "cumulative_cash_movement_cents": 42815491,
+    "date": "2026-09-12",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 118870,
+    "refund_out_cents": 22190,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 333162,
+    "cumulative_cash_movement_cents": 43148653,
+    "date": "2026-09-13",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 333162,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 246828,
+    "cumulative_cash_movement_cents": 43395481,
+    "date": "2026-09-14",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 246828,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 182744,
+    "cumulative_cash_movement_cents": 43578225,
+    "date": "2026-09-15",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 182744,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 197005,
+    "cumulative_cash_movement_cents": 43775230,
+    "date": "2026-09-16",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 197005,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 269240,
+    "cumulative_cash_movement_cents": 44044470,
+    "date": "2026-09-17",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 269240,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 19906,
+    "cumulative_cash_movement_cents": 44064376,
+    "date": "2026-09-18",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 19906,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 26294,
+    "cumulative_cash_movement_cents": 44090670,
+    "date": "2026-09-19",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 26294,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 84909,
+    "cumulative_cash_movement_cents": 44175579,
+    "date": "2026-09-20",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 84909,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  },
+  {
+    "cash_coverage_known": 1,
+    "cash_in_cents": 32092,
+    "cumulative_cash_movement_cents": 44207671,
+    "date": "2026-09-21",
+    "expense_out_cents": 0,
+    "net_cash_change_cents": 32092,
+    "refund_out_cents": 0,
+    "supplier_out_cents": 0
+  }
+]

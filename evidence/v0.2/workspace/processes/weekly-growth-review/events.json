@@ -1,0 +1,159 @@
+[
+  {
+    "checkpoint": {
+      "definition_hash": "ca78280cf373d1d539403336d3102ca2a3c0e92644206acaec5e6bd79fb9f52c",
+      "input_hash": "4c5cfe6e04c75c428a99e5a589e237fde4d9331655311b85b867e87b30c21d79",
+      "owner": "Responsable de crecimiento",
+      "process_id": "weekly-growth-review",
+      "responses": {},
+      "run_id": "59cccb92c86e35f1b44f1281",
+      "status": "VALIDATING",
+      "step": "source_contract",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "required_tables": [
+        "customers",
+        "orders",
+        "campaigns",
+        "leads",
+        "sessions",
+        "experiments",
+        "experiment_assignments",
+        "experiment_outcomes"
+      ]
+    },
+    "from_status": "NEW",
+    "hash": "218d441af731d5796bbcfab6eed05fc6f4b53d0085bba6e1ff65a7d38b977ca2",
+    "previous_hash": "GENESIS",
+    "sequence": 1,
+    "step": "source_contract",
+    "to_status": "VALIDATING"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "ca78280cf373d1d539403336d3102ca2a3c0e92644206acaec5e6bd79fb9f52c",
+      "input_hash": "4c5cfe6e04c75c428a99e5a589e237fde4d9331655311b85b867e87b30c21d79",
+      "owner": "Responsable de crecimiento",
+      "process_id": "weekly-growth-review",
+      "responses": {},
+      "run_id": "59cccb92c86e35f1b44f1281",
+      "status": "ANALYZING",
+      "step": "sql_marts",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "evidence_hash": "4c5cfe6e04c75c428a99e5a589e237fde4d9331655311b85b867e87b30c21d79",
+      "marts": [
+        "channel_performance",
+        "customer_cohorts",
+        "experiment_results",
+        "funnel_conversion",
+        "finance_monthly"
+      ]
+    },
+    "from_status": "VALIDATING",
+    "hash": "801a86022195be22462472850619eb1eefc30fc893b7350fff0719cf3c48cfa8",
+    "previous_hash": "218d441af731d5796bbcfab6eed05fc6f4b53d0085bba6e1ff65a7d38b977ca2",
+    "sequence": 2,
+    "step": "sql_marts",
+    "to_status": "ANALYZING"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "ca78280cf373d1d539403336d3102ca2a3c0e92644206acaec5e6bd79fb9f52c",
+      "input_hash": "4c5cfe6e04c75c428a99e5a589e237fde4d9331655311b85b867e87b30c21d79",
+      "owner": "Responsable de crecimiento",
+      "process_id": "weekly-growth-review",
+      "responses": {},
+      "run_id": "59cccb92c86e35f1b44f1281",
+      "status": "WAITING_AGENT",
+      "step": "native_analysis",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "request_id": "86241dc471bb7c488b937606a9f8983fef0e0cc375dbac907a2e42caf2705b55",
+      "role": "growth_analyst"
+    },
+    "from_status": "ANALYZING",
+    "hash": "a6e1be0beb992e74515036f71fd37ecca467157e491a4068445262df87053d15",
+    "previous_hash": "801a86022195be22462472850619eb1eefc30fc893b7350fff0719cf3c48cfa8",
+    "sequence": 3,
+    "step": "native_analysis",
+    "to_status": "WAITING_AGENT"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "ca78280cf373d1d539403336d3102ca2a3c0e92644206acaec5e6bd79fb9f52c",
+      "input_hash": "4c5cfe6e04c75c428a99e5a589e237fde4d9331655311b85b867e87b30c21d79",
+      "owner": "Responsable de crecimiento",
+      "process_id": "weekly-growth-review",
+      "responses": {
+        "growth_analyst": {
+          "agent_id": "/root/sol_scope_v2",
+          "dispatch_hash": "97887714c37d895869c27db319225cb8ff035488b1b1068230f249ca2bd32d39",
+          "model": "gpt-5.6-sol",
+          "request_id": "86241dc471bb7c488b937606a9f8983fef0e0cc375dbac907a2e42caf2705b55",
+          "sha256": "681cf030c27c128edc20c8e91ae84e42bc4645c49d239740e63aef08dec2e153"
+        }
+      },
+      "run_id": "59cccb92c86e35f1b44f1281",
+      "status": "WAITING_REVIEW",
+      "step": "independent_review",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "analyst": "growth_analyst",
+      "request_id": "019045af923a6f2a3e68948129b5ec2d98e541e9a2c424aa8be4022b04d171bd"
+    },
+    "from_status": "WAITING_AGENT",
+    "hash": "f91c7b42fd6db18ebde94f54320d2f4c28c3480ec1d2e4e5e76234ba7f75a0e0",
+    "previous_hash": "a6e1be0beb992e74515036f71fd37ecca467157e491a4068445262df87053d15",
+    "sequence": 4,
+    "step": "independent_review",
+    "to_status": "WAITING_REVIEW"
+  },
+  {
+    "checkpoint": {
+      "definition_hash": "ca78280cf373d1d539403336d3102ca2a3c0e92644206acaec5e6bd79fb9f52c",
+      "input_hash": "4c5cfe6e04c75c428a99e5a589e237fde4d9331655311b85b867e87b30c21d79",
+      "owner": "Responsable de crecimiento",
+      "process_id": "weekly-growth-review",
+      "responses": {
+        "evidence_reviewer": {
+          "agent_id": "/root/astra_v2_review",
+          "dispatch_hash": "8c0238dad416fb765a6d44a8e76db7471a1ad4cd6502cbfef79d3729b6ea653c",
+          "model": "gpt-6-astra",
+          "request_id": "019045af923a6f2a3e68948129b5ec2d98e541e9a2c424aa8be4022b04d171bd",
+          "sha256": "e0ec6b2b4026da655ae185210a093245ff7ec6f975d38260366dbbd813276463"
+        },
+        "growth_analyst": {
+          "agent_id": "/root/sol_scope_v2",
+          "dispatch_hash": "97887714c37d895869c27db319225cb8ff035488b1b1068230f249ca2bd32d39",
+          "model": "gpt-5.6-sol",
+          "request_id": "86241dc471bb7c488b937606a9f8983fef0e0cc375dbac907a2e42caf2705b55",
+          "sha256": "681cf030c27c128edc20c8e91ae84e42bc4645c49d239740e63aef08dec2e153"
+        }
+      },
+      "run_id": "59cccb92c86e35f1b44f1281",
+      "status": "REVIEW",
+      "step": "decision_packet",
+      "version": "2.0",
+      "workspace_hash": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+    },
+    "details": {
+      "external_execution": "PROHIBITED",
+      "sha256": "8a17425fa7de0c58b2225b7edfa9d05a76d3e59ce20c531ed1093e08e5c59e2f"
+    },
+    "from_status": "WAITING_REVIEW",
+    "hash": "bb148705332949c67f7725521f4e48b6fceefa2280c0393074b27345c6df1a40",
+    "previous_hash": "f91c7b42fd6db18ebde94f54320d2f4c28c3480ec1d2e4e5e76234ba7f75a0e0",
+    "sequence": 5,
+    "step": "decision_packet",
+    "to_status": "REVIEW"
+  }
+]

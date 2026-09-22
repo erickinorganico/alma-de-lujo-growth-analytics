@@ -1,0 +1,32 @@
+name: Verify analytical release
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Tests, scenarios, reconciliation and replay
+        run: python scripts/verify_v2.py --output build/ci-verification
+      - name: Published native evidence and full scope acceptance
+        run: python scripts/check_scope_v2.py --workspace evidence/v0.2/workspace --verification build/ci-verification/verification.json --output build/ci-acceptance.json
+      - name: Public release audit
+        run: python scripts/audit_release.py
+      - name: Save verification receipts
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: analytical-verification
+          path: |
+            build/ci-verification/*.json
+            build/ci-acceptance.json

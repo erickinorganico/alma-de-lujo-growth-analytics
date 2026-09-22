@@ -1,0 +1,81 @@
+{
+  "challenges": [
+    "Corregir única observación pública verificada por una fuente pública verificada con cuatro observaciones registradas. Las poblaciones urbana adulta, nacional de 12+, mujeres y hombres se solapan o difieren; no sumarlas, promediarlas ni interpretarlas como una tendencia homogénea.",
+    "Las limitaciones sobre TAM y demanda son advertencias de la ficha del proyecto; no presentarlas como cita textual o conclusión comercial emitida por INEGI sin verificar esa atribución.",
+    "Conversión, Wilson y SRM se recalcularon y coinciden; el análisis correctamente no declara ganador. Sin embargo, la métrica primaria es monetaria: 71,200/32=2,225 y 77,140/35=2,204 centavos por asignación, no evidencia de contribución por visita. No comparar sólo totales de brazos desiguales.",
+    "Antes de aprobar el protocolo, definir visitas elegibles, asignación por persona o visita, exposición repetida y estimador de contribución con incertidumbre. Los intervalos Wilson y el ejemplo de tamaño binomial no sustituyen ese diseño monetario.",
+    "Predeclarar denominador y ventana de devoluciones, umbral de SRM, información mínima, regla de decisión y abandono. Tener un texto que solicita futura aprobación no equivale a contar con un protocolo ejecutable ya aprobado.",
+    "El acceso fallido a Instagram o una landing AMVO no prueban demanda. Verificar sólo las fuentes efectivamente necesarias para la hipótesis, sin convertir la adquisición de un informe de categoría específico en requisito universal."
+  ],
+  "evidence_hash": "3412062569902e2053fbc8fb40596a83551655b24a260b24af063f36a35aab1a",
+  "facts": [
+    {
+      "evidence_refs": [
+        "/sources/observations/0/value"
+      ],
+      "id": "urban_activity",
+      "kind": "observation",
+      "statement": "El registro ligado contiene 44.5% para población de 18 años o más en 32 ciudades urbanas; es contexto de actividad física.",
+      "value": 44.5
+    },
+    {
+      "evidence_refs": [
+        "/sources/observations/1/value"
+      ],
+      "id": "national_activity",
+      "kind": "observation",
+      "statement": "El mismo registro contiene otra observación, 41.7%, para población nacional de 12 años o más.",
+      "value": 41.7
+    },
+    {
+      "evidence_refs": [
+        "/sources/observations/2/value"
+      ],
+      "id": "national_women",
+      "kind": "observation",
+      "statement": "El registro contiene 37.4% para mujeres de 12 años o más a nivel nacional.",
+      "value": 37.4
+    },
+    {
+      "evidence_refs": [
+        "/sources/observations/3/value"
+      ],
+      "id": "national_men",
+      "kind": "observation",
+      "statement": "El registro contiene 46.7% para hombres de 12 años o más a nivel nacional.",
+      "value": 46.7
+    },
+    {
+      "evidence_refs": [
+        "/sources/hypotheses/0/status"
+      ],
+      "id": "business_hypothesis",
+      "kind": "observation",
+      "statement": "La hipótesis del producto de entrada permanece UNTESTED_REAL_BUSINESS.",
+      "value": "UNTESTED_REAL_BUSINESS"
+    },
+    {
+      "evidence_refs": [
+        "/marts/experiment_results/0/primary_metric"
+      ],
+      "id": "primary_metric",
+      "kind": "observation",
+      "statement": "La métrica primaria declarada del experimento es contribution_cents_per_visit.",
+      "value": "contribution_cents_per_visit"
+    }
+  ],
+  "hypotheses": [
+    "La actividad física puede motivar preguntas de investigación; un test de producto requeriría evidencia de comportamiento y contribución en una población elegible, sin convertir prevalencia de actividad en tamaño de mercado."
+  ],
+  "recommendations": [],
+  "request_id": "8044572b2fd6d4dcc0fe3b01a16fb0a93a0a09580331a82f2d69d695076bbe34",
+  "role": "evidence_reviewer",
+  "summary": "REVIEW: el registro respalda una fuente pública INEGI verificada con cuatro observaciones de actividad física, no una única observación. El resumen debe corregir esa distinción y conservar las diferentes poblaciones. Ninguna observación demuestra demanda de calcetines ni un producto ganador. Las cifras experimentales coinciden, pero una futura prueba de contribución por visita todavía necesita definir exposición, unidad de análisis, incertidumbre monetaria, tamaño y guardrail; el diagnóstico binomial actual no completa ese protocolo.",
+  "unknowns": [
+    "Esta revisión comprobó el registro inmutable, no volvió a consultar las páginas públicas ni certifica acceso o actualización nuevos.",
+    "No hay demanda real, intención de compra, precios actuales, disponibilidad real ni desempeño de Instagram verificados en esta evidencia.",
+    "No están definidos ni aprobados población, exposición por visita, presupuesto, MDE monetario, duración, método inferencial y umbrales de cierre de una prueba real."
+  ],
+  "verdict": "REVIEW",
+  "version": "2.0"
+}

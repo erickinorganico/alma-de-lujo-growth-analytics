@@ -1,3 +1,5 @@
+> Historical v0.1 reference. Current implementation and acceptance: [v0.2 PRD](../specs/PRD.md), [runbook](RUNBOOK-v2.md), and [release evidence](RELEASE.md).
+
 # Alma de Lujo Growth Analytics — MVP plan
 
 Status: **implemented analytical MVP; local verification green on 2026-09-22**

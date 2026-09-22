@@ -1,0 +1,57 @@
+{
+  "content_hash": "d06efe733e4525d731093faa31c86ea51bb9f910856ad62e005032c141eaa3c3",
+  "control_results": [
+    {
+      "check_id": "sales_net_revenue",
+      "mart_cents": 37087457,
+      "passed": 1,
+      "source_cents": 37087457
+    },
+    {
+      "check_id": "cash_in",
+      "mart_cents": 49622444,
+      "passed": 1,
+      "source_cents": 49622444
+    },
+    {
+      "check_id": "cash_out",
+      "mart_cents": 5414773,
+      "passed": 1,
+      "source_cents": 5414773
+    },
+    {
+      "check_id": "purchase_receipts",
+      "mart_cents": 663,
+      "passed": 1,
+      "source_cents": 663
+    },
+    {
+      "check_id": "supplier_payments",
+      "mart_cents": 4158000,
+      "passed": 1,
+      "source_cents": 4158000
+    },
+    {
+      "check_id": "marketing_spend",
+      "mart_cents": 147526,
+      "passed": 1,
+      "source_cents": 147526
+    }
+  ],
+  "marts": [
+    "sales_daily",
+    "inventory_position",
+    "inventory_aging",
+    "procurement",
+    "cash_daily",
+    "finance_monthly",
+    "channel_performance",
+    "customer_cohorts",
+    "experiment_results",
+    "funnel_conversion",
+    "reconciliation"
+  ],
+  "path": "warehouse.sqlite3",
+  "row_count": 22844,
+  "table_count": 30
+}

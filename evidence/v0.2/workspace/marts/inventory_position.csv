@@ -1,0 +1,47 @@
+variant_id,product_id,product_name,category,lifecycle,color,size,cost_cents,ledger_on_hand_qty,reserved_qty,available_qty,in_transit_qty,count_date,counted_qty,count_discrepancy_qty,inventory_value_cents,trailing_30d_net_sold_qty,cover_days,stock_status,inventory_coverage_known
+var-legging-black-l,prod-leggings,Flow Leggings,Sportswear,launched,Black,L,11200,36,8,28,4,2026-09-21,36,0,403200,13,64.62,AVAILABLE,1
+var-legging-black-m,prod-leggings,Flow Leggings,Sportswear,launched,Black,M,11200,43,15,28,6,2026-09-21,43,0,481600,4,210.0,AVAILABLE,1
+var-legging-black-s,prod-leggings,Flow Leggings,Sportswear,launched,Black,S,11200,31,3,28,4,2026-09-21,31,0,347200,1,840.0,AVAILABLE,1
+var-legging-navy-l,prod-leggings,Flow Leggings,Sportswear,launched,Navy,L,11200,37,9,28,4,2026-09-21,37,0,414400,2,420.0,AVAILABLE,1
+var-legging-navy-m,prod-leggings,Flow Leggings,Sportswear,launched,Navy,M,11200,37,9,28,6,2026-09-21,37,0,414400,9,93.33,AVAILABLE,1
+var-legging-navy-s,prod-leggings,Flow Leggings,Sportswear,launched,Navy,S,11200,42,14,28,4,2026-09-21,42,0,470400,7,120.0,AVAILABLE,1
+var-legging-olive-l,prod-leggings,Flow Leggings,Sportswear,launched,Olive,L,11200,33,5,28,6,2026-09-21,33,0,369600,6,140.0,AVAILABLE,1
+var-legging-olive-m,prod-leggings,Flow Leggings,Sportswear,launched,Olive,M,11200,37,9,28,4,2026-09-21,37,0,414400,6,140.0,AVAILABLE,1
+var-legging-olive-s,prod-leggings,Flow Leggings,Sportswear,launched,Olive,S,11200,34,6,28,4,2026-09-21,34,0,380800,4,210.0,AVAILABLE,1
+var-short-black-l,prod-shorts,Move Biker Shorts,Sportswear,clearance,Black,L,7100,31,3,28,4,2026-09-21,31,0,220100,7,120.0,AVAILABLE,1
+var-short-black-m,prod-shorts,Move Biker Shorts,Sportswear,clearance,Black,M,7100,37,9,28,7,2026-09-21,37,0,262700,9,93.33,AVAILABLE,1
+var-short-black-s,prod-shorts,Move Biker Shorts,Sportswear,clearance,Black,S,7100,41,13,28,4,2026-09-21,41,0,291100,8,105.0,AVAILABLE,1
+var-short-coral-l,prod-shorts,Move Biker Shorts,Sportswear,clearance,Coral,L,7100,31,3,28,5,2026-09-21,31,0,220100,12,70.0,AVAILABLE,1
+var-short-coral-m,prod-shorts,Move Biker Shorts,Sportswear,clearance,Coral,M,7100,47,19,28,5,2026-09-21,47,0,333700,4,210.0,AVAILABLE,1
+var-short-coral-s,prod-shorts,Move Biker Shorts,Sportswear,clearance,Coral,S,7100,44,16,28,4,2026-09-21,44,0,312400,8,105.0,AVAILABLE,1
+var-short-navy-l,prod-shorts,Move Biker Shorts,Sportswear,clearance,Navy,L,7100,38,10,28,7,2026-09-21,38,0,269800,4,210.0,AVAILABLE,1
+var-short-navy-m,prod-shorts,Move Biker Shorts,Sportswear,clearance,Navy,M,7100,36,8,28,5,2026-09-21,36,0,255600,5,168.0,AVAILABLE,1
+var-short-navy-s,prod-shorts,Move Biker Shorts,Sportswear,clearance,Navy,S,7100,42,14,28,5,2026-09-21,42,0,298200,2,420.0,AVAILABLE,1
+var-sock-black-l,prod-socks,Grip Pilates Socks,Pilates socks,launched,Black,L,4200,57,29,28,9,2026-09-21,57,0,239400,13,64.62,AVAILABLE,1
+var-sock-black-m,prod-socks,Grip Pilates Socks,Pilates socks,launched,Black,M,4200,61,33,28,8,2026-09-21,61,0,256200,7,120.0,AVAILABLE,1
+var-sock-black-s,prod-socks,Grip Pilates Socks,Pilates socks,launched,Black,S,4200,46,18,28,8,2026-09-21,46,0,193200,12,70.0,AVAILABLE,1
+var-sock-coral-l,prod-socks,Grip Pilates Socks,Pilates socks,launched,Coral,L,4200,53,25,28,8,2026-09-21,53,0,222600,8,105.0,AVAILABLE,1
+var-sock-coral-m,prod-socks,Grip Pilates Socks,Pilates socks,launched,Coral,M,4200,39,11,28,8,2026-09-21,39,0,163800,8,105.0,AVAILABLE,1
+var-sock-coral-s,prod-socks,Grip Pilates Socks,Pilates socks,launched,Coral,S,4200,49,21,28,12,2026-09-21,49,0,205800,10,84.0,AVAILABLE,1
+var-sock-ivory-l,prod-socks,Grip Pilates Socks,Pilates socks,launched,Ivory,L,4200,51,23,28,12,2026-09-21,51,0,214200,17,49.41,AVAILABLE,1
+var-sock-ivory-m,prod-socks,Grip Pilates Socks,Pilates socks,launched,Ivory,M,4200,58,30,28,11,2026-09-21,58,0,243600,16,52.5,AVAILABLE,1
+var-sock-ivory-s,prod-socks,Grip Pilates Socks,Pilates socks,launched,Ivory,S,4200,42,14,28,14,2026-09-21,42,0,176400,16,52.5,AVAILABLE,1
+var-sock-lilac-l,prod-socks,Grip Pilates Socks,Pilates socks,launched,Lilac,L,4200,48,20,28,9,2026-09-21,48,0,201600,6,140.0,AVAILABLE,1
+var-sock-lilac-m,prod-socks,Grip Pilates Socks,Pilates socks,launched,Lilac,M,4200,47,19,28,10,2026-09-21,47,0,197400,7,120.0,AVAILABLE,1
+var-sock-lilac-s,prod-socks,Grip Pilates Socks,Pilates socks,launched,Lilac,S,4200,53,25,28,11,2026-09-21,53,0,222600,6,140.0,AVAILABLE,1
+var-sock-rose-l,prod-socks,Grip Pilates Socks,Pilates socks,launched,Rose,L,4200,50,22,28,6,2026-09-21,50,0,210000,4,210.0,AVAILABLE,1
+var-sock-rose-m,prod-socks,Grip Pilates Socks,Pilates socks,launched,Rose,M,4200,39,11,28,10,2026-09-21,39,0,163800,13,64.62,AVAILABLE,1
+var-sock-rose-s,prod-socks,Grip Pilates Socks,Pilates socks,launched,Rose,S,4200,54,26,28,10,2026-09-21,54,0,226800,18,46.67,AVAILABLE,1
+var-sock-sage-l,prod-socks,Grip Pilates Socks,Pilates socks,launched,Sage,L,4200,43,15,28,12,2026-09-21,43,0,180600,11,76.36,AVAILABLE,1
+var-sock-sage-m,prod-socks,Grip Pilates Socks,Pilates socks,launched,Sage,M,4200,55,27,28,13,2026-09-21,55,0,231000,14,60.0,AVAILABLE,1
+var-sock-sage-s,prod-socks,Grip Pilates Socks,Pilates socks,launched,Sage,S,4200,39,11,28,11,2026-09-21,39,0,163800,16,52.5,AVAILABLE,1
+var-top-black-l,prod-tops,Sculpt Studio Top,Sportswear,launched,Black,L,8200,39,11,28,6,2026-09-21,39,0,319800,7,120.0,AVAILABLE,1
+var-top-black-m,prod-tops,Sculpt Studio Top,Sportswear,launched,Black,M,8200,35,7,28,5,2026-09-21,35,0,287000,8,105.0,AVAILABLE,1
+var-top-black-s,prod-tops,Sculpt Studio Top,Sportswear,launched,Black,S,8200,35,7,28,6,2026-09-21,35,0,287000,14,60.0,AVAILABLE,1
+var-top-rose-l,prod-tops,Sculpt Studio Top,Sportswear,launched,Rose,L,8200,39,11,28,5,2026-09-21,39,0,319800,3,280.0,AVAILABLE,1
+var-top-rose-m,prod-tops,Sculpt Studio Top,Sportswear,launched,Rose,M,8200,29,1,28,6,2026-09-21,29,0,237800,11,76.36,AVAILABLE,1
+var-top-rose-s,prod-tops,Sculpt Studio Top,Sportswear,launched,Rose,S,8200,42,14,28,4,2026-09-21,42,0,344400,6,140.0,AVAILABLE,1
+var-top-sand-l,prod-tops,Sculpt Studio Top,Sportswear,launched,Sand,L,8200,33,5,28,6,2026-09-21,33,0,270600,5,168.0,AVAILABLE,1
+var-top-sand-m,prod-tops,Sculpt Studio Top,Sportswear,launched,Sand,M,8200,45,17,28,6,2026-09-21,45,0,369000,14,60.0,AVAILABLE,1
+var-top-sand-s,prod-tops,Sculpt Studio Top,Sportswear,launched,Sand,S,8200,31,3,28,6,2026-09-21,31,0,254200,16,52.5,AVAILABLE,1
+var-wrap-sand-o-s,prod-wrap,Recovery Wrap Concept,Sportswear,sample,Sand,O/S,9800,28,0,28,12,2026-09-21,28,0,274400,0,,PRELAUNCH,1

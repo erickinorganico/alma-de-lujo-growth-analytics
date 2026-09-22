@@ -1,0 +1,38 @@
+[
+  {
+    "arm": "control",
+    "assigned_customers": 32,
+    "contribution_cents": 71200,
+    "conversion_rate": 0.40625,
+    "converted_customers": 13,
+    "end_date": "2025-11-17",
+    "experiment_id": "exp-socks-01",
+    "guardrail": "return_rate_under_10_percent",
+    "name": "Synthetic Pilates socks vignette",
+    "net_revenue_cents": 115637,
+    "outcome_coverage_known": 1,
+    "primary_metric": "contribution_cents_per_visit",
+    "returned_customers": 0,
+    "start_date": "2025-09-22",
+    "status": "completed",
+    "synthetic_descriptive_only": 1
+  },
+  {
+    "arm": "treatment",
+    "assigned_customers": 35,
+    "contribution_cents": 77140,
+    "conversion_rate": 0.34285714285714286,
+    "converted_customers": 12,
+    "end_date": "2025-11-17",
+    "experiment_id": "exp-socks-01",
+    "guardrail": "return_rate_under_10_percent",
+    "name": "Synthetic Pilates socks vignette",
+    "net_revenue_cents": 110512,
+    "outcome_coverage_known": 1,
+    "primary_metric": "contribution_cents_per_visit",
+    "returned_customers": 0,
+    "start_date": "2025-09-22",
+    "status": "completed",
+    "synthetic_descriptive_only": 1
+  }
+]

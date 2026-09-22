@@ -1,0 +1,71 @@
+{
+  "challenges": [
+    "Independent registered queries match every bound mart; cover formulas, top-five ranking, open PO quantities, total valuation 12,836,500 cents, socks 3,712,800 cents and leggings 3,696,000 cents recompute correctly.",
+    "A 42-day threshold may support the stated no-reorder scenario, but it is not calibrated to lead-time or demand distributions. The 4.67-day buffer for Rose S is conditional on the assumed demand rate and should not be called a validated service guarantee.",
+    "Open PO units and in-transit units are the same underlying exposure in these marts; they should not be added together. They also cannot substitute for available stock before receipt.",
+    "Recommendation rank-3 names any lifecycle other than launched in its population, while its action and guardrail describe PRELAUNCH. Restrict that population to idea/sample concepts or separately specify treatment of clearance and retired items; clearance is not automatically a prelaunch concept.",
+    "The 12,836,500-cent total includes 274,400 cents of sample stock. Keep total asset cost valuation separate from the narrower launched/operational capital population."
+  ],
+  "evidence_hash": "88f23969cc6638cb094e3876d667bbdd0ab0df192cef7d9884626aee70784f5f",
+  "facts": [
+    {
+      "evidence_refs": [
+        "/marts/inventory_position/32/cover_days"
+      ],
+      "id": "rose_cover",
+      "kind": "observation",
+      "statement": "Rose S has 46.67 days of synthetic cover.",
+      "value": 46.67
+    },
+    {
+      "evidence_refs": [
+        "/marts/inventory_position/32/in_transit_qty"
+      ],
+      "id": "rose_transit",
+      "kind": "observation",
+      "statement": "Rose S has 10 synthetic units in transit, a quantity distinct from its 28 available units.",
+      "value": 10
+    },
+    {
+      "evidence_refs": [
+        "/marts/inventory_position/24/cover_days"
+      ],
+      "id": "ivory_cover",
+      "kind": "observation",
+      "statement": "Ivory L has 49.41 days of synthetic cover.",
+      "value": 49.41
+    },
+    {
+      "evidence_refs": [
+        "/marts/inventory_position/45/stock_status"
+      ],
+      "id": "concept_status",
+      "kind": "observation",
+      "statement": "Recovery Wrap Concept Sand is PRELAUNCH in the bound snapshot.",
+      "value": "PRELAUNCH"
+    },
+    {
+      "evidence_refs": [
+        "/marts/inventory_position/45/inventory_value_cents"
+      ],
+      "id": "concept_valuation",
+      "kind": "observation",
+      "statement": "The sample concept contributes 274,400 MXN cents to total synthetic inventory cost valuation, despite exclusion from operational reorder decisions.",
+      "value": 274400
+    }
+  ],
+  "hypotheses": [
+    "The lower Rose S cover is explained mechanically by 28 available units against 18 trailing net units sold; equal availability with different trailing sales can create the ranking without proving color preference."
+  ],
+  "recommendations": [],
+  "request_id": "02a7c6b52f15e948cacad9079b91eba1b91ca371a0e233af0dc47d7b6ec7915f",
+  "role": "evidence_reviewer",
+  "summary": "The synthetic stock calculations are correct: Rose S is the lowest-cover launched variant at 46.67 days, none of the 36 launched variants falls below the explicitly assumed 42-day threshold, and the inventory valuation and category comparisons reconcile. REVIEW: the no-reorder conclusion is valid only inside that assumed scenario. Actual lead-time variation, demand uncertainty, MOQ, available budget and promised receipt dates are unverified; the broad non-launched population in the prelaunch recommendation should be narrowed before owner approval.",
+  "unknowns": [
+    "The 21-day lead time plus 21-day safety allowance is an analyst assumption, not an estimated or approved service-level policy.",
+    "Transit quantities have no verified real arrival date, and the same-day synthetic count is not current physical evidence.",
+    "Demand, availability exposure, supplier MOQ, budget and commercial status outside the synthetic snapshot remain unknown."
+  ],
+  "verdict": "REVIEW",
+  "version": "2.0"
+}
