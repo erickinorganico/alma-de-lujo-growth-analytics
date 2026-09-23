@@ -358,8 +358,8 @@ class GuideContractTests(unittest.TestCase):
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, joined)
-        self.assertIn("../PORTAL/index.html", joined)
-        self.assertIn("../FUENTES/operating-v1-blank.xlsx", joined)
+        self.assertIn("../portal/index.html", joined)
+        self.assertIn("../fuentes/operating-v1-blank.xlsx", joined)
         self.assertNotIn(self.creation.lower(), joined)
 
     def test_real_guides_are_packaged_and_all_extracted_links_audit_cleanly(self) -> None:
