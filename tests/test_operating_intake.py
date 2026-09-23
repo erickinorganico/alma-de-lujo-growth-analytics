@@ -58,6 +58,54 @@ class PackFixture:
 
 
 class OperatingParserTests(unittest.TestCase):
+    def test_future_cash_projection_dates_preserve_cutoff(self) -> None:
+        for level in ("EXPECTED", "COMMITTED", "SCENARIO"):
+            with self.subTest(level=level), tempfile.TemporaryDirectory() as tmp:
+                fixture = self.fixture(tmp)
+                events = fixture.rows("cash_events")
+                projection = dict(events[0], event_id=f"synthetic:future-{level.lower()}",
+                    economic_event_id=f"synthetic:economic-future-{level.lower()}",
+                    supersedes_event_id="", event_date="2026-09-22", level=level,
+                    amount_cents="13", payment_id="", source_ref=f"synthetic:future-source-{level.lower()}",
+                    obligation_id="synthetic:obligation-expense-001" if level == "COMMITTED" else "")
+                fixture.write_rows("cash_events", [*events, projection])
+                parsed = parse_pack(fixture.path)
+                future = parsed["tables"]["cash_events"][-1]
+                self.assertEqual(date(2026, 9, 22), future["event_date"])
+                self.assertEqual((level, projection["economic_event_id"], projection["source_ref"]),
+                    (future["level"], future["economic_event_id"], future["source_ref"]))
+                raw_hash = hashlib.sha256((fixture.path / "cash_events.csv").read_bytes()).hexdigest()
+                self.assertEqual(raw_hash, parsed["source_sha256"]["cash_events.csv"])
+                built = build_operating_workspace(fixture.path, private_root=Path(tmp) / "cuts")
+                self.assertEqual(raw_hash, built["manifest"]["source_sha256"]["cash_events.csv"])
+                self.assertEqual("2026-09-21T23:59:59-07:00", built["manifest"]["cutoff_at"])
+                connection = sqlite3.connect(Path(built["destination"]) / "operating.sqlite3")
+                try:
+                    stored = connection.execute("SELECT event_date,level,economic_event_id,source_ref FROM cash_events WHERE event_id=?",
+                                                (projection["event_id"],)).fetchone()
+                    self.assertEqual(("2026-09-22", level, projection["economic_event_id"], projection["source_ref"]), stored)
+                finally:
+                    connection.close()
+
+    def test_future_observations_still_rejected(self) -> None:
+        for source, field in (("cash_events", "event_date"), ("sales_aggregates", "sales_date"),
+                              ("inventory_movements", "event_date"), ("quality_events", "event_date")):
+            with self.subTest(source=source), tempfile.TemporaryDirectory() as tmp:
+                fixture = self.fixture(tmp)
+                values = fixture.rows(source)
+                values[-1][field] = "2026-09-22"
+                fixture.write_rows(source, values)
+                error = self.assert_parse_error(fixture, "value.after_cutoff")
+                self.assertIn(f"{source}.csv", error.location)
+        for invalid_level in ("INVALID", ""):
+            with self.subTest(level=invalid_level), tempfile.TemporaryDirectory() as tmp:
+                fixture = self.fixture(tmp)
+                values = fixture.rows("cash_events")
+                values[-1]["event_date"] = "2026-09-22"
+                values[-1]["level"] = invalid_level
+                fixture.write_rows("cash_events", values)
+                self.assert_parse_error(fixture, "value.enum" if invalid_level else "value.required")
+
     def fixture(self, tmp: str) -> PackFixture:
         return PackFixture(Path(tmp))
 
