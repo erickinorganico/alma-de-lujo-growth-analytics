@@ -1,7 +1,7 @@
 ---
 phase: 02
 slug: reconciled-decision-metrics
-status: draft
+status: passed
 nyquist_compliant: true
 wave_0_complete: true
 created: 2026-09-22
@@ -40,15 +40,17 @@ Use the explicit interpreter after checking it exists and reports Python 3.11+ a
 
 | Task | Wave | Requirements | Test and hand oracle | Automated gate | Status |
 | --- | --- | --- | --- | --- | --- |
-| 02-01 Task 1 | 1 | MET-07; input basis for MET-01..06 | Literal 22 Phase 1 `SOURCE_NAMES`, table/column semantic keys/dates/units/coverage, source hash, missing relation, separate policy schema/hash/status; missing/stale/unapproved/synthetic policy | Cost/inventory focused | Planned red/green |
-| 02-01 Task 2 | 1 | MET-01, MET-07 | One SKU/cost version: 101 cents across three unit ordinals = 34+34+33; missing component, estimate, historical version, zero denominator | Cost/inventory focused | Planned red/green |
-| 02-01 Task 3 | 1 | MET-02, MET-07 | 20 ordered/18 received/2 inspection/16 accepted; duplicate receipt; return report without restock; reservation/loan and non-sellable count variance | Cost/inventory focused | Planned red/green |
-| 02-02 Task 1 | 2 | MET-03, MET-07 | 180000 obligation/100000 applied/80000 recorded unpaid; duplicate/over-applied payment, partial application coverage, undated due | Finance focused | Planned red/green |
-| 02-02 Task 2 | 2 | MET-03, MET-07 | One active economic event after supersession; reconciled balance only with observed opening/closing evidence; missing opening and 56/91-day boundaries | Finance focused | Planned red/green |
-| 02-02 Task 3 | 2 | MET-05, MET-07 | Budget origin with two targets and two payment rows; allocated plus unallocated exact; paid not added to incurred; missing/stale policy blocks headroom | Finance focused | Planned red/green |
-| 02-03 Task 1 | 3 | MET-04, MET-07 | Stockout exposure minutes, zero denominator, immature/unlinked return cohort, recorded unmet units as lower bound, absent channel observation never zero | Learning/publication focused | Planned red/green |
-| 02-03 Task 2 | 3 | MET-06, MET-07 | Readiness/quality/loan exception closure; sales row-category and field allowlists; injected cost, supplier, bank, recipient and PII-like value rejection | Learning/publication focused | Planned red/green |
-| 02-03 Task 3 | 3 | MET-01..07 | Registry completeness, two synthetic cuts, source/policy/artifact hashes, missing/stale policy, traversal/symlink/outside-root rejection, no partial publish | All Phase 2 focused + full regression + v0.2 acceptance | Planned red/green |
+| 02-01 Task 1 | 1 | MET-07; input basis for MET-01..06 | Literal 22 Phase 1 `SOURCE_NAMES`, table/column semantic keys/dates/units/coverage, source hash, missing relation, separate policy schema/hash/status; missing/stale/unapproved/synthetic policy | Cost/inventory focused | Green |
+| 02-01 Task 2 | 1 | MET-01, MET-07 | One SKU/cost version: 101 cents across three unit ordinals = 34+34+33; missing component, estimate, historical version, zero denominator | Cost/inventory focused | Green — partition invariant and ESTIMATED preserved |
+| 02-01 Task 3 | 1 | MET-02, MET-07 | 20 ordered/18 received/2 inspection/16 accepted; duplicate receipt; return report without restock; reservation/loan and non-sellable count variance | Cost/inventory focused | Green |
+| 02-02 Task 1 | 2 | MET-03, MET-07 | 180000 obligation/100000 applied/80000 recorded unpaid; duplicate/over-applied payment, partial application coverage, undated due | Finance focused | Green |
+| 02-02 Task 2 | 2 | MET-03, MET-07 | One active economic event after supersession; reconciled balance only with observed opening/closing evidence; missing opening and 56/91-day boundaries | Finance focused | Green — genuine future 55/56/90/91-day gates |
+| 02-02 Task 3 | 2 | MET-05, MET-07 | Budget origin with two targets and two payment rows; allocated plus unallocated exact; paid not added to incurred; missing/stale policy blocks headroom | Finance focused | Green |
+| 02-03 Task 1 | 3 | MET-04, MET-07 | Stockout exposure minutes, zero denominator, immature/unlinked return cohort, recorded unmet units as lower bound, absent channel observation never zero | Learning/publication focused | Green — mixed cohorts yield eligible 1/10 |
+| 02-03 Task 2 | 3 | MET-06, MET-07 | Readiness/quality/loan exception closure; sales row-category and field allowlists; injected cost, supplier, bank, recipient and PII-like value rejection | Learning/publication focused | Green |
+| 02-03 Task 3 | 3 | MET-01..07 | Registry completeness, two synthetic cuts, source/policy/artifact hashes, missing/stale policy, traversal/symlink/outside-root rejection, no partial publish | All Phase 2 focused + full regression + v0.2 acceptance | Green — semantic catalog and empty-domain matrix |
+| 02-04 Tasks 1–3 | 4 | MET-01..07 | Independent verifier counterexamples for partitioned COGS, estimated status, mixed cohorts, observed cash, five layers, empty domains and semantic registry | Focused + full regression + `verify_v2.py` | Green — 33/33 focused, 183/183 full |
+| 02-05 Tasks 1–3 | 5 | MET-03, MET-07 | MISSING cash with retained balances, genuine future forecast dates, 55/56/90/91 boundaries and forecast-derived status | Intake + finance/publication + full regression + `verify_v2.py` | Green — 37/37 focused, 189/189 full |
 
 ## Requirement and Negative-Control Coverage
 
@@ -78,7 +80,7 @@ None for synthetic Phase 2. Actual owner policy approval, fiscal treatment and r
 - [x] Every task has an automated focused command.
 - [x] A red/green test is created in each family's first task; no test infrastructure gap remains.
 - [x] MET-01..07 have positive and negative controls, with final full regressions planned.
-- [ ] Focused tests green on implemented code.
-- [ ] Full `unittest` and `verify_v2.py` green on final Phase 2 code.
+- [x] Focused tests green on implemented code: 37/37.
+- [x] Full `unittest` and `verify_v2.py` green on final Phase 2 code: 189/189 plus six acceptance scenarios.
 
-**Approval:** Pending execution evidence.
+**Approval:** Passed on 2026-09-23 after two GSD gap-closure plans and independent 10/10 goal re-verification. See `02-VERIFICATION.md`.

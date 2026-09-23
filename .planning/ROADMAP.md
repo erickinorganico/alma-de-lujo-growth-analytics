@@ -7,7 +7,7 @@ A private weekly cut moves through versioned intake, canonical analytical marts,
 ## Phases
 
 - [x] **Phase 1: Versioned Operating Intake** - A validated private cut becomes an immutable, restorable analytical workspace.
-- [ ] **Phase 2: Reconciled Decision Metrics** - Canonical marts expose exact, coverage-aware operating and product measures.
+- [x] **Phase 2: Reconciled Decision Metrics** - Canonical marts expose exact, coverage-aware operating and product measures.
 - [ ] **Phase 3: Governed Weekly Decision Cycle** - Current-cut evidence reaches real native analysis, independent review, and next-cut closure.
 - [ ] **Phase 4: Offline Client and Analyst Kit** - Users receive usable workbooks, a navigable offline portal, and a one-command weekly workflow.
 - [ ] **Phase 5: Acceptance and v1.0.0 Release** - Regression, two-week closure, privacy, Excel, archive, and CI evidence support a reproducible release.
@@ -24,7 +24,7 @@ A private weekly cut moves through versioned intake, canonical analytical marts,
   3. A cut manifest exposes stable identity, cutoff, timezone, source hashes, coverage, quality, and relationships, with missing and zero values kept distinct.
   4. Costs, purchases, receipts, obligations, payments, cash, stock, budgets, quality, sales readiness, and loans resolve through canonical SKU/event identities rather than competing ledgers.
   5. An analyst can export, restore, and verify a workspace with identical hashes and row relationships; tampering fails verification.
-**Plans**: 3 plans
+**Plans**: 5 plans
 
 Plans:
 - [x] 01-01: Define versioned operating-source contracts, keys, units, provenance, and blank/synthetic pack initialization.
@@ -44,9 +44,11 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: Materialize versioned cost and purchase/inventory/receipt marts with exact unit and cent reconciliation.
-- [ ] 02-02: Materialize obligation/payment, layered cash, and budget/drop/channel marts with non-additive financial states.
-- [ ] 02-03: Materialize product-learning and readiness/quality/loan exception marts, then register metric definitions and coverage rules.
+- [x] 02-01: Materialize versioned cost and purchase/inventory/receipt marts with exact unit and cent reconciliation.
+- [x] 02-02: Materialize obligation/payment, layered cash, and budget/drop/channel marts with non-additive financial states.
+- [x] 02-03: Materialize product-learning and readiness/quality/loan exception marts, then register metric definitions and coverage rules.
+- [x] 02-04: Close independent verification gaps in partitioned cost, cohort maturity, cash layers, empty domains and metric semantics.
+- [x] 02-05: Close final cash gaps in future projections, missing movement coverage and forecast status.
 
 ### Phase 3: Governed Weekly Decision Cycle
 **Goal**: A current private cut can produce evidence-bound native analysis, independent review, an owner-ready packet, and decisions that carry into the next cut.
@@ -105,7 +107,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Versioned Operating Intake | 3/3 | Complete | 2026-09-22 |
-| 2. Reconciled Decision Metrics | 0/3 | Not started | - |
+| 2. Reconciled Decision Metrics | 5/5 | Complete | 2026-09-23 |
 | 3. Governed Weekly Decision Cycle | 0/3 | Not started | - |
 | 4. Offline Client and Analyst Kit | 0/3 | Not started | - |
 | 5. Acceptance and v1.0.0 Release | 0/3 | Not started | - |

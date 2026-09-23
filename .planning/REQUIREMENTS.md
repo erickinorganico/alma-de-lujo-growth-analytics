@@ -15,13 +15,13 @@
 
 ### Metrics and decisions
 
-- [ ] **MET-01**: Cost marts distinguish known sum, complete cost, merchandise markup, gross margin and contribution, with version history, allocations and deterministic residual cents.
-- [ ] **MET-02**: Purchase and inventory marts reconcile ordered, received, inspected, accepted, rejected, non-sellable, loaned, reserved and available units exactly once.
-- [ ] **MET-03**: Finance marts reconcile canonical obligations and applied payments, and separate reconciled, committed, expected, undated and scenario cash for eight- and thirteen-week views.
-- [ ] **MET-04**: Product-learning marts report launch sell-through, variant mix, mature return/quality rates, availability exposure and recorded unmet demand with denominators and coverage.
-- [ ] **MET-05**: Budget/drop/channel marts keep approved, committed, incurred, paid, outstanding and unallocated amounts distinct and reconciled.
-- [ ] **MET-06**: Sales-readiness, quality and loan-custody marts produce an owner/action/date/closure exception queue without exposing internal costs to sales-facing outputs.
-- [ ] **MET-07**: Every metric definition declares formula, unit, grain, window, sources, unknown behavior, guardrail, owner and decision use.
+- [x] **MET-01**: Cost marts distinguish known sum, complete cost, merchandise markup, gross margin and contribution, with version history, allocations and deterministic residual cents.
+- [x] **MET-02**: Purchase and inventory marts reconcile ordered, received, inspected, accepted, rejected, non-sellable, loaned, reserved and available units exactly once.
+- [x] **MET-03**: Finance marts reconcile canonical obligations and applied payments, and separate reconciled, committed, expected, undated and scenario cash for eight- and thirteen-week views.
+- [x] **MET-04**: Product-learning marts report launch sell-through, variant mix, mature return/quality rates, availability exposure and recorded unmet demand with denominators and coverage.
+- [x] **MET-05**: Budget/drop/channel marts keep approved, committed, incurred, paid, outstanding and unallocated amounts distinct and reconciled.
+- [x] **MET-06**: Sales-readiness, quality and loan-custody marts produce an owner/action/date/closure exception queue without exposing internal costs to sales-facing outputs.
+- [x] **MET-07**: Every metric definition declares formula, unit, grain, window, sources, unknown behavior, guardrail, owner and decision use.
 
 ### Governed weekly cycle
 
@@ -66,7 +66,7 @@
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | DATA-01..05 | Phase 1 | Complete |
-| MET-01..07 | Phase 2 | Pending |
+| MET-01..07 | Phase 2 | Complete |
 | FLOW-01..05 | Phase 3 | Pending |
 | CLIENT-01..04 | Phase 4 | Pending |
 | REL-01..04 | Phase 5 | Pending |
