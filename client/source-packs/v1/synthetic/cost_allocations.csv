@@ -1,0 +1,2 @@
+allocation_id,component_id,sku_id,method_code,allocated_cents,remainder_cents,source_ref
+synthetic:allocation-001,synthetic:component-001,synthetic:sku-001,DIRECT,40000,0,synthetic:source:allocation-001

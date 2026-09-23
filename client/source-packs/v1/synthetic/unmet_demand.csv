@@ -1,0 +1,2 @@
+demand_event_id,event_date,sku_id,channel_code,requested_units,reason_code,source_ref
+synthetic:demand-001,2026-09-21,synthetic:sku-001,synthetic:direct,3,STOCKOUT,synthetic:source:demand-001

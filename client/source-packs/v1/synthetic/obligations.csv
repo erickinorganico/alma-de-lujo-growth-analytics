@@ -1,0 +1,3 @@
+obligation_id,origin_type,origin_id,due_date,original_cents,currency,status_code,source_ref
+synthetic:obligation-po-001,PURCHASE_ORDER,synthetic:po-001,2026-09-18,900000,MXN,SETTLED,synthetic:source:obligation-po-001
+synthetic:obligation-expense-001,EXPENSE,synthetic:expense-001,2026-09-30,100000,MXN,OPEN,synthetic:source:obligation-expense-001

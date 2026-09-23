@@ -1,0 +1,2 @@
+component_id,cost_version_id,component_code,classification,amount_cents,required_flag,quality_status,included_in_component_id,source_ref
+synthetic:component-001,synthetic:cost-version-001,synthetic:merchandise,DIRECT,40000,1,KNOWN,,synthetic:source:component-001

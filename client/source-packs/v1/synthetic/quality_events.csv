@@ -1,0 +1,3 @@
+quality_event_id,sku_id,receipt_id,delivery_cohort_id,event_date,event_type,units,reason_code,resolution_code,source_ref
+synthetic:quality-return-001,synthetic:sku-001,,synthetic:cohort-001,2026-09-19,RETURN_REPORTED,2,synthetic:fit,synthetic:review,synthetic:source:quality-return-001
+synthetic:quality-inspection-001,synthetic:sku-001,synthetic:receipt-001,,2026-09-10,INSPECTED,2,synthetic:receipt-check,synthetic:accepted,synthetic:source:quality-inspection-001

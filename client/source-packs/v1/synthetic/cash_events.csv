@@ -1,0 +1,3 @@
+event_id,economic_event_id,supersedes_event_id,scenario_id,event_date,level,direction,amount_cents,currency,obligation_id,payment_id,source_ref
+synthetic:cash-forecast-001,synthetic:economic-po-payment-001,,synthetic:scenario-observed,2026-09-18,COMMITTED,OUTFLOW,900000,MXN,synthetic:obligation-po-001,,synthetic:source:cash-forecast-001
+synthetic:cash-actual-001,synthetic:economic-po-payment-001,synthetic:cash-forecast-001,synthetic:scenario-observed,2026-09-18,RECONCILED,OUTFLOW,900000,MXN,synthetic:obligation-po-001,synthetic:payment-po-001,synthetic:source:cash-actual-001

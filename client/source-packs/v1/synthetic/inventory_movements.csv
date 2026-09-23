@@ -1,0 +1,6 @@
+movement_id,sku_id,event_date,movement_type,units,receipt_id,quality_event_id,loan_id,sales_date,sales_channel_code,source_ref
+synthetic:movement-opening-001,synthetic:sku-001,2026-09-01,OPENING,20,,,,,,synthetic:source:movement-opening-001
+synthetic:movement-receipt-001,synthetic:sku-001,2026-09-10,RECEIPT_ACCEPTED,16,synthetic:receipt-001,synthetic:quality-inspection-001,,,,synthetic:source:movement-receipt-001
+synthetic:movement-sale-001,synthetic:sku-001,2026-09-15,SALE_OUT,12,,,,2026-09-15,synthetic:direct,synthetic:source:movement-sale-001
+synthetic:movement-return-001,synthetic:sku-001,2026-09-19,RETURN_RESTOCK,1,,synthetic:quality-return-001,,,,synthetic:source:movement-return-001
+synthetic:movement-loan-001,synthetic:sku-001,2026-09-20,LOAN_OUT,1,,,synthetic:loan-001,,,synthetic:source:movement-loan-001

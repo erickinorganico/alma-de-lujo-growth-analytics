@@ -1,0 +1,2 @@
+sku_id,product_code,variant_code,category_code,color_code,size_code,lifecycle_status,effective_date,source_ref
+synthetic:sku-001,synthetic:product-001,synthetic:variant-001,synthetic:socks,synthetic:multicolor,synthetic:one-size,ACTIVE,2026-09-01,synthetic:source:sku-001

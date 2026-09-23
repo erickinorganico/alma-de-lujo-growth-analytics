@@ -1,0 +1,2 @@
+count_id,sku_id,cutoff_date,on_hand_units,reserved_units,in_transit_units,non_sellable_units,source_ref
+synthetic:count-001,synthetic:sku-001,2026-09-21,24,2,2,1,synthetic:source:count-001

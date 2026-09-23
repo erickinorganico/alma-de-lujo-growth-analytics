@@ -1,0 +1,1 @@
+loan_id,sku_id,quantity,recipient_ref,borrowed_date,due_date,returned_date,condition_code,status_code,source_ref

@@ -60,7 +60,7 @@ _SOURCE_DEFINITIONS: tuple[
     tuple[str, str, tuple[str, ...], tuple[tuple[str, ...], ...], tuple[str, ...]], ...
 ] = (
     ("sku_catalog", "one sellable variant", ("sku_id",), (), ("sku_id", "product_code", "variant_code", "category_code", "color_code", "size_code", "lifecycle_status", "effective_date")),
-    ("sales_aggregates", "date x SKU x channel", ("sales_date", "sku_id", "channel_code"), (("delivery_cohort_id",),), ("sales_date", "sku_id", "channel_code", "delivery_cohort_id", "delivered_units", "returned_units", "restocked_units", "net_revenue_cents", "variable_cost_cents", "coverage_status")),
+    ("sales_aggregates", "date x SKU x channel", ("sales_date", "sku_id", "channel_code"), (), ("sales_date", "sku_id", "channel_code", "delivery_cohort_id", "delivered_units", "returned_units", "restocked_units", "net_revenue_cents", "variable_cost_cents", "coverage_status")),
     ("availability_daily", "SKU x date", ("availability_date", "sku_id"), (), ("availability_date", "sku_id", "observed_minutes", "sellable_minutes", "stockout_minutes", "coverage_status")),
     ("unmet_demand", "one recorded demand observation", ("demand_event_id",), (), ("demand_event_id", "event_date", "sku_id", "channel_code", "requested_units", "reason_code")),
     ("inventory_counts", "one inventory count event", ("count_id",), (("sku_id", "cutoff_date"),), ("count_id", "sku_id", "cutoff_date", "on_hand_units", "reserved_units", "in_transit_units", "non_sellable_units")),
@@ -73,7 +73,7 @@ _SOURCE_DEFINITIONS: tuple[
     ("purchase_receipts", "one physical receipt event", ("receipt_id",), (), ("receipt_id", "purchase_order_id", "received_date", "received_units", "inspection_units", "accepted_units", "rejected_units")),
     ("obligations", "one payable economic origin", ("obligation_id",), (("origin_type", "origin_id"),), ("obligation_id", "origin_type", "origin_id", "due_date", "original_cents", "currency", "status_code")),
     ("obligation_payments", "one applied observed payment", ("payment_id",), (), ("payment_id", "obligation_id", "paid_date", "amount_cents")),
-    ("cash_events", "one immutable cash evidence row", ("event_id",), (("scenario_id", "economic_event_id", "supersedes_event_id"),), ("event_id", "economic_event_id", "supersedes_event_id", "scenario_id", "event_date", "level", "direction", "amount_cents", "currency", "obligation_id", "payment_id")),
+    ("cash_events", "one immutable cash evidence row", ("event_id",), (), ("event_id", "economic_event_id", "supersedes_event_id", "scenario_id", "event_date", "level", "direction", "amount_cents", "currency", "obligation_id", "payment_id")),
     ("cash_balance_evidence", "one scenario opening/closing evidence window", ("balance_evidence_id",), (("scenario_id", "period_start", "period_end"),), ("balance_evidence_id", "scenario_id", "period_start", "period_end", "opening_balance_cents", "closing_balance_cents", "opening_observed_at", "closing_observed_at", "evidence_status")),
     ("budgets", "one approved drop/channel/window budget", ("budget_id",), (("period_start", "period_end", "drop_code", "channel_code"),), ("budget_id", "period_start", "period_end", "drop_code", "channel_code", "approved_cents")),
     ("budget_allocations", "one explicit origin allocation into a budget", ("budget_allocation_id",), (("budget_id", "origin_type", "origin_id", "drop_code", "channel_code"),), ("budget_allocation_id", "budget_id", "origin_type", "origin_id", "drop_code", "channel_code", "allocated_cents")),
@@ -246,6 +246,8 @@ for _name, _grain, _primary_key, _unique, _columns in _SOURCE_DEFINITIONS:
         "provenance_field": "source_ref",
     }
 SOURCES["cash_events"]["economic_identity"] = ("scenario_id", "economic_event_id")
+SOURCES["cash_events"]["unique_non_null"] = (("supersedes_event_id",),)
+SOURCES["sales_aggregates"]["unique_non_null"] = (("delivery_cohort_id",),)
 
 
 def columns_for(name: str) -> tuple[str, ...]:
@@ -306,7 +308,7 @@ def _fallback_iana_offset(timezone_name: str, cutoff: datetime) -> timedelta | N
 def validate_metadata(metadata: Any, *, allow_blank: bool = False) -> None:
     """Validate exact operating-v1 metadata without exposing supplied values."""
 
-    if not isinstance(metadata, dict) or tuple(metadata) != METADATA_FIELDS or set(metadata) != set(METADATA_FIELDS):
+    if not isinstance(metadata, dict) or set(metadata) != set(METADATA_FIELDS):
         raise OperatingContractError("metadata.shape", "metadata")
     if metadata["contract_version"] != CONTRACT_VERSION:
         raise OperatingContractError("metadata.contract_version", "contract_version")
@@ -355,7 +357,7 @@ def validate_metadata(metadata: Any, *, allow_blank: bool = False) -> None:
     for source in SOURCE_NAMES:
         location = f"coverage.{source}"
         entry = coverage[source]
-        if not isinstance(entry, dict) or tuple(entry) != ("status", "window_start", "window_end") or set(entry) != {"status", "window_start", "window_end"}:
+        if not isinstance(entry, dict) or set(entry) != {"status", "window_start", "window_end"}:
             raise OperatingContractError("metadata.coverage_shape", location)
         status = entry["status"]
         if status not in COVERAGE_STATUSES:

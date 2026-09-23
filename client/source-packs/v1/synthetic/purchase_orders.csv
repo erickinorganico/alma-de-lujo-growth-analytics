@@ -1,0 +1,2 @@
+purchase_order_id,sku_id,budget_id,ordered_units,agreed_unit_cents,order_date,promised_date,status_code,source_ref
+synthetic:po-001,synthetic:sku-001,synthetic:budget-001,20,45000,2026-09-02,2026-09-10,PARTIAL,synthetic:source:po-001

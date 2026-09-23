@@ -1,0 +1,2 @@
+expense_id,budget_id,incurred_date,category_code,amount_cents,status_code,source_ref
+synthetic:expense-001,synthetic:budget-001,2026-09-12,synthetic:packaging,100000,INCURRED,synthetic:source:expense-001

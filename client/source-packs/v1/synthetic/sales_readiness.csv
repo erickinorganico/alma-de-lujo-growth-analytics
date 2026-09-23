@@ -1,0 +1,2 @@
+sku_id,effective_date,readiness_status,missing_info_code,source_ref
+synthetic:sku-001,2026-09-21,READY,,synthetic:source:readiness-001

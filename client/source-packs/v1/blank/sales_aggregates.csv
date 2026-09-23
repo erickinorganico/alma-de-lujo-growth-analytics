@@ -1,0 +1,1 @@
+sales_date,sku_id,channel_code,delivery_cohort_id,delivered_units,returned_units,restocked_units,net_revenue_cents,variable_cost_cents,coverage_status,source_ref

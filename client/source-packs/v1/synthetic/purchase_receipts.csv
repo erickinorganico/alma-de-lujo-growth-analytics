@@ -1,0 +1,2 @@
+receipt_id,purchase_order_id,received_date,received_units,inspection_units,accepted_units,rejected_units,source_ref
+synthetic:receipt-001,synthetic:po-001,2026-09-10,18,2,16,0,synthetic:source:receipt-001
