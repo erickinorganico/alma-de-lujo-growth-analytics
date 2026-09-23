@@ -11,7 +11,7 @@
     "effective_end": {"type": "string", "format": "date"},
     "status": {"enum": ["REVIEW", "APPROVED", "SYNTHETIC_EXAMPLE"]},
     "owner_approval_ref": {"type": ["string", "null"]},
-    "bases": {"type": "object", "additionalProperties": {"type": ["string", "number", "boolean", "array"]}},
+    "bases": {"type": "object", "additionalProperties": {"type": ["string", "number", "boolean", "array", "object"]}},
     "thresholds": {"type": "object", "additionalProperties": {"type": ["integer", "number"]}},
     "maturity_windows": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
     "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}

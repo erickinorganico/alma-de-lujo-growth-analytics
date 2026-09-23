@@ -18,6 +18,14 @@ from alma.operating_workspace import relationship_summary
 
 STATUSES = frozenset({"MEASURED", "PARTIAL", "UNKNOWN", "NOT_APPLICABLE", "ESTIMATED", "ERROR"})
 POLICY_STATUSES = frozenset({"REVIEW", "APPROVED", "SYNTHETIC_EXAMPLE"})
+EXCEPTION_POLICY_CATEGORIES = frozenset({
+    "COST_INCOMPLETE",
+    "RECEIPT_UNINSPECTED",
+    "QUALITY_HOLD",
+    "SALES_READINESS",
+    "LOAN_RETURN_DUE",
+    "CUSTODY_EVIDENCE_MISSING",
+})
 # Literal semantic floor: a changed Phase 1 registry cannot silently redefine a mart input.
 REQUIRED_SEMANTIC_FIELDS = {
     "sku_catalog": ("sku_id", "effective_date", "lifecycle_status"),
@@ -154,13 +162,22 @@ def load_policy(path: str | Path, *, as_of: str, real_cut: bool) -> Policy:
         raise ValueError("invalid policy bases")
     required_bases = {"landed_cost_inclusions", "revenue_basis", "cogs_basis", "variable_cost_basis",
                       "tax_basis", "shipping_basis", "discount_basis", "cash_projection_selection",
-                      "cash_floor_basis", "budget_headroom_basis"}
+                      "cash_floor_basis", "budget_headroom_basis", "exception_owner_roles",
+                      "exception_next_actions"}
+    string_bases = required_bases - {"landed_cost_inclusions", "exception_owner_roles", "exception_next_actions"}
+    required_thresholds = {"inventory_variance_units", "minimum_cash_floor_cents",
+                           "receipt_inspection_due_days", "quality_disposition_due_days",
+                           "loan_overdue_grace_days"}
     if (set(content["bases"]) != required_bases
             or not isinstance(content["bases"]["landed_cost_inclusions"], list)
             or not content["bases"]["landed_cost_inclusions"]
             or set(content["bases"]["landed_cost_inclusions"]) - {"DIRECT", "ALLOCATED"}
             or any(not isinstance(content["bases"][name], str) or not content["bases"][name]
-                   for name in required_bases - {"landed_cost_inclusions"})
+                   for name in string_bases)
+            or any(set(content["bases"][name]) != EXCEPTION_POLICY_CATEGORIES
+                   or any(not isinstance(value, str) or not value for value in content["bases"][name].values())
+                   for name in ("exception_owner_roles", "exception_next_actions"))
+            or not required_thresholds.issubset(content["thresholds"])
             or any(not isinstance(value, int) or value < 0 for value in content["thresholds"].values())
             or any(not isinstance(value, int) or value < 0 for value in content["maturity_windows"].values())):
         raise ValueError("invalid policy rule values")

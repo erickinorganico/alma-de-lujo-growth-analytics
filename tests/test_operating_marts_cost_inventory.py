@@ -78,6 +78,9 @@ class MartContractTests(unittest.TestCase):
             policy.content["bases"]["budget_headroom_basis"],
         )
         self.assertEqual(0, policy.content["thresholds"]["minimum_cash_floor_cents"])
+        self.assertEqual("FINANCE_OWNER", policy.content["bases"]["exception_owner_roles"]["COST_INCOMPLETE"])
+        self.assertEqual("INSPECT_RECEIPT", policy.content["bases"]["exception_next_actions"]["RECEIPT_UNINSPECTED"])
+        self.assertEqual(2, policy.content["thresholds"]["receipt_inspection_due_days"])
         with self.assertRaises(ValueError):
             load_policy(policy_path, as_of="2030-01-01", real_cut=False)
         with self.assertRaises(ValueError):
