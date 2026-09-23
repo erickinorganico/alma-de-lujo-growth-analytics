@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import tempfile
 import unittest
+import json
+import shutil
 from pathlib import Path
 
 from alma.operating_mart_contracts import bind_cut, load_policy
@@ -101,6 +103,73 @@ class ExceptionTests(unittest.TestCase):
             with self.subTest(bad=bad):
                 with self.assertRaises(ValueError):
                     validate_sales_row(bad)
+
+
+class BundleTests(unittest.TestCase):
+    def test_complete_bundle_registry_lineage_and_two_cut_history(self) -> None:
+        from alma.operating_marts import build_operating_marts
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            private = root / ".local" / "operating-marts"
+            cut1 = build_operating_workspace(PACK, private_root=root / "cuts")
+            first = build_operating_marts(cut1["destination"], private, policy_path=POLICY,
+                                          private_root=private)
+            dest1 = Path(first["destination"])
+            self.assertTrue(dest1.is_dir())
+            manifest = json.loads((dest1 / "manifest.json").read_text(encoding="utf-8"))
+            registry = json.loads((dest1 / "registry.json").read_text(encoding="utf-8"))
+            metric_rows = json.loads((dest1 / "metric_rows.json").read_text(encoding="utf-8"))
+            self.assertEqual(set(manifest["artifact_sha256"]), set(manifest["artifacts"]))
+            self.assertEqual({row["metric_id"] for row in metric_rows}, set(registry))
+            self.assertTrue({"recorded_unpaid_cents", "budget_headroom_cents", "sell_through",
+                             "stockout_exposure", "available_units"}.issubset(registry))
+            self.assertEqual(manifest["policy_sha256"], first["policy_sha256"])
+            self.assertEqual(manifest["source_sha256"], json.loads(
+                (Path(cut1["destination"]) / "workspace.json").read_text(encoding="utf-8"))["source_sha256"])
+            with self.assertRaises(ValueError):
+                build_operating_marts(cut1["destination"], private, policy_path=POLICY,
+                                      private_root=private)
+            pack2 = root / "pack2"
+            shutil.copytree(PACK, pack2)
+            sku = pack2 / "sku_catalog.csv"
+            sku.write_text(sku.read_text(encoding="utf-8").replace(
+                "synthetic:source:sku-001", "synthetic:source:sku-002"), encoding="utf-8")
+            cut2 = build_operating_workspace(pack2, private_root=root / "cuts")
+            second = build_operating_marts(cut2["destination"], private, policy_path=POLICY,
+                                           private_root=private)
+            self.assertNotEqual(first["cut_id"], second["cut_id"])
+            self.assertTrue(dest1.is_dir())
+            self.assertTrue(Path(second["destination"]).is_dir())
+
+    def test_bad_policy_tamper_and_unsafe_paths_publish_nothing(self) -> None:
+        from alma.operating_marts import build_operating_marts
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            private = root / ".local" / "operating-marts"
+            cut = build_operating_workspace(PACK, private_root=root / "cuts")
+            bad_policy = root / "missing.json"
+            with self.assertRaises(ValueError):
+                build_operating_marts(cut["destination"], private, policy_path=bad_policy,
+                                      private_root=private)
+            self.assertFalse(private.exists())
+            with self.assertRaises(ValueError):
+                build_operating_marts(cut["destination"], root / "outside", policy_path=POLICY,
+                                      private_root=private)
+            self.assertFalse(private.exists())
+            link = root / "link"
+            link.symlink_to(root, target_is_directory=True)
+            with self.assertRaises(ValueError):
+                build_operating_marts(cut["destination"], link / ".local" / "operating-marts",
+                                      policy_path=POLICY, private_root=private)
+            self.assertFalse(private.exists())
+            source = Path(cut["destination"]) / "sku_catalog.csv"
+            source.write_bytes(source.read_bytes() + b"\n")
+            with self.assertRaises(ValueError):
+                build_operating_marts(cut["destination"], private, policy_path=POLICY,
+                                      private_root=private)
+            self.assertFalse(private.exists())
 
 
 if __name__ == "__main__":
