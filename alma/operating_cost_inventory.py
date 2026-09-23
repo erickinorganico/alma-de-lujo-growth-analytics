@@ -160,34 +160,52 @@ def realized_economics(
     """Same-grain realized economics over a half-open local-date window."""
     if start >= end:
         raise ValueError("empty or reversed economics window")
-    sales = _rows(cut,
-        "SELECT sales_date, delivered_units, net_revenue_cents, variable_cost_cents, "
-        "coverage_status, source_ref FROM sales_aggregates "
-        "WHERE sku_id=:sku AND channel_code=:channel AND sales_date>=:start AND sales_date<:end "
-        "ORDER BY sales_date, source_ref",
-        {"sku": sku_id, "channel": channel_code, "start": start, "end": end})
+    # Ordinals belong to the canonical SKU/version stream, not to a report slice.
+    # Earlier dates and other channels consume residual cents before this slice.
+    canonical = _rows(cut,
+        "SELECT sales_date, sku_id, channel_code, delivered_units, net_revenue_cents, "
+        "variable_cost_cents, coverage_status, source_ref FROM sales_aggregates "
+        "WHERE sku_id=:sku AND sales_date<:end "
+        "ORDER BY sales_date, sku_id, channel_code",
+        {"sku": sku_id, "end": end})
+    sales = [row for row in canonical if row["channel_code"] == channel_code and
+             start <= row["sales_date"] < end]
     revenue = sum(row["net_revenue_cents"] for row in sales)
     delivered = sum(row["delivered_units"] for row in sales)
     variable = sum(row["variable_cost_cents"] for row in sales if row["variable_cost_cents"] is not None)
     cogs = 0
     ordinal_by_version: dict[str, int] = defaultdict(int)
     complete = bool(sales) and all(row["coverage_status"] == "COMPLETE" and row["variable_cost_cents"] is not None for row in sales)
+    estimated = False
     source_refs = [row["source_ref"] for row in sales]
     version_ids: list[str] = []
     public_prices: dict[str, int] = {}
-    for row in sales:
+    for row in canonical:
+        selected = row["channel_code"] == channel_code and start <= row["sales_date"] < end
         cost = project_cost(cut, sku_id, row["sales_date"], policy)
         version_id = cost["cost_version_id"]
         if version_id is None or cost["unit_cost_cents"] is None:
-            complete = False
+            if selected:
+                complete = False
             continue
-        version_ids.append(version_id)
-        public_prices[version_id] = cost["public_price_cents"]
+        if selected:
+            version_ids.append(version_id)
+            public_prices[version_id] = cost["public_price_cents"]
+            estimated |= cost["status"] == "ESTIMATED"
+            source_refs.extend(cost["source_refs"])
         unit_costs = cost["unit_cost_cents"]
-        for ordinal in range(row["delivered_units"]):
-            cogs += unit_costs[(ordinal_by_version[version_id] + ordinal) % len(unit_costs)]
+        if selected:
+            basis = len(unit_costs)
+            base, residual = divmod(cost["complete_cost_cents"], basis)
+            start_ordinal = ordinal_by_version[version_id]
+            count = row["delivered_units"]
+            full_cycles, tail = divmod(count, basis)
+            offset = start_ordinal % basis
+            residual_hits = full_cycles * residual
+            residual_hits += min(tail, max(0, residual - offset))
+            residual_hits += min(max(0, tail - (basis - offset)), residual)
+            cogs += count * base + residual_hits
         ordinal_by_version[version_id] += row["delivered_units"]
-        source_refs.extend(cost["source_refs"])
     last_day = (date.fromisoformat(end) - timedelta(days=1)).isoformat()
     coverage = cut.coverage_status("sales_aggregates", start)
     if coverage not in {"COMPLETE", "ZERO"} or cut.coverage_status("sales_aggregates", last_day) not in {"COMPLETE", "ZERO"}:
@@ -195,7 +213,8 @@ def realized_economics(
     if cut.input_class != "SYNTHETIC_EXAMPLE" and not policy.authorizes_real_cut:
         complete = False
     ratios = economics_ratios(revenue, cogs, variable) if complete else {"markup": None, "gross_margin": None, "contribution_margin": None}
-    return {"status": "MEASURED" if complete else ("PARTIAL" if sales else "UNKNOWN"),
+    return {"status": ("ESTIMATED" if estimated else "MEASURED") if complete else
+            ("PARTIAL" if sales else "UNKNOWN"),
             "net_revenue_cents": revenue if sales else None,
             "delivered_units": delivered if sales else None,
             "cogs_cents": cogs if complete else None,
