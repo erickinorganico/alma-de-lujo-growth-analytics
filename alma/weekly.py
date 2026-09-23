@@ -8,6 +8,7 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
+from pathlib import PurePosixPath
 from typing import Any, Sequence
 
 from alma.decision_register import register_decision, verify_register
@@ -26,11 +27,18 @@ from alma.weekly_cycle import (
     submit_response,
     verify_cycle,
 )
+from scripts.package_client_v1 import audit_client_zip, build_client_kit
 
 
 VERSION = "weekly-run-v1"
 MAX_JSON_BYTES = 1024 * 1024
 _ACTIONS = ("record", "submit", "resume", "packet", "register")
+_PACKAGE_RELATIVE = "public-kit/Alma_OS_Client_v1.zip"
+_PACKAGE_KEYS = {
+    "version", "status", "path", "zip_sha256", "manifest_sha256",
+    "member_count", "audit",
+}
+_PACKAGE_AUDIT_KEYS = {"allowlist", "privacy", "links"}
 
 
 class WeeklyContractError(ValueError):
@@ -108,8 +116,58 @@ def _copy_pack(source: Path, destination: Path) -> Path:
     return destination
 
 
+def _package_identity(package: Path, built: dict[str, Any],
+                      audited: dict[str, Any]) -> dict[str, Any]:
+    """Project builder/auditor output to the exact public weekly boundary."""
+    agreement = ("version", "status", "manifest_sha256", "member_count", "privacy", "links")
+    if (any(built.get(key) != audited.get(key) for key in agreement) or
+            built.get("status") != "PASS" or audited.get("status") != "PASS" or
+            built.get("sha256") != _sha(package)):
+        raise WeeklyContractError("public package build and audit disagree")
+    return {
+        "version": built["version"],
+        "status": "PASS",
+        "path": _PACKAGE_RELATIVE,
+        "zip_sha256": built["sha256"],
+        "manifest_sha256": built["manifest_sha256"],
+        "member_count": built["member_count"],
+        "audit": {
+            "allowlist": audited["status"],
+            "privacy": audited["privacy"],
+            "links": audited["links"],
+        },
+    }
+
+
+def _verify_package_identity(folder: Path, identity: Any) -> Path:
+    """Rehash and freshly audit the exact run-relative public package."""
+    if (not isinstance(identity, dict) or set(identity) != _PACKAGE_KEYS or
+            not isinstance(identity.get("audit"), dict) or
+            set(identity["audit"]) != _PACKAGE_AUDIT_KEYS or
+            identity.get("status") != "PASS" or identity.get("path") != _PACKAGE_RELATIVE):
+        raise WeeklyContractError("weekly public package identity invalid")
+    relative = PurePosixPath(identity["path"])
+    if (relative.is_absolute() or ".." in relative.parts or
+            relative.as_posix() != identity["path"]):
+        raise WeeklyContractError("weekly public package path escaped its run")
+    package = (folder / Path(*relative.parts)).resolve(strict=True)
+    if (not package.is_relative_to(folder) or _is_link(package) or not package.is_file() or
+            _sha(package) != identity.get("zip_sha256")):
+        raise WeeklyContractError("weekly public package bytes changed")
+    _no_links(package)
+    audited = audit_client_zip(package)
+    if (identity.get("version") != audited.get("version") or
+            identity.get("manifest_sha256") != audited.get("manifest_sha256") or
+            identity.get("member_count") != audited.get("member_count") or
+            identity["audit"] != {"allowlist": audited.get("status"),
+                                  "privacy": audited.get("privacy"),
+                                  "links": audited.get("links")}):
+        raise WeeklyContractError("weekly public package audit binding changed")
+    return package
+
+
 def _safe_receipt(state: dict[str, Any], destination: Path,
-                  input_route: str) -> dict[str, Any]:
+                  input_route: str, public_package: dict[str, Any]) -> dict[str, Any]:
     cycle = _normal(str(state["destination"]))
     return {
         "version": VERSION,
@@ -124,6 +182,9 @@ def _safe_receipt(state: dict[str, Any], destination: Path,
         "manifest_sha256": state["manifest_sha256"],
         "mart_bundle_sha256": state["mart_bundle_sha256"],
         "task_bundle_sha256": state["task_bundle_sha256"],
+        "public_package": public_package,
+        "native_execution_claimed": False,
+        "external_execution": "PROHIBITED",
     }
 
 
@@ -212,6 +273,10 @@ def create_weekly_run(source_pack: str | Path, policy: str | Path,
             raise WeeklyContractError("new weekly run must remain waiting for analysts")
         cycle = _normal(str(state["destination"]))
         mart_manifest = Path(str(mart["destination"])) / "manifest.json"
+        package = destination / Path(*PurePosixPath(_PACKAGE_RELATIVE).parts)
+        built_package = build_client_kit(package)
+        audited_package = audit_client_zip(package)
+        public_package = _package_identity(package, built_package, audited_package)
         receipt_hashes = {
             "source.json": _write(destination / "receipts" / "source.json", source_receipt),
             "workspace.json": _write(destination / "receipts" / "workspace.json", {
@@ -232,6 +297,9 @@ def create_weekly_run(source_pack: str | Path, policy: str | Path,
                 "task_bundle_sha256": state["task_bundle_sha256"],
                 "native_execution_claimed": False,
             }),
+            "public-package.json": _write(
+                destination / "receipts" / "public-package.json", public_package
+            ),
         }
         index = {
             "version": VERSION,
@@ -247,10 +315,11 @@ def create_weekly_run(source_pack: str | Path, policy: str | Path,
             "prior": {"supplied": prior_register is not None,
                       "anchor": state.get("decision_register_anchor")},
             "receipts": receipt_hashes,
+            "public_package": public_package,
             "external_execution": "PROHIBITED",
         }
         _write(destination / "run-index.json", index)
-        return _safe_receipt(state, destination, input_route)
+        return _safe_receipt(state, destination, input_route, public_package)
     except WeeklyContractError:
         if created_destination and destination is not None and destination.exists():
             shutil.rmtree(_extended(destination), ignore_errors=True)
@@ -281,6 +350,19 @@ def _load_run(run: str | Path) -> tuple[Path, dict[str, Any], Path]:
         path = folder / "receipts" / name
         if not path.is_file() or _sha(path) != expected:
             raise WeeklyContractError("weekly stage receipt changed")
+    try:
+        package_receipt_path = folder / "receipts" / "public-package.json"
+        package_receipt_raw = package_receipt_path.read_bytes()
+        package_receipt = json.loads(package_receipt_raw)
+        if package_receipt_raw != canonical_json(package_receipt) + b"\n":
+            raise WeeklyContractError("weekly public package receipt is not canonical")
+        if index.get("public_package") != package_receipt:
+            raise WeeklyContractError("weekly package receipt and index disagree")
+        _verify_package_identity(folder, package_receipt)
+    except WeeklyContractError:
+        raise
+    except (ValueError, OSError, KeyError, TypeError, json.JSONDecodeError) as exc:
+        raise WeeklyContractError("weekly public package verification failed") from exc
     normal_cycle = (folder / index["cycle"]).resolve(strict=True)
     if not normal_cycle.is_relative_to(folder):
         raise WeeklyContractError("weekly cycle escaped its run")

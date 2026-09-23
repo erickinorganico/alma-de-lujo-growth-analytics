@@ -338,6 +338,7 @@ class WeeklyPackageStageTests(unittest.TestCase):
             checkout = home / "clean-checkout"
             with zipfile.ZipFile(archive) as bundle:
                 bundle.extractall(checkout)
+            self.assertIn("audit_client_zip", (checkout / "alma" / "weekly.py").read_text("utf-8"))
             env = {**os.environ, "PYTHONPATH": str(checkout)}
             process = subprocess.run(
                 [sys.executable, "-m", "alma.weekly", "weekly-resume",

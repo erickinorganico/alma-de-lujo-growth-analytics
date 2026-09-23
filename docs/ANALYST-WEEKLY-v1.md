@@ -21,7 +21,11 @@ Si la entrada es XLSX, el adaptador crea y valida primero un **canonical source 
 
 `--prior-register` y `--prior-anchor` se entregan **both or neither**. El par se verifica de forma independiente antes del carry-forward; conserva el hash y la fecha originales y marca los elementos vencidos. El registro nunca se infiere desde una recomendación.
 
-La creación escribe **stage receipts** para fuente, marts y espera nativa, además de `run-index.json`. WAITING indica que las solicitudes están listas pero no existe aún una respuesta aceptada. BLOCKED indica que debe corregirse la entrada, la política, el hash o el contrato. REVIEW indica que se puede inspeccionar el resultado sin tratarlo como aprobado.
+La creación escribe **stage receipts** para fuente, marts, espera nativa y paquete público, además de `run-index.json`. El mismo comando construye automáticamente `public-kit/Alma_OS_Client_v1.zip` y registra `receipts/public-package.json`; no hace falta ejecutar un empaquetador separado.
+
+La salida JSON incluye `public_package` con `version`, `status`, ruta relativa `path`, `zip_sha256`, `manifest_sha256`, `member_count` y las disposiciones `audit.allowlist`, `audit.privacy` y `audit.links`. `run-index.json` conserva exactamente la misma identidad y enlaza el SHA-256 del recibo bajo `receipts["public-package.json"]`. Antes de cualquier acción `weekly-resume`, un proceso nuevo vuelve a comprobar la ruta, bytes, recibo, índice y auditoría del ZIP; una diferencia bloquea la continuación sin reescribir evidencia.
+
+WAITING indica que las solicitudes están listas pero no existe aún una respuesta aceptada. BLOCKED indica que debe corregirse la entrada, la política, el hash o el contrato. REVIEW indica que se puede inspeccionar el resultado sin tratarlo como aprobado.
 
 ## Ejecutar los roles nativos
 
@@ -77,4 +81,6 @@ Para cerrar una decisión, registra evidencia que satisfaga el closure check tip
 
 ## Paquete público
 
-El paquete sanitizado se construye por separado con `python scripts/package_client_v1.py --output <alma-os-client-v1.zip>`. Contiene plantillas vacías, ejemplo sintético, políticas REVIEW/SYNTHETIC_EXAMPLE, diccionario, walkthrough y demo pública. No contiene un corte, respuestas nativas, recibos privados, decision events ni runtime de analistas. No puede ejecutar un corte privado.
+El comando soportado `.\run.ps1 weekly` construye el paquete sanitizado dentro del corte como `public-kit/Alma_OS_Client_v1.zip`. Contiene plantillas vacías, ejemplo sintético, políticas REVIEW/SYNTHETIC_EXAMPLE, diccionario, walkthrough y demo pública. No contiene un corte, respuestas nativas, recibos privados, decision events ni runtime de analistas. No puede ejecutar un corte privado.
+
+La validez del paquete es independiente de WAITING, BLOCKED, REVIEW o READY_FOR_OWNER: esos estados describen la ejecución analítica y la autoridad humana, no el contenido público. Un paquete con auditoría PASS nunca prueba análisis nativo, revisión, aprobación del owner ni ejecución externa.
