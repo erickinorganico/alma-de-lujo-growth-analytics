@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import shutil
 import tempfile
 from dataclasses import asdict
@@ -12,11 +13,12 @@ from typing import Any
 
 from alma.operating_archive import verify_cut
 from alma.operating_contracts import canonical_json
+from alma.operating_interchange import parse_pack
 from alma.operating_mart_contracts import MetricRow
 from alma.operating_marts import (
     SEMANTIC_FORMULAS, _FACT_KEYS, _definitions, build_operating_marts,
 )
-from alma.operating_workspace import build_operating_workspace
+from alma.operating_workspace import _cut_id, build_operating_workspace
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = "operating-cycle-v1"
@@ -25,12 +27,99 @@ DEFAULT_ROLES = ("merchandiser", "finance_analyst", "commerce_analyst",
 ROLE_MODELS = {"merchandiser": "terra", "finance_analyst": "terra",
                "commerce_analyst": "luna", "returns_analyst": "luna",
                "growth_analyst": "sol", "market_researcher": "sol"}
+ROLE_FAMILIES = {
+    "merchandiser": ("cost", "inventory", "purchases", "learning", "budgets"),
+    "finance_analyst": ("economics", "obligations", "cash", "budgets"),
+    "commerce_analyst": ("economics", "learning", "sales_readiness"),
+    "returns_analyst": ("inventory", "learning", "exceptions"),
+    "growth_analyst": ("economics", "learning", "sales_readiness"),
+    "market_researcher": ("learning", "exceptions", "sales_readiness"),
+}
+ROLE_REQUIRED_SOURCES = {
+    "merchandiser": ("sku_catalog", "inventory_counts", "cost_versions"),
+    "finance_analyst": ("obligations", "obligation_payments", "cash_events",
+                        "cash_balance_evidence", "budgets"),
+    "commerce_analyst": ("sales_aggregates", "availability_daily"),
+    "returns_analyst": ("quality_events", "inventory_movements"),
+    "growth_analyst": ("sales_aggregates", "availability_daily", "unmet_demand"),
+    "market_researcher": ("sales_aggregates", "availability_daily"),
+}
+STATIC_METRIC_FAMILY = {
+    "complete_landed_cost_cents": "cost", "available_units": "inventory",
+    "purchase_remaining_units": "purchases", "realized_contribution_cents": "economics",
+    "recorded_unpaid_cents": "obligations", "authoritative_outstanding_cents": "obligations",
+    "reconciled_cash_close_cents": "cash", "cash_layer_cents": "cash",
+    "budget_headroom_cents": "budgets", "sell_through": "learning",
+    "mature_return_rate": "learning", "quality_defect_rate": "learning",
+    "recorded_unmet_units": "learning", "stockout_exposure": "learning",
+    "variant_mix": "learning",
+}
 MAX_JSON_BYTES = 32 * 1024 * 1024
 POLICY = ROOT / "policies" / "operating-metrics-synthetic-v1.json"
 
 
 def _digest(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def resolve_pointer(evidence: Any, pointer: str) -> Any:
+    """Resolve a strict RFC 6901 pointer within frozen in-memory evidence only."""
+    if not isinstance(pointer, str) or not pointer.startswith("/") or len(pointer) > 500:
+        raise ValueError("evidence reference must be a local JSON Pointer")
+    current = evidence
+    for raw in pointer[1:].split("/"):
+        if re.search(r"~(?![01])", raw):
+            raise ValueError("invalid JSON Pointer escape")
+        part = raw.replace("~1", "/").replace("~0", "~")
+        if isinstance(current, list):
+            if not re.fullmatch(r"0|[1-9][0-9]*", part) or int(part) >= len(current):
+                raise ValueError("invalid JSON Pointer array index")
+            current = current[int(part)]
+        elif isinstance(current, dict) and part in current:
+            current = current[part]
+        else:
+            raise ValueError("evidence reference is absent")
+    return current
+
+
+def _metric_family(row: dict[str, Any]) -> str | None:
+    path = row.get("dimensions", {}).get("family_path")
+    if isinstance(path, str):
+        return path.split(".", 1)[0].split("[", 1)[0]
+    return STATIC_METRIC_FAMILY.get(row.get("metric_id"))
+
+
+def _role_evidence(report: dict[str, Any], role: str) -> dict[str, Any]:
+    families = ROLE_FAMILIES[role]
+    metrics = [row for row in report["metric_rows"] if _metric_family(row) in families]
+    if len(metrics) > 10_000:
+        raise ValueError("role evidence exceeds metric row cap")
+    definitions = {name: report["metric_definitions"][name]
+                   for name in sorted({row["metric_id"] for row in metrics})}
+    evidence = {"cut": {key: report[key] for key in ("cut_id", "cutoff_at", "timezone",
+        "input_class", "synthetic_business_data", "manifest_sha256", "mart_bundle_sha256",
+        "metric_contract_sha256")},
+        "coverage": report["coverage"], "domain_coverage": report["domain_coverage"],
+        "source_sha256": report["source_sha256"], "quality": report["quality"],
+        "reconciliation": report["reconciliation"], "lineage": report["lineage"],
+        "metric_definitions": definitions, "metric_rows": metrics,
+        "families": {name: report["families"][name] for name in families
+                     if name in report["families"]}}
+    if len(canonical_json(evidence)) > MAX_JSON_BYTES:
+        raise ValueError("role evidence exceeds byte cap")
+    return evidence
+
+
+def _role_gate(report: dict[str, Any], role: str) -> tuple[str, list[str]]:
+    required = ROLE_REQUIRED_SOURCES[role]
+    blocked = [name for name in required if report["coverage"][name]["status"]
+               in {"MISSING", "ERROR", "NOT_APPLICABLE"}]
+    if blocked:
+        return "BLOCKED_EVIDENCE", blocked
+    if any(report["coverage"][name]["status"] in {"PARTIAL", "ESTIMATED"}
+           for name in required):
+        return "REVIEW", []
+    return "READY_FOR_ANALYSIS", []
 
 
 def _read(path: Path, *, canonical: bool = True) -> tuple[dict[str, Any] | list[Any], bytes]:
@@ -153,16 +242,24 @@ def _initial_requests(report: dict[str, Any], run_id: str, roles: tuple[str, ...
                       current_hash: str) -> tuple[dict[str, bytes], dict[str, Any]]:
     request_bytes: dict[str, bytes] = {}
     for role in roles:
-        evidence = {"current_cut": report}
+        evidence = _role_evidence(report, role)
+        evidence_status, blocked_sources = _role_gate(report, role)
+        refs = ["/cut/cut_id", "/quality/workspace"]
+        if evidence["metric_rows"]:
+            refs.append("/metric_rows/0/value")
+        for pointer in refs:
+            resolve_pointer(evidence, pointer)
         body = {"version": VERSION, "cut_id": report["cut_id"], "run_id": run_id,
                 "role": role, "expected_model_family": ROLE_MODELS[role],
                 "execution_mode": "native-codex-task-bridge",
                 "synthetic_business_data": report["synthetic_business_data"],
+                "evidence_status": evidence_status, "blocked_sources": blocked_sources,
                 "current_cut_sha256": current_hash,
                 "manifest_sha256": report["manifest_sha256"],
                 "mart_bundle_sha256": report["mart_bundle_sha256"],
                 "metric_contract_sha256": report["metric_contract_sha256"],
                 "evidence_hash": _digest(canonical_json(evidence)), "evidence": evidence,
+                "evidence_refs": refs,
                 "response_contract": "contracts/weekly-cycle-v1.schema.json#/$defs/response",
                 "write_scope": [f"tasks/{role}.response.json", f"tasks/{role}.query-trace.json"]}
         body["request_id"] = _digest(canonical_json(body))
@@ -175,7 +272,8 @@ def _initial_requests(report: dict[str, Any], run_id: str, roles: tuple[str, ...
 
 
 def start_cycle(workspace: str | Path, mart_bundle: str | Path, output_root: str | Path,
-                roles: tuple[str, ...] | list[str] | None = None) -> dict[str, Any]:
+                roles: tuple[str, ...] | list[str] | None = None, *,
+                _input_route: str = "verified_boundary") -> dict[str, Any]:
     """Freeze one verified canonical cut without invoking any native analyst."""
     root = _output_root(output_root)
     chosen = tuple(DEFAULT_ROLES if roles is None else roles)
@@ -193,10 +291,11 @@ def start_cycle(workspace: str | Path, mart_bundle: str | Path, output_root: str
     requests, bundle = _initial_requests(report, run_id, chosen, report_hash)
     bundle_bytes = canonical_json(bundle)
     state = {"version": VERSION, "cut_id": report["cut_id"], "run_id": run_id,
-        "status": "WAITING_ANALYSTS", "input_route": "verified_boundary",
+        "status": "WAITING_ANALYSTS", "input_route": _input_route,
         "current_cut_sha256": report_hash, "manifest_sha256": manifest_hash,
         "mart_bundle_sha256": mart_hash, "task_bundle_sha256": _digest(bundle_bytes),
         "expected_roles": {role: {"model_family": ROLE_MODELS[role],
+                                   "evidence_status": _role_gate(report, role)[0],
                                    "request_sha256": _digest(requests[role])} for role in chosen},
         "accepted_roles": {}, "workspace_path": str(_path(workspace, existing=True)),
         "mart_bundle_path": str(_path(mart_bundle, existing=True))}
@@ -243,13 +342,25 @@ def start_cycle_from_source_pack(source_pack: str | Path, operating_root: str | 
     pack = _path(source_pack, existing=True)
     if pack.suffix.lower() == ".xlsx":
         raise ValueError("direct workbook preparation belongs to Phase 4")
-    built = build_operating_workspace(pack, private_root=operating_root)
-    verify_cut(built["destination"], private_root=operating_root)
-    marts = build_operating_marts(built["destination"], mart_root,
-                                  policy_path=POLICY, private_root=mart_root)
-    state = start_cycle(built["destination"], marts["destination"], output_root, roles)
-    # Input route is display metadata only; it cannot alter the frozen report.
-    return {**state, "input_route": "source_pack"}
+    parsed = parse_pack(pack, private_root=operating_root)
+    cut_id = _cut_id(parsed)
+    cut_path = _path(operating_root) / "operating-cuts" / cut_id
+    if not cut_path.exists():
+        built = build_operating_workspace(pack, private_root=operating_root)
+        cut_path = Path(built["destination"])
+    verified = verify_cut(cut_path, private_root=operating_root)
+    if verified["status"] != "PASS" or verified["cut_id"] != cut_id:
+        raise ValueError("source pack workspace verification failed")
+    registry = {name: asdict(definition) for name, definition in sorted(_definitions().items())}
+    contract_hash = _digest(canonical_json({"registry": registry,
+        "semantic_formulas": SEMANTIC_FORMULAS, "fact_keys": sorted(_FACT_KEYS)}))
+    mart_path = _path(mart_root) / cut_id / contract_hash
+    if not mart_path.exists():
+        marts = build_operating_marts(cut_path, mart_root,
+                                      policy_path=POLICY, private_root=mart_root)
+        mart_path = Path(marts["destination"])
+    _verified_report(cut_path, mart_path)
+    return start_cycle(cut_path, mart_path, output_root, roles, _input_route="source_pack")
 
 
 def verify_cycle(cycle_dir: str | Path) -> dict[str, Any]:
@@ -279,6 +390,10 @@ def verify_cycle(cycle_dir: str | Path) -> dict[str, Any]:
         bundle.get("current_cut_sha256") != state["current_cut_sha256"] or
         set(bundle.get("requests", {})) != set(state["expected_roles"])):
         raise ValueError("task bundle identity mismatch")
+    expected_requests, expected_bundle = _initial_requests(rebuilt, state["run_id"],
+        tuple(state["expected_roles"]), state["current_cut_sha256"])
+    if bundle != expected_bundle:
+        raise ValueError("task bundle differs from verified evidence")
     tasks = folder / "tasks"
     if tasks.is_symlink() or {item.name for item in tasks.iterdir()} != {
             f"{role}.request.json" for role in state["expected_roles"]}:
@@ -288,6 +403,7 @@ def verify_cycle(cycle_dir: str | Path) -> dict[str, Any]:
             raise ValueError("task path changed")
         request, raw = _read(tasks / f"{role}.request.json")
         if (_digest(raw) != info.get("sha256") or
+            raw != expected_requests[role] or
             _digest(raw) != state["expected_roles"][role]["request_sha256"] or
             request.get("role") != role or request.get("cut_id") != state["cut_id"] or
             request.get("current_cut_sha256") != state["current_cut_sha256"] or
@@ -295,6 +411,11 @@ def verify_cycle(cycle_dir: str | Path) -> dict[str, Any]:
             request.get("request_id") != _digest(canonical_json({
                 key: value for key, value in request.items() if key != "request_id"}))):
             raise ValueError("task request changed")
+        if request.get("write_scope") != [f"tasks/{role}.response.json",
+                                            f"tasks/{role}.query-trace.json"]:
+            raise ValueError("task write scope changed")
+        for pointer in request.get("evidence_refs", []):
+            resolve_pointer(request["evidence"], pointer)
     return {**state, "destination": str(folder)}
 
 
@@ -302,5 +423,5 @@ def cycle_status(cycle_dir: str | Path) -> dict[str, Any]:
     return verify_cycle(cycle_dir)
 
 
-__all__ = ["DEFAULT_ROLES", "ROLE_MODELS", "start_cycle", "start_cycle_from_source_pack",
+__all__ = ["DEFAULT_ROLES", "ROLE_MODELS", "resolve_pointer", "start_cycle", "start_cycle_from_source_pack",
            "verify_cycle", "cycle_status"]

@@ -90,6 +90,49 @@ class WeeklyCycleEvidenceTests(unittest.TestCase):
 
 
 class WeeklyCycleTaskBundleTests(unittest.TestCase):
+    def test_source_pack_rerun_reuses_verified_upstream_and_persists_route(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            operating = home / "operating"
+            marts = home / ".local" / "operating-marts"
+            cycles = home / ".local" / "weekly-cycles"
+            first = start_cycle_from_source_pack(PACK, operating, marts, cycles)
+            request = Path(first["destination"]) / "tasks" / "finance_analyst.request.json"
+            original = request.read_bytes()
+            second = start_cycle_from_source_pack(PACK, operating, marts, cycles)
+            self.assertEqual(first["run_id"], second["run_id"])
+            self.assertEqual(original, request.read_bytes())
+            self.assertEqual("source_pack", cycle_status(second["destination"])["input_route"])
+
+    def test_missing_cash_blocks_only_dependent_role(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            pack = home / "pack"
+            shutil.copytree(PACK, pack)
+            cash = pack / "cash_events.csv"
+            cash.write_text(cash.read_text(encoding="utf-8").splitlines()[0] + "\n", encoding="utf-8")
+            balance = pack / "cash_balance_evidence.csv"
+            balance.write_text(balance.read_text(encoding="utf-8").replace(
+                ",1100000,", ",2000000,"), encoding="utf-8")
+            metadata_path = pack / "metadata.json"
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            metadata["coverage"]["cash_events"] = {"status": "MISSING",
+                "window_start": None, "window_end": None}
+            metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
+            cut = build_operating_workspace(pack, private_root=home / "operating")
+            mart_root = home / ".local" / "operating-marts"
+            mart = build_operating_marts(cut["destination"], mart_root,
+                policy_path=POLICY, private_root=mart_root)
+            state = start_cycle(cut["destination"], mart["destination"],
+                home / ".local" / "weekly-cycles")
+            tasks = Path(state["destination"]) / "tasks"
+            finance = json.loads((tasks / "finance_analyst.request.json").read_text(encoding="utf-8"))
+            commerce = json.loads((tasks / "commerce_analyst.request.json").read_text(encoding="utf-8"))
+            self.assertEqual("BLOCKED_EVIDENCE", finance["evidence_status"])
+            self.assertIn("cash_events", finance["blocked_sources"])
+            self.assertNotEqual("BLOCKED_EVIDENCE", commerce["evidence_status"])
+            self.assertEqual("MISSING", finance["evidence"]["coverage"]["cash_events"]["status"])
+
     def test_six_role_specific_hash_bound_requests(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             home = Path(tmp)
