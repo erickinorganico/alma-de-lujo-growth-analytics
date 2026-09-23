@@ -22,6 +22,7 @@ MODEL_IDS = {
 REVIEWER_ROLE = "evidence_reviewer"
 PARENT_SCOPE = "schema,evidence,typed-values,registered-query,hashes,authority"
 MAX_BYTES = 1024 * 1024
+MAX_REQUEST_BYTES = 8 * MAX_BYTES
 
 
 def digest(value: Any) -> str:
@@ -61,7 +62,8 @@ def validate_request(request: Any) -> bool:
             "registered_queries", "response_contract", "write_scope"}
     _keys(request, keys, "request")
     role = request["role"]
-    if role not in ROLE_MODELS or request["expected_model_family"] != ROLE_MODELS[role]:
+    expected_family = "astra" if role == REVIEWER_ROLE else ROLE_MODELS.get(role)
+    if expected_family is None or request["expected_model_family"] != expected_family:
         raise ValueError("role/model family mismatch")
     if request["version"] != VERSION or request["execution_mode"] != "native-codex-task-bridge":
         raise ValueError("invalid native request mode")
@@ -78,6 +80,9 @@ def validate_request(request: Any) -> bool:
     evidence = request["evidence"]
     if not isinstance(evidence, dict) or not isinstance(evidence.get("metric_rows"), list):
         raise ValueError("request evidence lacks local mart")
+    if role == REVIEWER_ROLE and (not isinstance(evidence.get("analyses"), dict) or
+                                  not isinstance(evidence.get("accepted_hashes"), dict)):
+        raise ValueError("reviewer request lacks accepted analyses")
     cut = evidence.get("cut")
     if not isinstance(cut, dict) or any(cut.get(key) != request[key] for key in
             ("cut_id", "manifest_sha256", "mart_bundle_sha256", "metric_contract_sha256",
@@ -93,8 +98,108 @@ def validate_request(request: Any) -> bool:
     if not isinstance(request["evidence_refs"], list) or not request["evidence_refs"]:
         raise ValueError("missing request evidence references")
     _refs(evidence, request["evidence_refs"], "request")
-    if len(canonical_json(request)) > MAX_BYTES:
+    if len(canonical_json(request)) > MAX_REQUEST_BYTES:
         raise ValueError("oversized native request")
+    return True
+
+
+def make_reviewer_request(cycle: dict[str, Any], accepted: dict[str, Any]) -> dict[str, Any]:
+    """Freeze all accepted analyst artifacts into one distinct Astra request."""
+    state, report = cycle["state"], cycle["report"]
+    roles = set(state["expected_roles"])
+    if set(accepted) != roles or not roles:
+        raise ValueError("review requires every expected analyst")
+    for role, item in accepted.items():
+        if item["entry"] != state["accepted_roles"][role]:
+            raise ValueError("accepted analysis differs from cycle checkpoint")
+    evidence = {"cut": {key: report[key] for key in ("cut_id", "cutoff_at", "timezone",
+                "input_class", "synthetic_business_data", "manifest_sha256",
+                "mart_bundle_sha256", "metric_contract_sha256")},
+        "source_sha256": report["source_sha256"], "coverage": report["coverage"],
+        "quality": report["quality"], "reconciliation": report["reconciliation"],
+        "metric_rows": report["metric_rows"], "metric_definitions": report["metric_definitions"],
+        "analyses": {role: accepted[role]["response"] for role in sorted(roles)},
+        "analyst_evidence": {role: accepted[role]["request"]["evidence"]
+                             for role in sorted(roles)},
+        "accepted_hashes": {role: accepted[role]["entry"] for role in sorted(roles)}}
+    refs = ["/cut/cut_id", "/quality/workspace"]
+    if evidence["metric_rows"]:
+        refs.append("/metric_rows/0/value")
+    for role in sorted(roles):
+        refs.append(f"/accepted_hashes/{role}/response_sha256")
+    request = {"version": VERSION, "cut_id": state["cut_id"], "run_id": state["run_id"],
+        "role": REVIEWER_ROLE, "expected_model_family": "astra",
+        "execution_mode": "native-codex-task-bridge",
+        "synthetic_business_data": report["synthetic_business_data"],
+        "evidence_status": "REVIEW", "blocked_sources": [],
+        "current_cut_sha256": state["current_cut_sha256"],
+        "manifest_sha256": state["manifest_sha256"],
+        "mart_bundle_sha256": state["mart_bundle_sha256"],
+        "metric_contract_sha256": report["metric_contract_sha256"],
+        "evidence_hash": digest(evidence), "evidence": evidence,
+        "evidence_refs": refs, "registered_queries": QUERY_REGISTRY,
+        "response_contract": "contracts/weekly-cycle-v1.schema.json#/$defs/response",
+        "write_scope": ["tasks/evidence_reviewer.response.json",
+                        "tasks/evidence_reviewer.query-trace.json"]}
+    request["request_id"] = digest(request)
+    validate_request(request)
+    return request
+
+
+def build_terminal_packet(cycle: dict[str, Any], accepted: dict[str, Any],
+                          review: dict[str, Any]) -> dict[str, Any]:
+    """Project validated native statements; never compute or invent business facts."""
+    state, report = cycle["state"], cycle["report"]
+    if set(accepted) != set(state["expected_roles"]):
+        raise ValueError("terminal packet lacks expected analysts")
+    reviewer = review["response"]
+    if reviewer["verdict"] == "BLOCKED" or any(
+            item["response"]["verdict"] == "BLOCKED" for item in accepted.values()):
+        status = "BLOCKED"
+    elif reviewer["verdict"] == "READY_FOR_OWNER":
+        status = "READY_FOR_OWNER"
+    else:
+        status = "REVIEW"
+    def collected(field: str) -> list[dict[str, Any]]:
+        return [{"role": role, "item": item} for role, result in sorted(accepted.items())
+                for item in result["response"][field]]
+    packet = {"version": VERSION, "cut_id": state["cut_id"], "run_id": state["run_id"],
+        "status": status, "synthetic_business_data": report["synthetic_business_data"],
+        "current_cut_sha256": state["current_cut_sha256"],
+        "facts": collected("facts"), "unknowns": collected("unknowns"),
+        "hypotheses": collected("hypotheses"),
+        "recommendations": collected("recommendations"),
+        "challenges": collected("challenges") +
+            [{"role": REVIEWER_ROLE, "item": item} for item in reviewer["challenges"]],
+        "analyses": [{"role": role, "summary": item["response"]["summary"],
+                      "verdict": item["response"]["verdict"], **item["entry"]}
+                     for role, item in sorted(accepted.items())],
+        "review": {"summary": reviewer["summary"], "verdict": reviewer["verdict"],
+                   "facts": reviewer["facts"], "unknowns": reviewer["unknowns"],
+                   "hypotheses": reviewer["hypotheses"],
+                   "recommendations": reviewer["recommendations"],
+                   "challenges": reviewer["challenges"], **review["entry"]},
+        "provenance": {"manifest_sha256": state["manifest_sha256"],
+                       "mart_bundle_sha256": state["mart_bundle_sha256"],
+                       "metric_contract_sha256": report["metric_contract_sha256"],
+                       "source_sha256": report["source_sha256"],
+                       "accepted_hashes": {role: item["entry"] for role, item in sorted(accepted.items())},
+                       "review_hashes": review["entry"]},
+        "external_execution": "PROHIBITED"}
+    return packet
+
+
+def validate_terminal_packet(cycle: dict[str, Any], packet: Any) -> bool:
+    if not isinstance(packet, dict) or packet.get("external_execution") != "PROHIBITED":
+        raise ValueError("terminal packet authority invalid")
+    from .weekly_cycle import _verified_cycle_context
+
+    context = _verified_cycle_context(cycle["cycle_dir"])
+    if context["state"]["status"] not in {"READY_FOR_OWNER", "REVIEW", "BLOCKED"}:
+        raise ValueError("cycle is not terminal")
+    expected = build_terminal_packet(context, context["accepted"], context["review"])
+    if packet != expected or digest(packet) != context["state"].get("packet_sha256"):
+        raise ValueError("terminal packet differs from accepted evidence")
     return True
 
 
@@ -201,6 +306,21 @@ def validate_query_trace(request: dict[str, Any], trace: Any) -> bool:
     return True
 
 
+def execute_registered_query(request: dict[str, Any], reconciliation_id: str) -> dict[str, Any]:
+    """Read one registered frozen-mart selection for a native analyst or reviewer."""
+    validate_request(request)
+    _text(reconciliation_id, "reconciliation ID", limit=500)
+    rows = request["evidence"]["metric_rows"]
+    matches = [(index, row) for index, row in enumerate(rows)
+               if isinstance(row, dict) and row.get("reconciliation_id") == reconciliation_id]
+    if not matches or len(matches) > 100:
+        raise ValueError("registered query has no bounded result")
+    return {"query_id": "metric_rows.by_reconciliation_id",
+            "parameters": {"reconciliation_id": reconciliation_id},
+            "result_refs": [f"/metric_rows/{index}" for index, _ in matches],
+            "row_count": len(matches), "rows": [row for _, row in matches]}
+
+
 def _utc(value: Any) -> datetime:
     if not isinstance(value, str):
         raise ValueError("UTC dispatch timestamp required")
@@ -244,4 +364,5 @@ def validate_dispatch(request: dict[str, Any], response: dict[str, Any],
 
 
 __all__ = ["MODEL_IDS", "QUERY_REGISTRY", "PARENT_SCOPE", "digest", "validate_request",
-           "validate_response", "validate_query_trace", "validate_dispatch"]
+           "validate_response", "validate_query_trace", "validate_dispatch", "execute_registered_query",
+           "make_reviewer_request", "build_terminal_packet", "validate_terminal_packet"]

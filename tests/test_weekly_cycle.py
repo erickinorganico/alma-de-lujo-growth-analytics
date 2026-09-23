@@ -14,7 +14,8 @@ from alma.operating_workspace import build_operating_workspace
 from alma.operating_marts import build_operating_marts
 from alma.weekly_cycle import (start_cycle, start_cycle_from_source_pack, verify_cycle,
                                cycle_status, resolve_pointer, record_dispatch,
-                               submit_response, resume_cycle, read_terminal_packet)
+                               submit_response, resume_cycle, read_terminal_packet,
+                               export_acceptance_receipt, verify_acceptance_receipt)
 from alma.native_agents_v1 import validate_request, validate_terminal_packet
 from alma.operating_contracts import canonical_json
 
@@ -328,3 +329,102 @@ class WeeklyCycleNativeStateTests(unittest.TestCase):
                 self._submit(cycle, "evidence_reviewer", f"/root/fixture_{roles[0]}",
                              "gpt-6-astra", "READY_FOR_OWNER")
             self.assertEqual("WAITING_REVIEW", verify_cycle(cycle)["status"])
+
+    def test_cli_registered_query_record_submit_and_resume(self) -> None:
+        from tests.test_native_agents_v1 import response_for, trace_for, receipt_for
+
+        with tempfile.TemporaryDirectory() as tmp:
+            cycle = self._cycle(Path(tmp))
+            role = "merchandiser"
+            request_path = cycle / "tasks" / f"{role}.request.json"
+            request = json.loads(request_path.read_text(encoding="utf-8"))
+            reconciliation_id = request["evidence"]["metric_rows"][0]["reconciliation_id"]
+            cli = [sys.executable, str(ROOT / "scripts" / "run_weekly_cycle.py")]
+            query = subprocess.run([*cli, "query", "--request", str(request_path),
+                "--reconciliation-id", reconciliation_id], text=True, capture_output=True)
+            self.assertEqual(0, query.returncode, query.stderr)
+            result = json.loads(query.stdout)
+            self.assertEqual(["/metric_rows/0"], result["result_refs"])
+            response, trace = response_for(request), trace_for(request)
+            receipt = receipt_for(request, response, trace)
+            response_path = cycle / "tasks" / f"{role}.response.json"
+            trace_path = cycle / "tasks" / f"{role}.query-trace.json"
+            fields_path = Path(tmp) / "receipt-fields.json"
+            response_path.write_bytes(canonical_json(response))
+            trace_path.write_bytes(canonical_json(trace))
+            fields_path.write_bytes(canonical_json(receipt))
+            recorded = subprocess.run([*cli, "record", "--cycle", str(cycle), "--role", role,
+                "--response", str(response_path), "--query-trace", str(trace_path),
+                "--receipt-fields", str(fields_path)], text=True, capture_output=True)
+            self.assertEqual(0, recorded.returncode, recorded.stderr)
+            self.assertEqual("RECORDED", json.loads(recorded.stdout)["status"])
+            submitted = subprocess.run([*cli, "submit", "--cycle", str(cycle), "--role", role,
+                "--response", str(response_path), "--query-trace", str(trace_path),
+                "--receipt", str(cycle / "tasks" / f"{role}.dispatch.json")],
+                text=True, capture_output=True)
+            self.assertEqual(0, submitted.returncode, submitted.stderr)
+            self.assertEqual("WAITING_ANALYSTS", json.loads(submitted.stdout)["status"])
+            self.assertEqual("WAITING_ANALYSTS", resume_cycle(cycle)["status"])
+
+    def test_exact_last_event_checkpoint_recovery_and_chain_tamper(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            cycle = self._cycle(Path(tmp))
+            self._submit(cycle, "merchandiser", "/root/fixture_merchandiser",
+                         "gpt-5.6-terra")
+            events_path, state_path = cycle / "events.json", cycle / "state.json"
+            events = json.loads(events_path.read_text(encoding="utf-8"))
+            state_path.write_bytes(canonical_json({**events[-2]["checkpoint"],
+                                                   "event_hash": events[-2]["hash"]}))
+            with self.assertRaises(ValueError):
+                verify_cycle(cycle)
+            self.assertIn("merchandiser", resume_cycle(cycle)["accepted_roles"])
+            events[-1]["details"]["response_sha256"] = "0" * 64
+            events_path.write_bytes(canonical_json(events))
+            with self.assertRaises(ValueError):
+                verify_cycle(cycle)
+
+    def test_blocked_review_and_packet_tamper_fail_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            cycle = self._cycle(Path(tmp))
+            models = {"merchandiser": "gpt-5.6-terra", "finance_analyst": "gpt-5.6-terra",
+                "commerce_analyst": "gpt-6-luna", "returns_analyst": "gpt-6-luna",
+                "growth_analyst": "gpt-6-sol", "market_researcher": "gpt-6-sol"}
+            for role in sorted(models):
+                self._submit(cycle, role, f"/root/fixture_{role}", models[role])
+            state = self._submit(cycle, "evidence_reviewer", "/root/fixture_reviewer",
+                                 "gpt-6-astra", "BLOCKED")
+            self.assertEqual("BLOCKED", state["status"])
+            packet = cycle / "decision-packet.json"
+            self.assertEqual("BLOCKED", json.loads(packet.read_text(encoding="utf-8"))["status"])
+            packet.write_bytes(packet.read_bytes() + b"\n")
+            with self.assertRaises(ValueError):
+                verify_cycle(cycle)
+
+
+class NativeAcceptancePrivacyTests(unittest.TestCase):
+    _cycle = WeeklyCycleNativeStateTests._cycle
+    _submit = WeeklyCycleNativeStateTests._submit
+
+    def test_synthetic_receipt_exact_allowlist_and_private_recheck(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            cycle = self._cycle(home)
+            models = {"merchandiser": "gpt-5.6-terra", "finance_analyst": "gpt-5.6-terra",
+                "commerce_analyst": "gpt-6-luna", "returns_analyst": "gpt-6-luna",
+                "growth_analyst": "gpt-6-sol", "market_researcher": "gpt-6-sol"}
+            for role in sorted(models):
+                self._submit(cycle, role, f"/root/fixture_{role}", models[role])
+            self._submit(cycle, "evidence_reviewer", "/root/fixture_reviewer",
+                         "gpt-6-astra", "READY_FOR_OWNER")
+            receipt_path = home / "evidence" / "v1" / "native-cycle-acceptance.json"
+            receipt = export_acceptance_receipt(cycle, receipt_path)
+            self.assertEqual("PASS", verify_acceptance_receipt(receipt_path,
+                home / ".local" / "weekly-cycles")["status"])
+            self.assertEqual(6, len(receipt["analysts"]))
+            self.assertNotIn("facts", receipt)
+            self.assertNotIn("summary", receipt)
+            self.assertNotIn(str(home), receipt_path.read_text(encoding="utf-8"))
+            receipt["response_prose"] = "forbidden"
+            receipt_path.write_bytes(canonical_json(receipt))
+            with self.assertRaises(ValueError):
+                verify_acceptance_receipt(receipt_path, home / ".local" / "weekly-cycles")
