@@ -28,6 +28,8 @@ DEFAULT_ROLES = ("merchandiser", "finance_analyst", "commerce_analyst",
 ROLE_MODELS = {"merchandiser": "terra", "finance_analyst": "terra",
                "commerce_analyst": "luna", "returns_analyst": "luna",
                "growth_analyst": "sol", "market_researcher": "sol"}
+QUERY_REGISTRY = {"metric_rows.by_reconciliation_id": {
+    "source": "metric_rows", "parameters": ["reconciliation_id"], "read_only": True}}
 ROLE_FAMILIES = {
     "merchandiser": ("cost", "inventory", "purchases", "learning", "budgets"),
     "finance_analyst": ("economics", "obligations", "cash", "budgets"),
@@ -267,6 +269,7 @@ def _initial_requests(report: dict[str, Any], run_id: str, roles: tuple[str, ...
                 "metric_contract_sha256": report["metric_contract_sha256"],
                 "evidence_hash": _digest(canonical_json(evidence)), "evidence": evidence,
                 "evidence_refs": refs,
+                "registered_queries": QUERY_REGISTRY,
                 "response_contract": "contracts/weekly-cycle-v1.schema.json#/$defs/response",
                 "write_scope": [f"tasks/{role}.response.json", f"tasks/{role}.query-trace.json"]}
         body["request_id"] = _digest(canonical_json(body))

@@ -101,7 +101,8 @@ class NativeV1ContractTests(unittest.TestCase):
             ("stale report", lambda row: row.update(current_cut_sha256="0" * 64)),
             ("bad pointer", lambda row: row["facts"][0].update(evidence_refs=["/cut/~2"])),
             ("missing pointer", lambda row: row["facts"][0].update(evidence_refs=["/cut/missing"])),
-            ("typed null", lambda row: row["facts"][1].update(value=0)),
+            ("typed value", lambda row: row["facts"][1].update(
+                value=0 if row["facts"][1]["value"] is None else None)),
             ("extra mutation", lambda row: row.update(workspace_mutation=True)),
             ("business action", lambda row: row["recommendations"][0].update(execution="EXECUTE")),
             ("oversize", lambda row: row.update(summary="x" * 12001)),
@@ -161,3 +162,23 @@ class NativeV1ContractTests(unittest.TestCase):
                 self.assertTrue(contract["roles"][role]["registered_query_required"])
                 self.assertNotIn("row-level order", json.dumps(contract["roles"][role]).lower())
                 self.assertNotIn("synthetic only", json.dumps(contract["roles"][role]).lower())
+
+    def test_private_provenance_and_schema_contract(self) -> None:
+        request = copy.deepcopy(self.requests["merchandiser"])
+        request["synthetic_business_data"] = False
+        request["evidence"]["cut"]["synthetic_business_data"] = False
+        request["evidence"]["cut"]["input_class"] = "PRIVATE"
+        request["evidence_hash"] = digest(request["evidence"])
+        request["request_id"] = digest({key: value for key, value in request.items()
+                                       if key != "request_id"})
+        self.assertTrue(validate_request(request))
+        request["synthetic_business_data"] = True
+        request["request_id"] = digest({key: value for key, value in request.items()
+                                       if key != "request_id"})
+        with self.assertRaises(ValueError):
+            validate_request(request)
+        schema = json.loads((ROOT / "contracts" / "weekly-cycle-v1.schema.json").read_text(
+            encoding="utf-8"))
+        self.assertTrue({"request", "response", "query_trace", "dispatch_receipt", "packet"}
+                        <= set(schema["$defs"]))
+        self.assertIn("query_trace_sha256", schema["$defs"]["dispatch_receipt"]["required"])
