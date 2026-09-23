@@ -1,0 +1,30 @@
+{
+  "mode": "yolo",
+  "granularity": "coarse",
+  "parallel_execution": true,
+  "commit_docs": true,
+  "workflow": {
+    "research": true,
+    "plan_check": true,
+    "verify_phase": true,
+    "plan_review_convergence": false,
+    "text_mode": false
+  },
+  "models": {
+    "profile": "balanced",
+    "inherit_native_codex": true
+  },
+  "ship": {
+    "pr_body_sections": {
+      "user_stories": true,
+      "acceptance_criteria": true,
+      "definition_of_done": true,
+      "risks": true,
+      "dependencies": true,
+      "stakeholder_review": true
+    }
+  },
+  "intel": {
+    "enabled": true
+  }
+}
