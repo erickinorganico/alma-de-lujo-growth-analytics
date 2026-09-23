@@ -5,7 +5,9 @@ import tempfile
 import unittest
 import json
 import shutil
+import hashlib
 from pathlib import Path
+from unittest.mock import patch
 
 from alma.operating_mart_contracts import bind_cut, load_policy
 from alma.operating_workspace import build_operating_workspace
@@ -120,8 +122,13 @@ class BundleTests(unittest.TestCase):
             manifest = json.loads((dest1 / "manifest.json").read_text(encoding="utf-8"))
             registry = json.loads((dest1 / "registry.json").read_text(encoding="utf-8"))
             metric_rows = json.loads((dest1 / "metric_rows.json").read_text(encoding="utf-8"))
+            controls = json.loads((dest1 / "controls.json").read_text(encoding="utf-8"))
             self.assertEqual(set(manifest["artifact_sha256"]), set(manifest["artifacts"]))
+            for artifact, digest in manifest["artifact_sha256"].items():
+                self.assertEqual(digest, hashlib.sha256((dest1 / artifact).read_bytes()).hexdigest())
             self.assertEqual({row["metric_id"] for row in metric_rows}, set(registry))
+            self.assertEqual(len(metric_rows), sum(controls[name]["metric_count"] for name in
+                ("cost_inventory", "finance", "learning")))
             self.assertTrue({"recorded_unpaid_cents", "budget_headroom_cents", "sell_through",
                              "stockout_exposure", "available_units"}.issubset(registry))
             self.assertEqual(manifest["policy_sha256"], first["policy_sha256"])
@@ -154,15 +161,65 @@ class BundleTests(unittest.TestCase):
                 build_operating_marts(cut["destination"], private, policy_path=bad_policy,
                                       private_root=private)
             self.assertFalse(private.exists())
+            stale = root / "stale.json"
+            stale_policy = json.loads(POLICY.read_text(encoding="utf-8"))
+            stale_policy["effective_end"] = "2026-09-21"
+            from alma.operating_contracts import canonical_json
+            stale_policy["sha256"] = hashlib.sha256(canonical_json({
+                key: value for key, value in stale_policy.items() if key != "sha256"
+            })).hexdigest()
+            stale.write_text(json.dumps(stale_policy), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                build_operating_marts(cut["destination"], private, policy_path=stale,
+                                      private_root=private)
+            self.assertFalse(private.exists())
             with self.assertRaises(ValueError):
                 build_operating_marts(cut["destination"], root / "outside", policy_path=POLICY,
                                       private_root=private)
             self.assertFalse(private.exists())
-            link = root / "link"
-            link.symlink_to(root, target_is_directory=True)
             with self.assertRaises(ValueError):
-                build_operating_marts(cut["destination"], link / ".local" / "operating-marts",
+                build_operating_marts(cut["destination"], private / ".." / "operating-marts",
                                       policy_path=POLICY, private_root=private)
+            self.assertFalse(private.exists())
+
+    def test_registry_and_reconciliation_failure_publish_nothing(self) -> None:
+        from alma import operating_marts
+        build_operating_marts = operating_marts.build_operating_marts
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            private = root / ".local" / "operating-marts"
+            cut = build_operating_workspace(PACK, private_root=root / "cuts")
+            original = operating_marts._definitions
+            with patch.object(operating_marts, "_definitions", side_effect=lambda: {
+                key: value for key, value in original().items() if key != "sell_through"
+            }):
+                with self.assertRaises(ValueError):
+                    operating_marts.build_operating_marts(cut["destination"], private,
+                                                          policy_path=POLICY, private_root=private)
+            self.assertFalse(private.exists())
+            with patch.object(operating_marts, "project_inventory", side_effect=ValueError("variance")):
+                with self.assertRaises(ValueError):
+                    operating_marts.build_operating_marts(cut["destination"], private,
+                                                          policy_path=POLICY, private_root=private)
+            self.assertFalse(private.exists())
+            inventory = operating_marts.project_inventory
+            with patch.object(operating_marts, "project_inventory", side_effect=lambda *args: {
+                **inventory(*args), "status": "INVALID"
+            }):
+                with self.assertRaises(ValueError):
+                    build_operating_marts(cut["destination"], private,
+                                          policy_path=POLICY, private_root=private)
+            self.assertFalse(private.exists())
+            link = root / "link"
+            try:
+                link.symlink_to(root, target_is_directory=True)
+            except OSError:
+                pass  # Windows may deny unprivileged symlink creation.
+            else:
+                with self.assertRaises(ValueError):
+                    build_operating_marts(cut["destination"], link / ".local" / "operating-marts",
+                                          policy_path=POLICY, private_root=private)
             self.assertFalse(private.exists())
             source = Path(cut["destination"]) / "sku_catalog.csv"
             source.write_bytes(source.read_bytes() + b"\n")
