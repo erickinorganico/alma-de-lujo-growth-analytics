@@ -18,14 +18,17 @@ $allowedDefinitions = @(
     "carried_decision"
 )
 
+$diagnosticDefinition = "UNRECOGNIZED"
+
 function Write-Result([string]$Status) {
-    [Console]::Out.WriteLine("definition=$Definition status=$Status")
+    [Console]::Out.WriteLine("definition=$diagnosticDefinition status=$Status")
 }
 
 try {
     if ($Definition -notin $allowedDefinitions) {
         throw "definition is not allowlisted"
     }
+    $diagnosticDefinition = $Definition
     if (-not (Test-Path -LiteralPath $SchemaPath -PathType Leaf) -or
         -not (Test-Path -LiteralPath $InstancePath -PathType Leaf)) {
         throw "schema or instance is unavailable"
