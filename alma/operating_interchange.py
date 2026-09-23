@@ -101,7 +101,9 @@ def _coerce_value(
             raise OperatingContractError("value.date", location) from exc
         if value.isoformat() != raw:
             _fail("value.date", location)
-        if name not in {"promised_date", "due_date", "period_end"} and value > cutoff_date:
+        if name not in {"promised_date", "due_date", "period_end"} and not (
+            source == "cash_events" and name == "event_date"
+        ) and value > cutoff_date:
             _fail("value.after_cutoff", location)
     elif field_type == "timestamp":
         try:
@@ -156,10 +158,17 @@ def _read_source(pack: Path, source: str, cutoff_date: date) -> tuple[list[dict[
                     _fail("csv.rows", filename)
                 if len(values) != len(expected):
                     _fail("csv.ragged", f"{filename}:{row_number}")
-                rows.append({
+                typed_row = {
                     field["name"]: _coerce_value(source, field, raw, row_number, cutoff_date)
                     for field, raw in zip(fields, values, strict=True)
-                })
+                }
+                # The cash event's typed level determines whether its date is an
+                # observed fact or a prospective movement after the cut.
+                if source == "cash_events" and typed_row["event_date"] is not None and \
+                        typed_row["event_date"] > cutoff_date and \
+                        typed_row["level"] not in {"COMMITTED", "EXPECTED", "SCENARIO"}:
+                    _fail("value.after_cutoff", f"{filename}:{row_number}:event_date")
+                rows.append(typed_row)
     except UnicodeDecodeError as exc:
         raise OperatingContractError("csv.encoding", filename) from exc
     return rows, hashlib.sha256(raw_bytes).hexdigest()

@@ -86,6 +86,12 @@ class OperatingParserTests(unittest.TestCase):
                     self.assertEqual(("2026-09-22", level, projection["economic_event_id"], projection["source_ref"]), stored)
                 finally:
                     connection.close()
+                projection["amount_cents"] = "14"
+                fixture.write_rows("cash_events", [*events, projection])
+                changed = build_operating_workspace(fixture.path, private_root=Path(tmp) / "changed-cuts")
+                self.assertNotEqual(built["cut_id"], changed["cut_id"])
+                self.assertNotEqual(raw_hash, changed["manifest"]["source_sha256"]["cash_events.csv"])
+                self.assertEqual(built["manifest"]["cutoff_at"], changed["manifest"]["cutoff_at"])
 
     def test_future_observations_still_rejected(self) -> None:
         for source, field in (("cash_events", "event_date"), ("sales_aggregates", "sales_date"),
