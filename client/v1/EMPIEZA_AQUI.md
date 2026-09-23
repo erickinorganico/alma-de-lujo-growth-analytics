@@ -9,7 +9,7 @@ Este paquete es una guía **informativa y sintética** para preparar el corte se
 3. Captura únicamente hechos observados. **Vacío no significa cero**: si aún no conoces un dato, déjalo vacío y conserva la cobertura como desconocida.
 4. Guarda el archivo lleno como una **copia privada** fuera de este ZIP. No reemplaces la plantilla original.
 
-Las 22 tablas cubren catálogo y variantes, inventario y movimientos, ventas y devoluciones, sesiones y campañas, gastos y objetivos, compras y proveedores, y el corte de control. También se incluyen packs CSV vacíos y sintéticos completos en `FUENTES/source-packs/`.
+El registro canónico contiene exactamente estas 22 tablas: `sku_catalog`, `sales_aggregates`, `availability_daily`, `unmet_demand`, `inventory_counts`, `inventory_movements`, `inventory_reservations`, `cost_versions`, `cost_components`, `cost_allocations`, `purchase_orders`, `purchase_receipts`, `obligations`, `obligation_payments`, `cash_events`, `cash_balance_evidence`, `budgets`, `budget_allocations`, `expenses`, `quality_events`, `sales_readiness` y `loans`. También se incluyen packs CSV vacíos y sintéticos completos en `FUENTES/source-packs/`.
 
 ## 2. Elige una política separada
 

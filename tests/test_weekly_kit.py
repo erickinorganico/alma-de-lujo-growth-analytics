@@ -14,7 +14,7 @@ from contextlib import contextmanager
 from pathlib import Path
 
 from alma.decision_register import create_register, verify_register
-from alma.operating_contracts import canonical_json
+from alma.operating_contracts import SOURCE_NAMES, canonical_json
 from alma.weekly import WeeklyContractError, continue_weekly_run, create_weekly_run
 from alma.weekly_cycle import verify_cycle
 from scripts.build_operating_workbooks import build_operating_workbooks
@@ -361,6 +361,9 @@ class GuideContractTests(unittest.TestCase):
         self.assertIn("../portal/index.html", joined)
         self.assertIn("../fuentes/operating-v1-blank.xlsx", joined)
         self.assertNotIn(self.creation.lower(), joined)
+        for relation in SOURCE_NAMES:
+            with self.subTest(relation=relation):
+                self.assertIn(f"`{relation}`", markdown)
 
     def test_real_guides_are_packaged_and_all_extracted_links_audit_cleanly(self) -> None:
         with weekly_home() as home:
