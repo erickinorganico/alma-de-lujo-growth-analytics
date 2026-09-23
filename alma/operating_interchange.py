@@ -336,6 +336,22 @@ def _validate_rows(tables: dict[str, list[dict[str, Any]]], metadata: dict[str, 
         reservation_balances[reservation] += delta
         if reservation_balances[reservation] < 0:
             _fail("reservation.negative", _row_location("inventory_reservations", index))
+    if (
+        metadata["coverage"]["inventory_reservations"]["status"] == "COMPLETE"
+        and metadata["coverage"]["inventory_counts"]["status"] == "COMPLETE"
+    ):
+        reservation_end = date.fromisoformat(metadata["coverage"]["inventory_reservations"]["window_end"])
+        active_by_sku: dict[str, int] = defaultdict(int)
+        for reservation, balance in reservation_balances.items():
+            active_by_sku[reservation_skus[reservation]] += balance
+        count_by_sku = {
+            row["sku_id"]: row
+            for row in tables["inventory_counts"]
+            if row["cutoff_date"] == reservation_end
+        }
+        for sku_id in {row["sku_id"] for row in tables["sku_catalog"]}:
+            if sku_id not in count_by_sku or count_by_sku[sku_id]["reserved_units"] != active_by_sku[sku_id]:
+                _fail("reservation.count_reconciliation", "inventory_counts.csv")
 
     movement_links: dict[tuple[str, str], int] = defaultdict(int)
     opening_by_sku: dict[str, int] = defaultdict(int)
@@ -373,6 +389,12 @@ def _validate_rows(tables: dict[str, list[dict[str, Any]]], metadata: dict[str, 
                 _fail("stock.units", _row_location("inventory_movements", index))
         if any(count > 1 for count in movement_links.values()):
             _fail("stock.duplicate_post", _row_location("inventory_movements", index))
+    for (receipt_id,), receipt in receipts.items():
+        if receipt["accepted_units"] > 0 and movement_links[("RECEIPT_ACCEPTED", receipt_id)] != 1:
+            _fail("stock.missing_post", "inventory_movements.csv")
+    for sales_key, sales_row in sales.items():
+        if sales_row["delivered_units"] > 0 and movement_links[("SALE_OUT", repr(sales_key))] != 1:
+            _fail("stock.missing_post", "inventory_movements.csv")
     movement_coverage = metadata["coverage"]["inventory_movements"]
     if movement_coverage["status"] == "COMPLETE":
         expected_start = date.fromisoformat(movement_coverage["window_start"])
@@ -468,6 +490,7 @@ def _validate_cash(
         active.extend(leaves)
 
     active_payment_ids: set[str] = set()
+    active_observed_refs: set[tuple[str, str]] = set()
     for row in active:
         if row["level"] != "RECONCILED":
             continue
@@ -485,6 +508,11 @@ def _validate_cash(
                 _fail("cash.payment_match", "cash_events.csv")
         elif row["obligation_id"] is not None:
             _fail("cash.reconciled_origin", "cash_events.csv")
+        else:
+            observed_ref = (row["scenario_id"], row["source_ref"])
+            if observed_ref in active_observed_refs:
+                _fail("cash.source_ref", "cash_events.csv")
+            active_observed_refs.add(observed_ref)
 
     observed_windows: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for index, row in enumerate(tables["cash_balance_evidence"]):
@@ -495,6 +523,11 @@ def _validate_cash(
             if any(row[field] is None for field in required):
                 _fail("cash.balance_observed", _row_location("cash_balance_evidence", index))
             if row["opening_observed_at"] > row["closing_observed_at"]:
+                _fail("cash.balance_observed", _row_location("cash_balance_evidence", index))
+            if (
+                row["opening_observed_at"].date() != row["period_start"]
+                or row["closing_observed_at"].date() != row["period_end"]
+            ):
                 _fail("cash.balance_observed", _row_location("cash_balance_evidence", index))
             observed_windows[row["scenario_id"]].append(row)
     for scenario, windows in observed_windows.items():

@@ -236,6 +236,13 @@ class OperatingParserTests(unittest.TestCase):
             rows[0]["event_type"] = "RELEASE"
             fixture.write_rows("inventory_reservations", rows)
 
+        def remove_receipt_movement(fixture: PackFixture) -> None:
+            rows = [
+                row for row in fixture.rows("inventory_movements")
+                if row["movement_type"] != "RECEIPT_ACCEPTED"
+            ]
+            fixture.write_rows("inventory_movements", rows)
+
         controls: list[tuple[str, Callable[[PackFixture], None], str]] = [
             ("relation.sku", set_value("availability_daily", "sku_id", "synthetic:missing-sku"), "synthetic:missing-sku"),
             ("relation.receipt", set_value("inventory_movements", "receipt_id", "synthetic:missing-receipt"), "synthetic:missing-receipt"),
@@ -243,6 +250,7 @@ class OperatingParserTests(unittest.TestCase):
             ("relation.payment", set_value("cash_events", "payment_id", "synthetic:missing-payment"), "synthetic:missing-payment"),
             ("relation.origin", set_value("budget_allocations", "origin_id", "synthetic:missing-origin"), "synthetic:missing-origin"),
             ("stock.duplicate_post", duplicate_receipt_movement, "synthetic:movement-receipt-duplicate"),
+            ("stock.missing_post", remove_receipt_movement, "synthetic:receipt-001"),
             ("reservation.negative", negative_reservation, "RELEASE"),
             ("availability.minutes", set_value("availability_daily", "observed_minutes", "1441"), "1441"),
             ("relation.demand_sku", set_value("unmet_demand", "sku_id", "synthetic:missing-demand-sku"), "synthetic:missing-demand-sku"),
@@ -398,6 +406,19 @@ class OperatingWorkspaceTests(unittest.TestCase):
             self.assertEqual("workspace.exists", raised.exception.code)
             after = {path.name: path.read_bytes() for path in destination.iterdir() if path.is_file()}
             self.assertEqual(before, after)
+
+    def test_distinct_cuts_coexist_under_one_private_root(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            first = build_operating_workspace(SYNTHETIC_PACK, private_root=root)
+            fixture = PackFixture(root / "changed")
+            metadata = fixture.metadata()
+            metadata["coverage"]["availability_daily"]["status"] = "ESTIMATED"
+            fixture.write_metadata(metadata)
+            second = build_operating_workspace(fixture.path, private_root=root)
+            self.assertNotEqual(first["cut_id"], second["cut_id"])
+            self.assertTrue(Path(first["destination"]).is_dir())
+            self.assertTrue(Path(second["destination"]).is_dir())
 
     def test_invalid_pack_and_publish_failure_leave_no_cut_or_staging(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
