@@ -208,3 +208,161 @@ def realized_economics(
             "policy_version": policy.version, "policy_sha256": policy.sha256,
             "policy_status": policy.status,
             "reconciliation_id": f"economics:{cut.cut_id}:{sku_id}:{channel_code}:{start}:{end}"}
+
+
+def reconcile_purchase(order: dict[str, Any], receipts: Iterable[dict[str, Any]]) -> dict[str, Any]:
+    """One order and its distinct physical receipts, without stock side effects."""
+    receipts = list(receipts)
+    ids = [receipt["receipt_id"] for receipt in receipts]
+    if len(ids) != len(set(ids)):
+        raise ValueError("receipt replay")
+    for receipt in receipts:
+        if (any(not isinstance(receipt[field], int) or receipt[field] < 0 for field in
+                ("received_units", "inspection_units", "accepted_units", "rejected_units"))
+                or receipt["received_units"] != receipt["inspection_units"] + receipt["accepted_units"] + receipt["rejected_units"]):
+            raise ValueError("receipt disposition mismatch")
+    received = sum(receipt["received_units"] for receipt in receipts)
+    ordered = order["ordered_units"]
+    if not isinstance(ordered, int) or ordered < 0 or received > ordered:
+        raise ValueError("receipt exceeds ordered units")
+    cancelled = order["status_code"] == "CANCELLED"
+    remaining = ordered - received
+    return {
+        "purchase_order_id": order["purchase_order_id"],
+        "ordered_units": ordered, "received_units": received,
+        "inspection_units": sum(receipt["inspection_units"] for receipt in receipts),
+        "accepted_units": sum(receipt["accepted_units"] for receipt in receipts),
+        "rejected_units": sum(receipt["rejected_units"] for receipt in receipts),
+        "still_to_receive_units": 0 if cancelled else remaining,
+        "cancelled_unreceived_units": remaining if cancelled else 0,
+        "receipt_ids": tuple(sorted(ids)),
+        "reconciliation_id": f'purchase:{order["purchase_order_id"]}',
+    }
+
+
+def project_purchases(cut: BoundCut, as_of: str) -> list[dict[str, Any]]:
+    """Preaggregate purchase/receipt units before any other dimension joins."""
+    aggregates = _rows(cut, _query("purchase_receipts"), {"as_of": as_of})
+    results = []
+    for aggregate in aggregates:
+        receipts = _rows(cut,
+            "SELECT * FROM purchase_receipts WHERE purchase_order_id=:po AND received_date<=:as_of "
+            "ORDER BY receipt_id", {"po": aggregate["purchase_order_id"], "as_of": as_of})
+        result = reconcile_purchase(aggregate, receipts)
+        for field in ("received_units", "inspection_units", "accepted_units", "rejected_units"):
+            if result[field] != aggregate[field]:
+                raise ValueError("purchase preaggregation mismatch")
+        coverage = (cut.coverage_status("purchase_orders", as_of),
+                    cut.coverage_status("purchase_receipts", as_of))
+        result.update(sku_id=aggregate["sku_id"], cut_id=cut.cut_id, as_of=as_of,
+                      status="MEASURED" if all(value in {"COMPLETE", "ZERO"} for value in coverage) else "PARTIAL",
+                      source_refs=tuple(sorted({row["source_ref"] for row in receipts})))
+        results.append(result)
+    return results
+
+
+_MOVEMENT_SIGN = {
+    "OPENING": 1, "RECEIPT_ACCEPTED": 1, "SALE_OUT": -1,
+    "RETURN_RESTOCK": 1, "LOAN_OUT": -1, "LOAN_IN": 1,
+    "ADJUSTMENT_IN": 1, "ADJUSTMENT_OUT": -1,
+}
+
+
+def project_inventory(cut: BoundCut, sku_id: str, as_of: str) -> dict[str, Any]:
+    """Reconcile distinct movement identities with count and custody evidence."""
+    movements = _rows(cut,
+        "SELECT * FROM inventory_movements WHERE sku_id=:sku AND event_date<=:as_of "
+        "ORDER BY event_date,movement_id", {"sku": sku_id, "as_of": as_of})
+    receipts = _rows(cut,
+        "SELECT r.* FROM purchase_receipts r JOIN purchase_orders p ON p.purchase_order_id=r.purchase_order_id "
+        "WHERE p.sku_id=:sku AND r.received_date<=:as_of ORDER BY r.received_date,r.receipt_id",
+        {"sku": sku_id, "as_of": as_of})
+    counts = _rows(cut,
+        "SELECT * FROM inventory_counts WHERE sku_id=:sku AND cutoff_date<=:as_of "
+        "ORDER BY cutoff_date DESC LIMIT 1", {"sku": sku_id, "as_of": as_of})
+    reservation_events = _rows(cut,
+        "SELECT * FROM inventory_reservations WHERE sku_id=:sku AND event_date<=:as_of "
+        "ORDER BY event_date,reservation_event_id", {"sku": sku_id, "as_of": as_of})
+    loans = _rows(cut,
+        "SELECT * FROM loans WHERE sku_id=:sku AND borrowed_date<=:as_of",
+        {"sku": sku_id, "as_of": as_of})
+    ids = [row["movement_id"] for row in movements]
+    if len(ids) != len(set(ids)):
+        raise ValueError("movement replay")
+    accepted = {row["receipt_id"]: row["accepted_units"] for row in receipts}
+    by_receipt: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    restocked_quality_ids: set[str] = set()
+    on_hand = 0
+    loaned = 0
+    source_refs: list[str] = []
+    for movement in movements:
+        kind = movement["movement_type"]
+        units = movement["units"]
+        if kind not in _MOVEMENT_SIGN or not isinstance(units, int) or units < 0:
+            raise ValueError("invalid physical movement")
+        if kind == "RECEIPT_ACCEPTED":
+            receipt_id = movement["receipt_id"]
+            if receipt_id not in accepted:
+                raise ValueError("orphan accepted receipt movement")
+            by_receipt[receipt_id].append(movement)
+        if kind == "RETURN_RESTOCK":
+            quality_id = movement["quality_event_id"]
+            if quality_id is None or quality_id in restocked_quality_ids:
+                raise ValueError("return restock replay")
+            restocked_quality_ids.add(quality_id)
+        on_hand += _MOVEMENT_SIGN[kind] * units
+        if on_hand < 0:
+            raise ValueError("negative physical stock")
+        if kind == "LOAN_OUT":
+            loaned += units
+        elif kind == "LOAN_IN":
+            loaned -= units
+        if loaned < 0:
+            raise ValueError("negative loan custody")
+        source_refs.append(movement["source_ref"])
+    for receipt_id, accepted_units in accepted.items():
+        matches = by_receipt[receipt_id]
+        if len(matches) != (1 if accepted_units else 0) or (matches and matches[0]["units"] != accepted_units):
+            raise ValueError("accepted receipt movement mismatch")
+    active_reserved: dict[str, int] = defaultdict(int)
+    for event in reservation_events:
+        sign = 1 if event["event_type"] == "PLACE" else -1
+        active_reserved[event["reservation_id"]] += sign * event["units"]
+        if active_reserved[event["reservation_id"]] < 0:
+            raise ValueError("negative reservation")
+        source_refs.append(event["source_ref"])
+    reserved = sum(active_reserved.values())
+    count = counts[0] if counts else None
+    variance = None if count is None else on_hand - count["on_hand_units"]
+    non_sellable = count["non_sellable_units"] if count is not None and count["cutoff_date"] == as_of else None
+    if count is not None:
+        source_refs.append(count["source_ref"])
+        if count["cutoff_date"] == as_of and reserved != count["reserved_units"]:
+            variance = variance if variance else reserved - count["reserved_units"]
+    if loaned != sum(row["quantity"] for row in loans if row["status_code"] in {"OPEN", "PARTIAL"}):
+        variance = variance if variance else loaned - sum(row["quantity"] for row in loans if row["status_code"] in {"OPEN", "PARTIAL"})
+    inspection = sum(row["inspection_units"] for row in receipts)
+    coverage_statuses = [cut.coverage_status(source, as_of) for source in
+           ("inventory_movements", "inventory_counts", "inventory_reservations", "loans", "purchase_receipts")]
+    blocked_coverage = any(status in {"MISSING", "ERROR"} for status in coverage_statuses)
+    complete = count is not None and variance == 0 and non_sellable is not None
+    if any(status not in {"COMPLETE", "ZERO"} for status in coverage_statuses):
+        complete = False
+    available = None if non_sellable is None or variance != 0 or blocked_coverage else on_hand - non_sellable - reserved
+    if available is not None and available < 0:
+        raise ValueError("negative available stock")
+    if variance != 0:
+        available = None
+    return {
+        "sku_id": sku_id, "as_of": as_of,
+        "status": "MEASURED" if complete else ("UNKNOWN" if variance != 0 or blocked_coverage or not movements else "PARTIAL"),
+        "owned_units": on_hand + loaned + inspection,
+        "on_hand_units": on_hand,
+        "sellable_on_hand_units": None if non_sellable is None else on_hand - non_sellable,
+        "inspection_units": inspection, "non_sellable_units": non_sellable,
+        "loaned_units": loaned, "reserved_units": reserved,
+        "available_units": available,
+        "count_variance_units": variance,
+        "source_refs": tuple(sorted(set(source_refs))),
+        "reconciliation_id": f"inventory:{cut.cut_id}:{sku_id}:{as_of}",
+    }

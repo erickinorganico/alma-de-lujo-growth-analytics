@@ -16,7 +16,7 @@ SYNTHETIC_PACK = ROOT / "client" / "source-packs" / "v1" / "synthetic"
 
 class MartContractTests(unittest.TestCase):
     def test_source_registry_and_verified_two_cut_binding(self) -> None:
-        from alma.operating_mart_contracts import bind_cut, SOURCE_BINDINGS
+        from alma.operating_mart_contracts import bind_cut, SOURCE_BINDINGS, REQUIRED_SEMANTIC_FIELDS
 
         expected = (
             "sku_catalog", "sales_aggregates", "availability_daily", "unmet_demand",
@@ -28,6 +28,9 @@ class MartContractTests(unittest.TestCase):
         )
         self.assertEqual(expected, SOURCE_NAMES)
         self.assertEqual(set(expected), set(SOURCE_BINDINGS))
+        self.assertEqual(set(expected), set(REQUIRED_SEMANTIC_FIELDS))
+        for source, fields in REQUIRED_SEMANTIC_FIELDS.items():
+            self.assertTrue(set(fields) <= set(SOURCE_BINDINGS[source]["fields"]))
         with tempfile.TemporaryDirectory() as tmp:
             first = build_operating_workspace(SYNTHETIC_PACK, private_root=Path(tmp) / "one")
             second = build_operating_workspace(SYNTHETIC_PACK, private_root=Path(tmp) / "two")
@@ -152,12 +155,16 @@ class InventoryMartTests(unittest.TestCase):
             reconcile_purchase(order, [dict(receipt, accepted_units=17)])
 
     def test_synthetic_custody_uses_one_receipt_and_only_physical_restock(self) -> None:
-        from alma.operating_cost_inventory import project_inventory
+        from alma.operating_cost_inventory import project_inventory, project_purchases
         from alma.operating_mart_contracts import bind_cut
 
         with tempfile.TemporaryDirectory() as tmp:
             result = build_operating_workspace(SYNTHETIC_PACK, private_root=tmp)
             with bind_cut(result["destination"]) as cut:
+                purchase = project_purchases(cut, "2026-09-21")[0]
+                self.assertEqual(20, purchase["ordered_units"])
+                self.assertEqual(18, purchase["received_units"])
+                self.assertEqual(2, purchase["still_to_receive_units"])
                 stock = project_inventory(cut, "synthetic:sku-001", "2026-09-21")
                 self.assertEqual(24, stock["on_hand_units"])
                 self.assertEqual(2, stock["inspection_units"])
@@ -166,6 +173,32 @@ class InventoryMartTests(unittest.TestCase):
                 self.assertEqual(1, stock["non_sellable_units"])
                 self.assertEqual(21, stock["available_units"])
                 self.assertEqual("PARTIAL", stock["status"])
+                cut.coverage["inventory_movements"]["status"] = "MISSING"
+                blocked = project_inventory(cut, "synthetic:sku-001", "2026-09-21")
+                self.assertEqual("UNKNOWN", blocked["status"])
+                self.assertIsNone(blocked["available_units"])
+
+    def test_count_variance_blocks_available_units(self) -> None:
+        from unittest import mock
+        from alma import operating_cost_inventory as mart
+        from alma.operating_mart_contracts import bind_cut
+
+        with tempfile.TemporaryDirectory() as tmp:
+            result = build_operating_workspace(SYNTHETIC_PACK, private_root=tmp)
+            with bind_cut(result["destination"]) as cut:
+                original_rows = mart._rows
+
+                def changed_count(bound, statement, parameters):
+                    rows = original_rows(bound, statement, parameters)
+                    if "FROM inventory_counts" in statement and rows:
+                        rows[0]["on_hand_units"] += 1
+                    return rows
+
+                with mock.patch.object(mart, "_rows", side_effect=changed_count):
+                    stock = mart.project_inventory(cut, "synthetic:sku-001", "2026-09-21")
+                self.assertEqual(-1, stock["count_variance_units"])
+                self.assertEqual("UNKNOWN", stock["status"])
+                self.assertIsNone(stock["available_units"])
 
 
 if __name__ == "__main__":

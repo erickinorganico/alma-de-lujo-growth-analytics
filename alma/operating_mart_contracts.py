@@ -18,6 +18,31 @@ from alma.operating_workspace import relationship_summary
 
 STATUSES = frozenset({"MEASURED", "PARTIAL", "UNKNOWN", "NOT_APPLICABLE", "ESTIMATED", "ERROR"})
 POLICY_STATUSES = frozenset({"REVIEW", "APPROVED", "SYNTHETIC_EXAMPLE"})
+# Literal semantic floor: a changed Phase 1 registry cannot silently redefine a mart input.
+REQUIRED_SEMANTIC_FIELDS = {
+    "sku_catalog": ("sku_id", "effective_date", "lifecycle_status"),
+    "sales_aggregates": ("sales_date", "sku_id", "channel_code", "delivery_cohort_id", "delivered_units", "net_revenue_cents", "variable_cost_cents", "coverage_status"),
+    "availability_daily": ("availability_date", "sku_id", "observed_minutes", "sellable_minutes", "stockout_minutes", "coverage_status"),
+    "unmet_demand": ("demand_event_id", "event_date", "sku_id", "channel_code", "requested_units"),
+    "inventory_counts": ("count_id", "sku_id", "cutoff_date", "on_hand_units", "reserved_units", "non_sellable_units"),
+    "inventory_movements": ("movement_id", "sku_id", "event_date", "movement_type", "units", "receipt_id", "quality_event_id", "loan_id"),
+    "inventory_reservations": ("reservation_event_id", "reservation_id", "sku_id", "event_date", "event_type", "units"),
+    "cost_versions": ("cost_version_id", "sku_id", "effective_date", "lifecycle_status", "quantity_basis", "public_price_cents"),
+    "cost_components": ("component_id", "cost_version_id", "classification", "amount_cents", "required_flag", "quality_status", "included_in_component_id"),
+    "cost_allocations": ("allocation_id", "component_id", "sku_id", "allocated_cents", "remainder_cents"),
+    "purchase_orders": ("purchase_order_id", "sku_id", "ordered_units", "order_date", "status_code"),
+    "purchase_receipts": ("receipt_id", "purchase_order_id", "received_date", "received_units", "inspection_units", "accepted_units", "rejected_units"),
+    "obligations": ("obligation_id", "origin_type", "origin_id", "due_date", "original_cents"),
+    "obligation_payments": ("payment_id", "obligation_id", "paid_date", "amount_cents"),
+    "cash_events": ("event_id", "economic_event_id", "supersedes_event_id", "scenario_id", "event_date", "level", "amount_cents"),
+    "cash_balance_evidence": ("balance_evidence_id", "scenario_id", "period_start", "period_end", "opening_balance_cents", "closing_balance_cents", "evidence_status"),
+    "budgets": ("budget_id", "period_start", "period_end", "approved_cents"),
+    "budget_allocations": ("budget_allocation_id", "budget_id", "origin_type", "origin_id", "allocated_cents"),
+    "expenses": ("expense_id", "incurred_date", "amount_cents", "status_code"),
+    "quality_events": ("quality_event_id", "sku_id", "receipt_id", "delivery_cohort_id", "event_date", "event_type", "units"),
+    "sales_readiness": ("sku_id", "effective_date", "readiness_status"),
+    "loans": ("loan_id", "sku_id", "quantity", "borrowed_date", "due_date", "returned_date", "status_code"),
+}
 SOURCE_BINDINGS = {
     name: {
         "table": name,
@@ -28,6 +53,11 @@ SOURCE_BINDINGS = {
     }
     for name, contract in SOURCES.items()
 }
+if set(REQUIRED_SEMANTIC_FIELDS) != set(SOURCE_BINDINGS) or any(
+    set(fields) - set(SOURCE_BINDINGS[name]["fields"])
+    for name, fields in REQUIRED_SEMANTIC_FIELDS.items()
+):
+    raise RuntimeError("Phase 1 semantic fields are incomplete")
 
 
 @dataclass(frozen=True)
@@ -189,9 +219,18 @@ def bind_cut(path: str | Path) -> BoundCut:
             columns = {row["name"]: row for row in connection.execute(f'PRAGMA table_info("{name}")')}
             if set(columns) != set(binding["fields"]):
                 raise ValueError(f"column mismatch: {name}")
+            for field_name, spec in binding["fields"].items():
+                expected_type = "INTEGER" if spec["type"] in {"integer", "nonnegative_integer", "signed_integer"} else "TEXT"
+                if columns[field_name]["type"] != expected_type:
+                    raise ValueError(f"column type mismatch: {name}.{field_name}")
             primary_key = tuple(row["name"] for row in sorted(columns.values(), key=lambda item: item["pk"]) if row["pk"])
             if primary_key != binding["primary_key"]:
                 raise ValueError(f"primary key mismatch: {name}")
+            foreign_keys = {(row["from"], row["table"], row["to"]) for row in connection.execute(f'PRAGMA foreign_key_list("{name}")')}
+            for field in SOURCES[name]["fields"]:
+                target = field["foreign_key"]
+                if target is not None and (field["name"], target[0], target[1][0]) not in foreign_keys:
+                    raise ValueError(f"foreign key mismatch: {name}.{field['name']}")
         relation = relationship_summary(connection)
         if relation["foreign_key_violations"] or relation["digest"] != manifest["relationship_check"]["digest"]:
             raise ValueError("relationship mismatch")
