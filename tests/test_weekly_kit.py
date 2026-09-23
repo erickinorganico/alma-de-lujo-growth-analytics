@@ -12,7 +12,9 @@ import unittest
 import zipfile
 from contextlib import contextmanager
 from pathlib import Path
+from unittest import mock
 
+import alma.weekly as weekly_module
 from alma.decision_register import create_register, verify_register
 from alma.operating_contracts import SOURCE_NAMES, canonical_json
 from alma.weekly import WeeklyContractError, continue_weekly_run, create_weekly_run
@@ -219,6 +221,150 @@ class WeeklyCommandTests(unittest.TestCase):
                     self.assertEqual(raw, (run / relative).read_bytes())
 
 
+class WeeklyPackageStageTests(unittest.TestCase):
+    package_keys = {
+        "version", "status", "path", "zip_sha256", "manifest_sha256",
+        "member_count", "audit",
+    }
+    audit_keys = {"allowlist", "privacy", "links"}
+
+    def test_success_binds_exact_safe_package_identity_and_public_inventory(self) -> None:
+        with weekly_home() as home:
+            pack, _ = generated_materials(home)
+            output = home / ".local" / "client-runs"
+            with mock.patch.object(weekly_module, "build_client_kit", wraps=build_client_kit,
+                                   create=True) as builder, mock.patch.object(
+                    weekly_module, "audit_client_zip", wraps=audit_client_zip,
+                    create=True) as auditor:
+                result = create_weekly_run(pack, POLICY, output)
+            run = Path(result["run"])
+            package = run / "public-kit" / "Alma_OS_Client_v1.zip"
+            receipt_path = run / "receipts" / "public-package.json"
+            index_path = run / "run-index.json"
+            builder.assert_called_once_with(package)
+            auditor.assert_called_once_with(package)
+            receipt_raw = receipt_path.read_bytes()
+            receipt = json.loads(receipt_raw)
+            index = json.loads(index_path.read_text("utf-8"))
+            self.assertEqual(self.package_keys, set(result["public_package"]))
+            self.assertEqual(self.package_keys, set(receipt))
+            self.assertEqual(self.audit_keys, set(receipt["audit"]))
+            self.assertEqual({"allowlist": "PASS", "privacy": "PASS", "links": "PASS"},
+                             receipt["audit"])
+            self.assertEqual(receipt, index["public_package"])
+            self.assertEqual(receipt, result["public_package"])
+            self.assertEqual(canonical_json(receipt) + b"\n", receipt_raw)
+            self.assertEqual(hashlib.sha256(receipt_raw).hexdigest(),
+                             index["receipts"]["public-package.json"])
+            self.assertEqual("public-kit/Alma_OS_Client_v1.zip", receipt["path"])
+            self.assertEqual(hashlib.sha256(package.read_bytes()).hexdigest(),
+                             receipt["zip_sha256"])
+            audited = audit_client_zip(package)
+            self.assertEqual(audited["manifest_sha256"], receipt["manifest_sha256"])
+            self.assertEqual(audited["member_count"], receipt["member_count"])
+            self.assertEqual("WAITING_ANALYSTS", result["status"])
+            self.assertFalse(result["native_execution_claimed"])
+            self.assertEqual("PROHIBITED", result["external_execution"])
+            with zipfile.ZipFile(package) as bundle:
+                names = bundle.namelist()
+            self.assertFalse(any(name.startswith(("input/", "tasks/", ".local/"))
+                                 for name in names))
+            self.assertFalse(any(token in name.lower() for name in names for token in
+                                 ("response", "query-trace", "dispatch", "owner-decision")))
+            self.assertTrue(all(".." not in Path(name).parts and ":" not in name and
+                                "\\" not in name for name in names))
+
+    def test_identical_public_inputs_are_reproducible_and_replay_changes_nothing(self) -> None:
+        with weekly_home() as home:
+            pack, _ = generated_materials(home)
+            first = create_weekly_run(pack, POLICY, home / "first" / ".local" / "client-runs")
+            second = create_weekly_run(pack, POLICY, home / "second" / ".local" / "client-runs")
+            self.assertEqual(first["public_package"]["zip_sha256"],
+                             second["public_package"]["zip_sha256"])
+            self.assertEqual(first["public_package"]["manifest_sha256"],
+                             second["public_package"]["manifest_sha256"])
+            run = Path(first["run"])
+            before = {path.relative_to(run).as_posix(): path.read_bytes()
+                      for path in run.rglob("*") if path.is_file()}
+            with self.assertRaises(WeeklyContractError):
+                create_weekly_run(pack, POLICY, home / "first" / ".local" / "client-runs")
+            after = {path.relative_to(run).as_posix(): path.read_bytes()
+                     for path in run.rglob("*") if path.is_file()}
+            self.assertEqual(before, after)
+
+    def test_builder_and_post_build_audit_failures_remove_the_new_cut(self) -> None:
+        with weekly_home() as home:
+            pack, _ = generated_materials(home)
+
+            def fail_builder(output: str | Path) -> None:
+                target = Path(output)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(b"partial-public-package")
+                raise PackageContractError("injected builder failure")
+
+            builder_root = home / "builder" / ".local" / "client-runs"
+            with mock.patch.object(weekly_module, "build_client_kit",
+                                   side_effect=fail_builder, create=True):
+                with self.assertRaises(WeeklyContractError):
+                    create_weekly_run(pack, POLICY, builder_root)
+            self.assertEqual([], list(builder_root.glob("*")))
+
+            audit_root = home / "audit" / ".local" / "client-runs"
+            with mock.patch.object(weekly_module, "build_client_kit", wraps=build_client_kit,
+                                   create=True), mock.patch.object(
+                    weekly_module, "audit_client_zip",
+                    side_effect=PackageContractError("injected auditor failure"), create=True):
+                with self.assertRaises(WeeklyContractError):
+                    create_weekly_run(pack, POLICY, audit_root)
+            self.assertEqual([], list(audit_root.glob("*")))
+
+    def test_tamper_fails_closed_and_clean_archive_process_revalidates_package(self) -> None:
+        with weekly_home() as home:
+            pack, _ = generated_materials(home)
+            result = create_weekly_run(pack, POLICY, home / ".local" / "client-runs")
+            run = Path(result["run"])
+            package = run / result["public_package"]["path"]
+            receipt = run / "receipts" / "public-package.json"
+            index = run / "run-index.json"
+            immutable = {"package": package.read_bytes(), "receipt": receipt.read_bytes(),
+                         "index": index.read_bytes()}
+
+            archive = home / "committed.zip"
+            archived = subprocess.run(
+                ["git", "archive", "--format=zip", "-o", str(archive), "HEAD"],
+                cwd=ROOT, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(0, archived.returncode, archived.stderr)
+            checkout = home / "clean-checkout"
+            with zipfile.ZipFile(archive) as bundle:
+                bundle.extractall(checkout)
+            env = {**os.environ, "PYTHONPATH": str(checkout)}
+            process = subprocess.run(
+                [sys.executable, "-m", "alma.weekly", "weekly-resume",
+                 "--run", str(run), "--action", "resume"],
+                cwd=checkout, env=env, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(0, process.returncode, process.stderr)
+            self.assertEqual("WAITING_ANALYSTS", json.loads(process.stdout)["status"])
+            self.assertEqual(immutable["package"], package.read_bytes())
+            self.assertEqual(immutable["receipt"], receipt.read_bytes())
+            self.assertEqual(immutable["index"], index.read_bytes())
+
+            package.write_bytes(immutable["package"] + b"tamper")
+            with self.assertRaises(WeeklyContractError):
+                continue_weekly_run(run, "resume")
+            self.assertEqual(immutable["receipt"], receipt.read_bytes())
+            self.assertEqual(immutable["index"], index.read_bytes())
+            package.write_bytes(immutable["package"])
+            changed = json.loads(receipt.read_text("utf-8"))
+            changed["member_count"] += 1
+            receipt.write_bytes(canonical_json(changed) + b"\n")
+            with self.assertRaises(WeeklyContractError):
+                continue_weekly_run(run, "resume")
+            self.assertEqual(immutable["package"], package.read_bytes())
+            self.assertEqual(immutable["index"], index.read_bytes())
+
+
 def safe_guides(root: Path) -> Path:
     guides = root / "guides"
     guides.mkdir()
@@ -345,6 +491,16 @@ class GuideContractTests(unittest.TestCase):
         for phrase in required:
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase.lower(), lowered)
+        for phrase in (
+            "public-kit/Alma_OS_Client_v1.zip", "receipts/public-package.json",
+            "zip_sha256", "manifest_sha256", "member_count", "allowlist",
+            "privacy", "links", "automáticamente", "independiente de waiting",
+        ):
+            with self.subTest(package_phrase=phrase):
+                self.assertIn(phrase.lower(), lowered)
+        self.assertNotIn(
+            "python scripts/package_client_v1.py --output <alma-os-client-v1.zip>", text
+        )
 
     def test_client_guides_start_with_sources_policies_and_public_only_journey(self) -> None:
         markdown = (ROOT / "client" / "v1" / "EMPIEZA_AQUI.md").read_text("utf-8")
