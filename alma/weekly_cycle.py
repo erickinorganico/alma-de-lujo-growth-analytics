@@ -370,7 +370,9 @@ def start_cycle(workspace: str | Path, mart_bundle: str | Path, output_root: str
 
 def start_cycle_from_source_pack(source_pack: str | Path, operating_root: str | Path,
                                  mart_root: str | Path, output_root: str | Path,
-                                 roles: tuple[str, ...] | list[str] | None = None) -> dict[str, Any]:
+                                 roles: tuple[str, ...] | list[str] | None = None, *,
+                                 prior_register: str | Path | None = None,
+                                 prior_anchor: dict[str, Any] | str | Path | None = None) -> dict[str, Any]:
     """Build both completed upstream layers before issuing any native request."""
     pack = _path(source_pack, existing=True)
     if pack.suffix.lower() == ".xlsx":
@@ -393,7 +395,8 @@ def start_cycle_from_source_pack(source_pack: str | Path, operating_root: str | 
                                       policy_path=POLICY, private_root=mart_root)
         mart_path = Path(marts["destination"])
     _verified_report(cut_path, mart_path)
-    return start_cycle(cut_path, mart_path, output_root, roles, _input_route="source_pack")
+    return start_cycle(cut_path, mart_path, output_root, roles, _input_route="source_pack",
+                       prior_register=prior_register, prior_anchor=prior_anchor)
 
 
 def _event_state(events: list[Any], state: dict[str, Any]) -> None:

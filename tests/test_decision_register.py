@@ -4,6 +4,8 @@ from __future__ import annotations
 import csv
 import json
 import shutil
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -267,3 +269,52 @@ class DecisionContinuityTests(unittest.TestCase):
                  "criterion": "Owner accepts the result.",
                  "scope": "local-owner-attestation"})
             self.assertEqual("CLOSED", closed["status"])
+
+
+class DecisionRegisterCLITests(unittest.TestCase):
+    def _run(self, *arguments: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run([sys.executable, str(Path(__file__).resolve().parents[1] /
+            "scripts" / "manage_decisions.py"), *arguments], text=True,
+            capture_output=True, check=False)
+
+    def test_private_commands_and_negative_controls(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            register = home / ".local" / "decision-register" / "weekly"
+            initialized = self._run("init", "--register", str(register),
+                "--register-id", "weekly", "--owner-role", "growth_owner")
+            self.assertEqual(0, initialized.returncode, initialized.stderr)
+            self.assertEqual("GENESIS", json.loads(initialized.stdout)["terminal_hash"])
+            pii = self._run("init", "--register", str(home / ".local" /
+                "decision-register" / "pii"), "--register-id", "pii",
+                "--owner-role", "Erick Peralta")
+            self.assertEqual(2, pii.returncode)
+            traversal = self._run("verify", "--register", str(register / ".." / "weekly"))
+            self.assertEqual(2, traversal.returncode)
+            cycle = terminal_cycle(home / "cycle")
+            recommendation_id = read_terminal_packet(cycle)["recommendations"][0]["item"]["id"]
+            check_path = register / "closure-check.json"
+            check_path.write_bytes(canonical_json(closure_check()))
+            created = self._run("register", "--register", str(register), "--cycle", str(cycle),
+                "--recommendation-id", recommendation_id, "--owner-role", "growth_owner",
+                "--due-date", "2026-10-01", "--choice", "ACCEPT",
+                "--closure-check", str(check_path))
+            self.assertEqual(0, created.returncode, created.stderr)
+            decision_id = json.loads(created.stdout)["decision_id"]
+            checked = self._run("verify", "--register", str(register),
+                                "--expected-anchor", str(register / "anchor.json"))
+            self.assertEqual(0, checked.returncode, checked.stderr)
+            exported = self._run("export-csv", "--register", str(register),
+                                 "--output", str(register / "REGISTRO_DECISIONES.csv"))
+            self.assertEqual(0, exported.returncode, exported.stderr)
+            proposals = register / "DECISION_PROPOSALS.csv"
+            proposals.write_text("decision_id,proposed_status,owner,note_code,new_due_date\n"
+                f"{decision_id},IN_PROGRESS,growth_owner,=cmd,\n", encoding="utf-8")
+            rejected = self._run("import-proposals", "--register", str(register),
+                                 "--csv", str(proposals))
+            self.assertEqual(2, rejected.returncode)
+            proposals.write_text("decision_id,proposed_status,owner,note_code,new_due_date\n"
+                f"{decision_id},IN_PROGRESS,growth_owner,REVIEWED,\n"
+                f"{decision_id},IN_PROGRESS,growth_owner,REVIEWED,\n", encoding="utf-8")
+            self.assertEqual(2, self._run("import-proposals", "--register", str(register),
+                                         "--csv", str(proposals)).returncode)

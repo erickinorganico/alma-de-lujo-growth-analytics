@@ -36,6 +36,8 @@ def _parser() -> argparse.ArgumentParser:
     start.add_argument("--mart-root", type=Path, default=ROOT / ".local" / "operating-marts")
     start.add_argument("--output-root", type=Path, required=True)
     start.add_argument("--role", action="append", dest="roles")
+    start.add_argument("--prior-register", type=Path)
+    start.add_argument("--prior-anchor", type=Path)
     for command in ("status", "verify", "resume", "packet"):
         subparser = commands.add_parser(command, help=f"{command} an existing private cycle")
         subparser.add_argument("--cycle", required=True, type=Path)
@@ -87,9 +89,11 @@ def main(argv: Sequence[str] | None = None) -> int:
                 raise ValueError("direct workbook preparation belongs to Phase 4")
             if args.source_pack is not None and args.workspace is None and args.mart_bundle is None:
                 state = start_cycle_from_source_pack(args.source_pack, args.operating_root,
-                    args.mart_root, args.output_root, args.roles)
+                    args.mart_root, args.output_root, args.roles,
+                    prior_register=args.prior_register, prior_anchor=args.prior_anchor)
             elif args.source_pack is None and args.workspace is not None and args.mart_bundle is not None:
-                state = start_cycle(args.workspace, args.mart_bundle, args.output_root, args.roles)
+                state = start_cycle(args.workspace, args.mart_bundle, args.output_root, args.roles,
+                    prior_register=args.prior_register, prior_anchor=args.prior_anchor)
             else:
                 raise ValueError("select exactly one route: --source-pack or --workspace with --mart-bundle")
         elif args.command == "status":

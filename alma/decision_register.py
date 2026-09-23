@@ -7,6 +7,7 @@ import json
 import os
 import re
 import tempfile
+from contextlib import contextmanager
 from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -21,6 +22,10 @@ GENESIS = "GENESIS"
 MAX_EVENTS = 10_000
 MAX_TEXT = 4_000
 OWNER_RE = re.compile(r"^[a-z][a-z0-9_]{2,63}$")
+OWNER_FUNCTIONS = {"growth", "finance", "operations", "commercial", "inventory",
+                   "merchandising", "commerce", "returns", "market", "management",
+                   "executive", "business", "analytics", "procurement", "founder",
+                   "after", "sales"}
 CODE_RE = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,127}$")
 HASH_RE = re.compile(r"^[0-9a-f]{64}$")
 FORMULA_PREFIXES = ("=", "+", "-", "@")
@@ -72,6 +77,23 @@ def _atomic(path: Path, value: Any) -> None:
             os.unlink(temporary)
 
 
+@contextmanager
+def _locked(register: Path):
+    lock = register / ".register-lock"
+    if lock.is_symlink():
+        raise ValueError("linked register lock")
+    try:
+        handle = lock.open("x", encoding="utf-8")
+    except FileExistsError:
+        raise ValueError("decision register is locked") from None
+    try:
+        with handle:
+            handle.write("exclusive decision register mutation")
+        yield
+    finally:
+        lock.unlink(missing_ok=True)
+
+
 def _register_path(value: str | Path, *, existing: bool = True) -> Path:
     raw = Path(value)
     if ".." in raw.parts:
@@ -93,6 +115,9 @@ def _owner(value: str, allowed: set[str] | None = None) -> str:
     if not isinstance(value, str) or not OWNER_RE.fullmatch(value) or not value.endswith(
             ("_owner", "_lead", "_reviewer", "_analyst")):
         raise ValueError("owner must be a non-PII role token")
+    stem = value.rsplit("_", 1)[0]
+    if not set(stem.split("_")) & OWNER_FUNCTIONS:
+        raise ValueError("owner token must name a functional role, not a person")
     if allowed is not None and value not in allowed:
         raise ValueError("owner role is not allowlisted")
     return value
@@ -224,8 +249,9 @@ def _event(body: dict[str, Any], sequence: int) -> dict[str, Any]:
     return event
 
 
-def _append(register: Path, body: dict[str, Any], origin: str | None = None,
-            evidence_origin: str | None = None) -> dict[str, Any]:
+def _append_locked(register: Path, body: dict[str, Any], origin: str | None = None,
+                   evidence_origin: str | None = None) -> dict[str, Any]:
+    _no_floats(body)
     verified = verify_register(register)
     events = list(verified["events"])
     if len(events) >= MAX_EVENTS:
@@ -249,6 +275,12 @@ def _append(register: Path, body: dict[str, Any], origin: str | None = None,
     _atomic(register / "anchor.json", anchor)
     return {"decision_id": event["decision_id"], "event_id": event["event_id"],
             "status": event["status"], "anchor": anchor}
+
+
+def _append(register: Path, body: dict[str, Any], origin: str | None = None,
+            evidence_origin: str | None = None) -> dict[str, Any]:
+    with _locked(register):
+        return _append_locked(register, body, origin, evidence_origin)
 
 
 def register_decision(register: str | Path, cycle_dir: str | Path, recommendation_id: str,
@@ -356,7 +388,7 @@ def extend_decision(register: str | Path, decision_id: str, new_due_date: str,
 
 
 def _projection_at(register: Path, anchor: dict[str, Any]) -> dict[str, Any]:
-    verified = verify_register(register)
+    verified = verify_register(register, _verify_origins=False)
     count = anchor.get("event_count") if isinstance(anchor, dict) else None
     if type(count) is not int or not 0 <= count <= len(verified["events"]):
         raise ValueError("invalid historical anchor count")
@@ -401,6 +433,12 @@ def carry_for_report(register: str | Path, report: dict[str, Any],
     for current in prior["decisions"]:
         if current["status"] not in active:
             continue
+        latest = next(event for event in reversed(prior["events"])
+                      if event["decision_id"] == current["decision_id"])
+        if (latest["event_type"] == "EXTEND" and
+                datetime.fromisoformat(latest["recorded_at_utc"].replace("Z", "+00:00")) >
+                cutoff.astimezone(timezone.utc)):
+            raise ValueError("extension was recorded after the next-cut cutoff")
         overdue = date.fromisoformat(current["due_date"]) < cutoff.date()
         status = "STALE" if overdue else ("OPEN" if current["status"] == "STALE" else current["status"])
         event_type = "STALE" if overdue else "CARRY"
@@ -489,6 +527,7 @@ def close_decision(register: str | Path, decision_id: str, next_cycle_dir: str |
     raw = (cycle_path / "current-cut.json").read_bytes()
     report = json.loads(raw)
     expected_keys = {"cut_id", "current_cut_sha256", "pointer", "observed_value"}
+    _no_floats(closure_evidence)
     if (not isinstance(closure_evidence, dict) or set(closure_evidence) != expected_keys or
             closure_evidence["cut_id"] != report["cut_id"] or
             closure_evidence["current_cut_sha256"] != _sha(raw) or
@@ -560,7 +599,8 @@ def _project(register_id: str, owner_roles: list[str], events: list[dict[str, An
             "anchor": anchor}
 
 
-def verify_register(register: str | Path, expected_anchor: dict[str, Any] | str | Path | None = None
+def verify_register(register: str | Path, expected_anchor: dict[str, Any] | str | Path | None = None,
+                    *, _verify_origins: bool = True
                     ) -> dict[str, Any]:
     folder = _register_path(register)
     config = _config(folder)
@@ -569,6 +609,7 @@ def verify_register(register: str | Path, expected_anchor: dict[str, Any] | str 
     if not isinstance(events, list) or len(events) > MAX_EVENTS or not isinstance(origins, dict):
         raise ValueError("invalid register collections")
     previous = GENESIS
+    prior_recorded: datetime | None = None
     decision_states: dict[str, str] = {}
     event_ids: set[str] = set()
     decision_ids: set[str] = set()
@@ -591,16 +632,36 @@ def verify_register(register: str | Path, expected_anchor: dict[str, Any] | str 
             raise ValueError("event content hash invalid")
         if event["external_execution"] != "PROHIBITED":
             raise ValueError("external execution is prohibited")
+        try:
+            recorded = datetime.fromisoformat(event["recorded_at_utc"].replace("Z", "+00:00"))
+            cutoff = datetime.fromisoformat(event["cutoff"])
+        except (TypeError, ValueError) as exc:
+            raise ValueError("invalid event timestamp") from exc
+        if (recorded.tzinfo is None or recorded.utcoffset() != timedelta(0) or cutoff.tzinfo is None or
+                (prior_recorded is not None and recorded < prior_recorded)):
+            raise ValueError("event timestamps are not ordered UTC evidence")
+        prior_recorded = recorded
         _owner(event["owner"], allowed)
         _date(event["due_date"], "due date")
         _closure_check(event["closure_check"])
         for name in ("source_hash", "packet_hash"):
             if not isinstance(event[name], str) or not HASH_RE.fullmatch(event[name]):
                 raise ValueError("invalid evidence hash")
+        if (not isinstance(event["closure_rule"], str) or not event["closure_rule"].strip() or
+                len(event["closure_rule"]) > MAX_TEXT or
+                (event["note_code"] is not None and not CODE_RE.fullmatch(event["note_code"]))):
+            raise ValueError("invalid closure rule or note code")
+        _no_floats(event["closure_evidence"])
+        if len(canonical_json(event["closure_evidence"])) > 16_384:
+            raise ValueError("closure evidence exceeds limit")
         decision_id = _code(event["decision_id"], "decision ID")
         if event["event_type"] == "REGISTER":
             if decision_id in decision_ids or event["status"] not in {"OPEN", "REVIEW", "REJECTED"}:
                 raise ValueError("duplicate decision or invalid initial status")
+            if event["closure_evidence"] is not None or event["note_code"] is not None or \
+                    event["status"] != {"ACCEPT": "OPEN", "DEFER": "REVIEW",
+                                         "REJECT": "REJECTED"}.get(event["owner_choice"]):
+                raise ValueError("invalid registration event semantics")
             decision_ids.add(decision_id)
             immutable[decision_id] = {key: event[key] for key in ("source_hash", "packet_hash",
                 "recommendation_id", "closure_rule", "closure_check", "owner_choice")}
@@ -650,6 +711,27 @@ def verify_register(register: str | Path, expected_anchor: dict[str, Any] | str 
         supplied = _json(Path(expected_anchor)) if isinstance(expected_anchor, (str, Path)) else expected_anchor
         if supplied != anchor:
             raise ValueError("stale or forged expected anchor")
+    if _verify_origins:
+        by_decision = {event["decision_id"]: event for event in events
+                       if event["event_type"] == "REGISTER"}
+        for decision_id, origin in origins["registrations"].items():
+            cycle = verify_cycle(origin)
+            packet = read_terminal_packet(origin)
+            event = by_decision[decision_id]
+            if (cycle["status"] != "READY_FOR_OWNER" or
+                    cycle.get("packet_sha256") != event["packet_hash"] or
+                    digest(packet["provenance"]["source_sha256"]) != event["source_hash"]):
+                raise ValueError("originating owner packet no longer verifies")
+        by_event = {event["event_id"]: event for event in events}
+        for event_id, origin in origins["events"].items():
+            cycle = verify_cycle(origin)
+            event = by_event[event_id]
+            raw = (Path(origin) / "current-cut.json").read_bytes()
+            evidence = event["closure_evidence"]
+            if (event["event_type"] != "CLOSE" or not isinstance(evidence, dict) or
+                    cycle["cut_id"] != event["cut_id"] or
+                    _sha(raw) != evidence.get("current_cut_sha256")):
+                raise ValueError("closure evidence origin no longer verifies")
     return _project(config["register_id"], config["owner_roles"], events, anchor)
 
 

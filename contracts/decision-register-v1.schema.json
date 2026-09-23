@@ -42,7 +42,7 @@
         "version": {"const": "decision-register-v1"},
         "event_id": {"type": "string"},
         "decision_id": {"type": "string"},
-        "event_type": {"enum": ["REGISTER", "STATUS", "EXTEND", "CARRY", "STALE", "CLOSE", "ATTEST"]},
+        "event_type": {"enum": ["REGISTER", "STATUS", "EXTEND", "CARRY", "STALE", "CLOSE"]},
         "recorded_at_utc": {"type": "string", "format": "date-time"},
         "cut_id": {"type": "string"},
         "cutoff": {"type": "string", "format": "date-time"},
