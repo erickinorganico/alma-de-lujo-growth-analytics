@@ -33,6 +33,13 @@ FINANCE_DEFINITIONS = {
         "MXN_CENTS", "scenario_id x horizon x layer", "56/91 day half-open",
         ("cash_events", "cash_balance_evidence"), "UNKNOWN balance without observed close",
         "one active economic identity", "finance", "liquidity_projection_review"),
+    "budget_headroom_cents": MetricDefinition(
+        "budget_headroom_cents", "v1",
+        "approved ceiling - open commitment - incurred, after source-to-target cent bridge",
+        "MXN_CENTS", "budget_id x drop_code x channel_code", "budget period [start,end)",
+        ("budgets", "budget_allocations", "purchase_orders", "purchase_receipts", "expenses", "obligations", "obligation_payments"),
+        "UNKNOWN without approved policy, complete coverage and mapped sources",
+        "paid settlement never added to exposure", "finance", "budget_reallocation_review"),
 }
 
 
@@ -268,6 +275,7 @@ def project_cash(
             raise ValueError("cash scenario must be selected")
         scenario_id = next(iter(scenarios))
     selected = [event for event in events if event["scenario_id"] == scenario_id]
+    scenario_events = [event for event in events if event["level"] == "SCENARIO"]
     evidence_rows = _rows(cut, _query("cash_balance_evidence"), {"scenario_id": scenario_id, "as_of": as_of})
     if len(evidence_rows) > 1 and evidence_rows[0]["period_start"] == evidence_rows[1]["period_start"]:
         raise ValueError("ambiguous independent balance evidence")
@@ -276,8 +284,15 @@ def project_cash(
     coverage = "COMPLETE" if all(value in {"COMPLETE", "ZERO"} for value in coverage_values) else "PARTIAL"
     close = reconcile_cash_close(selected, evidence, coverage=coverage)
     approved = cut.input_class == "SYNTHETIC_EXAMPLE" or policy.authorizes_real_cut
-    horizons = cash_horizons(selected, as_of,
+    horizons = cash_horizons([*selected, *(event for event in scenario_events if event not in selected)], as_of,
                              starting_close_cents=close["close_cents"] if approved else None)
+    cash_floor_cents = policy.content["thresholds"].get("minimum_cash_floor_cents")
+    if not isinstance(cash_floor_cents, int) or cash_floor_cents < 0:
+        raise ValueError("invalid cash floor policy")
+    for horizon in horizons.values():
+        horizon["minimum_cash_floor_cents"] = cash_floor_cents
+        horizon["cash_floor_breached"] = (None if horizon["daily_minimum_cents"] is None
+                                         else horizon["daily_minimum_cents"] < cash_floor_cents)
     actual = sum(_signed(event) for event in selected if event["level"] == "RECONCILED")
     refs = tuple(sorted({event["source_ref"] for event in selected}
                         | ({evidence["source_ref"]} if evidence else set())))
@@ -289,10 +304,209 @@ def project_cash(
         f"cash:{cut.cut_id}:{scenario_id}:{as_of}", policy.version, policy.sha256, policy.status)
     return {"cut_id": cut.cut_id, "as_of": as_of, "timezone": cut.timezone,
             "scenario_id": scenario_id, "active_event_ids": tuple(event["event_id"] for event in selected),
+            "scenario_event_ids": tuple(event["event_id"] for event in scenario_events),
             "actual_movements_cents": actual, "reconciled_close_cents": close["close_cents"],
             "close_status": close["status"], "horizons": horizons,
             "source_refs": refs,
             "source_hashes": {name: cut.source_hashes[f"{name}.csv"] for name in ("cash_events", "cash_balance_evidence")},
             "policy_version": policy.version, "policy_sha256": policy.sha256,
-            "policy_status": policy.status, "forecast_status": "REVIEW" if not approved else "MEASURED",
+            "policy_status": policy.status,
+            "forecast_status": "REVIEW" if not approved else ("UNKNOWN" if close["close_cents"] is None else "ESTIMATED"),
+            "active_event_lineage": tuple({"event_id": event["event_id"],
+                "economic_event_id": event["economic_event_id"],
+                "supersedes_event_id": event["supersedes_event_id"],
+                "level": event["level"], "source_ref": event["source_ref"]} for event in selected),
             "metric_row": metric_row, "reconciliation_id": metric_row.reconciliation_id}
+
+
+def allocate_source_cents(
+    origin: tuple[str, str], source_cents: int, allocations: Iterable[dict[str, Any]],
+) -> dict[str, Any]:
+    """Retain the exact unmapped source residual after explicit target shares."""
+    if not isinstance(source_cents, int) or source_cents < 0:
+        raise ValueError("invalid source cents")
+    allocations = list(allocations)
+    ids = [row["budget_allocation_id"] for row in allocations]
+    if len(ids) != len(set(ids)):
+        raise ValueError("duplicate budget allocation ID")
+    target_cents: dict[tuple[str, str, str], int] = {}
+    for row in allocations:
+        if (row["origin_type"], row["origin_id"]) != origin:
+            raise ValueError("budget allocation crosses economic origin")
+        target = (row["budget_id"], row["drop_code"], row["channel_code"])
+        if target in target_cents:
+            raise ValueError("duplicate allocation target")
+        amount = row["allocated_cents"]
+        if not isinstance(amount, int) or amount < 0:
+            raise ValueError("invalid allocation cents")
+        target_cents[target] = amount
+    assigned = sum(target_cents.values())
+    if assigned > source_cents:
+        raise ValueError("budget allocations exceed source")
+    return {"origin": origin, "source_cents": source_cents,
+            "target_cents": target_cents, "unallocated_cents": source_cents - assigned,
+            "allocation_ids": tuple(sorted(ids)),
+            "reconciliation_id": f"allocation:{origin[0]}:{origin[1]}"}
+
+
+def distribute_state_cents(state_cents: int, source_cents: int, shares: dict[str, Any]) -> dict[str, Any]:
+    """Largest-remainder split with stable target keys; all state cents survive."""
+    if not isinstance(state_cents, int) or state_cents < 0 or source_cents < 0:
+        raise ValueError("invalid state cents")
+    if source_cents == 0:
+        if state_cents:
+            raise ValueError("nonzero state on zero source")
+        return {"target_cents": {key: 0 for key in shares["target_cents"]}, "unallocated_cents": 0}
+    weights: list[tuple[tuple[str, str, str] | None, int]] = [
+        *sorted(shares["target_cents"].items()), (None, shares["unallocated_cents"])]
+    if sum(weight for _, weight in weights) != source_cents:
+        raise ValueError("source shares do not reconcile")
+    values = {key: (state_cents * weight) // source_cents for key, weight in weights}
+    remainders = [(state_cents * weight) % source_cents for _, weight in weights]
+    residual = state_cents - sum(values.values())
+    # A real target precedes the unmapped bucket on ties.
+    order = sorted(range(len(weights)), key=lambda index: (-remainders[index],
+                   weights[index][0] is None, weights[index][0] or ("", "", "")))
+    for index in order[:residual]:
+        values[weights[index][0]] += 1
+    return {"target_cents": {key: values[key] for key in shares["target_cents"]},
+            "unallocated_cents": values[None]}
+
+
+def project_budgets(cut: BoundCut, as_of: str, policy: Policy) -> dict[str, Any]:
+    """Map one economic source into mutually exclusive budget states."""
+    if policy.content["bases"].get("budget_headroom_basis") != \
+            "approved_minus_open_commitment_minus_allocated_incurred":
+        raise ValueError("unsupported budget headroom policy")
+    budgets = _rows(cut, _query("budgets"), {"as_of": as_of})
+    budget_by_id = {row["budget_id"]: row for row in _rows(cut, _query("budgets_all"))}
+    active_budget_ids = {row["budget_id"] for row in budgets}
+    allocations = _rows(cut, _query("budget_allocations"))
+    allocations_by_origin: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in allocations:
+        allocations_by_origin[(row["origin_type"], row["origin_id"])].append(row)
+    scoped_origins = {(row["origin_type"], row["origin_id"]) for row in allocations
+                      if row["budget_id"] in active_budget_ids}
+    purchase_rows = _rows(cut, _query("purchase_sources"), {"as_of": as_of})
+    receipt_totals = {row["purchase_order_id"]: row["received_units"] for row in
+                      _rows(cut, _query("purchase_receipt_totals"), {"as_of": as_of})}
+    expense_rows = _rows(cut, _query("expense_sources"), {"as_of": as_of})
+    obligations = _rows(cut, _query("obligations"))
+    obligation_by_origin: dict[tuple[str, str], dict[str, Any]] = {}
+    for obligation in obligations:
+        origin = (obligation["origin_type"], obligation["origin_id"])
+        if origin in obligation_by_origin:
+            raise ValueError("ambiguous obligation origin")
+        obligation_by_origin[origin] = obligation
+    payments = _rows(cut, _query("payments_by_id"), {"as_of": as_of})
+    payment_groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for payment in payments:
+        payment_groups[payment["obligation_id"]].append(payment)
+    sources: dict[tuple[str, str], dict[str, Any]] = {}
+    for po in purchase_rows:
+        origin = ("PURCHASE_ORDER", po["purchase_order_id"])
+        if po["budget_id"] not in active_budget_ids and origin not in scoped_origins:
+            continue
+        ordered = po["ordered_units"]
+        received = receipt_totals.get(po["purchase_order_id"], 0)
+        if received > ordered:
+            raise ValueError("purchase receipt exceeds ordered units")
+        total = ordered * po["agreed_unit_cents"]
+        incurred = received * po["agreed_unit_cents"]
+        open_commitment = total - incurred if po["status_code"] in {"OPEN", "PARTIAL"} else 0
+        sources[origin] = {"source_cents": total, "open_commitment_cents": open_commitment,
+                           "incurred_cents": incurred, "source_ref": po["source_ref"]}
+    for expense in expense_rows:
+        origin = ("EXPENSE", expense["expense_id"])
+        if expense["budget_id"] not in active_budget_ids and origin not in scoped_origins:
+            continue
+        amount = expense["amount_cents"]
+        sources[origin] = {"source_cents": amount, "open_commitment_cents": 0,
+                           "incurred_cents": amount if expense["status_code"] == "INCURRED" else 0,
+                           "source_ref": expense["source_ref"]}
+    target_states: dict[tuple[str, str, str], dict[str, int]] = {}
+    target_refs: dict[tuple[str, str, str], set[str]] = defaultdict(set)
+    for budget in budgets:
+        key = (budget["budget_id"], budget["drop_code"], budget["channel_code"])
+        target_states[key] = {"approved_ceiling_cents": budget["approved_cents"],
+                              "open_commitment_cents": 0, "incurred_cents": 0,
+                              "paid_cents": 0, "outstanding_obligation_cents": 0}
+        target_refs[key].add(budget["source_ref"])
+    source_results = []
+    unallocated_total = 0
+    for origin, source in sorted(sources.items()):
+        obligation = obligation_by_origin.get(origin)
+        applied = 0
+        outstanding = 0
+        if obligation is not None:
+            if obligation["original_cents"] != source["source_cents"]:
+                raise ValueError("obligation amount differs from economic source")
+            balance = reconcile_obligation(obligation, payment_groups.pop(obligation["obligation_id"], []),
+                                           as_of=as_of, application_coverage="COMPLETE")
+            applied = balance["recorded_applied_cents"]
+            outstanding = balance["recorded_unpaid_cents"]
+        origin_allocations = allocations_by_origin.pop(origin, [])
+        shares = allocate_source_cents(origin, source["source_cents"], origin_allocations)
+        for target in shares["target_cents"]:
+            if target[0] not in budget_by_id:
+                raise ValueError("allocation targets missing budget")
+            target_states.setdefault(target, {"approved_ceiling_cents": 0,
+                "open_commitment_cents": 0, "incurred_cents": 0, "paid_cents": 0,
+                "outstanding_obligation_cents": 0})
+            target_refs[target].add(source["source_ref"])
+        for allocation in origin_allocations:
+            target_refs[(allocation["budget_id"], allocation["drop_code"], allocation["channel_code"])].add(allocation["source_ref"])
+        unallocated_total += shares["unallocated_cents"]
+        for field, amount in (("open_commitment_cents", source["open_commitment_cents"]),
+                              ("incurred_cents", source["incurred_cents"]),
+                              ("paid_cents", applied),
+                              ("outstanding_obligation_cents", outstanding)):
+            distributed = distribute_state_cents(amount, source["source_cents"], shares)
+            for target, cents in distributed["target_cents"].items():
+                target_states[target][field] += cents
+        source_results.append({"origin_type": origin[0], "origin_id": origin[1],
+                               **source, "paid_cents": applied,
+                               "outstanding_obligation_cents": outstanding,
+                               "allocated_cents": sum(shares["target_cents"].values()),
+                               "unallocated_cents": shares["unallocated_cents"],
+                               "allocation_ids": shares["allocation_ids"],
+                               "reconciliation_id": shares["reconciliation_id"]})
+    all_origins = ({("PURCHASE_ORDER", row["purchase_order_id"]) for row in
+                    _rows(cut, "SELECT purchase_order_id FROM purchase_orders")}
+                   | {("EXPENSE", row["expense_id"]) for row in
+                      _rows(cut, "SELECT expense_id FROM expenses")})
+    if any(origin not in all_origins for origin in allocations_by_origin):
+        raise ValueError("allocation references absent economic source")
+    required = ("budgets", "budget_allocations", "purchase_orders", "purchase_receipts",
+                "expenses", "obligations", "obligation_payments")
+    coverage = [cut.coverage_status(name, as_of) for name in required]
+    approved = cut.input_class == "SYNTHETIC_EXAMPLE" or policy.authorizes_real_cut
+    headroom_eligible = approved and not unallocated_total and all(
+        status in {"COMPLETE", "ZERO"} for status in coverage)
+    targets = []
+    for target, state in sorted(target_states.items()):
+        budget_id, drop_code, channel_code = target
+        if budget_id not in active_budget_ids:
+            continue
+        headroom = (state["approved_ceiling_cents"] - state["open_commitment_cents"] - state["incurred_cents"])
+        status = "MEASURED" if headroom_eligible else "PARTIAL"
+        reconciliation_id = f"budget:{cut.cut_id}:{budget_id}:{drop_code}:{channel_code}:{as_of}"
+        metric_row = MetricRow("budget_headroom_cents", cut.cut_id, as_of,
+            {"budget_id": budget_id, "drop_code": drop_code, "channel_code": channel_code},
+            state["approved_ceiling_cents"], 1, headroom if headroom_eligible else None,
+            status, required, tuple(sorted(target_refs[target])), reconciliation_id,
+            policy.version, policy.sha256, policy.status)
+        targets.append({"budget_id": budget_id, "drop_code": drop_code,
+                        "channel_code": channel_code, **state,
+                        "headroom_cents": headroom if headroom_eligible else None,
+                        "status": status, "cut_id": cut.cut_id, "as_of": as_of,
+                        "policy_version": policy.version, "policy_sha256": policy.sha256,
+                        "policy_status": policy.status,
+                        "source_refs": tuple(sorted(target_refs[target])),
+                        "reconciliation_id": reconciliation_id, "metric_row": metric_row})
+    return {"cut_id": cut.cut_id, "as_of": as_of, "timezone": cut.timezone,
+            "targets": targets, "sources": source_results,
+            "unallocated_cents": unallocated_total,
+            "source_hashes": {name: cut.source_hashes[f"{name}.csv"] for name in required},
+            "policy_version": policy.version, "policy_sha256": policy.sha256,
+            "policy_status": policy.status}

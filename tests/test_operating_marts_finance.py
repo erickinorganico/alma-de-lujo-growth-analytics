@@ -35,6 +35,12 @@ class ObligationTests(unittest.TestCase):
             reconcile_obligation(obligation, [payment, payment], as_of="2026-09-21", application_coverage="COMPLETE")
         with self.assertRaises(ValueError):
             reconcile_obligation(obligation, [dict(payment, amount_cents=180001)], as_of="2026-09-21", application_coverage="COMPLETE")
+        split = reconcile_obligation(dict(obligation, original_cents=101),
+            [dict(payment, payment_id="p1", amount_cents=30),
+             dict(payment, payment_id="p2", amount_cents=30)],
+            as_of="2026-09-21", application_coverage="COMPLETE")
+        self.assertEqual(60, split["recorded_applied_cents"])
+        self.assertEqual(41, split["recorded_unpaid_cents"])
 
     def test_verified_cut_obligations_use_source_grain(self) -> None:
         from alma.operating_finance_marts import project_obligations, FINANCE_DEFINITIONS
@@ -66,6 +72,8 @@ class CashTests(unittest.TestCase):
                       level="RECONCILED", payment_id="p1")
         active = active_cash_events([forecast, actual], as_of)
         self.assertEqual(["actual"], [event["event_id"] for event in active])
+        with self.assertRaises(ValueError):
+            active_cash_events([forecast, dict(forecast, event_id="duplicate-root")], as_of)
         day55 = (date.fromisoformat(as_of) + timedelta(days=55)).isoformat()
         day56 = (date.fromisoformat(as_of) + timedelta(days=56)).isoformat()
         boundary = [dict(base, event_id="d55", economic_event_id="e55", supersedes_event_id=None,
@@ -103,6 +111,19 @@ class CashTests(unittest.TestCase):
                 self.assertEqual(("synthetic:cash-actual-001",), cash["active_event_ids"])
                 self.assertEqual(-900000, cash["actual_movements_cents"])
                 self.assertIsNone(cash["reconciled_close_cents"])
+            pack = Path(tmp) / "complete-cash-pack"
+            shutil.copytree(PACK, pack)
+            metadata_path = pack / "metadata.json"
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            for source in ("cash_events", "cash_balance_evidence"):
+                metadata["coverage"][source]["status"] = "COMPLETE"
+            metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
+            complete = build_operating_workspace(pack, private_root=Path(tmp) / "complete-cash")
+            with bind_cut(complete["destination"]) as cut:
+                cash = project_cash(cut, "2026-09-21", policy)
+                self.assertEqual(1100000, cash["reconciled_close_cents"])
+                self.assertEqual(1100000, cash["horizons"][56]["daily_minimum_cents"])
+                self.assertFalse(cash["horizons"][56]["cash_floor_breached"])
 
 
 class BudgetTests(unittest.TestCase):
@@ -121,6 +142,9 @@ class BudgetTests(unittest.TestCase):
         paid = distribute_state_cents(60, 101, shares)
         self.assertEqual(60, sum(paid["target_cents"].values()) + paid["unallocated_cents"])
         self.assertEqual([30, 30], sorted(paid["target_cents"].values()))
+        incurred = distribute_state_cents(101, 101, shares)
+        self.assertEqual(100, sum(incurred["target_cents"].values()))
+        self.assertEqual(1, incurred["unallocated_cents"])
         with self.assertRaises(ValueError):
             allocate_source_cents(("EXPENSE", "e1"), 101, allocations + [allocations[0]])
         with self.assertRaises(ValueError):
