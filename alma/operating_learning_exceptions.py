@@ -28,14 +28,14 @@ LEARNING_DEFINITIONS = {
         "UNKNOWN without comparable exposure and price", "descriptive only",
         "product", "assortment_review"),
     "mature_return_rate": MetricDefinition("mature_return_rate", "v1",
-        "physically received linked returns / eligible delivered units",
-        "RATIO", "delivery_cohort_id", "mature as_of",
+        "physically received linked returns / mature covered cohort deliveries; aggregate pools eligible cohorts only",
+        "RATIO", "delivery_cohort_id or eligible aggregate", "cohort latest delivery + policy returns_days <= as_of",
         ("sales_aggregates", "quality_events"),
         "UNKNOWN if unlinked, immature, or incompletely observed", "never count reported-only return",
         "product", "quality_review"),
     "quality_defect_rate": MetricDefinition("quality_defect_rate", "v1",
-        "confirmed rejected linked units / eligible inspected linked units",
-        "RATIO", "delivery_cohort_id", "mature as_of",
+        "confirmed rejected units / inspected units in matching mature covered cohorts",
+        "RATIO", "delivery_cohort_id or eligible aggregate", "cohort latest delivery + policy returns_days <= as_of",
         ("sales_aggregates", "quality_events"),
         "UNKNOWN without linked inspected denominator", "confirmed events only",
         "quality", "quality_review"),
@@ -195,6 +195,7 @@ def project_learning(
     receipts = _rows(cut, _query("accepted_receipts"), params)
     restocks = _rows(cut, _query("physical_restocks"), params)
     quality = _rows(cut, _query("quality_events"), params)
+    quality_outside = _rows(cut, _query("quality_outside"), params)
     availability = _rows(cut, _query("availability"), params)
     unmet = _rows(cut, _query("unmet"), params)
     source_names = ("sales_aggregates", "inventory_counts", "purchase_receipts",
@@ -228,28 +229,53 @@ def project_learning(
                 "numerator": stockout_minutes, "denominator": observed_minutes or None,
                 "value": _ratio(stockout_minutes, observed_minutes) if exposure_complete and observed_minutes else None,
                 "status": exposure_status}
-    cohorts = [row for row in sales if row["delivery_cohort_id"] is not None]
-    linked_all = len(cohorts) == len(sales) and bool(sales)
+    grouped: dict[str | None, list[dict[str, Any]]] = {}
+    for sale in sales:
+        grouped.setdefault(sale["delivery_cohort_id"], []).append(sale)
+    quality_by_cohort: dict[str, list[dict[str, Any]]] = {}
+    for event in quality:
+        quality_by_cohort.setdefault(event["delivery_cohort_id"], []).append(event)
     received_return_units = sum(row["units"] for row in quality if row["event_type"] == "RETURN_RECEIVED"
                                 and row["delivery_cohort_id"] is not None)
-    reported_return_units = sum(row["units"] for row in quality if row["event_type"] == "RETURN_REPORTED"
-                                and row["delivery_cohort_id"] is not None)
     maturity_days = policy.content["maturity_windows"]["returns_days"]
-    cohort_date = min((row["sales_date"] for row in sales), default=as_of)
-    return_coverage = "COMPLETE" if coverage["sales_aggregates"] in {"COMPLETE", "ZERO"} and \
-        coverage["quality_events"] in {"COMPLETE", "ZERO"} and all(
-        row["coverage_status"] == "COMPLETE" for row in sales) else "PARTIAL"
-    if reported_return_units > received_return_units:
-        return_coverage = "PARTIAL"
-    returns = mature_return_rate(delivered, received_return_units, cohort_date=cohort_date,
-        as_of=as_of, maturity_days=maturity_days, linked=linked_all, coverage=return_coverage)
-    inspected = sum(row["units"] for row in quality if row["event_type"] == "INSPECTED"
-                    and row["delivery_cohort_id"] is not None)
-    defects = sum(row["units"] for row in quality if row["event_type"] == "REJECTED"
-                  and row["delivery_cohort_id"] is not None)
-    defect_rate = mature_return_rate(inspected, defects, cohort_date=cohort_date,
-        as_of=as_of, maturity_days=maturity_days, linked=linked_all and inspected > 0,
-        coverage=return_coverage)
+    cohort_rows = []
+    for cohort_id, deliveries in sorted(grouped.items(), key=lambda item: item[0] or ""):
+        events = quality_by_cohort.get(cohort_id, []) if cohort_id is not None else []
+        units = sum(row["delivered_units"] for row in deliveries)
+        received = sum(row["units"] for row in events if row["event_type"] == "RETURN_RECEIVED")
+        reported = sum(row["units"] for row in events if row["event_type"] == "RETURN_REPORTED")
+        inspected = sum(row["units"] for row in events if row["event_type"] == "INSPECTED")
+        defects = sum(row["units"] for row in events if row["event_type"] == "REJECTED")
+        latest = max(row["sales_date"] for row in deliveries)
+        cohort_coverage = "COMPLETE" if cohort_id is not None and all(
+            coverage[name] in {"COMPLETE", "ZERO"} for name in ("sales_aggregates", "quality_events")) and all(
+            row["coverage_status"] == "COMPLETE" for row in deliveries) and reported <= received else "PARTIAL"
+        mature = date.fromisoformat(as_of) >= date.fromisoformat(latest) + timedelta(days=maturity_days)
+        returned = mature_return_rate(units, received, cohort_date=latest, as_of=as_of,
+            maturity_days=maturity_days, linked=cohort_id is not None, coverage=cohort_coverage)
+        quality_rate = mature_return_rate(inspected, defects, cohort_date=latest, as_of=as_of,
+            maturity_days=maturity_days, linked=cohort_id is not None and inspected > 0,
+            coverage=cohort_coverage)
+        reason = ("UNLINKED" if cohort_id is None else "IMMATURE" if not mature else
+                  "INCOMPLETE_COVERAGE" if cohort_coverage != "COMPLETE" else None)
+        cohort_rows.append({"delivery_cohort_id": cohort_id, "latest_delivery_date": latest,
+            "delivered_units": units, "received_return_units": received,
+            "reported_return_units": reported, "inspected_units": inspected,
+            "rejected_units": defects, "mature_returns": returned,
+            "quality_defects": quality_rate, "exclusion_reason": reason,
+            "source_refs": tuple(sorted({row["source_ref"] for row in (*deliveries, *events)}))})
+    def pooled(field: str) -> dict[str, Any]:
+        eligible = [row[field] for row in cohort_rows if row[field]["status"] == "MEASURED"]
+        if not eligible:
+            if cohort_rows and all(row[field]["status"] == "NOT_APPLICABLE" for row in cohort_rows):
+                return {"numerator": 0, "denominator": 0, "value": None, "status": "NOT_APPLICABLE"}
+            return {"numerator": None, "denominator": None, "value": None, "status": "UNKNOWN"}
+        numerator = sum(row["numerator"] for row in eligible)
+        denominator = sum(row["denominator"] for row in eligible)
+        return {"numerator": numerator, "denominator": denominator,
+                "value": _ratio(numerator, denominator), "status": "MEASURED"}
+    returns = pooled("mature_returns")
+    defect_rate = pooled("quality_defects")
     mix_by_channel = project_variant_mix(cut, sku_id, start, end, as_of)
     mix = mix_by_channel[0] if len(mix_by_channel) == 1 else {
         "numerator": None, "denominator": None, "value": None, "status": "UNKNOWN"}
@@ -259,17 +285,29 @@ def project_learning(
                    "status": "MEASURED" if coverage["unmet_demand"] in {"COMPLETE", "ZERO"} else "PARTIAL",
                    "source_ref": row["source_ref"]} for row in unmet]
     source_refs = tuple(sorted({row["source_ref"] for rows in
-        (sales, opening, receipts, restocks, quality, availability, unmet) for row in rows}))
+        (sales, opening, receipts, restocks, quality, quality_outside, availability, unmet) for row in rows}))
     metrics = {"sell_through": sold, "mature_return_rate": returns,
                "quality_defect_rate": defect_rate, "stockout_exposure": exposure}
     metric_rows = []
     for metric_id, value in metrics.items():
         metric_rows.append(MetricRow(metric_id, cut.cut_id, as_of,
-            {"sku_id": sku_id, "window_start": start, "window_end": end},
+            {"sku_id": sku_id, "window_start": start, "window_end": end,
+             "scope": "eligible_aggregate" if metric_id in {"mature_return_rate", "quality_defect_rate"} else "window"},
             value["numerator"], value["denominator"], value["value"], value["status"],
             LEARNING_DEFINITIONS[metric_id].sources, source_refs,
             f"learning:{cut.cut_id}:{metric_id}:{sku_id}:{start}:{end}",
             policy.version, policy.sha256, policy.status))
+    for cohort in cohort_rows:
+        for metric_id, key in (("mature_return_rate", "mature_returns"),
+                               ("quality_defect_rate", "quality_defects")):
+            value = cohort[key]
+            metric_rows.append(MetricRow(metric_id, cut.cut_id, as_of,
+                {"sku_id": sku_id, "scope": "cohort", "delivery_cohort_id": cohort["delivery_cohort_id"] or "UNLINKED",
+                 "window_start": start, "window_end": end},
+                value["numerator"], value["denominator"], value["value"], value["status"],
+                LEARNING_DEFINITIONS[metric_id].sources, cohort["source_refs"],
+                f'learning:{cut.cut_id}:{metric_id}:{sku_id}:{cohort["delivery_cohort_id"] or "UNLINKED"}:{start}:{end}',
+                policy.version, policy.sha256, policy.status))
     for row in mix_by_channel:
         metric_rows.append(MetricRow("variant_mix", cut.cut_id, as_of,
             {"sku_id": sku_id, "product_code": row["product_code"],
@@ -295,7 +333,12 @@ def project_learning(
             "sell_through": sold, "variant_mix": mix,
             "variant_mix_by_channel": mix_by_channel,
             "mature_returns": returns,
-            "quality_defects": defect_rate, "exposure": exposure,
+            "quality_defects": defect_rate, "cohort_rows": cohort_rows,
+            "excluded_quality_evidence": tuple({"quality_event_id": row["quality_event_id"],
+                "delivery_cohort_id": row["delivery_cohort_id"], "event_type": row["event_type"],
+                "units": row["units"], "source_ref": row["source_ref"],
+                "reason": "UNLINKED" if row["delivery_cohort_id"] is None else "OUTSIDE_SELECTED_COHORT"}
+                for row in quality_outside), "exposure": exposure,
             "recorded_unmet": unmet_rows, "preference_status": "UNKNOWN",
             "source_refs": source_refs,
             "source_hashes": {name: cut.source_hashes[f"{name}.csv"] for name in source_names},

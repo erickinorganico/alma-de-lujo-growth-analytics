@@ -97,6 +97,9 @@ class LearningTests(unittest.TestCase):
                     if row["delivery_cohort_id"] == "synthetic:cohort-002")["mature_returns"]["status"])
                 self.assertFalse(any(row["delivery_cohort_id"] == "synthetic:cohort-foreign"
                                      for row in result["cohort_rows"]))
+                self.assertEqual(4, len(result["excluded_quality_evidence"]))
+                self.assertEqual({"UNLINKED", "OUTSIDE_SELECTED_COHORT"},
+                    {row["reason"] for row in result["excluded_quality_evidence"]})
 
     def test_eligible_sell_through_and_mature_cohort_controls(self) -> None:
         from alma.operating_learning_exceptions import sell_through, mature_return_rate, variant_mix

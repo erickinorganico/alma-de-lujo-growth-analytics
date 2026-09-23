@@ -37,7 +37,21 @@ SELECT quality_event_id, sku_id, receipt_id, delivery_cohort_id,
        event_date, event_type, units, reason_code, resolution_code, source_ref
 FROM quality_events
 WHERE sku_id=:sku AND event_date<=:as_of
+  AND delivery_cohort_id IN (
+    SELECT DISTINCT delivery_cohort_id FROM sales_aggregates
+    WHERE sku_id=:sku AND sales_date>=:start AND sales_date<:end
+      AND delivery_cohort_id IS NOT NULL)
 ORDER BY event_date,quality_event_id;
+
+-- name: quality_outside
+SELECT quality_event_id, delivery_cohort_id, event_type, units, source_ref
+FROM quality_events AS q
+WHERE q.sku_id=:sku AND q.event_date<=:as_of
+  AND NOT EXISTS (
+    SELECT 1 FROM sales_aggregates AS s
+    WHERE s.sku_id=:sku AND s.sales_date>=:start AND s.sales_date<:end
+      AND s.delivery_cohort_id=q.delivery_cohort_id)
+ORDER BY q.quality_event_id;
 
 -- name: availability
 SELECT availability_date, observed_minutes, sellable_minutes,
