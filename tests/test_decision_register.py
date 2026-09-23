@@ -3,13 +3,16 @@ from __future__ import annotations
 
 import csv
 import json
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
 
 from alma.decision_register import (
     append_status,
+    close_decision,
     create_register,
+    extend_decision,
     export_csv,
     import_proposals,
     register_decision,
@@ -69,6 +72,27 @@ def closure_check() -> dict:
     return {"kind": "machine", "pointer": "/metric_rows/0/value", "operator": "exists",
             "expected": None, "value_type": "existence", "unit": "row",
             "requires_later_cut": True}
+
+
+def later_upstream(home: Path, cutoff: str = "2026-09-28T23:59:59-07:00") -> tuple[Path, Path]:
+    from alma.operating_workspace import build_operating_workspace
+    from alma.operating_marts import build_operating_marts
+
+    source = home / "later-source"
+    shutil.copytree(Path(__file__).resolve().parents[1] / "client" / "source-packs" / "v1" /
+                    "synthetic", source)
+    metadata_path = source / "metadata.json"
+    metadata = json.loads(metadata_path.read_text("utf-8"))
+    metadata["cutoff_at"] = cutoff
+    for coverage in metadata["coverage"].values():
+        coverage["window_end"] = cutoff[:10]
+    metadata_path.write_bytes(canonical_json(metadata))
+    cut = build_operating_workspace(source, private_root=home / "later-operating")
+    marts = build_operating_marts(cut["destination"], home / ".local" / "later-marts",
+        policy_path=Path(__file__).resolve().parents[1] / "policies" /
+                    "operating-metrics-synthetic-v1.json",
+        private_root=home / ".local" / "later-marts")
+    return Path(cut["destination"]), Path(marts["destination"])
 
 
 class DecisionRegisterContractTests(unittest.TestCase):
@@ -153,4 +177,92 @@ class DecisionRegisterContractTests(unittest.TestCase):
 
 
 class DecisionContinuityTests(unittest.TestCase):
-    """Task 2 tests are added during its RED phase."""
+    def _registered(self, home: Path, due_date: str = "2026-09-25",
+                    check: dict | None = None) -> tuple[str, str, dict]:
+        cycle = terminal_cycle(home)
+        packet = read_terminal_packet(cycle)
+        recommendation_id = packet["recommendations"][0]["item"]["id"]
+        register = create_register(home / ".local" / "decision-register" / "weekly",
+            "weekly", ["growth_owner"])
+        created = register_decision(register, cycle, recommendation_id, "growth_owner",
+            due_date, "ACCEPT", check or closure_check())
+        return register, created["decision_id"], created["anchor"]
+
+    def test_second_cut_carries_stable_identity_and_marks_overdue_stale(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            register, decision_id, anchor = self._registered(home, "2026-09-22")
+            cut, marts = later_upstream(home)
+            second = start_cycle(cut, marts, home / ".local" / "weekly-cycles",
+                                 prior_register=register, prior_anchor=anchor)
+            report = json.loads((Path(second["destination"]) / "current-cut.json").read_text("utf-8"))
+            carried = report["carried_decisions"]
+            self.assertEqual([decision_id], [row["decision_id"] for row in carried])
+            self.assertEqual("STALE", carried[0]["status"])
+            self.assertEqual(verify_register(register)["decisions"][0]["source_hash"],
+                             carried[0]["source_hash"])
+            request = json.loads((Path(second["destination"]) / "tasks" /
+                                  "growth_analyst.request.json").read_text("utf-8"))
+            self.assertEqual(carried, request["evidence"]["carried_decisions"])
+            self.assertEqual("STALE", verify_register(register)["decisions"][0]["status"])
+            self.assertEqual("WAITING_ANALYSTS", verify_cycle(second["destination"])["status"])
+
+    def test_extension_before_cutoff_preserves_open_and_records_old_new_due_dates(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            register, decision_id, _ = self._registered(home, "2026-09-25")
+            extended = extend_decision(register, decision_id, "2026-10-05", "growth_owner",
+                                       "OWNER_EXTENDED")
+            cut, marts = later_upstream(home)
+            second = start_cycle(cut, marts, home / ".local" / "weekly-cycles",
+                                 prior_register=register, prior_anchor=extended["anchor"])
+            state = verify_register(register)
+            self.assertEqual("OPEN", state["decisions"][0]["status"])
+            self.assertEqual("2026-10-05", state["decisions"][0]["due_date"])
+            extension = next(event for event in state["events"] if event["event_type"] == "EXTEND")
+            self.assertEqual({"old_due_date": "2026-09-25", "new_due_date": "2026-10-05"},
+                             extension["closure_evidence"]["extension"])
+            self.assertEqual("OPEN", json.loads((Path(second["destination"]) /
+                "current-cut.json").read_text("utf-8"))["carried_decisions"][0]["status"])
+
+    def test_exact_later_cut_pointer_closes_and_forgery_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            register, decision_id, anchor = self._registered(home)
+            cut, marts = later_upstream(home)
+            second = start_cycle(cut, marts, home / ".local" / "weekly-cycles",
+                                 prior_register=register, prior_anchor=anchor)
+            cycle = Path(second["destination"])
+            current = json.loads((cycle / "current-cut.json").read_text("utf-8"))
+            evidence = {"cut_id": current["cut_id"],
+                "current_cut_sha256": second["current_cut_sha256"],
+                "pointer": "/metric_rows/0/value",
+                "observed_value": current["metric_rows"][0]["value"]}
+            forged = dict(evidence, current_cut_sha256="0" * 64)
+            with self.assertRaises(ValueError):
+                close_decision(register, decision_id, cycle, forged)
+            closed = close_decision(register, decision_id, cycle, evidence)
+            self.assertEqual("CLOSED", closed["status"])
+            self.assertEqual("CLOSED", verify_register(register)["decisions"][0]["status"])
+
+    def test_human_judgment_requires_explicit_local_owner_attestation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            check = {"kind": "human_judgment", "criterion": "Owner accepts the result.",
+                     "requires_later_cut": True}
+            register, decision_id, anchor = self._registered(home, check=check)
+            cut, marts = later_upstream(home)
+            second = start_cycle(cut, marts, home / ".local" / "weekly-cycles",
+                                 prior_register=register, prior_anchor=anchor)
+            cycle = Path(second["destination"])
+            current = json.loads((cycle / "current-cut.json").read_text("utf-8"))
+            evidence = {"cut_id": current["cut_id"],
+                "current_cut_sha256": second["current_cut_sha256"], "pointer": None,
+                "observed_value": None}
+            reviewed = close_decision(register, decision_id, cycle, evidence)
+            self.assertEqual("REVIEW", reviewed["status"])
+            closed = close_decision(register, decision_id, cycle, evidence,
+                {"owner_role": "growth_owner", "attested": True,
+                 "criterion": "Owner accepts the result.",
+                 "scope": "local-owner-attestation"})
+            self.assertEqual("CLOSED", closed["status"])
