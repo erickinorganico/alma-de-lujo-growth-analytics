@@ -88,10 +88,11 @@ def later_upstream(home: Path, cutoff: str = "2026-09-28T23:59:59-07:00") -> tup
         coverage["window_end"] = cutoff[:10]
     metadata_path.write_bytes(canonical_json(metadata))
     cut = build_operating_workspace(source, private_root=home / "later-operating")
-    marts = build_operating_marts(cut["destination"], home / ".local" / "later-marts",
+    mart_root = home / "later" / ".local" / "operating-marts"
+    marts = build_operating_marts(cut["destination"], mart_root,
         policy_path=Path(__file__).resolve().parents[1] / "policies" /
                     "operating-metrics-synthetic-v1.json",
-        private_root=home / ".local" / "later-marts")
+        private_root=mart_root)
     return Path(cut["destination"]), Path(marts["destination"])
 
 

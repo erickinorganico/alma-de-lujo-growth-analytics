@@ -109,6 +109,9 @@ def _role_evidence(report: dict[str, Any], role: str) -> dict[str, Any]:
         "metric_definitions": definitions, "metric_rows": metrics,
         "families": {name: report["families"][name] for name in families
                      if name in report["families"]}}
+    if "decision_register" in report:
+        evidence["decision_register"] = report["decision_register"]
+        evidence["carried_decisions"] = report["carried_decisions"]
     if len(canonical_json(evidence)) > MAX_JSON_BYTES:
         raise ValueError("role evidence exceeds byte cap")
     return evidence
@@ -284,7 +287,9 @@ def _initial_requests(report: dict[str, Any], run_id: str, roles: tuple[str, ...
 
 def start_cycle(workspace: str | Path, mart_bundle: str | Path, output_root: str | Path,
                 roles: tuple[str, ...] | list[str] | None = None, *,
-                _input_route: str = "verified_boundary") -> dict[str, Any]:
+                _input_route: str = "verified_boundary",
+                prior_register: str | Path | None = None,
+                prior_anchor: dict[str, Any] | str | Path | None = None) -> dict[str, Any]:
     """Freeze one verified canonical cut without invoking any native analyst."""
     root = _output_root(output_root)
     chosen = tuple(DEFAULT_ROLES if roles is None else roles)
@@ -296,6 +301,19 @@ def start_cycle(workspace: str | Path, mart_bundle: str | Path, output_root: str
     chosen = tuple(sorted(chosen))
     report, manifest_hash, mart_hash = _verified_report(workspace, mart_bundle)
     report["task_scope"] = list(chosen)
+    if (prior_register is None) != (prior_anchor is None):
+        raise ValueError("prior register and anchor must be supplied together")
+    decision_path = None
+    decision_anchor = None
+    if prior_register is not None:
+        from .decision_register import carry_for_report
+
+        binding = carry_for_report(prior_register, report, prior_anchor)
+        report["decision_register"] = {key: binding[key] for key in
+                                       ("version", "register_id", "prior_anchor", "anchor")}
+        report["carried_decisions"] = binding["carried_decisions"]
+        decision_path = str(Path(prior_register).resolve(strict=True))
+        decision_anchor = binding["anchor"]
     report_bytes = canonical_json(report)
     report_hash = _digest(report_bytes)
     run_id = _digest(canonical_json({"cut_id": report["cut_id"],
@@ -311,7 +329,8 @@ def start_cycle(workspace: str | Path, mart_bundle: str | Path, output_root: str
                                    "evidence_status": _role_gate(report, role)[0],
                                    "request_sha256": _digest(requests[role])} for role in chosen},
         "accepted_roles": {}, "workspace_path": str(_path(workspace, existing=True)),
-        "mart_bundle_path": str(_path(mart_bundle, existing=True))}
+        "mart_bundle_path": str(_path(mart_bundle, existing=True)),
+        "decision_register_path": decision_path, "decision_register_anchor": decision_anchor}
     event = {"sequence": 1, "previous_hash": "GENESIS", "event_type": "TASKS_PREPARED",
              "recorded_at_utc": datetime.now(timezone.utc).isoformat(),
              "checkpoint": state, "details": {"request_count": len(chosen),
@@ -393,7 +412,8 @@ def _event_state(events: list[Any], state: dict[str, Any]) -> None:
         if prior is not None:
             immutable = ("version", "cut_id", "run_id", "input_route", "current_cut_sha256",
                          "manifest_sha256", "mart_bundle_sha256", "task_bundle_sha256",
-                         "expected_roles", "workspace_path", "mart_bundle_path")
+                         "expected_roles", "workspace_path", "mart_bundle_path",
+                         "decision_register_path", "decision_register_anchor")
             if any(checkpoint.get(key) != prior.get(key) for key in immutable):
                 raise ValueError("cycle identity changed in journal")
             before, after = prior["accepted_roles"], checkpoint["accepted_roles"]
@@ -470,6 +490,22 @@ def _verified_cycle_context(cycle_dir: str | Path) -> dict[str, Any]:
     bundle, _ = _read(folder / "task-bundle.json")
     rebuilt, manifest_hash, mart_hash = _verified_report(state["workspace_path"], state["mart_bundle_path"])
     rebuilt["task_scope"] = list(state["expected_roles"])
+    if state.get("decision_register_path") is not None:
+        from .decision_register import projection_for_anchor
+
+        projection = projection_for_anchor(state["decision_register_path"],
+                                           state["decision_register_anchor"])
+        active = {"OPEN", "IN_PROGRESS", "REVIEW", "STALE"}
+        carried = [{key: row[key] for key in ("decision_id", "recommendation_id", "owner",
+            "due_date", "status", "source_hash", "packet_hash", "event_count", "terminal_hash")}
+            for row in projection["decisions"] if row["status"] in active]
+        binding = report.get("decision_register")
+        if (not isinstance(binding, dict) or binding.get("anchor") != state["decision_register_anchor"] or
+                binding.get("register_id") != projection["register_id"] or
+                report.get("carried_decisions") != carried):
+            raise ValueError("decision register binding changed")
+        rebuilt["decision_register"] = binding
+        rebuilt["carried_decisions"] = carried
     if (report != rebuilt or _digest(canonical_json(report)) != state["current_cut_sha256"] or
         manifest_hash != state["manifest_sha256"] or mart_hash != state["mart_bundle_sha256"] or
         _digest(canonical_json(bundle)) != state["task_bundle_sha256"]):
