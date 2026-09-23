@@ -257,7 +257,10 @@ class ClientSystemAcceptance(unittest.TestCase):
             for trigger in triggers:
                 self.assertIn(trigger.casefold(), content, f"Trigger {trigger} missing from process {pid}")
 
-        agent_contracts = list((ROOT / "agents").glob("*.json"))
+        # The historical manifest lists single-role files; v1 multi-role catalogs
+        # have their own contract gate and are not cards in this client manifest.
+        agent_contracts = [path for path in (ROOT / "agents").glob("*.json")
+                           if not path.name.endswith(".roles.json")]
         expected_roles = {p.stem for p in agent_contracts}
         role_ids = self.manifest["ids"]["agents"]
         self.assertEqual(len(role_ids), 7)
