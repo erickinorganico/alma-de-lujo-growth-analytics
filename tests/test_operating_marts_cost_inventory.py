@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import hashlib
 import shutil
+import csv
 import tempfile
 import unittest
 from pathlib import Path
@@ -101,6 +102,101 @@ class MartContractTests(unittest.TestCase):
 
 
 class CostMartTests(unittest.TestCase):
+    def test_cogs_partition_invariance(self) -> None:
+        from alma.operating_cost_inventory import realized_economics
+        from alma.operating_mart_contracts import bind_cut, load_policy
+
+        with tempfile.TemporaryDirectory() as tmp:
+            pack = Path(tmp) / "pack"
+            shutil.copytree(SYNTHETIC_PACK, pack)
+            metadata_file = pack / "metadata.json"
+            metadata = json.loads(metadata_file.read_text(encoding="utf-8"))
+            for source in ("sales_aggregates", "cost_versions", "cost_components", "cost_allocations"):
+                metadata["coverage"][source]["status"] = "COMPLETE"
+            metadata_file.write_text(json.dumps(metadata), encoding="utf-8")
+            sales_file = pack / "sales_aggregates.csv"
+            with sales_file.open(newline="", encoding="utf-8") as stream:
+                reader = csv.DictReader(stream)
+                fields = reader.fieldnames
+                template = next(reader)
+            rows = []
+            for day, channel, ref, cohort in (("2026-09-15", "synthetic:direct", "a", "001"),
+                                              ("2026-09-16", "synthetic:direct", "b", "002"),
+                                              ("2026-09-17", "synthetic:wholesale", "c", "003")):
+                rows.append(dict(template, sales_date=day, channel_code=channel,
+                                 delivery_cohort_id=f"synthetic:cohort-{cohort}",
+                                 delivered_units="1", returned_units="1" if ref == "a" else "0",
+                                 restocked_units="1" if ref == "a" else "0",
+                                 net_revenue_cents="100", variable_cost_cents="0",
+                                 coverage_status="COMPLETE", source_ref=f"synthetic:source:sales-{ref}"))
+            with sales_file.open("w", newline="", encoding="utf-8") as stream:
+                writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
+                writer.writeheader(); writer.writerows(rows)
+            movements_file = pack / "inventory_movements.csv"
+            with movements_file.open(newline="", encoding="utf-8") as stream:
+                reader = csv.DictReader(stream)
+                move_fields = reader.fieldnames
+                movements = list(reader)
+            sale_movement = next(row for row in movements if row["movement_type"] == "SALE_OUT")
+            sale_movement["units"] = "1"
+            for day, channel, ref in (("2026-09-16", "synthetic:direct", "b"),
+                                      ("2026-09-17", "synthetic:wholesale", "c")):
+                movements.append(dict(sale_movement, movement_id=f"synthetic:movement-sale-{ref}",
+                    event_date=day, sales_date=day, sales_channel_code=channel,
+                    source_ref=f"synthetic:source:movement-sale-{ref}"))
+            with movements_file.open("w", newline="", encoding="utf-8") as stream:
+                writer = csv.DictWriter(stream, fieldnames=move_fields, lineterminator="\n")
+                writer.writeheader(); writer.writerows(movements)
+            counts = pack / "inventory_counts.csv"
+            counts.write_text(counts.read_text(encoding="utf-8").replace(",24,2,", ",33,2,"), encoding="utf-8")
+            version = pack / "cost_versions.csv"
+            version.write_text(version.read_text(encoding="utf-8").replace(",ACTIVE,1,", ",ACTIVE,3,"), encoding="utf-8")
+            component = pack / "cost_components.csv"
+            component.write_text(component.read_text(encoding="utf-8").replace(",40000,", ",101,"), encoding="utf-8")
+            allocation = pack / "cost_allocations.csv"
+            allocation.write_text(allocation.read_text(encoding="utf-8").replace(",40000,", ",101,"), encoding="utf-8")
+            result = build_operating_workspace(pack, private_root=Path(tmp) / "cuts")
+            policy = load_policy(ROOT / "policies" / "operating-metrics-synthetic-v1.json",
+                                 as_of="2026-09-21", real_cut=False)
+            with bind_cut(result["destination"]) as cut:
+                sku = "synthetic:sku-001"
+                combined = realized_economics(cut, sku, "synthetic:direct", "2026-09-15", "2026-09-17", policy)
+                first = realized_economics(cut, sku, "synthetic:direct", "2026-09-15", "2026-09-16", policy)
+                second = realized_economics(cut, sku, "synthetic:direct", "2026-09-16", "2026-09-17", policy)
+                third = realized_economics(cut, sku, "synthetic:wholesale", "2026-09-17", "2026-09-18", policy)
+                self.assertEqual(68, combined["cogs_cents"])
+                self.assertEqual([34, 34, 33], [first["cogs_cents"], second["cogs_cents"], third["cogs_cents"]])
+                self.assertEqual(101, combined["cogs_cents"] + third["cogs_cents"])
+
+    def test_estimated_cost_propagates_to_economics(self) -> None:
+        from alma.operating_cost_inventory import project_cost, realized_economics
+        from alma.operating_mart_contracts import bind_cut, load_policy
+
+        with tempfile.TemporaryDirectory() as tmp:
+            pack = Path(tmp) / "pack"
+            shutil.copytree(SYNTHETIC_PACK, pack)
+            metadata_file = pack / "metadata.json"
+            metadata = json.loads(metadata_file.read_text(encoding="utf-8"))
+            for source in ("sales_aggregates", "cost_versions", "cost_components", "cost_allocations"):
+                metadata["coverage"][source]["status"] = "COMPLETE"
+            metadata_file.write_text(json.dumps(metadata), encoding="utf-8")
+            sales_file = pack / "sales_aggregates.csv"
+            sales_file.write_text(sales_file.read_text(encoding="utf-8").replace(",PARTIAL,", ",COMPLETE,"), encoding="utf-8")
+            component = pack / "cost_components.csv"
+            component.write_text(component.read_text(encoding="utf-8").replace(",KNOWN,", ",ESTIMATED,"), encoding="utf-8")
+            result = build_operating_workspace(pack, private_root=Path(tmp) / "cuts")
+            policy = load_policy(ROOT / "policies" / "operating-metrics-synthetic-v1.json",
+                                 as_of="2026-09-21", real_cut=False)
+            with bind_cut(result["destination"]) as cut:
+                cost = project_cost(cut, "synthetic:sku-001", "2026-09-15", policy)
+                economics = realized_economics(cut, "synthetic:sku-001", "synthetic:direct",
+                                               "2026-09-15", "2026-09-16", policy)
+                self.assertEqual("ESTIMATED", cost["status"])
+                self.assertEqual("ESTIMATED", economics["status"])
+                self.assertEqual(480000, economics["cogs_cents"])
+                self.assertEqual(240000, economics["contribution_cents"])
+                self.assertEqual("0.2", economics["ratios"]["contribution_margin"])
+
     def test_indivisible_cents_and_missing_component(self) -> None:
         from alma.operating_cost_inventory import allocate_unit_cents, evaluate_cost_version
         from alma.operating_mart_contracts import load_policy
