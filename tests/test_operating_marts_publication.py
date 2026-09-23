@@ -7,6 +7,7 @@ import json
 import shutil
 import tempfile
 import unittest
+from datetime import date, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
@@ -42,6 +43,95 @@ def coverage(pack: Path, source: str, status: str) -> None:
 
 
 class PublicationGapTests(unittest.TestCase):
+    def test_expected_cash_daily_and_minimum_remain_estimated(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            pack = home / "pack"
+            shutil.copytree(PACK, pack)
+            cash_file = pack / "cash_events.csv"
+            fields, values = rows(cash_file)
+            values.append(dict(values[0], event_id="synthetic:cash-expected-013",
+                economic_event_id="synthetic:economic-expected-013", supersedes_event_id="",
+                event_date="2026-09-21", level="EXPECTED", direction="OUTFLOW",
+                amount_cents="13", obligation_id="", payment_id="",
+                source_ref="synthetic:source:cash-expected-013"))
+            write_rows(cash_file, fields, values)
+            for source in ("cash_events", "cash_balance_evidence"):
+                coverage(pack, source, "COMPLETE")
+            cut = build_operating_workspace(pack, private_root=home / "cuts")
+            private = home / ".local" / "operating-marts"
+            result = operating_marts.build_operating_marts(cut["destination"], private,
+                policy_path=POLICY, private_root=private)
+            dest = Path(result["destination"])
+            families = json.loads((dest / "families.json").read_text(encoding="utf-8"))
+            metrics = json.loads((dest / "metric_rows.json").read_text(encoding="utf-8"))
+            self.assertEqual(1100000, families["cash"]["reconciled_close_cents"])
+            self.assertEqual((1100000, "MEASURED"), next((row["value"], row["status"])
+                for row in metrics if row["metric_id"] == "reconciled_cash_close_cents"))
+            for horizon in (56, 91):
+                details = families["cash"]["horizons"][str(horizon)]
+                self.assertEqual(-13, details["layers_cents"]["EXPECTED"])
+                self.assertEqual(1099987, details["daily_closes_cents"]["2026-09-21"])
+                self.assertEqual(1099987, details["daily_minimum_cents"])
+                for path, amount in ((f"cash.horizons.{horizon}.layers_cents.EXPECTED", -13),
+                    (f"cash.horizons.{horizon}.weekly_layers_cents.0.EXPECTED", -13),
+                    (f"cash.horizons.{horizon}.daily_closes_cents.2026-09-21", 1099987),
+                    (f"cash.horizons.{horizon}.daily_minimum_cents", 1099987)):
+                    self.assertEqual((amount, "ESTIMATED"), next((row["value"], row["status"])
+                        for row in metrics if row["dimensions"].get("family_path") == path))
+
+    def test_future_horizon_boundaries_through_intake(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            pack = home / "pack"
+            shutil.copytree(PACK, pack)
+            cash_file = pack / "cash_events.csv"
+            fields, values = rows(cash_file)
+            for level in ("COMMITTED", "EXPECTED", "SCENARIO"):
+                for offset, amount in ((55, 11), (56, 13), (90, 17), (91, 19)):
+                    tag = f"{level.lower()}-{offset}"
+                    values.append(dict(values[0], event_id=f"synthetic:cash-{tag}",
+                        economic_event_id=f"synthetic:economic-{tag}", supersedes_event_id="",
+                        event_date=(date(2026, 9, 21) + timedelta(days=offset)).isoformat(),
+                        level=level, direction="OUTFLOW", amount_cents=str(amount),
+                        obligation_id="synthetic:obligation-expense-001" if level == "COMMITTED" else "",
+                        payment_id="", source_ref=f"synthetic:source:cash-{tag}"))
+            write_rows(cash_file, fields, values)
+            for source in ("cash_events", "cash_balance_evidence"):
+                coverage(pack, source, "COMPLETE")
+            cut = build_operating_workspace(pack, private_root=home / "cuts")
+            private = home / ".local" / "operating-marts"
+            result = operating_marts.build_operating_marts(cut["destination"], private,
+                policy_path=POLICY, private_root=private)
+            dest = Path(result["destination"])
+            families = json.loads((dest / "families.json").read_text(encoding="utf-8"))
+            metrics = json.loads((dest / "metric_rows.json").read_text(encoding="utf-8"))
+            self.assertEqual(1100000, families["cash"]["reconciled_close_cents"])
+            self.assertEqual(-900000, families["cash"]["actual_movements_cents"])
+            for horizon, total, minimum in ((56, -11, 1099978), (91, -41, 1099918)):
+                details = families["cash"]["horizons"][str(horizon)]
+                for layer in ("COMMITTED", "EXPECTED"):
+                    self.assertEqual(total, details["layers_cents"][layer])
+                self.assertEqual(total, details["scenario_cents"])
+                self.assertEqual(minimum, details["daily_minimum_cents"])
+                for layer in ("COMMITTED", "EXPECTED", "SCENARIO"):
+                    row = next(row for row in metrics if row["metric_id"] == "cash_layer_cents"
+                        and row["dimensions"].get("horizon") == str(horizon)
+                        and row["dimensions"].get("layer") == layer)
+                    self.assertEqual((total, "ESTIMATED"), (row["value"], row["status"]))
+                    self.assertIn(f"synthetic:source:cash-{layer.lower()}-55", row["source_refs"])
+                    self.assertNotIn(f"synthetic:source:cash-{layer.lower()}-91", row["source_refs"])
+                    path = f"cash.horizons.{horizon}." + (f"layers_cents.{layer}" if layer !=
+                        "SCENARIO" else "scenario_cents")
+                    semantic = next(item for item in metrics if item["dimensions"].get("family_path") == path)
+                    self.assertEqual((row["value"], row["status"], row["source_refs"]),
+                                     (semantic["value"], semantic["status"], semantic["source_refs"]))
+                self.assertNotIn((date(2026, 9, 21) + timedelta(days=56)).isoformat(),
+                                 details["daily_closes_cents"] if horizon == 56 else {})
+            self.assertEqual(-11, families["cash"]["horizons"]["56"]["weekly_layers_cents"]["7"]["EXPECTED"])
+            self.assertEqual(-13, families["cash"]["horizons"]["91"]["weekly_layers_cents"]["8"]["EXPECTED"])
+            self.assertEqual(-17, families["cash"]["horizons"]["91"]["weekly_layers_cents"]["12"]["EXPECTED"])
+
     def test_missing_cash_retains_balances_and_publishes_unknown(self) -> None:
         for event_status in ("MISSING", "ZERO"):
             with self.subTest(event_status=event_status), tempfile.TemporaryDirectory() as tmp:

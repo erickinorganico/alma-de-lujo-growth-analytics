@@ -67,6 +67,33 @@ class ObligationTests(unittest.TestCase):
 
 
 class CashTests(unittest.TestCase):
+    def test_cash_forecast_status_is_dependency_specific(self) -> None:
+        from alma.operating_finance_marts import project_cash
+        from alma.operating_mart_contracts import load_policy
+
+        policy = load_policy(ROOT / "policies" / "operating-metrics-synthetic-v1.json",
+                             as_of="2026-09-21", real_cut=False)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            pack = root / "pack"
+            shutil.copytree(PACK, pack)
+            metadata_path = pack / "metadata.json"
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            for source in ("cash_events", "cash_balance_evidence"):
+                metadata["coverage"][source]["status"] = "COMPLETE"
+            metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
+            result = build_operating_workspace(pack, private_root=root / "cuts")
+            with bind_cut(result["destination"]) as cut:
+                cash = project_cash(cut, "2026-09-21", policy)
+                self.assertEqual((1100000, "MEASURED"),
+                                 (cash["reconciled_close_cents"], cash["close_status"]))
+                self.assertEqual("ESTIMATED", cash["forecast_status"])
+                self.assertEqual(1100000, cash["horizons"][56]["daily_minimum_cents"])
+                cut.input_class = "PRIVATE"
+                review = project_cash(cut, "2026-09-21", policy)
+                self.assertEqual("REVIEW", review["forecast_status"])
+                self.assertIsNone(review["horizons"][56]["daily_minimum_cents"])
+
     def test_observed_inflow_without_payable_is_valid(self) -> None:
         from alma.operating_finance_marts import active_cash_events
 
