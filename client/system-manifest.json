@@ -3,7 +3,7 @@
   "assets": [
     {
       "path": "client/SISTEMA_ANALITICO.html",
-      "sha256": "dd157b9b86b13b081c047327b1856e31069eb2634918930418b054dade436454"
+      "sha256": "cab2c1ea46d2049d16a2b55f44ba205021fd910f0a6831adbce0360584f97cd7"
     }
   ],
   "base_sources": [
@@ -1053,11 +1053,11 @@
       "evidence_refs": [
         {
           "path": "client/operating-data/cost_versions.csv",
-          "sha256": "e00e418664ca66305322523642b48b0a6d377180d13967ed2d014407b793a581"
+          "sha256": "32731059693bd365454fef68fceaa7f9ba1843c70305b95507771333dcc07139"
         },
         {
           "path": "client/operating-data/cost_components.csv",
-          "sha256": "51116e362ea3718f2feb6c90a7227582401ee43ae48a9fb26e64e89182ce6464"
+          "sha256": "f9ce813aad07ce93ac28826646556dc40d24003ba28cb3ae1e3e83a1a88fa371"
         }
       ],
       "scope": "extensión local sintética v0.3.0",
@@ -1070,11 +1070,11 @@
       "evidence_refs": [
         {
           "path": "client/operating-data/purchase_orders_ops.csv",
-          "sha256": "a87572c0d99953e0d9239478a14f030da731d2b3c1313036cfe83a8041bad344"
+          "sha256": "a12b6cccd5078efca30725e816900235032c469455438e879837aa55eb1ebae7"
         },
         {
           "path": "client/operating-data/purchase_receipts_ops.csv",
-          "sha256": "7e39da5a2dce1a5f1a45c9e9bce84d51163af27ed65340114af07cb458991bf5"
+          "sha256": "0a3ce3ceed15853194568012cbfa0908455c9cf4a6c112b6aecfdbac88f07643"
         }
       ],
       "scope": "extensión local sintética v0.3.0",
@@ -1087,11 +1087,11 @@
       "evidence_refs": [
         {
           "path": "client/operating-data/obligations.csv",
-          "sha256": "7b51a188bcaa49a397c8e2a4f2a4098e6ab537de7a5a28ecb45956fd46edc03b"
+          "sha256": "a6d9799ad26b1e27e7ab6821c0a4374a96e17921b2d93d93f3ecc057ca24ba30"
         },
         {
           "path": "client/operating-data/obligation_payments.csv",
-          "sha256": "d7e5fe709dc26e4cee05d35d5b5bb0b435c53d71baa60e575f18f9c6075e66d8"
+          "sha256": "bcb7a5eb14f2704a24d865f491eda6826f4b05660725d58bae94b871ad6ec068"
         }
       ],
       "scope": "extensión local sintética v0.3.0",
@@ -1104,7 +1104,7 @@
       "evidence_refs": [
         {
           "path": "client/operating-data/cash_scenario_events.csv",
-          "sha256": "0fc2eedc10929993fb557281e093236c74fd45f08f69bc486ea6ee4b6231dbdb"
+          "sha256": "2af2267050197b2cb0f8fd5b87911e15a18d69c1004975b3f65670acf1ecd9d5"
         }
       ],
       "scope": "extensión local sintética v0.3.0",
@@ -3578,17 +3578,17 @@
     "agents/market_researcher.json": "50f416faeb91e3ee662a4cd624fcc8b1da91530aa98fbde17ba1c1425ec32364",
     "agents/merchandiser.json": "66c671d2d37820e71d31ab727cd10c4115dc847bc5d4821615adea6349a98c24",
     "agents/returns_analyst.json": "5653f9bd473293c1e08695022f85af5b790a947cc1f8db9a3ae945e4398de373",
-    "client/COSTOS_Y_OPERACION.html": "347d2d92c2b059ed246c9cb9f591dfca64bab666f0fa9c0ee04ef38b58b97967",
-    "client/costs-operations-manifest.json": "4e58c59a5df0a42203ad385ee6afafd52bb81eb1fc4c2026fce566768d837475",
+    "client/COSTOS_Y_OPERACION.html": "599a8c6398dda799ec40403e0b00df80cbf0349643c4e8e07f7765580162c79d",
+    "client/costs-operations-manifest.json": "e955313459f149445cd48bc3ea207e5a9b65c44fdfbbbb4c66b2a59512a9b62b",
     "client/example-input.json": "d99f2ab0c7cc3bbb6da1291ba7977d89003e224795479b5b3e2958d84b40c06a",
-    "client/operating-data/cash_scenario_events.csv": "0fc2eedc10929993fb557281e093236c74fd45f08f69bc486ea6ee4b6231dbdb",
-    "client/operating-data/cost_allocations.csv": "ce35ddf4cd273c0598017f69f20e2f9b1b3ec2e17d267d379b13065e62963848",
-    "client/operating-data/cost_components.csv": "51116e362ea3718f2feb6c90a7227582401ee43ae48a9fb26e64e89182ce6464",
-    "client/operating-data/cost_versions.csv": "e00e418664ca66305322523642b48b0a6d377180d13967ed2d014407b793a581",
-    "client/operating-data/obligation_payments.csv": "d7e5fe709dc26e4cee05d35d5b5bb0b435c53d71baa60e575f18f9c6075e66d8",
-    "client/operating-data/obligations.csv": "7b51a188bcaa49a397c8e2a4f2a4098e6ab537de7a5a28ecb45956fd46edc03b",
-    "client/operating-data/purchase_orders_ops.csv": "a87572c0d99953e0d9239478a14f030da731d2b3c1313036cfe83a8041bad344",
-    "client/operating-data/purchase_receipts_ops.csv": "7e39da5a2dce1a5f1a45c9e9bce84d51163af27ed65340114af07cb458991bf5",
+    "client/operating-data/cash_scenario_events.csv": "2af2267050197b2cb0f8fd5b87911e15a18d69c1004975b3f65670acf1ecd9d5",
+    "client/operating-data/cost_allocations.csv": "174d1dec9da9928af1c352f0447a62e9bd424fceb687927d6787569b8d16ffa8",
+    "client/operating-data/cost_components.csv": "f9ce813aad07ce93ac28826646556dc40d24003ba28cb3ae1e3e83a1a88fa371",
+    "client/operating-data/cost_versions.csv": "32731059693bd365454fef68fceaa7f9ba1843c70305b95507771333dcc07139",
+    "client/operating-data/obligation_payments.csv": "bcb7a5eb14f2704a24d865f491eda6826f4b05660725d58bae94b871ad6ec068",
+    "client/operating-data/obligations.csv": "a6d9799ad26b1e27e7ab6821c0a4374a96e17921b2d93d93f3ecc057ca24ba30",
+    "client/operating-data/purchase_orders_ops.csv": "a12b6cccd5078efca30725e816900235032c469455438e879837aa55eb1ebae7",
+    "client/operating-data/purchase_receipts_ops.csv": "0a3ce3ceed15853194568012cbfa0908455c9cf4a6c112b6aecfdbac88f07643",
     "evidence/v0.2/agents/model-provenance.json": "b6b93428540ee2da6ed1fa0f6f465bddc416cdab54684fc52433619a276edf2a",
     "evidence/v0.2/agents/task-runs.json": "db934a467908d87b7905c61580fbd768660a007d459142b80967376dc8f6a8bd",
     "evidence/v0.2/workspace/lineage.json": "fa092643bd96f46c6df3a709d7e706db03f4d21a7aea65c6c8fa1d521a6cd780",

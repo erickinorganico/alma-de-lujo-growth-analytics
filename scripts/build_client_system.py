@@ -643,8 +643,8 @@ def main() -> None:
         print("PASS: HTML and manifest match all source evidence")
     else:
         OUT.mkdir(exist_ok=True)
-        html_path.write_text(body, encoding="utf-8")
-        manifest_path.write_text(manifest_text, encoding="utf-8")
+        html_path.write_text(body, encoding="utf-8", newline="\n")
+        manifest_path.write_text(manifest_text, encoding="utf-8", newline="\n")
         print(f"Wrote {rel(html_path)} and {rel(manifest_path)}")
     print(json.dumps(manifest["sections"], ensure_ascii=False, sort_keys=True))
 

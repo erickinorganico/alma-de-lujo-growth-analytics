@@ -47,7 +47,7 @@
         "SYN-COST-02",
         "SYN-COST-03"
       ],
-      "sha256": "e00e418664ca66305322523642b48b0a6d377180d13967ed2d014407b793a581"
+      "sha256": "32731059693bd365454fef68fceaa7f9ba1843c70305b95507771333dcc07139"
     },
     {
       "name": "cost_components",
@@ -86,7 +86,7 @@
         "SYN-EST-06",
         "SYN-EST-07"
       ],
-      "sha256": "51116e362ea3718f2feb6c90a7227582401ee43ae48a9fb26e64e89182ce6464"
+      "sha256": "f9ce813aad07ce93ac28826646556dc40d24003ba28cb3ae1e3e83a1a88fa371"
     },
     {
       "name": "cost_allocations",
@@ -114,7 +114,7 @@
         "SYN-ALLOC-01",
         "SYN-ALLOC-02"
       ],
-      "sha256": "ce35ddf4cd273c0598017f69f20e2f9b1b3ec2e17d267d379b13065e62963848"
+      "sha256": "174d1dec9da9928af1c352f0447a62e9bd424fceb687927d6787569b8d16ffa8"
     },
     {
       "name": "purchase_orders_ops",
@@ -144,7 +144,7 @@
         "SYN-PO-01",
         "SYN-PO-02"
       ],
-      "sha256": "a87572c0d99953e0d9239478a14f030da731d2b3c1313036cfe83a8041bad344"
+      "sha256": "a12b6cccd5078efca30725e816900235032c469455438e879837aa55eb1ebae7"
     },
     {
       "name": "purchase_receipts_ops",
@@ -173,7 +173,7 @@
       "evidence_refs": [
         "SYN-RCV-01"
       ],
-      "sha256": "7e39da5a2dce1a5f1a45c9e9bce84d51163af27ed65340114af07cb458991bf5"
+      "sha256": "0a3ce3ceed15853194568012cbfa0908455c9cf4a6c112b6aecfdbac88f07643"
     },
     {
       "name": "obligations",
@@ -203,7 +203,7 @@
         "SYN-OBL-01",
         "SYN-OBL-02"
       ],
-      "sha256": "7b51a188bcaa49a397c8e2a4f2a4098e6ab537de7a5a28ecb45956fd46edc03b"
+      "sha256": "a6d9799ad26b1e27e7ab6821c0a4374a96e17921b2d93d93f3ecc057ca24ba30"
     },
     {
       "name": "obligation_payments",
@@ -228,7 +228,7 @@
       "evidence_refs": [
         "SYN-PAY-01"
       ],
-      "sha256": "d7e5fe709dc26e4cee05d35d5b5bb0b435c53d71baa60e575f18f9c6075e66d8"
+      "sha256": "bcb7a5eb14f2704a24d865f491eda6826f4b05660725d58bae94b871ad6ec068"
     },
     {
       "name": "cash_scenario_events",
@@ -260,7 +260,7 @@
         "OBL-002",
         "PO-OPS-002"
       ],
-      "sha256": "0fc2eedc10929993fb557281e093236c74fd45f08f69bc486ea6ee4b6231dbdb"
+      "sha256": "2af2267050197b2cb0f8fd5b87911e15a18d69c1004975b3f65670acf1ecd9d5"
     }
   ],
   "metrics": {
@@ -718,11 +718,11 @@
       "evidence_refs": [
         {
           "path": "client/operating-data/cost_versions.csv",
-          "sha256": "e00e418664ca66305322523642b48b0a6d377180d13967ed2d014407b793a581"
+          "sha256": "32731059693bd365454fef68fceaa7f9ba1843c70305b95507771333dcc07139"
         },
         {
           "path": "client/operating-data/cost_components.csv",
-          "sha256": "51116e362ea3718f2feb6c90a7227582401ee43ae48a9fb26e64e89182ce6464"
+          "sha256": "f9ce813aad07ce93ac28826646556dc40d24003ba28cb3ae1e3e83a1a88fa371"
         }
       ]
     },
@@ -734,11 +734,11 @@
       "evidence_refs": [
         {
           "path": "client/operating-data/purchase_orders_ops.csv",
-          "sha256": "a87572c0d99953e0d9239478a14f030da731d2b3c1313036cfe83a8041bad344"
+          "sha256": "a12b6cccd5078efca30725e816900235032c469455438e879837aa55eb1ebae7"
         },
         {
           "path": "client/operating-data/purchase_receipts_ops.csv",
-          "sha256": "7e39da5a2dce1a5f1a45c9e9bce84d51163af27ed65340114af07cb458991bf5"
+          "sha256": "0a3ce3ceed15853194568012cbfa0908455c9cf4a6c112b6aecfdbac88f07643"
         }
       ]
     },
@@ -750,11 +750,11 @@
       "evidence_refs": [
         {
           "path": "client/operating-data/obligations.csv",
-          "sha256": "7b51a188bcaa49a397c8e2a4f2a4098e6ab537de7a5a28ecb45956fd46edc03b"
+          "sha256": "a6d9799ad26b1e27e7ab6821c0a4374a96e17921b2d93d93f3ecc057ca24ba30"
         },
         {
           "path": "client/operating-data/obligation_payments.csv",
-          "sha256": "d7e5fe709dc26e4cee05d35d5b5bb0b435c53d71baa60e575f18f9c6075e66d8"
+          "sha256": "bcb7a5eb14f2704a24d865f491eda6826f4b05660725d58bae94b871ad6ec068"
         }
       ]
     },
@@ -766,7 +766,7 @@
       "evidence_refs": [
         {
           "path": "client/operating-data/cash_scenario_events.csv",
-          "sha256": "0fc2eedc10929993fb557281e093236c74fd45f08f69bc486ea6ee4b6231dbdb"
+          "sha256": "2af2267050197b2cb0f8fd5b87911e15a18d69c1004975b3f65670acf1ecd9d5"
         }
       ]
     },

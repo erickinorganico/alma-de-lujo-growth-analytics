@@ -98,7 +98,7 @@ def run(output):
             content=json.dumps(report,ensure_ascii=False,indent=2).encode('utf-8')
             evidence=ROOT/'evidence/v0.3';evidence.mkdir(parents=True,exist_ok=True)
             (evidence/'client-example.json').write_bytes(content)
-            (ROOT/'client/EJEMPLO_RESUELTO.html').write_text(render(report,sha256(content).hexdigest()),encoding='utf-8')
+            (ROOT/'client/EJEMPLO_RESUELTO.html').write_text(render(report,sha256(content).hexdigest()),encoding='utf-8',newline='\n')
     files=['Alma_de_Lujo_EJEMPLO.xlsx','Alma_de_Lujo_PLANTILLA.xlsx','EMPIEZA_AQUI.md','GUIA_SEMANAL.html','REGISTRO_DECISIONES.csv','EJEMPLO_RESUELTO.html','DECISIONES_DEL_EJEMPLO.md','FUENTES_METRICAS_AGENTES.md']
     for name in files:
         if not (ROOT/'client'/name).is_file():raise FileNotFoundError(name)
@@ -121,7 +121,7 @@ def run(output):
         actual_hash=sha256(path.read_bytes()).hexdigest()
         if actual_hash!=expected_hash:raise ValueError('Offline system evidence hash drift: '+relative)
     manifest['offline_system']={'entrypoint':'sistema/client/SISTEMA_ANALITICO.html','files':len(system_files),'sha256':dict(sorted(system_files.items()))}
-    (ROOT/'client/release-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    (ROOT/'client/release-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
     output=Path(output).resolve()
     if not output.is_relative_to((ROOT/'.local/releases').resolve()):
         raise ValueError('Release ZIP output must stay under .local/releases.')

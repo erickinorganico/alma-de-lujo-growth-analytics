@@ -78,7 +78,7 @@ CONTRACT = {
 
 def write_csv(path, rows):
     with path.open('w', encoding='utf-8-sig', newline='') as handle:
-        writer=csv.DictWriter(handle,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
+        writer=csv.DictWriter(handle,fieldnames=list(rows[0]),lineterminator='\n');writer.writeheader();writer.writerows(rows)
 
 
 def evidence_ref(relative_path):
@@ -206,8 +206,8 @@ def main():
       dict(capability='React/Supabase transactional application',status='CONFLICT_OUT_OF_SCOPE',canonical_status='CONFLICT',evidence='current repository contract is analytical CLI/files/reports',evidence_refs=[evidence_ref('AGENTS.md'),evidence_ref('specs/COSTS-OPERATIONS-v3.md')]),
       dict(capability='real bank, tax and customer integrations',status='PENDING_AUTHORIZED_DATA',canonical_status='MISSING',evidence='synthetic fixture only',evidence_refs=[evidence_ref('specs/COSTS-OPERATIONS-v3.md')])
     ],source='candidate handoff integrated against current repository; React/Supabase claims not implemented',limitations=['Synthetic fixture only','Tax basis pending; no net margin','Weekly scenario does not reconcile a real bank','No autonomous purchase, payment, price change or publication'])
-    manifest_path=ROOT/'client/costs-operations-manifest.json';manifest_path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2,default=str)+'\n',encoding='utf-8')
-    (ROOT/'client/COSTOS_Y_OPERACION.html').write_text(render(manifest),encoding='utf-8')
+    manifest_path=ROOT/'client/costs-operations-manifest.json';manifest_path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2,default=str)+'\n',encoding='utf-8',newline='\n')
+    (ROOT/'client/COSTOS_Y_OPERACION.html').write_text(render(manifest),encoding='utf-8',newline='\n')
     print(json.dumps({'status':'ok','sources':len(sources),'metrics':len(manifest['metric_definitions']),'manifest':str(manifest_path),'html':'client/COSTOS_Y_OPERACION.html'},ensure_ascii=False))
 
 
