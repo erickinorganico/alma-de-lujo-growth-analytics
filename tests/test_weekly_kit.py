@@ -18,6 +18,7 @@ from alma.operating_contracts import canonical_json
 from alma.weekly import WeeklyContractError, continue_weekly_run, create_weekly_run
 from alma.weekly_cycle import verify_cycle
 from scripts.build_operating_workbooks import build_operating_workbooks
+from scripts.package_client_v1 import PackageContractError, audit_client_zip, build_client_kit
 from tests.test_decision_register import MODELS, closure_check
 from tests.test_native_agents_v1 import receipt_for, response_for, trace_for
 
@@ -216,6 +217,96 @@ class WeeklyCommandTests(unittest.TestCase):
             for relative, raw in immutable.items():
                 if relative != "run-index.json":
                     self.assertEqual(raw, (run / relative).read_bytes())
+
+
+def safe_guides(root: Path) -> Path:
+    guides = root / "guides"
+    guides.mkdir()
+    (guides / "EMPIEZA_AQUI.md").write_text(
+        "# Empieza aquí\n\nKit informativo y sintético. "
+        "[Guía](GUIA_SEMANAL.html) · [Portal](../PORTAL/index.html) · "
+        "[Plantilla](../FUENTES/operating-v1-blank.xlsx)\n",
+        encoding="utf-8",
+    )
+    (guides / "GUIA_SEMANAL.html").write_text(
+        '<!doctype html><html lang="es"><body><h1>Guía semanal</h1>'
+        '<p>Este ZIP no contiene el runtime de analistas y no ejecuta cortes privados.</p>'
+        '<a href="../PORTAL/index.html">Abrir demo</a>'
+        '<a href="../DICCIONARIO/DICCIONARIO-v1.json">Diccionario</a>'
+        '</body></html>',
+        encoding="utf-8",
+    )
+    return guides
+
+
+class ClientKitTests(unittest.TestCase):
+    def test_reproducible_zip_has_complete_hashes_links_policies_and_upstream_oracles(self) -> None:
+        with weekly_home() as home:
+            guides = safe_guides(home)
+            first = build_client_kit(home / "kit-one.zip", guide_root=guides)
+            second = build_client_kit(home / "kit-two.zip", guide_root=guides)
+            self.assertEqual(first["sha256"], second["sha256"])
+            self.assertEqual("PASS", first["status"])
+            audited = audit_client_zip(home / "kit-one.zip")
+            self.assertEqual("PASS", audited["status"])
+            extracted = home / "extracted"
+            with zipfile.ZipFile(home / "kit-one.zip") as bundle:
+                bundle.extractall(extracted)
+                names = set(bundle.namelist())
+            manifest = json.loads((extracted / "PACKAGE-MANIFEST.json").read_text("utf-8"))
+            self.assertEqual(names - {"PACKAGE-MANIFEST.json"}, set(manifest["members"]))
+            for relative, item in manifest["members"].items():
+                self.assertEqual(item["sha256"], hashlib.sha256(
+                    (extracted / relative).read_bytes()).hexdigest())
+            self.assertEqual(hashlib.sha256((ROOT / "evidence" / "v1.0" / "workbooks" /
+                "workbook-pack-parity.json").read_bytes()).hexdigest(),
+                manifest["verification_inputs"]["workbook_pack_parity_sha256"])
+            self.assertEqual(hashlib.sha256((ROOT / "evidence" / "v1.0" / "portal" /
+                "portal-visual-inspection.json").read_bytes()).hexdigest(),
+                manifest["verification_inputs"]["portal_visual_inspection_sha256"])
+            self.assertIn("POLITICAS/operating-metrics-review-template-v1.json", names)
+            self.assertIn("POLITICAS/operating-metrics-synthetic-v1.json", names)
+            self.assertIn("PORTAL/index.html", names)
+            self.assertNotIn("synthetic-current", "\n".join(names).lower())
+            self.assertFalse(any(name.startswith(("alma/", "scripts/", "tasks/")) for name in names))
+
+    def test_audit_rejects_private_native_runtime_credentials_traversal_and_policy_authority(self) -> None:
+        with weekly_home() as home:
+            source = home / "safe.zip"
+            build_client_kit(source, guide_root=safe_guides(home))
+
+            def mutate(name: str, member: str, content: bytes) -> Path:
+                target = home / f"{name}.zip"
+                with zipfile.ZipFile(source) as original, zipfile.ZipFile(target, "w") as changed:
+                    for info in original.infolist():
+                        if info.filename != member:
+                            changed.writestr(info, original.read(info.filename))
+                    changed.writestr(member, content)
+                return target
+
+            cases = {
+                "runtime": ("alma/weekly.py", b"este ZIP ejecuta un corte privado"),
+                "native": ("tasks/growth_analyst.response.json", b"{}"),
+                "private": ("private/current-cut.json", b"{}"),
+                "credential": (".env", b"TOKEN=secret"),
+                "traversal": ("../escape.txt", b"unsafe"),
+                "broken_link": ("INICIO/GUIA_SEMANAL.html", b'<a href="missing.html">x</a>'),
+            }
+            for name, (member, content) in cases.items():
+                with self.subTest(name=name), self.assertRaises(PackageContractError):
+                    audit_client_zip(mutate(name, member, content))
+
+            with zipfile.ZipFile(source) as bundle:
+                policy = json.loads(bundle.read(
+                    "POLITICAS/operating-metrics-review-template-v1.json"))
+            policy["status"] = "APPROVED"
+            policy["owner_approval_ref"] = "owner:private"
+            policy["sha256"] = hashlib.sha256(canonical_json(
+                {key: value for key, value in policy.items() if key != "sha256"}
+            )).hexdigest()
+            with self.assertRaises(PackageContractError):
+                audit_client_zip(mutate("approved", "POLITICAS/operating-metrics-review-template-v1.json",
+                                        canonical_json(policy)))
 
 
 if __name__ == "__main__":
