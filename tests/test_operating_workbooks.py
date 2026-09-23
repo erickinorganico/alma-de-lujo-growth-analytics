@@ -54,8 +54,9 @@ class OperatingWorkbookGenerationTests(unittest.TestCase):
                         )
                         self.assertEqual("A7", sheet.freeze_panes)
                         self.assertEqual("landscape", sheet.page_setup.orientation)
-                        self.assertEqual("1:6", sheet.print_title_rows)
-                        self.assertEqual("1", str(sheet.page_setup.fitToWidth))
+                        self.assertEqual("$1:$6", sheet.print_title_rows)
+                        self.assertTrue(sheet.sheet_properties.pageSetUpPr.fitToPage)
+                        self.assertIn(sheet.page_setup.fitToWidth, {None, 1})
                         self.assertTrue(sheet.auto_filter.ref.startswith("A6:"))
                         self.assertTrue(sheet.data_validations.count >= 1)
                         rows = [
