@@ -1,0 +1,4 @@
+# Optional analyst tools and workbook build/verification. Core v0.2 is stdlib.
+openpyxl==3.1.5
+et-xmlfile==2.0.0
+XlsxWriter==3.2.9

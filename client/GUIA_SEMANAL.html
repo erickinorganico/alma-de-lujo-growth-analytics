@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guía semanal sin conexión para el kit Excel Alma de Lujo v0.3">
+  <title>Alma de Lujo · Guía semanal v0.3</title>
+  <style>
+    :root {
+      --ink: #26302b;
+      --muted: #64736b;
+      --paper: #fbfaf6;
+      --card: #ffffff;
+      --line: #d9e0da;
+      --sage: #dce9dc;
+      --sage-deep: #43604d;
+      --coral: #f1d4c7;
+      --coral-deep: #8e4c3b;
+      --gold: #f1e4b8;
+      --shadow: 0 14px 35px rgba(38, 48, 43, .08);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font: 16px/1.6 "Aptos", "Segoe UI", system-ui, sans-serif;
+    }
+    a { color: var(--sage-deep); font-weight: 700; }
+    a:focus-visible, summary:focus-visible { outline: 3px solid #a6c7b0; outline-offset: 3px; }
+    .wrap { width: min(1120px, calc(100% - 36px)); margin: 0 auto; }
+    .hero { padding: 54px 0 34px; }
+    .eyebrow { color: var(--sage-deep); font-size: .78rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    h1, h2, h3 { line-height: 1.15; margin: 0 0 .65rem; letter-spacing: -.025em; }
+    h1 { max-width: 760px; font-size: clamp(2.4rem, 6vw, 5.3rem); font-weight: 750; }
+    h2 { font-size: clamp(1.65rem, 3vw, 2.4rem); }
+    h3 { font-size: 1.12rem; }
+    p { margin: .4rem 0 1rem; }
+    .lede { max-width: 710px; color: var(--muted); font-size: 1.1rem; }
+    .notice { margin-top: 24px; padding: 15px 18px; border-left: 5px solid var(--coral-deep); background: var(--coral); border-radius: 7px; }
+    .notice strong { color: var(--coral-deep); }
+    .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .button { display: inline-block; padding: 10px 15px; color: var(--ink); background: var(--sage); border: 1px solid #bdd0bf; border-radius: 999px; text-decoration: none; }
+    .button.secondary { background: var(--card); border-color: var(--line); }
+    nav { position: sticky; top: 0; z-index: 3; background: rgba(251, 250, 246, .94); border-block: 1px solid var(--line); backdrop-filter: blur(8px); }
+    nav .wrap { display: flex; gap: 17px; overflow-x: auto; padding: 10px 0; }
+    nav a { white-space: nowrap; font-size: .9rem; text-decoration: none; }
+    section { padding: 42px 0; }
+    .section-intro { max-width: 730px; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .card { padding: 22px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
+    .card.sage { background: var(--sage); border-color: #c9dccb; }
+    .card.gold { background: var(--gold); border-color: #e5d59a; }
+    .card p:last-child, .card ul:last-child { margin-bottom: 0; }
+    .step { position: relative; padding-left: 58px; }
+    .step-num { position: absolute; left: 0; top: 0; display: grid; width: 38px; height: 38px; place-items: center; background: var(--sage-deep); color: white; border-radius: 50%; font-weight: 800; }
+    .step:not(:last-child)::after { content: ""; position: absolute; left: 18px; top: 42px; height: calc(100% - 16px); border-left: 2px dotted #afc7b3; }
+    .steps { display: grid; gap: 24px; }
+    ul { padding-left: 1.2rem; }
+    li + li { margin-top: .35rem; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+    table { width: 100%; border-collapse: collapse; min-width: 650px; }
+    th, td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { background: #edf3ed; color: var(--sage-deep); font-size: .84rem; letter-spacing: .03em; text-transform: uppercase; }
+    tr:last-child td { border-bottom: 0; }
+    code { padding: .12em .35em; color: #33443a; background: #edf1ed; border-radius: 4px; font-size: .92em; }
+    .tag { display: inline-block; padding: 2px 8px; margin: 2px 2px 2px 0; border-radius: 999px; font-size: .78rem; font-weight: 800; letter-spacing: .02em; }
+    .tag.review { color: #765615; background: var(--gold); }
+    .tag.unknown { color: #713b2c; background: var(--coral); }
+    .tag.ready { color: #245238; background: var(--sage); }
+    .formula { margin: 16px 0; padding: 17px; overflow-x: auto; color: #314637; background: #eef4ee; border: 1px solid #d0dfd2; border-radius: 9px; font: .95rem/1.65 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .checklist { display: grid; gap: 10px; }
+    .check { display: flex; gap: 10px; align-items: flex-start; padding: 11px 13px; background: var(--card); border: 1px solid var(--line); border-radius: 9px; }
+    .check::before { content: "✓"; flex: 0 0 auto; color: var(--sage-deep); font-weight: 900; }
+    footer { padding: 34px 0 60px; color: var(--muted); border-top: 1px solid var(--line); }
+    .small { color: var(--muted); font-size: .9rem; }
+    @media (max-width: 820px) {
+      .grid, .grid.two { grid-template-columns: 1fr; }
+      .hero { padding-top: 36px; }
+    }
+    @media print {
+      body { background: white; font-size: 11pt; }
+      nav, .links { display: none; }
+      .hero { padding: 20px 0; }
+      section { padding: 20px 0; break-inside: avoid; }
+      .card, .table-wrap { box-shadow: none; }
+      .step, .card, .formula, tr { break-inside: avoid; }
+      h2, h3 { break-after: avoid; }
+      a { color: black; }
+      a[href]::after { content: " (" attr(href) ")"; font-size: .8em; font-weight: 400; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero wrap" id="inicio">
+    <div class="eyebrow">Alma de Lujo · cliente · v0.3</div>
+    <h1>Tu próxima compra, con números claros.</h1>
+    <p class="lede">Este libro de guía acompaña al kit Excel. En 15 a 25 minutos puedes declarar un corte, cargar cuatro tablas de datos agregados, revisar las excepciones y dejar una decisión con responsable y fecha.</p>
+    <div class="notice"><strong>Datos propios o ejemplo sintético:</strong> el libro de ejemplo sólo explica el funcionamiento. No presenta ventas, caja, precios, inventario ni demanda reales de Alma de Lujo.</div>
+    <div class="links">
+      <a class="button" href="Alma_de_Lujo_PLANTILLA.xlsx">Abrir libro plantilla</a>
+      <a class="button secondary" href="Alma_de_Lujo_EJEMPLO.xlsx">Ver ejemplo sintético</a>
+    </div>
+  </header>
+
+  <nav aria-label="Secciones de la guía">
+    <div class="wrap">
+      <a href="#primera-semana">Primera semana</a>
+      <a href="#tablas">Tablas</a>
+      <a href="#decidir">Decidir</a>
+      <a href="#ejemplo">Ejemplo</a>
+      <a href="#pendiente">Pendiente</a>
+      <a href="#limites">Límites</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="wrap" id="primera-semana">
+      <div class="eyebrow">01 · primera semana</div>
+      <h2>Haz sólo lo necesario para el primer corte</h2>
+      <p class="section-intro">El libro está diseñado para entrar datos propios sin comprender la arquitectura técnica. Las cuatro tablas de entrada son simples; las dos hojas de salida condensan el trabajo.</p>
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">1</span>
+          <h3>Declara fecha y ventana en <code>CONFIG</code> · 2 min</h3>
+          <p>En <code>CONFIG</code> completa <code>B5</code> <strong>Fecha de corte</strong>, <code>B6</code> <strong>Días de observación</strong>, <code>B7</code> <strong>Días de seguridad</strong>, <code>B8</code> <strong>Margen contribución objetivo</strong>, <code>B9</code> <strong>Caja inicial</strong>, <code>B10</code> <strong>Piso protegido</strong>, <code>B11</code> <strong>Tope de compras elegido para el escenario</strong>, <code>B12</code> <strong>Política revisada</strong>, <code>B13</code> <strong>Plan de caja completo</strong> y <code>B14</code> <strong>Ventas completas</strong>. Usa <code>SI</code> sólo con fuentes completas y revisadas. Un vacío significa <span class="tag unknown">DESCONOCIDO</span>; cero es un cero observado.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">2</span>
+          <h3>Completa <code>CATALOGO</code> · 3 a 5 min</h3>
+          <p>Agrega un SKU por color y talla cuando corresponda. Usa sólo <code>ACTIVO</code>, <code>PRELANZAMIENTO</code> o <code>PAUSADO</code>. Separa costos actuales de históricos. El precio calculado es un escenario de gestión, no un cálculo fiscal ni una predicción de demanda.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">3</span>
+          <h3>Agrega <code>VENTAS</code> por fecha y SKU · 3 a 5 min</h3>
+          <p>Registra entregadas, devueltas, reingresadas, ingreso neto, costo variable real si existe y una referencia breve. Una devolución no prueba un reingreso; el reembolso de efectivo se registra aparte en <code>CAJA</code>.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">4</span>
+          <h3>Agrega el conteo en <code>STOCK</code> · 3 a 5 min</h3>
+          <p>Usa un conteo correcto al corte. Existencia disponible es existencia física menos reservado. Tránsito es futuro, no disponible. Sólo marca tránsito confirmado <code>SI</code> cuando la fuente está completa; una ETA vencida queda en revisión.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">5</span>
+          <h3>Registra <code>CAJA</code> · 2 a 4 min</h3>
+          <p>Incluye los movimientos existentes o planeados con fecha, dirección, categoría, importe y referencia. La compra que estás evaluando desde <code>STOCK</code> no se copia otra vez a <code>CAJA</code>: se duplicaría. El plan mira 91 cierres diarios; no observa intradía.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">6</span>
+          <h3>Lee las salidas y deja la próxima acción · 2 a 4 min</h3>
+          <p>Empieza por <code>DECISIONES</code> y luego revisa <code>FLUJO_13_SEMANAS</code>. Una propuesta pendiente puede quedarse abierta, pedir la fuente faltante, cambiar de responsable o recibir una fecha de revisión. El libro no compra, paga, reembolsa ni envía mensajes.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap" id="tablas">
+      <div class="eyebrow">02 · entrada y salida</div>
+      <h2>Cuatro tablas de entrada, dos salidas</h2>
+      <p class="section-intro">No necesitas importar el almacén de 30 tablas. El cliente trabaja con este corte ligero por SKU y día.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Hoja</th><th>Qué entra</th><th>Qué debes cuidar</th></tr></thead>
+          <tbody>
+            <tr><td><code>CONFIG</code></td><td>Fecha de corte, ventanas, políticas, caja inicial, piso y tope.</td><td><code>SI</code> sólo con fuente completa; política provisional visible.</td></tr>
+            <tr><td><code>CATALOGO</code></td><td>SKU, producto, color, talla, estado, precio y costos unitarios.</td><td>Separar costo actual de histórico; no mezclar estados de lifecycle.</td></tr>
+            <tr><td><code>VENTAS</code></td><td>Una fila por fecha + SKU: entregadas, devueltas, reingresadas, ingreso y costo variable.</td><td>Ventana completa; devolución y reingreso son columnas distintas.</td></tr>
+            <tr><td><code>STOCK</code></td><td>Conteo, reservado, tránsito, ETA, disponibilidad y escenario de compra.</td><td>No contar tránsito como existencia; no duplicar orden abierta y tránsito.</td></tr>
+            <tr><td><code>CAJA</code></td><td>Entradas y salidas fechadas que ya existen o están planeadas.</td><td>No copiar aquí una compra elegida en <code>STOCK</code>; reembolso es salida.</td></tr>
+            <tr><td><code>DECISIONES</code></td><td colspan="2">Salida: propuesta o excepción con métrica, guardrail, responsable, fecha de revisión y cierre.</td></tr>
+            <tr><td><code>FLUJO_13_SEMANAS</code></td><td colspan="2">Salida: 91 cierres diarios agrupados en 13 semanas, con mínimo diario y alertas de piso.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="wrap" id="decidir">
+      <div class="eyebrow">03 · decisión</div>
+      <h2>Una recomendación no está completa sin su dueño</h2>
+      <div class="grid two">
+        <article class="card sage">
+          <h3>La fila de decisión debe responder</h3>
+          <ul>
+            <li>¿Qué acción concreta se considera?</li>
+            <li>¿Qué fuente y periodo la respaldan?</li>
+            <li>¿Cuál es la métrica principal?</li>
+            <li>¿Cuál es el guardrail?</li>
+            <li>¿Quién es responsable?</li>
+            <li>¿Cuándo se vuelve a revisar?</li>
+            <li>¿Qué condición permite cerrarla?</li>
+          </ul>
+        </article>
+        <article class="card gold">
+          <h3>Si aparece “pendiente”</h3>
+          <p>La persona responsable puede completar la fuente, corregir el conteo, confirmar una ETA, revisar el costo, mantener la propuesta abierta o asignar una fecha. También puede marcarla <span class="tag review">REVISAR</span> o <span class="tag unknown">DESCONOCIDO</span> con un motivo.</p>
+          <p>Una sugerencia pendiente no es una orden. No uses este libro para realizar compras, pagos, reembolsos, publicaciones o cambios de campaña.</p>
+        </article>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <h3>Semáforo de lectura</h3>
+        <p><span class="tag ready">LISTO PARA RESPONSABLE</span> La evidencia y los supuestos requeridos están presentes; la persona responsable aún decide.</p>
+        <p><span class="tag review">REVISAR</span> Hay una excepción o supuesto que debe evaluar alguien.</p>
+        <p><span class="tag unknown">DESCONOCIDO</span> Falta información necesaria. Nunca significa cero.</p>
+      </div>
+    </section>
+
+    <section class="wrap" id="ejemplo">
+      <div class="eyebrow">04 · microejemplo</div>
+      <h2>Calcetín rosa talla M: cálculo de escenario</h2>
+      <p class="section-intro">La siguiente cifra es inventada para explicar el método. No es un dato observado de la marca.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Dato</th><th>Valor</th></tr></thead>
+          <tbody>
+            <tr><td>SKU y estado</td><td><code>SOCK-ROSA-M</code> · ACTIVO</td></tr>
+            <tr><td>Precio de lista</td><td>$520.00</td></tr>
+            <tr><td>Fecha de corte / días disponibles</td><td>2026-09-21 / 14 días</td></tr>
+            <tr><td>Costo variable unitario</td><td>$180.00 compra + $20.00 flete + $10.00 empaque + $0.00 otro variable = $210.00</td></tr>
+            <tr><td>Comisión y margen objetivo</td><td>5% y 50%</td></tr>
+            <tr><td>Ventas de 14 días</td><td>14 entregadas, 1 devuelta, 1 reingresada</td></tr>
+            <tr><td>Conteo y tránsito</td><td>12 físicas, 2 reservadas, 3 en tránsito confirmado; ETA 2026-09-28, elegible con plazo de 14 días</td></tr>
+            <tr><td>Política</td><td>14 días de entrega, 7 de seguridad, MOQ 12, múltiplo 6</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="formula">Consumo = (14 entregadas - 1 reingresada) / 14 = 0.9286<br>Disponible = 12 - 2 = 10<br>Tránsito elegible: 2026-09-21 &lt; 2026-09-28 &lt;= 2026-10-05 (corte + plazo 14)<br>Horizonte de consumo = 14 + 7 = 21 días<br>Necesidad = ceil(0.9286 × 21 - 10 - 3) = ceil(6.5) = 7<br>MOQ/múltiplo → propuesta condicional = 12 unidades<br>Precio objetivo = 210 / (1 - 0.05 - 0.50) = $466.67 redondeado hacia arriba</div>
+      <p>El libro propone 12 unidades bajo estas condiciones. No crea una orden. Si se pagan 12 unidades a $200.00 cada una en la fecha elegida, el escenario de caja carga $2,400.00 en esa fecha dentro de los 91 días; esa propuesta no se vuelve a escribir como otra salida en <code>CAJA</code>.</p>
+    </section>
+
+    <section class="wrap" id="pendiente">
+      <div class="eyebrow">05 · controles humanos</div>
+      <h2>Antes de cerrar la semana</h2>
+      <div class="checklist">
+        <div class="check">Confirmé la fecha de corte y que la ventana de ventas está completa o marcada como parcial.</div>
+        <div class="check">Usé un conteo de inventario propio y correcto; no inventé ventas para llenar huecos.</div>
+        <div class="check">Dejé tránsito, ETA y confirmación separados de la existencia disponible.</div>
+        <div class="check">No mezclé una compra elegida en <code>STOCK</code> con una salida duplicada en <code>CAJA</code>.</div>
+        <div class="check">Separé devolución, reingreso y reembolso, y conservé el dato desconocido cuando no existe vínculo.</div>
+        <div class="check">Cada decisión tiene responsable, métrica, guardrail, fecha de revisión y regla de cierre.</div>
+      </div>
+    </section>
+
+    <section class="wrap" id="limites">
+      <div class="eyebrow">06 · límites</div>
+      <h2>Úsalo como herramienta de gestión</h2>
+      <div class="grid">
+        <article class="card"><h3>Capacidad</h3><p>Hasta 100 SKU, 1,000 agregados de ventas por fecha y SKU, 250 entradas existentes de caja y 13 semanas. No dejes que un exceso de filas se recorte silenciosamente.</p></article>
+        <article class="card"><h3>Privacidad</h3><p>Usa sólo SKU, fechas, cantidades, importes y referencias cortas no personales. No pegues nombres, correos, teléfonos, direcciones ni credenciales.</p></article>
+        <article class="card"><h3>Sin ejecución externa</h3><p>El Excel ayuda a preparar una conversación y documentar una decisión. No compra, paga, reembolsa, publica, contacta clientes ni cambia campañas.</p></article>
+      </div>
+      <p class="small" style="margin-top:22px">Guía estática: funciona sin servidor ni conexión. El libro de ejemplo es sintético; el libro vacío espera los datos y las decisiones del cliente.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <strong>Alma de Lujo · kit cliente v0.3</strong>
+      <p>Un corte claro, una evidencia visible y una próxima acción revisable.</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,3 @@
+﻿allocation_id,component_id,sku,method,allocated_cents,remainder_cents,source_ref,synthetic
+CA-001,CC-002,PIL-NEGRO,units,80000,0,SYN-ALLOC-01,1
+CA-002,CC-010,TOP-NEGRO-S,units,40000,0,SYN-ALLOC-02,1

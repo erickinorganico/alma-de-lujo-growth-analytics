@@ -1,0 +1,98 @@
+{
+  "version": "3.0",
+  "currency": "MXN",
+  "amount_unit": "pesos",
+  "first_row": 6,
+  "last_sku_row": 105,
+  "last_sales_row": 1005,
+  "last_cash_row": 255,
+  "parameters": {
+    "as_of": "B5",
+    "observation_days": "B6",
+    "safety_days": "B7",
+    "target_margin": "B8",
+    "opening_cash": "B9",
+    "cash_floor": "B10",
+    "purchase_cap": "B11",
+    "policy_reviewed": "B12",
+    "cash_plan_complete": "B13",
+    "sales_complete": "B14"
+  },
+  "sheets": {
+    "CATALOGO": [
+      "sku",
+      "product",
+      "category",
+      "color",
+      "size",
+      "status",
+      "list_price",
+      "purchase_cost",
+      "inbound_freight",
+      "packaging",
+      "commission_rate",
+      "other_variable",
+      "lead_days",
+      "moq",
+      "pack_multiple"
+    ],
+    "VENTAS": [
+      "date",
+      "sku",
+      "delivered_units",
+      "returned_units",
+      "restocked_units",
+      "net_revenue",
+      "variable_cost",
+      "source_ref"
+    ],
+    "STOCK": [
+      "sku",
+      "count_date",
+      "on_hand",
+      "reserved",
+      "in_transit",
+      "eta",
+      "transit_confirmed",
+      "available_days",
+      "planned_qty",
+      "payment_date"
+    ],
+    "CAJA": [
+      "date",
+      "direction",
+      "category",
+      "amount",
+      "source_ref"
+    ]
+  },
+  "enums": {
+    "product_status": [
+      "ACTIVO",
+      "PRELANZAMIENTO",
+      "PAUSADO"
+    ],
+    "yes_no": [
+      "SI",
+      "NO"
+    ],
+    "cash_direction": [
+      "ENTRADA",
+      "SALIDA"
+    ]
+  },
+  "rules": {
+    "capacity": "100 SKUs, 1000 date-SKU sales aggregates, 250 existing cash-plan entries, 13 forecast weeks",
+    "privacy": "No customer names, email, phone, addresses or credentials. Only SKU/date aggregates and short non-personal document references.",
+    "blank": "Blank is unknown, not zero. Numeric zero is explicit. A blank cash plan is not complete unless the operator declares completeness.",
+    "sales_grain": "One row per date and SKU; net revenue after commercial discounts/credits; variable cost is an optional actual management-cost input, never inferred from today's catalog.",
+    "returns": "Returned units and physically restocked units are separate; restocked <= returned. Prior-period returns may exceed today's deliveries. Refund cash is recorded separately.",
+    "replenishment": "Only active valid SKU, count at cutoff, fully observed availability window, complete sales and reviewed provisional policy. Daily consumption=max(0, delivered-restocked)/observation_days. Available=on_hand-reserved. Eligible transit requires SI and cutoff<eta<=cutoff+lead. Late transit requires review. Target horizon=lead+safety. Need=max(0,ceil(rate*horizon-available-eligible_transit)). Positive need rounds up max(need,moq) to pack_multiple. This is a conditional quantity proposal, never an order.",
+    "price": "Variable unit cost=purchase+inbound+packaging+other; target price=cost/(1-commission-target_margin) rounded UP to cent. Nonpositive denominator is infeasible. No demand elasticity, tax or causal sales claim.",
+    "purchase_cash": "The user chooses planned quantity and payment date. Evaluate full purchase+inbound cost as one cash outflow on that date, next day through day91. No packaging cost added to inventory purchase. Do not also enter those proposals in CAJA. Existing supplier obligations belong in CAJA.",
+    "budget": "Available budget before proposals=max(0,min(purchase_cap,min(base DAILY closing cash and opening cash)-cash_floor)). Evaluate 91 daily closings and aggregate into13 weeks. Show weekly closing and minimum daily closing cash before/after proposals. Flag any daily floor breach; no autoallocation. Intraday timing is not observed and this is not a bank reconciliation.",
+    "external_execution": "PROHIBITED",
+    "numeric_bounds": "Dates 1900-01-01 through 2100-12-31; abs money <=1000000000 pesos with at most 2 decimal places; abs unit counts <=1000000; lead_days and safety_days <=3650; observation_days 1..365. Invalid pasted values block the affected analysis."
+  },
+  "marker_cell": "CONFIG!B3"
+}

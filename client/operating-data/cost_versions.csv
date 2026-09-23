@@ -1,0 +1,4 @@
+﻿cost_version_id,sku,effective_date,lifecycle,quantity_basis,public_price_cents,selling_fee_bps,tax_basis,source_ref,synthetic
+CV-PIL-NEGRO-1,PIL-NEGRO,2026-09-01,approved,100,29900,800,PENDIENTE,SYN-COST-01,1
+CV-PIL-LILA-1,PIL-LILA,2026-09-01,draft,100,29900,800,PENDIENTE,SYN-COST-02,1
+CV-TOP-NEGRO-S-1,TOP-NEGRO-S,2026-09-01,approved,20,89900,800,PENDIENTE,SYN-COST-03,1

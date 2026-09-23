@@ -1,0 +1,6 @@
+﻿scenario_id,event_id,event_date,level,direction,amount_cents,concept,source_ref,synthetic
+BASE,CE-000,2026-09-22,ASSUMPTION_UNRECONCILED,OPENING,8000000,Saldo inicial sintético; no conciliado con banco,SYN-OPENING-01,1
+BASE,CE-001,2026-09-22,EXPECTED,IN,1500000,Cobros agregados sintéticos,SYN-CASH-01,1
+BASE,CE-002,2026-09-28,COMMITTED,OUT,80000,Saldo obligación OBL-001,OBL-001,1
+BASE,CE-003,2026-10-01,COMMITTED,OUT,160000,Obligación OBL-002,OBL-002,1
+REINVESTIR_TOP,CE-004,2026-10-05,SCENARIO,OUT,420000,Compra propuesta; no autorizada,PO-OPS-002,1

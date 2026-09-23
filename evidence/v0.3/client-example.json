@@ -1,0 +1,1183 @@
+{
+  "version": "3.0",
+  "status": "REVISAR",
+  "as_of": "2026-09-21",
+  "issues": [],
+  "skus": [
+    {
+      "sku": "PIL-NEGRO",
+      "product": "Calcetín Pilates Grip",
+      "color": "Negro",
+      "size": "Unitalla",
+      "status": "PROPUESTA_CONDICIONAL",
+      "reasons": [],
+      "delivered_units": 60.0,
+      "restocked_units": 4.0,
+      "net_revenue_mxn": 16445.0,
+      "variable_cost_mxn": 5824.0,
+      "contribution_mxn": 10621.0,
+      "unit_variable_cost_mxn": 104.0,
+      "unit_contribution_mxn": 171.08,
+      "unit_margin": 0.5721739130434783,
+      "target_price_mxn": 221.28,
+      "available_units": 10.0,
+      "eligible_transit_units": 0.0,
+      "daily_consumption": 2.0,
+      "cover_days": 5.0,
+      "suggested_qty": 36,
+      "planned_qty": 36.0,
+      "planned_purchase_mxn": 3240.0
+    },
+    {
+      "sku": "PIL-ARENA",
+      "product": "Calcetín Pilates Grip",
+      "color": "Arena",
+      "size": "Unitalla",
+      "status": "SIN_REPOSICION",
+      "reasons": [],
+      "delivered_units": 28.0,
+      "restocked_units": 0.0,
+      "net_revenue_mxn": 8073.0,
+      "variable_cost_mxn": 2912.0,
+      "contribution_mxn": 5161.0,
+      "unit_variable_cost_mxn": 104.0,
+      "unit_contribution_mxn": 171.08,
+      "unit_margin": 0.5721739130434783,
+      "target_price_mxn": 221.28,
+      "available_units": 60.0,
+      "eligible_transit_units": 0.0,
+      "daily_consumption": 1.0,
+      "cover_days": 60.0,
+      "suggested_qty": 0,
+      "planned_qty": 0.0,
+      "planned_purchase_mxn": 0.0
+    },
+    {
+      "sku": "PIL-ROSA",
+      "product": "Calcetín Pilates Grip",
+      "color": "Rosa",
+      "size": "Unitalla",
+      "status": "REVISAR",
+      "reasons": [
+        "PRODUCTO_NO_ACTIVO"
+      ],
+      "delivered_units": 0.0,
+      "restocked_units": 0.0,
+      "net_revenue_mxn": 0.0,
+      "variable_cost_mxn": 0.0,
+      "contribution_mxn": 0.0,
+      "unit_variable_cost_mxn": 104.0,
+      "unit_contribution_mxn": 171.08,
+      "unit_margin": 0.5721739130434783,
+      "target_price_mxn": 221.28,
+      "available_units": 0.0,
+      "eligible_transit_units": 0.0,
+      "daily_consumption": 0.0,
+      "cover_days": null,
+      "suggested_qty": null,
+      "planned_qty": 0.0,
+      "planned_purchase_mxn": 0.0
+    },
+    {
+      "sku": "PIL-LILA",
+      "product": "Calcetín Pilates Grip",
+      "color": "Lila",
+      "size": "Unitalla",
+      "status": "REVISAR",
+      "reasons": [
+        "DATOS_FALTANTES"
+      ],
+      "delivered_units": 35.0,
+      "restocked_units": 1.0,
+      "net_revenue_mxn": 9867.0,
+      "variable_cost_mxn": null,
+      "contribution_mxn": null,
+      "unit_variable_cost_mxn": null,
+      "unit_contribution_mxn": null,
+      "unit_margin": null,
+      "target_price_mxn": null,
+      "available_units": 7.0,
+      "eligible_transit_units": 0.0,
+      "daily_consumption": 1.2142857142857142,
+      "cover_days": 5.764705882352941,
+      "suggested_qty": null,
+      "planned_qty": 0.0,
+      "planned_purchase_mxn": 0.0
+    },
+    {
+      "sku": "PIL-VERDE",
+      "product": "Calcetín Pilates Grip",
+      "color": "Verde salvia",
+      "size": "Unitalla",
+      "status": "REVISAR",
+      "reasons": [
+        "DISPONIBILIDAD_NO_OBSERVADA_COMPLETA"
+      ],
+      "delivered_units": 42.0,
+      "restocked_units": 1.0,
+      "net_revenue_mxn": 11960.0,
+      "variable_cost_mxn": 4264.0,
+      "contribution_mxn": 7696.0,
+      "unit_variable_cost_mxn": 104.0,
+      "unit_contribution_mxn": 171.08,
+      "unit_margin": 0.5721739130434783,
+      "target_price_mxn": 221.28,
+      "available_units": 8.0,
+      "eligible_transit_units": 0.0,
+      "daily_consumption": 1.4642857142857142,
+      "cover_days": 5.463414634146342,
+      "suggested_qty": null,
+      "planned_qty": 0.0,
+      "planned_purchase_mxn": 0.0
+    },
+    {
+      "sku": "PIL-AZUL",
+      "product": "Calcetín Pilates Grip",
+      "color": "Azul noche",
+      "size": "Unitalla",
+      "status": "REVISAR",
+      "reasons": [
+        "TRANSITO_FUERA_DEL_PLAZO"
+      ],
+      "delivered_units": 32.0,
+      "restocked_units": 1.0,
+      "net_revenue_mxn": 9269.0,
+      "variable_cost_mxn": 3224.0,
+      "contribution_mxn": 6045.0,
+      "unit_variable_cost_mxn": 104.0,
+      "unit_contribution_mxn": 171.08,
+      "unit_margin": 0.5721739130434783,
+      "target_price_mxn": 221.28,
+      "available_units": 6.0,
+      "eligible_transit_units": 0.0,
+      "daily_consumption": 1.1071428571428572,
+      "cover_days": 5.419354838709677,
+      "suggested_qty": null,
+      "planned_qty": 0.0,
+      "planned_purchase_mxn": 0.0
+    },
+    {
+      "sku": "PIL-VINO",
+      "product": "Calcetín Pilates Grip",
+      "color": "Vino",
+      "size": "Unitalla",
+      "status": "REVISAR",
+      "reasons": [
+        "TRANSITO_NO_CONFIRMADO"
+      ],
+      "delivered_units": 30.0,
+      "restocked_units": 0.0,
+      "net_revenue_mxn": 8671.0,
+      "variable_cost_mxn": 3120.0,
+      "contribution_mxn": 5551.0,
+      "unit_variable_cost_mxn": 104.0,
+      "unit_contribution_mxn": 171.08,
+      "unit_margin": 0.5721739130434783,
+      "target_price_mxn": 221.28,
+      "available_units": 6.0,
+      "eligible_transit_units": 0.0,
+      "daily_consumption": 1.0714285714285714,
+      "cover_days": 5.6,
+      "suggested_qty": null,
+      "planned_qty": 0.0,
+      "planned_purchase_mxn": 0.0
+    },
+    {
+      "sku": "PIL-GRIS",
+      "product": "Calcetín Pilates Grip",
+      "color": "Gris",
+      "size": "Unitalla",
+      "status": "PROPUESTA_CONDICIONAL",
+      "reasons": [],
+      "delivered_units": 42.0,
+      "restocked_units": 2.0,
+      "net_revenue_mxn": 11661.0,
+      "variable_cost_mxn": 4160.0,
+      "contribution_mxn": 7501.0,
+      "unit_variable_cost_mxn": 104.0,
+      "unit_contribution_mxn": 171.08,
+      "unit_margin": 0.5721739130434783,
+      "target_price_mxn": 221.28,
+      "available_units": 10.0,
+      "eligible_transit_units": 12.0,
+      "daily_consumption": 1.4285714285714286,
+      "cover_days": 7.0,
+      "suggested_qty": 12,
+      "planned_qty": 0.0,
+      "planned_purchase_mxn": 0.0
+    },
+    {
+      "sku": "TOP-NEGRO-S",
+      "product": "Top deportivo Aura",
+      "color": "Negro",
+      "size": "S",
+      "status": "PROPUESTA_CONDICIONAL",
+      "reasons": [],
+      "delivered_units": 12.0,
+      "restocked_units": 1.0,
+      "net_revenue_mxn": 9889.0,
+      "variable_cost_mxn": 4180.0,
+      "contribution_mxn": 5709.0,
+      "unit_variable_cost_mxn": 380.0,
+      "unit_contribution_mxn": 447.08,
+      "unit_margin": 0.49730812013348163,
+      "target_price_mxn": 808.52,
+      "available_units": 8.0,
+      "eligible_transit_units": 0.0,
+      "daily_consumption": 0.39285714285714285,
+      "cover_days": 20.363636363636363,
+      "suggested_qty": 12,
+      "planned_qty": 60.0,
+      "planned_purchase_mxn": 21000.0
+    },
+    {
+      "sku": "LEG-NEGRO-M",
+      "product": "Legging Esencia",
+      "color": "Negro",
+      "size": "M",
+      "status": "REVISAR",
+      "reasons": [
+        "PRODUCTO_NO_ACTIVO",
+        "ACTUALIZAR_CONTEO"
+      ],
+      "delivered_units": 8.0,
+      "restocked_units": 1.0,
+      "net_revenue_mxn": 9093.0,
+      "variable_cost_mxn": 3710.0,
+      "contribution_mxn": 5383.0,
+      "unit_variable_cost_mxn": 530.0,
+      "unit_contribution_mxn": 665.08,
+      "unit_margin": 0.5119938414164742,
+      "target_price_mxn": 1127.66,
+      "available_units": 18.0,
+      "eligible_transit_units": 0.0,
+      "daily_consumption": 0.25,
+      "cover_days": 72.0,
+      "suggested_qty": null,
+      "planned_qty": 0.0,
+      "planned_purchase_mxn": 0.0
+    }
+  ],
+  "cash_weeks": [
+    {
+      "week": 1,
+      "start": "2026-09-22",
+      "end": "2026-09-28",
+      "in_mxn": 15000.0,
+      "out_existing_mxn": 18000.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 77000.0,
+      "planned_closing_mxn": null,
+      "min_daily_base_mxn": 77000.0,
+      "min_daily_after_mxn": null,
+      "below_floor": null
+    },
+    {
+      "week": 2,
+      "start": "2026-09-29",
+      "end": "2026-10-05",
+      "in_mxn": 12000.0,
+      "out_existing_mxn": 14000.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 75000.0,
+      "planned_closing_mxn": null,
+      "min_daily_base_mxn": 75000.0,
+      "min_daily_after_mxn": null,
+      "below_floor": null
+    },
+    {
+      "week": 3,
+      "start": "2026-10-06",
+      "end": "2026-10-12",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 6000.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 69000.0,
+      "planned_closing_mxn": null,
+      "min_daily_base_mxn": 69000.0,
+      "min_daily_after_mxn": null,
+      "below_floor": null
+    },
+    {
+      "week": 4,
+      "start": "2026-10-13",
+      "end": "2026-10-19",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 69000.0,
+      "planned_closing_mxn": null,
+      "min_daily_base_mxn": 69000.0,
+      "min_daily_after_mxn": null,
+      "below_floor": null
+    },
+    {
+      "week": 5,
+      "start": "2026-10-20",
+      "end": "2026-10-26",
+      "in_mxn": 9000.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 78000.0,
+      "planned_closing_mxn": null,
+      "min_daily_base_mxn": 69000.0,
+      "min_daily_after_mxn": null,
+      "below_floor": null
+    },
+    {
+      "week": 6,
+      "start": "2026-10-27",
+      "end": "2026-11-02",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 11000.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null,
+      "min_daily_base_mxn": 67000.0,
+      "min_daily_after_mxn": null,
+      "below_floor": null
+    },
+    {
+      "week": 7,
+      "start": "2026-11-03",
+      "end": "2026-11-09",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null,
+      "min_daily_base_mxn": 67000.0,
+      "min_daily_after_mxn": null,
+      "below_floor": null
+    },
+    {
+      "week": 8,
+      "start": "2026-11-10",
+      "end": "2026-11-16",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 8000.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null,
+      "min_daily_base_mxn": 59000.0,
+      "min_daily_after_mxn": null,
+      "below_floor": null
+    },
+    {
+      "week": 9,
+      "start": "2026-11-17",
+      "end": "2026-11-23",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null,
+      "min_daily_base_mxn": 59000.0,
+      "min_daily_after_mxn": null,
+      "below_floor": null
+    },
+    {
+      "week": 10,
+      "start": "2026-11-24",
+      "end": "2026-11-30",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null,
+      "min_daily_base_mxn": 59000.0,
+      "min_daily_after_mxn": null,
+      "below_floor": null
+    },
+    {
+      "week": 11,
+      "start": "2026-12-01",
+      "end": "2026-12-07",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null,
+      "min_daily_base_mxn": 59000.0,
+      "min_daily_after_mxn": null,
+      "below_floor": null
+    },
+    {
+      "week": 12,
+      "start": "2026-12-08",
+      "end": "2026-12-14",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 2000.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null,
+      "min_daily_base_mxn": 57000.0,
+      "min_daily_after_mxn": null,
+      "below_floor": null
+    },
+    {
+      "week": 13,
+      "start": "2026-12-15",
+      "end": "2026-12-21",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null,
+      "min_daily_base_mxn": 57000.0,
+      "min_daily_after_mxn": null,
+      "below_floor": null
+    }
+  ],
+  "cash_days": [
+    {
+      "date": "2026-09-22",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 80000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-09-23",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 80000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-09-24",
+      "in_mxn": 15000.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 95000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-09-25",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 95000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-09-26",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 18000.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 77000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-09-27",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 77000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-09-28",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 77000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-09-29",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 77000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-09-30",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 77000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-01",
+      "in_mxn": 12000.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 89000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-02",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 89000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-03",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 89000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-04",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 14000.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 75000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-05",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 75000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-06",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 75000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-07",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 75000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-08",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 75000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-09",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 75000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-10",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 75000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-11",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 6000.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 69000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-12",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 69000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-13",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 69000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-14",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 69000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-15",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 69000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-16",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 69000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-17",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 69000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-18",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 69000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-19",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 69000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-20",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 69000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-21",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 69000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-22",
+      "in_mxn": 9000.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 78000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-23",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 78000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-24",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 78000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-25",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 78000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-26",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 78000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-27",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 78000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-28",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 78000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-29",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 11000.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-30",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-10-31",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-01",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-02",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-03",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-04",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-05",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-06",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-07",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-08",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-09",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-10",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-11",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-12",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-13",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 67000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-14",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 8000.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-15",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-16",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-17",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-18",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-19",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-20",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-21",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-22",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-23",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-24",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-25",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-26",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-27",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-28",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-29",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-11-30",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-01",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-02",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-03",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-04",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-05",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-06",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-07",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 59000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-08",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 2000.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-09",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-10",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-11",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-12",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-13",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-14",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-15",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-16",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-17",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-18",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-19",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-20",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null
+    },
+    {
+      "date": "2026-12-21",
+      "in_mxn": 0.0,
+      "out_existing_mxn": 0.0,
+      "planned_purchases_mxn": null,
+      "base_closing_mxn": 57000.0,
+      "planned_closing_mxn": null
+    }
+  ],
+  "budget": {
+    "status": "DATOS_PENDIENTES",
+    "available_before_proposals_mxn": 17000.0,
+    "planned_purchase_mxn": null,
+    "min_daily_cash_after_mxn": null,
+    "cash_floor_mxn": 40000.0
+  },
+  "external_execution": "PROHIBITED",
+  "metadata": {
+    "contract_version": "3.0",
+    "source_sha256": "628c91e681fe24c2b0575f51ec8d227930d44a210719f5a7aef3b5d46cadd329",
+    "workbook_marker": "EJEMPLO_SINTETICO",
+    "private": true,
+    "synthetic": true
+  },
+  "limits": [
+    "Propuestas condicionales; no son Ã³rdenes ni autorizaciones.",
+    "Caja por cierres diarios: puede haber faltantes dentro del dÃ­a.",
+    "Costos histÃ³ricos opcionales no se sustituyen por costos actuales del catÃ¡logo.",
+    "La demanda observada y el precio objetivo no prueban preferencia ni elasticidad."
+  ]
+}

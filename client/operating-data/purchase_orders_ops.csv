@@ -1,0 +1,3 @@
+﻿purchase_order_id,supplier_ref,sku,ordered_qty,agreed_unit_cents,order_date,promised_date,commercial_status,source_ref,synthetic
+PO-OPS-001,SUP-SYN-01,PIL-NEGRO,20,9000,2026-09-10,2026-09-18,AUTHORIZED_SYNTHETIC,SYN-PO-01,1
+PO-OPS-002,SUP-SYN-02,TOP-NEGRO-S,12,35000,2026-09-18,2026-10-10,PROPOSED_SCENARIO,SYN-PO-02,1

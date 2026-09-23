@@ -1,0 +1,3824 @@
+{
+  "as_of": "2026-09-21",
+  "assets": [
+    {
+      "path": "client/SISTEMA_ANALITICO.html",
+      "sha256": "cab2c1ea46d2049d16a2b55f44ba205021fd910f0a6831adbce0360584f97cd7"
+    }
+  ],
+  "base_sources": [
+    {
+      "decision_use": "channel_performance → lead-to-delivery, weekly-growth-review",
+      "domain": "Growth",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/campaigns.csv",
+          "sha256": "08b4086ce01aa2a0043c00a56a3001d8e2879263ecd68b93f2411b6e2b3ef85f"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "name",
+        "channel",
+        "objective",
+        "start_date",
+        "end_date"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 4,
+      "synthetic": true,
+      "table": "campaigns"
+    },
+    {
+      "decision_use": "Fuente contextual del snapshot; sin JOIN directo en los marts publicados",
+      "domain": "Growth",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/content_assets.csv",
+          "sha256": "17637b1d968c31300c74df4723ab503f4036212e17e11b0fca3e19cba349e72b"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "campaign_id",
+        "format",
+        "theme",
+        "published_date",
+        "variant_id"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 4,
+      "synthetic": true,
+      "table": "content_assets"
+    },
+    {
+      "decision_use": "sales_daily → channel_performance → reconciliation → lead-to-delivery, weekly-growth-review",
+      "domain": "Customer and commerce",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/credit_notes.csv",
+          "sha256": "1bf4b35130fe4d7f03833ac215c5cf9cf77aa69b30f0c6c9759d62e119810244"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "order_item_id",
+        "date",
+        "amount_cents",
+        "reason"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 61,
+      "synthetic": true,
+      "table": "credit_notes"
+    },
+    {
+      "decision_use": "Fuente contextual del snapshot; sin JOIN directo en los marts publicados",
+      "domain": "Customer and commerce",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/customers.csv",
+          "sha256": "1783300f5b45a36876d4b6e6de0d7e973a6e7b39bd9d292f2e9cc1904d27ae2a"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "acquired_date"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 400,
+      "synthetic": true,
+      "table": "customers"
+    },
+    {
+      "decision_use": "cash_daily → reconciliation → return-to-refund",
+      "domain": "Finance / expenses",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/expense_payments.csv",
+          "sha256": "92d5508975202fc30938b3356a60b5d6be464828ec4e8c5a1bea0f392ebe6f48"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "expense_id",
+        "date",
+        "amount_cents"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 26,
+      "synthetic": true,
+      "table": "expense_payments"
+    },
+    {
+      "decision_use": "finance_monthly → finance-close, weekly-growth-review",
+      "domain": "Finance / expenses",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/expenses.csv",
+          "sha256": "2aeed57cc6ce39277e8af048c3980da521c6bc51427e758ecc8ed38dfc7d6b12"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "date",
+        "category",
+        "amount_cents",
+        "paid_cents",
+        "variable"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 26,
+      "synthetic": true,
+      "table": "expenses"
+    },
+    {
+      "decision_use": "experiment_results → market-to-experiment, weekly-growth-review",
+      "domain": "Experiments",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/experiment_assignments.csv",
+          "sha256": "cf15c971dce1915895ef478bc979a94a7ada3d2d271bfeb0327cceb302235cec"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "experiment_id",
+        "customer_id",
+        "arm",
+        "assigned_date"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 67,
+      "synthetic": true,
+      "table": "experiment_assignments"
+    },
+    {
+      "decision_use": "experiment_results → market-to-experiment, weekly-growth-review",
+      "domain": "Experiments",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/experiment_outcomes.csv",
+          "sha256": "3142aa7310ac3a581f2179657845573b737c06ec4d746f661d9ae88ab0024664"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "assignment_id",
+        "date",
+        "converted",
+        "net_revenue_cents",
+        "contribution_cents",
+        "returned"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 67,
+      "synthetic": true,
+      "table": "experiment_outcomes"
+    },
+    {
+      "decision_use": "experiment_results → market-to-experiment, weekly-growth-review",
+      "domain": "Experiments",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/experiments.csv",
+          "sha256": "5563c510da86dde21f166cff6fff160060633149fb1dbebde87ecb8df22a938e"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "name",
+        "hypothesis",
+        "primary_metric",
+        "guardrail",
+        "start_date",
+        "end_date",
+        "status"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 1,
+      "synthetic": true,
+      "table": "experiments"
+    },
+    {
+      "decision_use": "channel_performance → funnel_conversion → reconciliation → lead-to-delivery, weekly-growth-review",
+      "domain": "Growth",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/funnel.csv",
+          "sha256": "b7da28b68fb3da0f12bd20244a904b374a7d9c6e9c3db2c6c0c134ff4538a876"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "date",
+        "channel",
+        "campaign_id",
+        "visits",
+        "leads",
+        "spend_cents"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 13,
+      "synthetic": true,
+      "table": "funnel"
+    },
+    {
+      "decision_use": "inventory_position → market-to-experiment, procure-to-stock, return-to-refund",
+      "domain": "Supply and inventory",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/inventory_counts.csv",
+          "sha256": "56af24341cd97630a5576fc975e04a0454d4b57ded87958e5440860dcaf7531a"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "variant_id",
+        "date",
+        "counted_qty"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 46,
+      "synthetic": true,
+      "table": "inventory_counts"
+    },
+    {
+      "decision_use": "Fuente contextual del snapshot; sin JOIN directo en los marts publicados",
+      "domain": "Customer and commerce",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/invoices.csv",
+          "sha256": "2c50ec6f9d9b9941aff6714516d2cb9f87c8f3193e947ace5c34ce15881176b6"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "order_id",
+        "date",
+        "amount_cents",
+        "status",
+        "kind"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 984,
+      "synthetic": true,
+      "table": "invoices"
+    },
+    {
+      "decision_use": "funnel_conversion → lead-to-delivery, weekly-growth-review",
+      "domain": "Growth",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/leads.csv",
+          "sha256": "d97dadbbae128bee53ab818f7fbcd60e0ef412d5a67f9de28ad67617e7e93b87"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "customer_id",
+        "session_id",
+        "channel",
+        "campaign_id",
+        "date",
+        "intent",
+        "status",
+        "order_id",
+        "variant_id"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 2830,
+      "synthetic": true,
+      "table": "leads"
+    },
+    {
+      "decision_use": "Fuente contextual del snapshot; sin JOIN directo en los marts publicados",
+      "domain": "Catalog",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/lifecycle_events.csv",
+          "sha256": "751622f211ce022f2fb325b1934f7e2a64d9729756f4a8ac2acfac230fc20237"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "product_id",
+        "date",
+        "from_stage",
+        "to_stage",
+        "reason"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 9,
+      "synthetic": true,
+      "table": "lifecycle_events"
+    },
+    {
+      "decision_use": "inventory_position → inventory_aging → market-to-experiment, procure-to-stock, return-to-refund",
+      "domain": "Supply and inventory",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/movements.csv",
+          "sha256": "aa8eccd71abcbea1b95e84827c9546e289ef6b416f9d1bd6e3cdbd56c514d933"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "variant_id",
+        "date",
+        "kind",
+        "quantity",
+        "reference_id"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 1525,
+      "synthetic": true,
+      "table": "movements"
+    },
+    {
+      "decision_use": "sales_daily → inventory_position → channel_performance → reconciliation → lead-to-delivery, market-to-experiment, procure-to-stock, return-to-refund, weekly-growth-review",
+      "domain": "Customer and commerce",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/order_items.csv",
+          "sha256": "ad31c6285b678b5983033edfc5916384f9dd26951f8d7d58ec14a4edd8510e2e"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "order_id",
+        "variant_id",
+        "quantity",
+        "unit_price_cents",
+        "discount_cents",
+        "unit_cost_cents"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 1805,
+      "synthetic": true,
+      "table": "order_items"
+    },
+    {
+      "decision_use": "sales_daily → inventory_position → channel_performance → customer_cohorts → funnel_conversion → reconciliation → lead-to-delivery, market-to-experiment, procure-to-stock, return-to-refund, weekly-growth-review",
+      "domain": "Customer and commerce",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/orders.csv",
+          "sha256": "e4fa89a2ffcb58dec9b1c6af5fff5018958ac97c5f1a763b8ebfb03da7278685"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "customer_id",
+        "channel",
+        "campaign_id",
+        "date",
+        "delivered_date",
+        "status"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 1200,
+      "synthetic": true,
+      "table": "orders"
+    },
+    {
+      "decision_use": "cash_daily → reconciliation → return-to-refund",
+      "domain": "Customer and commerce",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/payments.csv",
+          "sha256": "344dad05fc631d519c682844e9bf7b3bdad97d1ac61e09879b93f65de914d783"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "order_id",
+        "date",
+        "amount_cents",
+        "status"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 1477,
+      "synthetic": true,
+      "table": "payments"
+    },
+    {
+      "decision_use": "inventory_position → market-to-experiment, procure-to-stock, return-to-refund",
+      "domain": "Catalog",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/products.csv",
+          "sha256": "2338eb52bb68d02a9170e3cbb42929f93fa1e9df3ae14e46bc010330ea837559"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "name",
+        "category",
+        "collection",
+        "lifecycle"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 5,
+      "synthetic": true,
+      "table": "products"
+    },
+    {
+      "decision_use": "inventory_position → procurement → reconciliation → market-to-experiment, procure-to-stock, return-to-refund",
+      "domain": "Supply and inventory",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/purchase_orders.csv",
+          "sha256": "99eb0d66236943aa43e8e94540180622d52191d8d1278cc5664c649155e00b4d"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "supplier_id",
+        "variant_id",
+        "ordered_qty",
+        "received_qty",
+        "unit_cost_cents",
+        "status",
+        "date",
+        "paid_cents"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 46,
+      "synthetic": true,
+      "table": "purchase_orders"
+    },
+    {
+      "decision_use": "procurement → procure-to-stock",
+      "domain": "Supply and inventory",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/purchase_receipts.csv",
+          "sha256": "a007b9b342414adfecf084aad1fa86b09111115873a03e04a2773283df249d50"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "purchase_order_id",
+        "date",
+        "quantity"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 54,
+      "synthetic": true,
+      "table": "purchase_receipts"
+    },
+    {
+      "decision_use": "cash_daily → reconciliation → return-to-refund",
+      "domain": "Customer and commerce",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/refunds.csv",
+          "sha256": "969bdad56020e021ff8a179ddfec9e52cd03296ff4eb1be7752452c74a0c32ac"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "order_id",
+        "date",
+        "amount_cents",
+        "status"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 61,
+      "synthetic": true,
+      "table": "refunds"
+    },
+    {
+      "decision_use": "inventory_position → market-to-experiment, procure-to-stock, return-to-refund",
+      "domain": "Supply and inventory",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/reservations.csv",
+          "sha256": "140f990c4f341d9c6c230de4630464fae44e35cd69a113c9ab5cae80d99ed79f"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "order_item_id",
+        "quantity",
+        "status"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 1805,
+      "synthetic": true,
+      "table": "reservations"
+    },
+    {
+      "decision_use": "sales_daily → inventory_position → channel_performance → lead-to-delivery, market-to-experiment, procure-to-stock, return-to-refund, weekly-growth-review",
+      "domain": "Customer and commerce",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/returns.csv",
+          "sha256": "c62d6195a987263201514c74fec73e597c60ed3950d0c0bfd03cb953ea94446e"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "order_item_id",
+        "date",
+        "quantity",
+        "restock"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 61,
+      "synthetic": true,
+      "table": "returns"
+    },
+    {
+      "decision_use": "funnel_conversion → lead-to-delivery, weekly-growth-review",
+      "domain": "Growth",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/sessions.csv",
+          "sha256": "ad4bbc6580520b2111298030cab8ce378d8137cefa963d9de56a27b8f5c3dc47"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "customer_id",
+        "channel",
+        "campaign_id",
+        "date",
+        "content_asset_id"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 9230,
+      "synthetic": true,
+      "table": "sessions"
+    },
+    {
+      "decision_use": "Fuente contextual del snapshot; sin JOIN directo en los marts publicados",
+      "domain": "Customer and commerce",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/shipments.csv",
+          "sha256": "1675f52b04cb6845ef9793ff786acf0bcd1c9e3eefc57649cdfe32a8c44892fa"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "order_id",
+        "date",
+        "status",
+        "delivered_date"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 924,
+      "synthetic": true,
+      "table": "shipments"
+    },
+    {
+      "decision_use": "procurement → cash_daily → reconciliation → procure-to-stock, return-to-refund",
+      "domain": "Supply and inventory",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/supplier_payments.csv",
+          "sha256": "4d538eda490114371c42187db7251cc0354c77a65d28b6d524de2888ab0d8aee"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "purchase_order_id",
+        "date",
+        "amount_cents"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 57,
+      "synthetic": true,
+      "table": "supplier_payments"
+    },
+    {
+      "decision_use": "Fuente contextual del snapshot; sin JOIN directo en los marts publicados",
+      "domain": "Supply and inventory",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/suppliers.csv",
+          "sha256": "ef057aa50bc1d67a2c30c8e9efa69d618f28d4bbee0443ef8f56ba54d08220a3"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "name"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 3,
+      "synthetic": true,
+      "table": "suppliers"
+    },
+    {
+      "decision_use": "Fuente contextual del snapshot; sin JOIN directo en los marts publicados",
+      "domain": "Supply and inventory",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/unmet_demand.csv",
+          "sha256": "cb6b154f946d1057c7e227853d3b0340a766218786daa70768413dc403d1af60"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "date",
+        "variant_id",
+        "quantity",
+        "reason"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 7,
+      "synthetic": true,
+      "table": "unmet_demand"
+    },
+    {
+      "decision_use": "inventory_position → market-to-experiment, procure-to-stock, return-to-refund",
+      "domain": "Catalog",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/tables/variants.csv",
+          "sha256": "3fdfa034942fc82322b8e922dfeb025eddc14c46c35de95257223fe380e9bdc2"
+        },
+        {
+          "path": "evidence/v0.2/workspace/workspace.json",
+          "sha256": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89"
+        }
+      ],
+      "fields": [
+        "id",
+        "product_id",
+        "size",
+        "color",
+        "price_cents",
+        "cost_cents"
+      ],
+      "grain": "one synthetic contract row",
+      "primary_key": [
+        "id"
+      ],
+      "row_count": 46,
+      "synthetic": true,
+      "table": "variants"
+    }
+  ],
+  "coverage": {
+    "campaigns": true,
+    "content_assets": true,
+    "credit_notes": true,
+    "customers": true,
+    "expense_payments": true,
+    "expenses": true,
+    "experiment_assignments": true,
+    "experiment_outcomes": true,
+    "experiments": true,
+    "funnel": true,
+    "inventory_counts": true,
+    "invoices": true,
+    "leads": true,
+    "lifecycle_events": true,
+    "movements": true,
+    "order_items": true,
+    "orders": true,
+    "payments": true,
+    "products": true,
+    "purchase_orders": true,
+    "purchase_receipts": true,
+    "refunds": true,
+    "reservations": true,
+    "returns": true,
+    "sessions": true,
+    "shipments": true,
+    "supplier_payments": true,
+    "suppliers": true,
+    "unmet_demand": true,
+    "variants": true
+  },
+  "extension": {
+    "capability_ids": [
+      "versioned management costs",
+      "cost coverage and provenance",
+      "receipt-to-availability bridge",
+      "canonical obligations",
+      "8-week scenario comparison"
+    ],
+    "present": true,
+    "synthetic": true,
+    "table_ids": [
+      "cost_versions",
+      "cost_components",
+      "cost_allocations",
+      "purchase_orders_ops",
+      "purchase_receipts_ops",
+      "obligations",
+      "obligation_payments",
+      "cash_scenario_events"
+    ],
+    "version": "0.3.0"
+  },
+  "extension_matrix": [
+    {
+      "current": "Costo unitario y COGS con cobertura",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/lineage.json",
+          "sha256": "fa092643bd96f46c6df3a709d7e706db03f4d21a7aea65c6c8fa1d521a6cd780"
+        },
+        {
+          "path": "specs/PROCESS-CATALOG.md",
+          "sha256": "1e396e39f3c6be89ca487ce2e1c83f79705a0baacadc85a71351007be5c49e69"
+        }
+      ],
+      "scope": "Partidas, versión y autorización financiera",
+      "status": "PARTIAL",
+      "title": "Ficha y versiones de costos"
+    },
+    {
+      "current": "Sin contrato de reparto documentado en v0.2",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/lineage.json",
+          "sha256": "fa092643bd96f46c6df3a709d7e706db03f4d21a7aea65c6c8fa1d521a6cd780"
+        },
+        {
+          "path": "specs/PROCESS-CATALOG.md",
+          "sha256": "1e396e39f3c6be89ca487ce2e1c83f79705a0baacadc85a71351007be5c49e69"
+        }
+      ],
+      "scope": "Reparto compartido reconciliado",
+      "status": "MISSING",
+      "title": "Asignaciones y redondeo"
+    },
+    {
+      "current": "PO, receipt, payment y movimiento sintéticos",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/lineage.json",
+          "sha256": "fa092643bd96f46c6df3a709d7e706db03f4d21a7aea65c6c8fa1d521a6cd780"
+        },
+        {
+          "path": "specs/PROCESS-CATALOG.md",
+          "sha256": "1e396e39f3c6be89ca487ce2e1c83f79705a0baacadc85a71351007be5c49e69"
+        }
+      ],
+      "scope": "Inspección/preparación operativa",
+      "status": "PARTIAL",
+      "title": "Compras y recepciones"
+    },
+    {
+      "current": "Pagos de proveedor/gastos como hechos",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/lineage.json",
+          "sha256": "fa092643bd96f46c6df3a709d7e706db03f4d21a7aea65c6c8fa1d521a6cd780"
+        },
+        {
+          "path": "specs/PROCESS-CATALOG.md",
+          "sha256": "1e396e39f3c6be89ca487ce2e1c83f79705a0baacadc85a71351007be5c49e69"
+        }
+      ],
+      "scope": "Saldo obligado y fechas futuras",
+      "status": "PARTIAL",
+      "title": "Obligaciones y pagos"
+    },
+    {
+      "current": "Movimiento liquidado; sin saldo bancario inicial",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/lineage.json",
+          "sha256": "fa092643bd96f46c6df3a709d7e706db03f4d21a7aea65c6c8fa1d521a6cd780"
+        },
+        {
+          "path": "specs/PROCESS-CATALOG.md",
+          "sha256": "1e396e39f3c6be89ca487ce2e1c83f79705a0baacadc85a71351007be5c49e69"
+        }
+      ],
+      "scope": "Proyección de ocho semanas con cobertura",
+      "status": "PARTIAL",
+      "title": "Caja liquidada, comprometida y escenario"
+    },
+    {
+      "current": "Retornos físicos separados de créditos/reembolsos",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/lineage.json",
+          "sha256": "fa092643bd96f46c6df3a709d7e706db03f4d21a7aea65c6c8fa1d521a6cd780"
+        },
+        {
+          "path": "specs/PROCESS-CATALOG.md",
+          "sha256": "1e396e39f3c6be89ca487ce2e1c83f79705a0baacadc85a71351007be5c49e69"
+        }
+      ],
+      "scope": "Casos de calidad vinculados",
+      "status": "PARTIAL",
+      "title": "Calidad e incidencias"
+    },
+    {
+      "current": "Autoridad de agentes prohíbe acciones externas",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/lineage.json",
+          "sha256": "fa092643bd96f46c6df3a709d7e706db03f4d21a7aea65c6c8fa1d521a6cd780"
+        },
+        {
+          "path": "specs/PROCESS-CATALOG.md",
+          "sha256": "1e396e39f3c6be89ca487ce2e1c83f79705a0baacadc85a71351007be5c49e69"
+        }
+      ],
+      "scope": "Autorización operativa por rol/dato no demostrada",
+      "status": "PARTIAL",
+      "title": "Permisos financieros"
+    },
+    {
+      "current": "Eventos y reconciliación fuente-mart sintéticos",
+      "evidence_refs": [
+        {
+          "path": "evidence/v0.2/workspace/lineage.json",
+          "sha256": "fa092643bd96f46c6df3a709d7e706db03f4d21a7aea65c6c8fa1d521a6cd780"
+        },
+        {
+          "path": "specs/PROCESS-CATALOG.md",
+          "sha256": "1e396e39f3c6be89ca487ce2e1c83f79705a0baacadc85a71351007be5c49e69"
+        }
+      ],
+      "scope": "Versiones de costo y corrección trazable de partidas",
+      "status": "PARTIAL",
+      "title": "Historia y conciliación"
+    },
+    {
+      "current": "8 CSV sources + cost metrics",
+      "evidence_refs": [
+        {
+          "path": "client/operating-data/cost_versions.csv",
+          "sha256": "32731059693bd365454fef68fceaa7f9ba1843c70305b95507771333dcc07139"
+        },
+        {
+          "path": "client/operating-data/cost_components.csv",
+          "sha256": "f9ce813aad07ce93ac28826646556dc40d24003ba28cb3ae1e3e83a1a88fa371"
+        }
+      ],
+      "scope": "extensión local sintética v0.3.0",
+      "source_status": "IMPLEMENTED_LOCAL",
+      "status": "EXISTS",
+      "title": "visible cost sources and cost coverage"
+    },
+    {
+      "current": "purchase_orders_ops + purchase_receipts_ops",
+      "evidence_refs": [
+        {
+          "path": "client/operating-data/purchase_orders_ops.csv",
+          "sha256": "a12b6cccd5078efca30725e816900235032c469455438e879837aa55eb1ebae7"
+        },
+        {
+          "path": "client/operating-data/purchase_receipts_ops.csv",
+          "sha256": "0a3ce3ceed15853194568012cbfa0908455c9cf4a6c112b6aecfdbac88f07643"
+        }
+      ],
+      "scope": "extensión local sintética v0.3.0",
+      "source_status": "IMPLEMENTED_LOCAL",
+      "status": "EXISTS",
+      "title": "purchase receipt and accepted availability"
+    },
+    {
+      "current": "obligations + obligation_payments",
+      "evidence_refs": [
+        {
+          "path": "client/operating-data/obligations.csv",
+          "sha256": "a6d9799ad26b1e27e7ab6821c0a4374a96e17921b2d93d93f3ecc057ca24ba30"
+        },
+        {
+          "path": "client/operating-data/obligation_payments.csv",
+          "sha256": "bcb7a5eb14f2704a24d865f491eda6826f4b05660725d58bae94b871ad6ec068"
+        }
+      ],
+      "scope": "extensión local sintética v0.3.0",
+      "source_status": "IMPLEMENTED_LOCAL",
+      "status": "EXISTS",
+      "title": "canonical obligations without double counting"
+    },
+    {
+      "current": "BASE and REINVESTIR_TOP remain separate",
+      "evidence_refs": [
+        {
+          "path": "client/operating-data/cash_scenario_events.csv",
+          "sha256": "2af2267050197b2cb0f8fd5b87911e15a18d69c1004975b3f65670acf1ecd9d5"
+        }
+      ],
+      "scope": "extensión local sintética v0.3.0",
+      "source_status": "IMPLEMENTED_LOCAL",
+      "status": "EXISTS",
+      "title": "8-week cash scenarios"
+    },
+    {
+      "current": "current repository contract is analytical CLI/files/reports",
+      "evidence_refs": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "abbf8f9d306eb939b30ef37cb76613af60a0e81583eb55fa375068efe317a9fd"
+        },
+        {
+          "path": "specs/COSTS-OPERATIONS-v3.md",
+          "sha256": "6b375b26b6cbc0b5af989bd08857fb77180435b4c42d8de4f367a2dbe90c5d9e"
+        }
+      ],
+      "scope": "extensión local sintética v0.3.0",
+      "source_status": "CONFLICT_OUT_OF_SCOPE",
+      "status": "CONFLICT",
+      "title": "React/Supabase transactional application"
+    },
+    {
+      "current": "synthetic fixture only",
+      "evidence_refs": [
+        {
+          "path": "specs/COSTS-OPERATIONS-v3.md",
+          "sha256": "6b375b26b6cbc0b5af989bd08857fb77180435b4c42d8de4f367a2dbe90c5d9e"
+        }
+      ],
+      "scope": "extensión local sintética v0.3.0",
+      "source_status": "PENDING_AUTHORIZED_DATA",
+      "status": "MISSING",
+      "title": "real bank, tax and customer integrations"
+    }
+  ],
+  "extension_status_mapping": {
+    "CONFLICT_OUT_OF_SCOPE": "CONFLICT",
+    "IMPLEMENTED_LOCAL": "EXISTS",
+    "PARTIAL": "PARTIAL",
+    "PENDING_AUTHORIZED_DATA": "MISSING",
+    "SPECIFIED_NOT_IMPLEMENTED": "SPECIFIED"
+  },
+  "ids": {
+    "agents": [
+      "commerce_analyst",
+      "evidence_reviewer",
+      "finance_analyst",
+      "growth_analyst",
+      "market_researcher",
+      "merchandiser",
+      "returns_analyst"
+    ],
+    "marts": [
+      "sales_daily",
+      "inventory_position",
+      "inventory_aging",
+      "procurement",
+      "cash_daily",
+      "finance_monthly",
+      "channel_performance",
+      "customer_cohorts",
+      "experiment_results",
+      "funnel_conversion",
+      "reconciliation"
+    ],
+    "processes": [
+      "finance-close",
+      "lead-to-delivery",
+      "market-to-experiment",
+      "procure-to-stock",
+      "return-to-refund",
+      "weekly-growth-review"
+    ],
+    "sources": [
+      "campaigns",
+      "content_assets",
+      "credit_notes",
+      "customers",
+      "expense_payments",
+      "expenses",
+      "experiment_assignments",
+      "experiment_outcomes",
+      "experiments",
+      "funnel",
+      "inventory_counts",
+      "invoices",
+      "leads",
+      "lifecycle_events",
+      "movements",
+      "order_items",
+      "orders",
+      "payments",
+      "products",
+      "purchase_orders",
+      "purchase_receipts",
+      "refunds",
+      "reservations",
+      "returns",
+      "sessions",
+      "shipments",
+      "supplier_payments",
+      "suppliers",
+      "unmet_demand",
+      "variants"
+    ]
+  },
+  "lineage": {
+    "edges": [
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "credit_notes",
+        "target": "sales_daily"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "order_items",
+        "target": "sales_daily"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "orders",
+        "target": "sales_daily"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "returns",
+        "target": "sales_daily"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "inventory_counts",
+        "target": "inventory_position"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "movements",
+        "target": "inventory_position"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "order_items",
+        "target": "inventory_position"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "orders",
+        "target": "inventory_position"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "products",
+        "target": "inventory_position"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "purchase_orders",
+        "target": "inventory_position"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "reservations",
+        "target": "inventory_position"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "returns",
+        "target": "inventory_position"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "variants",
+        "target": "inventory_position"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "movements",
+        "target": "inventory_aging"
+      },
+      {
+        "kind": "SQL mart dependency",
+        "source": "inventory_position",
+        "target": "inventory_aging"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "purchase_orders",
+        "target": "procurement"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "purchase_receipts",
+        "target": "procurement"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "supplier_payments",
+        "target": "procurement"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "expense_payments",
+        "target": "cash_daily"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "payments",
+        "target": "cash_daily"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "refunds",
+        "target": "cash_daily"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "supplier_payments",
+        "target": "cash_daily"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "expenses",
+        "target": "finance_monthly"
+      },
+      {
+        "kind": "SQL mart dependency",
+        "source": "sales_daily",
+        "target": "finance_monthly"
+      },
+      {
+        "kind": "SQL mart dependency",
+        "source": "cash_daily",
+        "target": "finance_monthly"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "campaigns",
+        "target": "channel_performance"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "credit_notes",
+        "target": "channel_performance"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "funnel",
+        "target": "channel_performance"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "order_items",
+        "target": "channel_performance"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "orders",
+        "target": "channel_performance"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "returns",
+        "target": "channel_performance"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "orders",
+        "target": "customer_cohorts"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "experiment_assignments",
+        "target": "experiment_results"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "experiment_outcomes",
+        "target": "experiment_results"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "experiments",
+        "target": "experiment_results"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "funnel",
+        "target": "funnel_conversion"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "leads",
+        "target": "funnel_conversion"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "orders",
+        "target": "funnel_conversion"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "sessions",
+        "target": "funnel_conversion"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "credit_notes",
+        "target": "reconciliation"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "expense_payments",
+        "target": "reconciliation"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "funnel",
+        "target": "reconciliation"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "order_items",
+        "target": "reconciliation"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "orders",
+        "target": "reconciliation"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "payments",
+        "target": "reconciliation"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "purchase_orders",
+        "target": "reconciliation"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "refunds",
+        "target": "reconciliation"
+      },
+      {
+        "kind": "SQL FROM/JOIN",
+        "source": "supplier_payments",
+        "target": "reconciliation"
+      },
+      {
+        "kind": "SQL mart dependency",
+        "source": "sales_daily",
+        "target": "reconciliation"
+      },
+      {
+        "kind": "SQL mart dependency",
+        "source": "procurement",
+        "target": "reconciliation"
+      },
+      {
+        "kind": "SQL mart dependency",
+        "source": "cash_daily",
+        "target": "reconciliation"
+      },
+      {
+        "kind": "SQL mart dependency",
+        "source": "channel_performance",
+        "target": "reconciliation"
+      },
+      {
+        "kind": "packet evidence reference",
+        "source": "inventory_position",
+        "target": "market-to-experiment"
+      },
+      {
+        "kind": "packet evidence reference",
+        "source": "inventory_position",
+        "target": "procure-to-stock"
+      },
+      {
+        "kind": "packet evidence reference",
+        "source": "inventory_position",
+        "target": "return-to-refund"
+      },
+      {
+        "kind": "packet evidence reference",
+        "source": "procurement",
+        "target": "procure-to-stock"
+      },
+      {
+        "kind": "packet evidence reference",
+        "source": "cash_daily",
+        "target": "return-to-refund"
+      },
+      {
+        "kind": "packet evidence reference",
+        "source": "finance_monthly",
+        "target": "finance-close"
+      },
+      {
+        "kind": "packet evidence reference",
+        "source": "finance_monthly",
+        "target": "weekly-growth-review"
+      },
+      {
+        "kind": "packet evidence reference",
+        "source": "channel_performance",
+        "target": "lead-to-delivery"
+      },
+      {
+        "kind": "packet evidence reference",
+        "source": "channel_performance",
+        "target": "weekly-growth-review"
+      },
+      {
+        "kind": "packet evidence reference",
+        "source": "customer_cohorts",
+        "target": "weekly-growth-review"
+      },
+      {
+        "kind": "packet evidence reference",
+        "source": "experiment_results",
+        "target": "market-to-experiment"
+      },
+      {
+        "kind": "packet evidence reference",
+        "source": "experiment_results",
+        "target": "weekly-growth-review"
+      },
+      {
+        "kind": "packet evidence reference",
+        "source": "funnel_conversion",
+        "target": "lead-to-delivery"
+      },
+      {
+        "kind": "packet evidence reference",
+        "source": "funnel_conversion",
+        "target": "weekly-growth-review"
+      },
+      {
+        "kind": "accepted native response",
+        "source": "finance-close",
+        "target": "evidence_reviewer"
+      },
+      {
+        "kind": "accepted native response",
+        "source": "finance-close",
+        "target": "finance_analyst"
+      },
+      {
+        "kind": "reviewed packet",
+        "source": "finance-close",
+        "target": "decision-packet:finance-close"
+      },
+      {
+        "kind": "accepted native response",
+        "source": "lead-to-delivery",
+        "target": "commerce_analyst"
+      },
+      {
+        "kind": "accepted native response",
+        "source": "lead-to-delivery",
+        "target": "evidence_reviewer"
+      },
+      {
+        "kind": "reviewed packet",
+        "source": "lead-to-delivery",
+        "target": "decision-packet:lead-to-delivery"
+      },
+      {
+        "kind": "accepted native response",
+        "source": "market-to-experiment",
+        "target": "evidence_reviewer"
+      },
+      {
+        "kind": "accepted native response",
+        "source": "market-to-experiment",
+        "target": "market_researcher"
+      },
+      {
+        "kind": "reviewed packet",
+        "source": "market-to-experiment",
+        "target": "decision-packet:market-to-experiment"
+      },
+      {
+        "kind": "accepted native response",
+        "source": "procure-to-stock",
+        "target": "evidence_reviewer"
+      },
+      {
+        "kind": "accepted native response",
+        "source": "procure-to-stock",
+        "target": "merchandiser"
+      },
+      {
+        "kind": "reviewed packet",
+        "source": "procure-to-stock",
+        "target": "decision-packet:procure-to-stock"
+      },
+      {
+        "kind": "accepted native response",
+        "source": "return-to-refund",
+        "target": "evidence_reviewer"
+      },
+      {
+        "kind": "accepted native response",
+        "source": "return-to-refund",
+        "target": "returns_analyst"
+      },
+      {
+        "kind": "reviewed packet",
+        "source": "return-to-refund",
+        "target": "decision-packet:return-to-refund"
+      },
+      {
+        "kind": "accepted native response",
+        "source": "weekly-growth-review",
+        "target": "evidence_reviewer"
+      },
+      {
+        "kind": "accepted native response",
+        "source": "weekly-growth-review",
+        "target": "growth_analyst"
+      },
+      {
+        "kind": "reviewed packet",
+        "source": "weekly-growth-review",
+        "target": "decision-packet:weekly-growth-review"
+      }
+    ],
+    "evidence_refs": [
+      {
+        "path": "evidence/v0.2/workspace/lineage.json",
+        "sha256": "fa092643bd96f46c6df3a709d7e706db03f4d21a7aea65c6c8fa1d521a6cd780"
+      }
+    ]
+  },
+  "links_are_relative": true,
+  "mart_to_marts_by_sql": {
+    "cash_daily": [],
+    "channel_performance": [],
+    "customer_cohorts": [],
+    "experiment_results": [],
+    "finance_monthly": [
+      "sales_daily",
+      "cash_daily"
+    ],
+    "funnel_conversion": [],
+    "inventory_aging": [
+      "inventory_position"
+    ],
+    "inventory_position": [],
+    "procurement": [],
+    "reconciliation": [
+      "sales_daily",
+      "procurement",
+      "cash_daily",
+      "channel_performance"
+    ],
+    "sales_daily": []
+  },
+  "mart_to_processes_by_packet_references": {
+    "cash_daily": [
+      "return-to-refund"
+    ],
+    "channel_performance": [
+      "lead-to-delivery",
+      "weekly-growth-review"
+    ],
+    "customer_cohorts": [
+      "weekly-growth-review"
+    ],
+    "experiment_results": [
+      "market-to-experiment",
+      "weekly-growth-review"
+    ],
+    "finance_monthly": [
+      "finance-close",
+      "weekly-growth-review"
+    ],
+    "funnel_conversion": [
+      "lead-to-delivery",
+      "weekly-growth-review"
+    ],
+    "inventory_aging": [],
+    "inventory_position": [
+      "market-to-experiment",
+      "procure-to-stock",
+      "return-to-refund"
+    ],
+    "procurement": [
+      "procure-to-stock"
+    ],
+    "reconciliation": [],
+    "sales_daily": []
+  },
+  "metrics": [
+    {
+      "decision": "Lectura y control del warehouse",
+      "definition": "Delivered-line gross/discount and COGS on the delivery date; credit-note reductions on their event date; restocked-return COGS reversals on the return event date.",
+      "evidence_refs": [
+        {
+          "path": "models/marts/sales_daily.sql",
+          "sha256": "3b852fcebc0db1f174eb40c823a2bfd79091c4ccb4f54a4744320cfff90192ee"
+        },
+        {
+          "path": "evidence/v0.2/workspace/marts/sales_daily.json",
+          "sha256": "befd9177409dbd30dba6292e8dee700b2b3648c3528695f55e6952286227b766"
+        }
+      ],
+      "fields": [
+        {
+          "definition_sql": null,
+          "name": "date",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "fecha ISO"
+        },
+        {
+          "definition_sql": "CASE WHEN k.revenue_known=1 THEN SUM(e.gross_revenue_cents) END AS gross_revenue_cents",
+          "name": "gross_revenue_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN k.revenue_known=1 THEN SUM(e.discount_cents) END AS discount_cents",
+          "name": "discount_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN k.revenue_known=1 THEN SUM(e.credit_note_cents) END AS credit_note_cents",
+          "name": "credit_note_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN k.revenue_known=1 THEN SUM(e.gross_revenue_cents)-SUM(e.discount_cents)-SUM(e.credit_note_cents) END AS net_revenue_cents",
+          "name": "net_revenue_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN k.cost_coverage_known=1 AND MIN(e.cost_known)=1 THEN SUM(e.cogs_cents) END AS cogs_cents",
+          "name": "cogs_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN k.revenue_known=1 AND k.cost_coverage_known=1 AND MIN(e.cost_known)=1 THEN SUM(e.gross_revenue_cents)-SUM(e.discount_cents)-SUM(e.credit_note_cents)-SUM(e.cogs_cents) END AS gross_profit_cents",
+          "name": "gross_profit_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "k.revenue_known AS revenue_coverage_known",
+          "name": "revenue_coverage_known",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "indicador 0/1"
+        },
+        {
+          "definition_sql": "CASE WHEN k.cost_coverage_known=1 AND MIN(e.cost_known)=1 THEN 1 ELSE 0 END AS cost_coverage_known",
+          "name": "cost_coverage_known",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "indicador 0/1"
+        }
+      ],
+      "formula": "WITH events AS (\n  SELECT o.delivered_date AS date,\n         SUM(i.quantity * i.unit_price_cents) AS gross_revenue_cents,\n         SUM(i.discount_cents) AS discount_cents, 0 AS credit_note_cents,\n         SUM(i.quantity * i.unit_cost_cents) AS cogs_cents,\n         MIN(CASE WHEN i.unit_cost_cents IS NULL THEN 0 ELSE 1 END) AS cost_known\n  FROM orders o JOIN order_items i ON i.order_id=o.id\n  WHERE o.status='delivered' GROUP BY o.delivered_date\n  UNION ALL\n  SELECT cn.date,0,0,SUM(cn.amount_cents),0,1 FROM credit_notes cn GROUP BY cn.date\n  UNION ALL\n  SELECT r.date,0,0,0,-SUM(r.quantity*i.unit_cost_cents),\n         MIN(CASE WHEN i.unit_cost_cents IS NULL THEN 0 ELSE 1 END)\n  FROM returns r JOIN order_items i ON i.id=r.order_item_id\n  WHERE r.restock=1 GROUP BY r.date\n), known AS (\n SELECT CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN 1 ELSE 0 END revenue_known,\n        CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:returns}}=1 THEN 1 ELSE 0 END cost_coverage_known\n)\nSELECT e.date,\n CASE WHEN k.revenue_known=1 THEN SUM(e.gross_revenue_cents) END AS gross_revenue_cents,\n CASE WHEN k.revenue_known=1 THEN SUM(e.discount_cents) END AS discount_cents,\n CASE WHEN k.revenue_known=1 THEN SUM(e.credit_note_cents) END AS credit_note_cents,\n CASE WHEN k.revenue_known=1 THEN SUM(e.gross_revenue_cents)-SUM(e.discount_cents)-SUM(e.credit_note_cents) END AS net_revenue_cents,\n CASE WHEN k.cost_coverage_known=1 AND MIN(e.cost_known)=1 THEN SUM(e.cogs_cents) END AS cogs_cents,\n CASE WHEN k.revenue_known=1 AND k.cost_coverage_known=1 AND MIN(e.cost_known)=1 THEN SUM(e.gross_revenue_cents)-SUM(e.discount_cents)-SUM(e.credit_note_cents)-SUM(e.cogs_cents) END AS gross_profit_cents,\n k.revenue_known AS revenue_coverage_known,\n CASE WHEN k.cost_coverage_known=1 AND MIN(e.cost_known)=1 THEN 1 ELSE 0 END AS cost_coverage_known\nFROM events e CROSS JOIN known k GROUP BY e.date ORDER BY e.date\n",
+      "grain": "calendar event date",
+      "guardrail": "Cobertura requerida: credit_notes, order_items, orders, returns",
+      "id": "sales_daily",
+      "sources": [
+        "credit_notes",
+        "order_items",
+        "orders",
+        "returns"
+      ],
+      "sql": "models/marts/sales_daily.sql",
+      "unit": "centavos MXN, fecha ISO, indicador 0/1",
+      "unknown": "NULL/UNKNOWN cuando cobertura o denominador no permite medir; no sustituir por cero",
+      "window": "según fecha/mes del grano; trailing_30d cuando se indica en columna"
+    },
+    {
+      "decision": "market-to-experiment, procure-to-stock, return-to-refund",
+      "definition": "Product/SKU attributes, ledger on-hand, active reservation, available, open PO transit, latest deterministic count, ledger-through-count discrepancy, valuation, trailing 30-day net sold, cover, and prelaunch/stockout rule.",
+      "evidence_refs": [
+        {
+          "path": "models/marts/inventory_position.sql",
+          "sha256": "4bffc82efe8695f607432b791ea90107880e6e9d2871011c43170ca35f311e01"
+        },
+        {
+          "path": "evidence/v0.2/workspace/marts/inventory_position.json",
+          "sha256": "e58278c97e0bd86adcf800d13549b3466e17f45d8fc0db36e15ac58c9ed852da"
+        }
+      ],
+      "fields": [
+        {
+          "definition_sql": "v.id variant_id",
+          "name": "variant_id",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": null,
+          "name": "product_id",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": "p.name product_name",
+          "name": "product_name",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "category",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "lifecycle",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "color",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "size",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "cost_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "INT",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:movements}}=1 THEN COALESCE(ln.on_hand_qty,0) END ledger_on_hand_qty",
+          "name": "ledger_on_hand_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:reservations}}=1 AND {{coverage:order_items}}=1 THEN COALESCE(r.qty,0) END reserved_qty",
+          "name": "reserved_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:movements}}=1 AND {{coverage:reservations}}=1 AND {{coverage:order_items}}=1 THEN COALESCE(ln.on_hand_qty,0)-COALESCE(r.qty,0) END available_qty",
+          "name": "available_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:purchase_orders}}=1 THEN COALESCE(t.qty,0) END in_transit_qty",
+          "name": "in_transit_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": "lc.date count_date",
+          "name": "count_date",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "fecha ISO"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:inventory_counts}}=1 THEN lc.counted_qty END counted_qty",
+          "name": "counted_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:inventory_counts}}=1 AND {{coverage:movements}}=1 AND lc.date IS NOT NULL THEN lc.counted_qty-lc2.qty END count_discrepancy_qty",
+          "name": "count_discrepancy_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:movements}}=1 AND v.cost_cents IS NOT NULL THEN COALESCE(ln.on_hand_qty,0)*v.cost_cents END inventory_value_cents",
+          "name": "inventory_value_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:returns}}=1 THEN COALESCE(s.qty,0) END trailing_30d_net_sold_qty",
+          "name": "trailing_30d_net_sold_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:movements}}=1 AND {{coverage:reservations}}=1 AND {{coverage:order_items}}=1 AND {{coverage:orders}}=1 AND {{coverage:returns}}=1 AND COALESCE(s.qty,0)>0 THEN ROUND((COALESCE(ln.on_hand_qty,0)-COALESCE(r.qty,0))*30.0/s.qty,2) END cover_days",
+          "name": "cover_days",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "días"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:products}}=0 OR {{coverage:variants}}=0 OR {{coverage:movements}}=0 OR {{coverage:reservations}}=0 OR {{coverage:order_items}}=0 THEN 'UNKNOWN' WHEN p.lifecycle IN ('idea','sample') THEN 'PRELAUNCH' WHEN COALESCE(ln.on_hand_qty,0)-COALESCE(r.qty,0)<=0 THEN 'STOCKOUT' ELSE 'AVAILABLE' END stock_status",
+          "name": "stock_status",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:products}}=1 AND {{coverage:variants}}=1 AND {{coverage:movements}}=1 AND {{coverage:reservations}}=1 AND {{coverage:order_items}}=1 THEN 1 ELSE 0 END inventory_coverage_known",
+          "name": "inventory_coverage_known",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "indicador 0/1"
+        }
+      ],
+      "formula": "WITH latest_count AS (\n SELECT variant_id,date,counted_qty FROM (SELECT c.*,ROW_NUMBER() OVER(PARTITION BY variant_id ORDER BY date DESC,id DESC) rn FROM inventory_counts c) WHERE rn=1\n), ledger_now AS (SELECT variant_id,SUM(quantity) on_hand_qty FROM movements GROUP BY variant_id),\nledger_at_count AS (SELECT c.variant_id,c.date,SUM(m.quantity) qty FROM latest_count c LEFT JOIN movements m ON m.variant_id=c.variant_id AND m.date<=c.date GROUP BY c.variant_id,c.date),\nreserve AS (SELECT i.variant_id,SUM(r.quantity) qty FROM reservations r JOIN order_items i ON i.id=r.order_item_id WHERE r.status='active' GROUP BY i.variant_id),\ntransit AS (SELECT variant_id,SUM(ordered_qty-received_qty) qty FROM purchase_orders WHERE status<>'cancelled' GROUP BY variant_id),\nnet_sold AS (\n SELECT i.variant_id,SUM(i.quantity) qty FROM orders o JOIN order_items i ON i.order_id=o.id WHERE o.status='delivered' AND o.delivered_date>date((SELECT json_extract(value,'$.as_of') FROM warehouse_manifest WHERE key='metadata'),'-30 day') GROUP BY i.variant_id\n UNION ALL SELECT i.variant_id,-SUM(r.quantity) FROM returns r JOIN order_items i ON i.id=r.order_item_id WHERE r.restock=1 AND r.date>date((SELECT json_extract(value,'$.as_of') FROM warehouse_manifest WHERE key='metadata'),'-30 day') GROUP BY i.variant_id\n), sold AS (SELECT variant_id,SUM(qty) qty FROM net_sold GROUP BY variant_id)\nSELECT v.id variant_id,v.product_id,p.name product_name,p.category,p.lifecycle,v.color,v.size,v.cost_cents,\n CASE WHEN {{coverage:movements}}=1 THEN COALESCE(ln.on_hand_qty,0) END ledger_on_hand_qty,\n CASE WHEN {{coverage:reservations}}=1 AND {{coverage:order_items}}=1 THEN COALESCE(r.qty,0) END reserved_qty,\n CASE WHEN {{coverage:movements}}=1 AND {{coverage:reservations}}=1 AND {{coverage:order_items}}=1 THEN COALESCE(ln.on_hand_qty,0)-COALESCE(r.qty,0) END available_qty,\n CASE WHEN {{coverage:purchase_orders}}=1 THEN COALESCE(t.qty,0) END in_transit_qty,\n lc.date count_date,CASE WHEN {{coverage:inventory_counts}}=1 THEN lc.counted_qty END counted_qty,CASE WHEN {{coverage:inventory_counts}}=1 AND {{coverage:movements}}=1 AND lc.date IS NOT NULL THEN lc.counted_qty-lc2.qty END count_discrepancy_qty,\n CASE WHEN {{coverage:movements}}=1 AND v.cost_cents IS NOT NULL THEN COALESCE(ln.on_hand_qty,0)*v.cost_cents END inventory_value_cents,\n CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:returns}}=1 THEN COALESCE(s.qty,0) END trailing_30d_net_sold_qty,\n CASE WHEN {{coverage:movements}}=1 AND {{coverage:reservations}}=1 AND {{coverage:order_items}}=1 AND {{coverage:orders}}=1 AND {{coverage:returns}}=1 AND COALESCE(s.qty,0)>0 THEN ROUND((COALESCE(ln.on_hand_qty,0)-COALESCE(r.qty,0))*30.0/s.qty,2) END cover_days,\n CASE WHEN {{coverage:products}}=0 OR {{coverage:variants}}=0 OR {{coverage:movements}}=0 OR {{coverage:reservations}}=0 OR {{coverage:order_items}}=0 THEN 'UNKNOWN' WHEN p.lifecycle IN ('idea','sample') THEN 'PRELAUNCH' WHEN COALESCE(ln.on_hand_qty,0)-COALESCE(r.qty,0)<=0 THEN 'STOCKOUT' ELSE 'AVAILABLE' END stock_status,\n CASE WHEN {{coverage:products}}=1 AND {{coverage:variants}}=1 AND {{coverage:movements}}=1 AND {{coverage:reservations}}=1 AND {{coverage:order_items}}=1 THEN 1 ELSE 0 END inventory_coverage_known\nFROM variants v JOIN products p ON p.id=v.product_id LEFT JOIN ledger_now ln ON ln.variant_id=v.id LEFT JOIN reserve r ON r.variant_id=v.id LEFT JOIN transit t ON t.variant_id=v.id LEFT JOIN latest_count lc ON lc.variant_id=v.id LEFT JOIN ledger_at_count lc2 ON lc2.variant_id=v.id AND lc2.date=lc.date LEFT JOIN sold s ON s.variant_id=v.id ORDER BY v.id\n",
+      "grain": "variant at snapshot",
+      "guardrail": "Cobertura requerida: inventory_counts, movements, order_items, orders, products, purchase_orders, reservations, returns, variants",
+      "id": "inventory_position",
+      "sources": [
+        "inventory_counts",
+        "movements",
+        "order_items",
+        "orders",
+        "products",
+        "purchase_orders",
+        "reservations",
+        "returns",
+        "variants"
+      ],
+      "sql": "models/marts/inventory_position.sql",
+      "unit": "centavos MXN, conteo / dimensión según SQL, dimensión, días, fecha ISO, indicador 0/1, unidades",
+      "unknown": "NULL/UNKNOWN cuando cobertura o denominador no permite medir; no sustituir por cero",
+      "window": "según fecha/mes del grano; trailing_30d cuando se indica en columna"
+    },
+    {
+      "decision": "Lectura y control del warehouse",
+      "definition": "Position plus latest positive stock event and shipped quantity.",
+      "evidence_refs": [
+        {
+          "path": "models/marts/inventory_aging.sql",
+          "sha256": "3959153eea4949c03974373d20671e693c57d514495edd49d0efdeedb6c47973"
+        },
+        {
+          "path": "evidence/v0.2/workspace/marts/inventory_aging.json",
+          "sha256": "11ee4d6992bb431945ebd35d8678f17e1226d362e7f529a63a018a1094cd70ef"
+        }
+      ],
+      "fields": [
+        {
+          "definition_sql": null,
+          "name": "variant_id",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": null,
+          "name": "product_id",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": null,
+          "name": "product_name",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "category",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "lifecycle",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "color",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "size",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "cost_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "INT",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": null,
+          "name": "ledger_on_hand_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": null,
+          "name": "reserved_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": null,
+          "name": "available_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": null,
+          "name": "in_transit_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": null,
+          "name": "count_date",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "fecha ISO"
+        },
+        {
+          "definition_sql": null,
+          "name": "counted_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": null,
+          "name": "count_discrepancy_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": null,
+          "name": "inventory_value_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": null,
+          "name": "trailing_30d_net_sold_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": null,
+          "name": "cover_days",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "días"
+        },
+        {
+          "definition_sql": null,
+          "name": "stock_status",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": null,
+          "name": "inventory_coverage_known",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "indicador 0/1"
+        },
+        {
+          "definition_sql": null,
+          "name": "last_inbound_date",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN p.inventory_coverage_known=1 AND e.last_inbound_date IS NOT NULL THEN CAST(julianday((SELECT json_extract(value,'$.as_of') FROM warehouse_manifest WHERE key='metadata'))-julianday(e.last_inbound_date) AS INTEGER) END days_since_last_inbound",
+          "name": "days_since_last_inbound",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        }
+      ],
+      "formula": "WITH positive_events AS (SELECT variant_id,MAX(date) last_inbound_date FROM movements WHERE quantity>0 GROUP BY variant_id)\nSELECT p.*,e.last_inbound_date,\n CASE WHEN p.inventory_coverage_known=1 AND e.last_inbound_date IS NOT NULL THEN CAST(julianday((SELECT json_extract(value,'$.as_of') FROM warehouse_manifest WHERE key='metadata'))-julianday(e.last_inbound_date) AS INTEGER) END days_since_last_inbound\nFROM inventory_position p LEFT JOIN positive_events e ON e.variant_id=p.variant_id ORDER BY p.variant_id\n",
+      "grain": "variant at snapshot",
+      "guardrail": "Cobertura requerida: controles de calidad y SQL",
+      "id": "inventory_aging",
+      "sources": [
+        "movements"
+      ],
+      "sql": "models/marts/inventory_aging.sql",
+      "unit": "centavos MXN, conteo / dimensión según SQL, dimensión, días, fecha ISO, indicador 0/1, unidades",
+      "unknown": "NULL/UNKNOWN cuando cobertura o denominador no permite medir; no sustituir por cero",
+      "window": "según fecha/mes del grano; trailing_30d cuando se indica en columna"
+    },
+    {
+      "decision": "procure-to-stock",
+      "definition": "Ordered/received/open quantity and event-reconciled supplier cash.",
+      "evidence_refs": [
+        {
+          "path": "models/marts/procurement.sql",
+          "sha256": "48184d8bb0f6b3f07748d7f8e72cc60a37f3b4e7dbb9f93f11ffbe652899eb42"
+        },
+        {
+          "path": "evidence/v0.2/workspace/marts/procurement.json",
+          "sha256": "e1127ac36465159868d8c13b49307f51bb7fece7a9d712fd79a62fb319556361"
+        }
+      ],
+      "fields": [
+        {
+          "definition_sql": "po.id purchase_order_id",
+          "name": "purchase_order_id",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": "po.date ordered_date",
+          "name": "ordered_date",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "supplier_id",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": null,
+          "name": "variant_id",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": null,
+          "name": "ordered_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "INT",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": null,
+          "name": "received_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "INT",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": "po.ordered_qty-po.received_qty open_qty",
+          "name": "open_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": null,
+          "name": "unit_cost_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "INT",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "po.ordered_qty*po.unit_cost_cents ordered_value_cents",
+          "name": "ordered_value_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": null,
+          "name": "paid_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "INT",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:purchase_receipts}}=1 THEN COALESCE(r.receipt_qty,0) END receipt_event_qty",
+          "name": "receipt_event_qty",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "unidades"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:supplier_payments}}=1 THEN COALESCE(p.payment_cents,0) END supplier_payment_event_cents",
+          "name": "supplier_payment_event_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:purchase_receipts}}=1 AND {{coverage:supplier_payments}}=1 AND po.received_qty=COALESCE(r.receipt_qty,0) AND po.paid_cents=COALESCE(p.payment_cents,0) THEN 1 ELSE 0 END reconciled",
+          "name": "reconciled",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:purchase_orders}}=1 AND {{coverage:purchase_receipts}}=1 AND {{coverage:supplier_payments}}=1 THEN 1 ELSE 0 END coverage_known",
+          "name": "coverage_known",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "indicador 0/1"
+        }
+      ],
+      "formula": "SELECT po.id purchase_order_id,po.date ordered_date,po.supplier_id,po.variant_id,po.ordered_qty,po.received_qty,po.ordered_qty-po.received_qty open_qty,\n po.unit_cost_cents,po.ordered_qty*po.unit_cost_cents ordered_value_cents,po.paid_cents,\n CASE WHEN {{coverage:purchase_receipts}}=1 THEN COALESCE(r.receipt_qty,0) END receipt_event_qty,\n CASE WHEN {{coverage:supplier_payments}}=1 THEN COALESCE(p.payment_cents,0) END supplier_payment_event_cents,\n CASE WHEN {{coverage:purchase_receipts}}=1 AND {{coverage:supplier_payments}}=1 AND po.received_qty=COALESCE(r.receipt_qty,0) AND po.paid_cents=COALESCE(p.payment_cents,0) THEN 1 ELSE 0 END reconciled,\n CASE WHEN {{coverage:purchase_orders}}=1 AND {{coverage:purchase_receipts}}=1 AND {{coverage:supplier_payments}}=1 THEN 1 ELSE 0 END coverage_known\nFROM purchase_orders po LEFT JOIN (SELECT purchase_order_id,SUM(quantity) receipt_qty FROM purchase_receipts GROUP BY purchase_order_id) r ON r.purchase_order_id=po.id\nLEFT JOIN (SELECT purchase_order_id,SUM(amount_cents) payment_cents FROM supplier_payments GROUP BY purchase_order_id) p ON p.purchase_order_id=po.id ORDER BY po.date,po.id\n",
+      "grain": "purchase order",
+      "guardrail": "Cobertura requerida: purchase_orders, purchase_receipts, supplier_payments",
+      "id": "procurement",
+      "sources": [
+        "purchase_orders",
+        "purchase_receipts",
+        "supplier_payments"
+      ],
+      "sql": "models/marts/procurement.sql",
+      "unit": "centavos MXN, conteo / dimensión según SQL, dimensión, indicador 0/1, unidades",
+      "unknown": "NULL/UNKNOWN cuando cobertura o denominador no permite medir; no sustituir por cero",
+      "window": "según fecha/mes del grano; trailing_30d cuando se indica en columna"
+    },
+    {
+      "decision": "return-to-refund",
+      "definition": "Settled payments in; refunds, supplier payments, and expense payments out. This is movement, not bank balance.",
+      "evidence_refs": [
+        {
+          "path": "models/marts/cash_daily.sql",
+          "sha256": "89d3e68fbc96f5adee334e665d68a2e070405cc2077fa57b529f2816ff9103cd"
+        },
+        {
+          "path": "evidence/v0.2/workspace/marts/cash_daily.json",
+          "sha256": "1249bed02a576fafddf79eef10f4b289224915de1a2ac820d6138c9c81983e08"
+        }
+      ],
+      "fields": [
+        {
+          "definition_sql": null,
+          "name": "date",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "fecha ISO"
+        },
+        {
+          "definition_sql": "CASE WHEN k.value=1 THEN d.cash_in_cents END cash_in_cents",
+          "name": "cash_in_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN k.value=1 THEN d.refund_out_cents END refund_out_cents",
+          "name": "refund_out_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN k.value=1 THEN d.supplier_out_cents END supplier_out_cents",
+          "name": "supplier_out_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN k.value=1 THEN d.expense_out_cents END expense_out_cents",
+          "name": "expense_out_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN k.value=1 THEN d.cash_in_cents-d.refund_out_cents-d.supplier_out_cents-d.expense_out_cents END net_cash_change_cents",
+          "name": "net_cash_change_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN k.value=1 THEN SUM(d.cash_in_cents-d.refund_out_cents-d.supplier_out_cents-d.expense_out_cents) OVER (ORDER BY d.date) END cumulative_cash_movement_cents",
+          "name": "cumulative_cash_movement_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "k.value AS cash_coverage_known",
+          "name": "cash_coverage_known",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "indicador 0/1"
+        }
+      ],
+      "formula": "WITH known AS (\n SELECT CASE WHEN {{coverage:payments}}=1 AND {{coverage:refunds}}=1 AND {{coverage:supplier_payments}}=1 AND {{coverage:expense_payments}}=1 THEN 1 ELSE 0 END AS value\n), events AS (\n SELECT date,amount_cents AS cash_in_cents,0 AS refund_out_cents,0 AS supplier_out_cents,0 AS expense_out_cents FROM payments WHERE status='settled'\n UNION ALL SELECT date,0,amount_cents,0,0 FROM refunds WHERE status='settled'\n UNION ALL SELECT date,0,0,amount_cents,0 FROM supplier_payments\n UNION ALL SELECT date,0,0,0,amount_cents FROM expense_payments\n), daily AS (\n SELECT date,SUM(cash_in_cents) cash_in_cents,SUM(refund_out_cents) refund_out_cents,SUM(supplier_out_cents) supplier_out_cents,SUM(expense_out_cents) expense_out_cents FROM events GROUP BY date\n)\nSELECT d.date,\n CASE WHEN k.value=1 THEN d.cash_in_cents END cash_in_cents,CASE WHEN k.value=1 THEN d.refund_out_cents END refund_out_cents,\n CASE WHEN k.value=1 THEN d.supplier_out_cents END supplier_out_cents,CASE WHEN k.value=1 THEN d.expense_out_cents END expense_out_cents,\n CASE WHEN k.value=1 THEN d.cash_in_cents-d.refund_out_cents-d.supplier_out_cents-d.expense_out_cents END net_cash_change_cents,\n CASE WHEN k.value=1 THEN SUM(d.cash_in_cents-d.refund_out_cents-d.supplier_out_cents-d.expense_out_cents) OVER (ORDER BY d.date) END cumulative_cash_movement_cents,\n k.value AS cash_coverage_known FROM daily d CROSS JOIN known k ORDER BY d.date\n",
+      "grain": "cash event date",
+      "guardrail": "Cobertura requerida: expense_payments, payments, refunds, supplier_payments",
+      "id": "cash_daily",
+      "sources": [
+        "expense_payments",
+        "payments",
+        "refunds",
+        "supplier_payments"
+      ],
+      "sql": "models/marts/cash_daily.sql",
+      "unit": "centavos MXN, fecha ISO, indicador 0/1",
+      "unknown": "NULL/UNKNOWN cuando cobertura o denominador no permite medir; no sustituir por cero",
+      "window": "según fecha/mes del grano; trailing_30d cuando se indica en columna"
+    },
+    {
+      "decision": "finance-close, weekly-growth-review",
+      "definition": "Revenue, COGS, gross profit, variable expense, contribution after variable expense, all-expense operating result, and cash movement. A single missing COGS component makes monthly COGS/profit unknown. The month spine retains expense-only and cash-only months.",
+      "evidence_refs": [
+        {
+          "path": "models/marts/finance_monthly.sql",
+          "sha256": "f5340240d7b7efee7161862575adc74ff1a7b666b4b9d169762c968af02b9e57"
+        },
+        {
+          "path": "evidence/v0.2/workspace/marts/finance_monthly.json",
+          "sha256": "668729a23bc1632e0012d97ae49d3320239ecd8b3b7729dc27fcc220236bd988"
+        }
+      ],
+      "fields": [
+        {
+          "definition_sql": "month",
+          "name": "month",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "mes YYYY-MM"
+        },
+        {
+          "definition_sql": "CASE WHEN revenue_known=1 THEN COALESCE(net_revenue_cents,0) END net_revenue_cents",
+          "name": "net_revenue_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN cost_source_known=1 AND row_cost_known=1 THEN COALESCE(cogs_cents,0) END cogs_cents",
+          "name": "cogs_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN revenue_known=1 AND cost_source_known=1 AND row_cost_known=1 THEN COALESCE(net_revenue_cents,0)-COALESCE(cogs_cents,0) END gross_profit_cents",
+          "name": "gross_profit_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN expense_known=1 THEN COALESCE(variable_expense_cents,0) END variable_expense_cents",
+          "name": "variable_expense_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN expense_known=1 THEN COALESCE(expense_accrual_cents,0) END expense_accrual_cents",
+          "name": "expense_accrual_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN revenue_known=1 AND cost_source_known=1 AND row_cost_known=1 AND expense_known=1 THEN COALESCE(net_revenue_cents,0)-COALESCE(cogs_cents,0)-COALESCE(variable_expense_cents,0) END contribution_after_variable_cents",
+          "name": "contribution_after_variable_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN revenue_known=1 AND cost_source_known=1 AND row_cost_known=1 AND expense_known=1 THEN COALESCE(net_revenue_cents,0)-COALESCE(cogs_cents,0)-COALESCE(expense_accrual_cents,0) END operating_after_all_expenses_cents",
+          "name": "operating_after_all_expenses_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN cash_known=1 THEN COALESCE(net_cash_change_cents,0) END net_cash_change_cents",
+          "name": "net_cash_change_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "revenue_known AS revenue_coverage_known",
+          "name": "revenue_coverage_known",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "indicador 0/1"
+        },
+        {
+          "definition_sql": "CASE WHEN cost_source_known=1 AND row_cost_known=1 THEN 1 ELSE 0 END cost_coverage_known",
+          "name": "cost_coverage_known",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "indicador 0/1"
+        },
+        {
+          "definition_sql": "expense_known AS expense_coverage_known",
+          "name": "expense_coverage_known",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "indicador 0/1"
+        },
+        {
+          "definition_sql": "cash_known AS cash_coverage_known",
+          "name": "cash_coverage_known",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "indicador 0/1"
+        }
+      ],
+      "formula": "WITH known AS (\n SELECT CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN 1 ELSE 0 END revenue_known,\n        CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:returns}}=1 THEN 1 ELSE 0 END cost_source_known,\n        CASE WHEN {{coverage:expenses}}=1 THEN 1 ELSE 0 END expense_known,\n        CASE WHEN {{coverage:payments}}=1 AND {{coverage:refunds}}=1 AND {{coverage:supplier_payments}}=1 AND {{coverage:expense_payments}}=1 THEN 1 ELSE 0 END cash_known\n), spine AS (SELECT substr(date,1,7) month FROM sales_daily UNION SELECT substr(date,1,7) FROM expenses UNION SELECT substr(date,1,7) FROM cash_daily),\nsales AS (SELECT substr(date,1,7) month,SUM(net_revenue_cents) net_revenue_cents,SUM(cogs_cents) cogs_cents,MIN(cost_coverage_known) cost_coverage_known FROM sales_daily GROUP BY 1),\nexpense_rollup AS (SELECT substr(date,1,7) month,SUM(amount_cents) expense_accrual_cents,SUM(CASE WHEN variable=1 THEN amount_cents ELSE 0 END) variable_expense_cents FROM expenses GROUP BY 1),\ncash AS (SELECT substr(date,1,7) month,SUM(net_cash_change_cents) net_cash_change_cents FROM cash_daily GROUP BY 1),\ncomputed AS (SELECT sp.month,k.*,s.net_revenue_cents,s.cogs_cents,COALESCE(s.cost_coverage_known,1) row_cost_known,e.variable_expense_cents,e.expense_accrual_cents,c.net_cash_change_cents FROM spine sp CROSS JOIN known k LEFT JOIN sales s ON s.month=sp.month LEFT JOIN expense_rollup e ON e.month=sp.month LEFT JOIN cash c ON c.month=sp.month)\nSELECT month,CASE WHEN revenue_known=1 THEN COALESCE(net_revenue_cents,0) END net_revenue_cents,\n CASE WHEN cost_source_known=1 AND row_cost_known=1 THEN COALESCE(cogs_cents,0) END cogs_cents,\n CASE WHEN revenue_known=1 AND cost_source_known=1 AND row_cost_known=1 THEN COALESCE(net_revenue_cents,0)-COALESCE(cogs_cents,0) END gross_profit_cents,\n CASE WHEN expense_known=1 THEN COALESCE(variable_expense_cents,0) END variable_expense_cents,CASE WHEN expense_known=1 THEN COALESCE(expense_accrual_cents,0) END expense_accrual_cents,\n CASE WHEN revenue_known=1 AND cost_source_known=1 AND row_cost_known=1 AND expense_known=1 THEN COALESCE(net_revenue_cents,0)-COALESCE(cogs_cents,0)-COALESCE(variable_expense_cents,0) END contribution_after_variable_cents,\n CASE WHEN revenue_known=1 AND cost_source_known=1 AND row_cost_known=1 AND expense_known=1 THEN COALESCE(net_revenue_cents,0)-COALESCE(cogs_cents,0)-COALESCE(expense_accrual_cents,0) END operating_after_all_expenses_cents,\n CASE WHEN cash_known=1 THEN COALESCE(net_cash_change_cents,0) END net_cash_change_cents,revenue_known AS revenue_coverage_known,\n CASE WHEN cost_source_known=1 AND row_cost_known=1 THEN 1 ELSE 0 END cost_coverage_known,expense_known AS expense_coverage_known,cash_known AS cash_coverage_known FROM computed ORDER BY month\n",
+      "grain": "calendar month",
+      "guardrail": "Cobertura requerida: credit_notes, expense_payments, expenses, order_items, orders, payments, refunds, returns, supplier_payments",
+      "id": "finance_monthly",
+      "sources": [
+        "expenses"
+      ],
+      "sql": "models/marts/finance_monthly.sql",
+      "unit": "centavos MXN, indicador 0/1, mes YYYY-MM",
+      "unknown": "NULL/UNKNOWN cuando cobertura o denominador no permite medir; no sustituir por cero",
+      "window": "según fecha/mes del grano; trailing_30d cuando se indica en columna"
+    },
+    {
+      "decision": "lead-to-delivery, weekly-growth-review",
+      "definition": "Distinct delivered orders/customers, delivered revenue, credits, delivered COGS, restock COGS reversal, descriptive marketing spend, and an explicit unknown-attribution flag. It makes no causal ROI claim.",
+      "evidence_refs": [
+        {
+          "path": "models/marts/channel_performance.sql",
+          "sha256": "acdd965e0c89b3f34a873157436d40768935cdaeee1fde5a160e363636094b72"
+        },
+        {
+          "path": "evidence/v0.2/workspace/marts/channel_performance.json",
+          "sha256": "73f2149cd09e9c396f5add5ca5115d8e01d99c0bddfd6558ee948a1c4006410c"
+        }
+      ],
+      "fields": [
+        {
+          "definition_sql": null,
+          "name": "channel",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": null,
+          "name": "campaign_id",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:orders}}=1 THEN COALESCE(d.delivered_orders,0) END delivered_orders",
+          "name": "delivered_orders",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:orders}}=1 AND {{coverage:customers}}=1 THEN COALESCE(d.customers,0) END customers",
+          "name": "customers",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN COALESCE(d.gross_revenue_cents,0) END gross_revenue_cents",
+          "name": "gross_revenue_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN COALESCE(d.discount_cents,0) END discount_cents",
+          "name": "discount_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN COALESCE(c.credit_note_cents,0) END credit_note_cents",
+          "name": "credit_note_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN COALESCE(d.gross_revenue_cents,0)-COALESCE(d.discount_cents,0)-COALESCE(c.credit_note_cents,0) END net_revenue_cents",
+          "name": "net_revenue_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:returns}}=1 AND COALESCE(d.cost_known,1)=1 AND COALESCE(r.cost_known,1)=1 THEN COALESCE(d.delivered_cogs_cents,0)-COALESCE(r.restock_cogs_reversal_cents,0) END cogs_cents",
+          "name": "cogs_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:funnel}}=1 THEN COALESCE(m.marketing_spend_cents,0) END marketing_spend_cents",
+          "name": "marketing_spend_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "1 AS attribution_unknown",
+          "name": "attribution_unknown",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN 1 ELSE 0 END revenue_coverage_known",
+          "name": "revenue_coverage_known",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "indicador 0/1"
+        }
+      ],
+      "formula": "WITH dimensions AS (SELECT channel,id campaign_id FROM campaigns UNION SELECT channel,campaign_id FROM funnel UNION SELECT channel,campaign_id FROM orders),\ndelivered AS (SELECT o.channel,o.campaign_id,COUNT(DISTINCT o.id) delivered_orders,COUNT(DISTINCT o.customer_id) customers,SUM(i.quantity*i.unit_price_cents) gross_revenue_cents,SUM(i.discount_cents) discount_cents,SUM(i.quantity*i.unit_cost_cents) delivered_cogs_cents,MIN(CASE WHEN i.unit_cost_cents IS NULL THEN 0 ELSE 1 END) cost_known FROM orders o JOIN order_items i ON i.order_id=o.id WHERE o.status='delivered' GROUP BY o.channel,o.campaign_id),\ncredits AS (SELECT o.channel,o.campaign_id,SUM(cn.amount_cents) credit_note_cents FROM credit_notes cn JOIN order_items i ON i.id=cn.order_item_id JOIN orders o ON o.id=i.order_id GROUP BY o.channel,o.campaign_id),\nrestocks AS (SELECT o.channel,o.campaign_id,SUM(r.quantity*i.unit_cost_cents) restock_cogs_reversal_cents,MIN(CASE WHEN i.unit_cost_cents IS NULL THEN 0 ELSE 1 END) cost_known FROM returns r JOIN order_items i ON i.id=r.order_item_id JOIN orders o ON o.id=i.order_id WHERE r.restock=1 GROUP BY o.channel,o.campaign_id),\nmarketing AS (SELECT channel,campaign_id,SUM(spend_cents) marketing_spend_cents FROM funnel GROUP BY channel,campaign_id)\nSELECT x.channel,x.campaign_id,\n CASE WHEN {{coverage:orders}}=1 THEN COALESCE(d.delivered_orders,0) END delivered_orders,\n CASE WHEN {{coverage:orders}}=1 AND {{coverage:customers}}=1 THEN COALESCE(d.customers,0) END customers,\n CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN COALESCE(d.gross_revenue_cents,0) END gross_revenue_cents,\n CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN COALESCE(d.discount_cents,0) END discount_cents,\n CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN COALESCE(c.credit_note_cents,0) END credit_note_cents,\n CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN COALESCE(d.gross_revenue_cents,0)-COALESCE(d.discount_cents,0)-COALESCE(c.credit_note_cents,0) END net_revenue_cents,\n CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:returns}}=1 AND COALESCE(d.cost_known,1)=1 AND COALESCE(r.cost_known,1)=1 THEN COALESCE(d.delivered_cogs_cents,0)-COALESCE(r.restock_cogs_reversal_cents,0) END cogs_cents,\n CASE WHEN {{coverage:funnel}}=1 THEN COALESCE(m.marketing_spend_cents,0) END marketing_spend_cents,\n 1 AS attribution_unknown,CASE WHEN {{coverage:orders}}=1 AND {{coverage:order_items}}=1 AND {{coverage:credit_notes}}=1 THEN 1 ELSE 0 END revenue_coverage_known\nFROM dimensions x LEFT JOIN delivered d ON d.channel=x.channel AND d.campaign_id=x.campaign_id LEFT JOIN credits c ON c.channel=x.channel AND c.campaign_id=x.campaign_id LEFT JOIN restocks r ON r.channel=x.channel AND r.campaign_id=x.campaign_id LEFT JOIN marketing m ON m.channel=x.channel AND m.campaign_id=x.campaign_id ORDER BY x.channel,x.campaign_id\n",
+      "grain": "channel and campaign",
+      "guardrail": "Cobertura requerida: credit_notes, customers, funnel, order_items, orders, returns",
+      "id": "channel_performance",
+      "sources": [
+        "campaigns",
+        "credit_notes",
+        "funnel",
+        "order_items",
+        "orders",
+        "returns"
+      ],
+      "sql": "models/marts/channel_performance.sql",
+      "unit": "centavos MXN, conteo / dimensión según SQL, dimensión, indicador 0/1",
+      "unknown": "NULL/UNKNOWN cuando cobertura o denominador no permite medir; no sustituir por cero",
+      "window": "según fecha/mes del grano; trailing_30d cuando se indica en columna"
+    },
+    {
+      "decision": "weekly-growth-review",
+      "definition": "Cohort customers, mature 30-day denominator, immature customers, and repeat-within-30-day rate. Immature cohorts are unknown, never reported as zero repeat.",
+      "evidence_refs": [
+        {
+          "path": "models/marts/customer_cohorts.sql",
+          "sha256": "6654b6ef0a36ea451c526be86d3a42df8f9252b56ddd0939e844fa8174860ada"
+        },
+        {
+          "path": "evidence/v0.2/workspace/marts/customer_cohorts.json",
+          "sha256": "5c3b80868f4e6ce33f197946fde850108ffd1dc551546fe4af32de075cdc08f2"
+        }
+      ],
+      "fields": [
+        {
+          "definition_sql": "substr(first_delivered_date,1,7) cohort_month",
+          "name": "cohort_month",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "mes YYYY-MM"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 THEN COUNT(*) END cohort_customers",
+          "name": "cohort_customers",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 THEN SUM(mature_30d) END eligible_customers_30d",
+          "name": "eligible_customers_30d",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 THEN SUM(CASE WHEN mature_30d=0 THEN 1 ELSE 0 END) END immature_customers",
+          "name": "immature_customers",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 AND SUM(mature_30d)>0 THEN SUM(CASE WHEN mature_30d=1 AND repeat_orders_30d>0 THEN 1 ELSE 0 END) END repeat_within_30d_customers",
+          "name": "repeat_within_30d_customers",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 AND SUM(mature_30d)>0 THEN ROUND(1.0*SUM(CASE WHEN mature_30d=1 AND repeat_orders_30d>0 THEN 1 ELSE 0 END)/SUM(mature_30d),4) END repeat_within_30d_rate",
+          "name": "repeat_within_30d_rate",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "ratio (0–1)"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 THEN 1 ELSE 0 END cohort_coverage_known",
+          "name": "cohort_coverage_known",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "indicador 0/1"
+        }
+      ],
+      "formula": "WITH first_date AS (SELECT customer_id,MIN(delivered_date) first_delivered_date FROM orders WHERE status='delivered' GROUP BY customer_id),\nfirst_delivery AS (SELECT d.customer_id,d.first_delivered_date,MIN(o.id) first_order_id FROM first_date d JOIN orders o ON o.customer_id=d.customer_id AND o.status='delivered' AND o.delivered_date=d.first_delivered_date GROUP BY d.customer_id,d.first_delivered_date),\ncustomer_orders AS (\n SELECT f.customer_id,f.first_delivered_date,\n        CASE WHEN f.first_delivered_date<=date((SELECT json_extract(value,'$.as_of') FROM warehouse_manifest WHERE key='metadata'),'-30 day') THEN 1 ELSE 0 END mature_30d,\n        COUNT(DISTINCT CASE WHEN o.id<>f.first_order_id AND o.delivered_date>=f.first_delivered_date AND o.delivered_date<=date(f.first_delivered_date,'+30 day') THEN o.id END) repeat_orders_30d\n FROM first_delivery f LEFT JOIN orders o ON o.customer_id=f.customer_id AND o.status='delivered' GROUP BY f.customer_id,f.first_delivered_date,f.first_order_id\n)\nSELECT substr(first_delivered_date,1,7) cohort_month,\n CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 THEN COUNT(*) END cohort_customers,\n CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 THEN SUM(mature_30d) END eligible_customers_30d,\n CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 THEN SUM(CASE WHEN mature_30d=0 THEN 1 ELSE 0 END) END immature_customers,\n CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 AND SUM(mature_30d)>0 THEN SUM(CASE WHEN mature_30d=1 AND repeat_orders_30d>0 THEN 1 ELSE 0 END) END repeat_within_30d_customers,\n CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 AND SUM(mature_30d)>0 THEN ROUND(1.0*SUM(CASE WHEN mature_30d=1 AND repeat_orders_30d>0 THEN 1 ELSE 0 END)/SUM(mature_30d),4) END repeat_within_30d_rate,\n CASE WHEN {{coverage:customers}}=1 AND {{coverage:orders}}=1 THEN 1 ELSE 0 END cohort_coverage_known\nFROM customer_orders GROUP BY cohort_month ORDER BY cohort_month\n",
+      "grain": "first-delivery month",
+      "guardrail": "Cobertura requerida: customers, orders",
+      "id": "customer_cohorts",
+      "sources": [
+        "orders"
+      ],
+      "sql": "models/marts/customer_cohorts.sql",
+      "unit": "conteo / dimensión según SQL, indicador 0/1, mes YYYY-MM, ratio (0–1)",
+      "unknown": "NULL/UNKNOWN cuando cobertura o denominador no permite medir; no sustituir por cero",
+      "window": "según fecha/mes del grano; trailing_30d cuando se indica en columna"
+    },
+    {
+      "decision": "market-to-experiment, weekly-growth-review",
+      "definition": "Assignment, conversion, revenue, contribution and returns. Outcomes are synthetic randomized examples and are descriptive only; no causal lift or ROI is claimed.",
+      "evidence_refs": [
+        {
+          "path": "models/marts/experiment_results.sql",
+          "sha256": "564f1d03774820105b5a8bbeca75039833ae79bd97b007b1e261c58d8dc58d53"
+        },
+        {
+          "path": "evidence/v0.2/workspace/marts/experiment_results.json",
+          "sha256": "f44aac0b132aa6ca8d2a15c46f5427c3fdfa97035a339b40510916c74595fe3f"
+        }
+      ],
+      "fields": [
+        {
+          "definition_sql": "e.id experiment_id",
+          "name": "experiment_id",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": null,
+          "name": "name",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "status",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "primary_metric",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "guardrail",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "start_date",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "end_date",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": null,
+          "name": "arm",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 THEN COUNT(a.id) END assigned_customers",
+          "name": "assigned_customers",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN SUM(CASE WHEN o.converted=1 THEN 1 ELSE 0 END) END converted_customers",
+          "name": "converted_customers",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 AND COUNT(a.id)>0 THEN AVG(CASE WHEN o.converted=1 THEN 1.0 ELSE 0.0 END) END conversion_rate",
+          "name": "conversion_rate",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "ratio (0–1)"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN SUM(o.net_revenue_cents) END net_revenue_cents",
+          "name": "net_revenue_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN SUM(o.contribution_cents) END contribution_cents",
+          "name": "contribution_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN SUM(o.returned) END returned_customers",
+          "name": "returned_customers",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN 1 ELSE 0 END outcome_coverage_known",
+          "name": "outcome_coverage_known",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "indicador 0/1"
+        },
+        {
+          "definition_sql": "1 AS synthetic_descriptive_only",
+          "name": "synthetic_descriptive_only",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        }
+      ],
+      "formula": "SELECT e.id experiment_id,e.name,e.status,e.primary_metric,e.guardrail,e.start_date,e.end_date,a.arm,\n CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 THEN COUNT(a.id) END assigned_customers,\n CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN SUM(CASE WHEN o.converted=1 THEN 1 ELSE 0 END) END converted_customers,\n CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 AND COUNT(a.id)>0 THEN AVG(CASE WHEN o.converted=1 THEN 1.0 ELSE 0.0 END) END conversion_rate,\n CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN SUM(o.net_revenue_cents) END net_revenue_cents,\n CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN SUM(o.contribution_cents) END contribution_cents,\n CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN SUM(o.returned) END returned_customers,\n CASE WHEN {{coverage:experiments}}=1 AND {{coverage:experiment_assignments}}=1 AND {{coverage:experiment_outcomes}}=1 THEN 1 ELSE 0 END outcome_coverage_known,\n 1 AS synthetic_descriptive_only\nFROM experiments e JOIN experiment_assignments a ON a.experiment_id=e.id LEFT JOIN experiment_outcomes o ON o.assignment_id=a.id GROUP BY e.id,a.arm ORDER BY e.id,a.arm\n",
+      "grain": "experiment and arm",
+      "guardrail": "Cobertura requerida: experiment_assignments, experiment_outcomes, experiments",
+      "id": "experiment_results",
+      "sources": [
+        "experiment_assignments",
+        "experiment_outcomes",
+        "experiments"
+      ],
+      "sql": "models/marts/experiment_results.sql",
+      "unit": "centavos MXN, conteo / dimensión según SQL, dimensión, indicador 0/1, ratio (0–1)",
+      "unknown": "NULL/UNKNOWN cuando cobertura o denominador no permite medir; no sustituir por cero",
+      "window": "según fecha/mes del grano; trailing_30d cuando se indica en columna"
+    },
+    {
+      "decision": "lead-to-delivery, weekly-growth-review",
+      "definition": "All leads plus linked/unlinked subgroups, distinct linked sessions/orders, descriptive spend, and conditional rates. Aggregate funnel traffic is not used as a substitution denominator.",
+      "evidence_refs": [
+        {
+          "path": "models/marts/funnel_conversion.sql",
+          "sha256": "6785459b1eb7fa0ada73167c485916535e53e9cacb94bec03929993a1f0b4672"
+        },
+        {
+          "path": "evidence/v0.2/workspace/marts/funnel_conversion.json",
+          "sha256": "a3528889c352eb61da1204a6c790fda000e13a64bb82e12721732676c8421f78"
+        }
+      ],
+      "fields": [
+        {
+          "definition_sql": null,
+          "name": "channel",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": null,
+          "name": "campaign_id",
+          "nullable_in_materialized_schema": true,
+          "type": "TEXT",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:sessions}}=1 THEN COALESCE(s.sessions,0) END sessions",
+          "name": "sessions",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.all_leads,0) END all_leads",
+          "name": "all_leads",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.linked_leads,0) END linked_leads",
+          "name": "linked_leads",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.unlinked_leads,0) END unlinked_leads",
+          "name": "unlinked_leads",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.linked_sessions,0) END session_linked_leads",
+          "name": "session_linked_leads",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.linked_orders,0) END linked_orders",
+          "name": "linked_orders",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "conteo / dimensión según SQL"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:funnel}}=1 THEN f.marketing_spend_cents END marketing_spend_cents",
+          "name": "marketing_spend_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "centavos MXN"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:sessions}}=1 AND {{coverage:leads}}=1 AND COALESCE(s.sessions,0)>0 THEN ROUND(1.0*COALESCE(l.linked_sessions,0)/s.sessions,4) END session_to_lead_rate",
+          "name": "session_to_lead_rate",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "ratio (0–1)"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:leads}}=1 AND COALESCE(l.all_leads,0)>0 THEN ROUND(1.0*COALESCE(l.linked_orders,0)/l.all_leads,4) END lead_to_linked_order_rate",
+          "name": "lead_to_linked_order_rate",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "ratio (0–1)"
+        },
+        {
+          "definition_sql": "CASE WHEN {{coverage:sessions}}=1 AND {{coverage:leads}}=1 THEN 1 ELSE 0 END funnel_coverage_known",
+          "name": "funnel_coverage_known",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "indicador 0/1"
+        }
+      ],
+      "formula": "WITH cohorts AS (\n SELECT channel,campaign_id FROM sessions UNION SELECT channel,campaign_id FROM leads UNION SELECT channel,campaign_id FROM orders UNION SELECT channel,campaign_id FROM funnel\n), session_counts AS (SELECT channel,campaign_id,COUNT(DISTINCT id) sessions FROM sessions GROUP BY channel,campaign_id),\nlead_counts AS (SELECT channel,campaign_id,COUNT(DISTINCT id) all_leads,COUNT(DISTINCT CASE WHEN session_id IS NOT NULL THEN id END) linked_leads,COUNT(DISTINCT session_id) linked_sessions,COUNT(DISTINCT CASE WHEN session_id IS NULL THEN id END) unlinked_leads,COUNT(DISTINCT order_id) linked_orders FROM leads GROUP BY channel,campaign_id),\nspend AS (SELECT channel,campaign_id,SUM(spend_cents) marketing_spend_cents,MIN(CASE WHEN visits IS NULL THEN 0 ELSE 1 END) visits_coverage_known FROM funnel GROUP BY channel,campaign_id)\nSELECT c.channel,c.campaign_id,\n CASE WHEN {{coverage:sessions}}=1 THEN COALESCE(s.sessions,0) END sessions,\n CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.all_leads,0) END all_leads,CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.linked_leads,0) END linked_leads,CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.unlinked_leads,0) END unlinked_leads,CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.linked_sessions,0) END session_linked_leads,\n CASE WHEN {{coverage:leads}}=1 THEN COALESCE(l.linked_orders,0) END linked_orders,\n CASE WHEN {{coverage:funnel}}=1 THEN f.marketing_spend_cents END marketing_spend_cents,\n CASE WHEN {{coverage:sessions}}=1 AND {{coverage:leads}}=1 AND COALESCE(s.sessions,0)>0 THEN ROUND(1.0*COALESCE(l.linked_sessions,0)/s.sessions,4) END session_to_lead_rate,\n CASE WHEN {{coverage:leads}}=1 AND COALESCE(l.all_leads,0)>0 THEN ROUND(1.0*COALESCE(l.linked_orders,0)/l.all_leads,4) END lead_to_linked_order_rate,\n CASE WHEN {{coverage:sessions}}=1 AND {{coverage:leads}}=1 THEN 1 ELSE 0 END funnel_coverage_known\nFROM cohorts c LEFT JOIN session_counts s ON s.channel=c.channel AND s.campaign_id=c.campaign_id LEFT JOIN lead_counts l ON l.channel=c.channel AND l.campaign_id=c.campaign_id LEFT JOIN spend f ON f.channel=c.channel AND f.campaign_id=c.campaign_id ORDER BY c.channel,c.campaign_id\n",
+      "grain": "channel and campaign",
+      "guardrail": "Cobertura requerida: funnel, leads, sessions",
+      "id": "funnel_conversion",
+      "sources": [
+        "funnel",
+        "leads",
+        "orders",
+        "sessions"
+      ],
+      "sql": "models/marts/funnel_conversion.sql",
+      "unit": "centavos MXN, conteo / dimensión según SQL, dimensión, indicador 0/1, ratio (0–1)",
+      "unknown": "NULL/UNKNOWN cuando cobertura o denominador no permite medir; no sustituir por cero",
+      "window": "según fecha/mes del grano; trailing_30d cuando se indica en columna"
+    },
+    {
+      "decision": "Lectura y control del warehouse",
+      "definition": "Independent source and mart totals with a passed evidence flag.",
+      "evidence_refs": [
+        {
+          "path": "models/marts/reconciliation.sql",
+          "sha256": "2ebfa62d64cbd357a221b94b0f332a3a305b879ca39233525dab7b76d2380ed7"
+        },
+        {
+          "path": "evidence/v0.2/workspace/marts/reconciliation.json",
+          "sha256": "f0a23d8f8e3e12da7fa363f7a192c75cd42b641531ffdeab59db40c3e210db9c"
+        }
+      ],
+      "fields": [
+        {
+          "definition_sql": null,
+          "name": "check_id",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "dimensión"
+        },
+        {
+          "definition_sql": null,
+          "name": "source_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "según check_id: centavos MXN o unidades"
+        },
+        {
+          "definition_sql": null,
+          "name": "mart_cents",
+          "nullable_in_materialized_schema": true,
+          "type": "",
+          "unit": "según check_id: centavos MXN o unidades"
+        },
+        {
+          "definition_sql": null,
+          "name": "passed",
+          "nullable_in_materialized_schema": true,
+          "type": "INTEGER",
+          "unit": "conteo / dimensión según SQL"
+        }
+      ],
+      "formula": "SELECT 'sales_net_revenue' check_id,\n (SELECT COALESCE(SUM(i.quantity*i.unit_price_cents-i.discount_cents),0) FROM order_items i JOIN orders o ON o.id=i.order_id WHERE o.status='delivered')-(SELECT COALESCE(SUM(amount_cents),0) FROM credit_notes) source_cents,\n (SELECT COALESCE(SUM(net_revenue_cents),0) FROM sales_daily) mart_cents\nUNION ALL SELECT 'cash_in',(SELECT COALESCE(SUM(amount_cents),0) FROM payments WHERE status='settled'),(SELECT COALESCE(SUM(cash_in_cents),0) FROM cash_daily)\nUNION ALL SELECT 'cash_out',(SELECT COALESCE(SUM(amount_cents),0) FROM refunds WHERE status='settled')+(SELECT COALESCE(SUM(amount_cents),0) FROM supplier_payments)+(SELECT COALESCE(SUM(amount_cents),0) FROM expense_payments),(SELECT COALESCE(SUM(refund_out_cents+supplier_out_cents+expense_out_cents),0) FROM cash_daily)\nUNION ALL SELECT 'purchase_receipts',(SELECT COALESCE(SUM(received_qty),0) FROM purchase_orders),(SELECT COALESCE(SUM(receipt_event_qty),0) FROM procurement)\nUNION ALL SELECT 'supplier_payments',(SELECT COALESCE(SUM(paid_cents),0) FROM purchase_orders),(SELECT COALESCE(SUM(supplier_payment_event_cents),0) FROM procurement)\nUNION ALL SELECT 'marketing_spend',(SELECT COALESCE(SUM(spend_cents),0) FROM funnel),(SELECT COALESCE(SUM(marketing_spend_cents),0) FROM channel_performance)\n",
+      "grain": "named source-to-mart control",
+      "guardrail": "Cobertura requerida: controles de calidad y SQL",
+      "id": "reconciliation",
+      "sources": [
+        "credit_notes",
+        "expense_payments",
+        "funnel",
+        "order_items",
+        "orders",
+        "payments",
+        "purchase_orders",
+        "refunds",
+        "supplier_payments"
+      ],
+      "sql": "models/marts/reconciliation.sql",
+      "unit": "conteo / dimensión según SQL, dimensión, según check_id: centavos MXN o unidades",
+      "unknown": "NULL/UNKNOWN cuando cobertura o denominador no permite medir; no sustituir por cero",
+      "window": "según fecha/mes del grano; trailing_30d cuando se indica en columna"
+    }
+  ],
+  "packet_status": {
+    "finance-close": "REVIEW",
+    "lead-to-delivery": "REVIEW",
+    "market-to-experiment": "REVIEW",
+    "procure-to-stock": "REVIEW",
+    "return-to-refund": "REVIEW",
+    "weekly-growth-review": "REVIEW"
+  },
+  "process_to_agents_by_accepted_response": {
+    "finance-close": [
+      "evidence_reviewer",
+      "finance_analyst"
+    ],
+    "lead-to-delivery": [
+      "commerce_analyst",
+      "evidence_reviewer"
+    ],
+    "market-to-experiment": [
+      "evidence_reviewer",
+      "market_researcher"
+    ],
+    "procure-to-stock": [
+      "evidence_reviewer",
+      "merchandiser"
+    ],
+    "return-to-refund": [
+      "evidence_reviewer",
+      "returns_analyst"
+    ],
+    "weekly-growth-review": [
+      "evidence_reviewer",
+      "growth_analyst"
+    ]
+  },
+  "processes": [
+    {
+      "controls": [
+        "control_totals",
+        "controls_pass",
+        "cutoff",
+        "finance_bridge",
+        "period_contract",
+        "reopen_approval",
+        "synthetic_approval"
+      ],
+      "decision": "Management finance packet separating performance, working-capital timing, and observed cash; it states that it is not formal accounting or tax output.",
+      "evidence_refs": [
+        {
+          "path": "processes/business/finance-close.json",
+          "sha256": "745e81ca185da54232614b4fd0a659690edad98ccaefee366632b95de8635b96"
+        },
+        {
+          "path": "evidence/v0.2/workspace/processes/finance-close/state.json",
+          "sha256": "1175a608762a9495d0af272c87da162c8acddecb2dff6771aa88e94a95313d58"
+        },
+        {
+          "path": "evidence/v0.2/workspace/processes/finance-close/decision-packet.json",
+          "sha256": "64c4082ff372e9c6bf93734081f22dad39badcfc286ebbbd8a23e524b763f304"
+        }
+      ],
+      "exceptions": [
+        "APPROVAL_MISSING",
+        "DATA_CUTOFF",
+        "FCL_LATE_EVENT",
+        "FIN_BRIDGE_MISMATCH",
+        "FIN_UNKNOWN_COST",
+        "MONEY_CURRENCY_MIXED",
+        "REVIEW_READY",
+        "SOURCE_NOT_OBSERVED"
+      ],
+      "id": "finance-close",
+      "marts": [
+        "finance_monthly"
+      ],
+      "states": [
+        "BLOCKED",
+        "CLOSED",
+        "DATA_CUTOFF",
+        "NEW",
+        "OPEN",
+        "RECONCILING",
+        "REOPENED",
+        "REVIEW_READY",
+        "VALIDATING"
+      ],
+      "status": "REVIEW",
+      "trigger": "period_opened"
+    },
+    {
+      "controls": [
+        "available_stock",
+        "delivery_quantity",
+        "lead_source",
+        "order_policy",
+        "payment_attempt",
+        "reason",
+        "reserved_quantity",
+        "settlement",
+        "shipment_quantity",
+        "valid_order"
+      ],
+      "decision": "Funnel and fulfilment review with coverage, drop-offs, order/settlement/fulfilment states, blocked claims, and owner.",
+      "evidence_refs": [
+        {
+          "path": "processes/business/lead-to-delivery.json",
+          "sha256": "21ce3bf2c2bc81b6af695ed0597675d30a405639c712c90912241493455c08ac"
+        },
+        {
+          "path": "evidence/v0.2/workspace/processes/lead-to-delivery/state.json",
+          "sha256": "d3c650c9a7a91265e9f1f775fdcb337cb8bd826a9532601fd61322f7c75a0881"
+        },
+        {
+          "path": "evidence/v0.2/workspace/processes/lead-to-delivery/decision-packet.json",
+          "sha256": "f38dc3a2ecbb2a09610ba9240ec40bc834a5aa74bd4e16cde033a4041991b265"
+        }
+      ],
+      "exceptions": [
+        "FULFILMENT_READY",
+        "INV_NEGATIVE_AVAILABLE",
+        "LEAD_OPEN",
+        "LEAD_QUALIFIED",
+        "LTD_SPLIT_FULFILMENT",
+        "ORDER_INVALID_LINE",
+        "ORDER_PLACED",
+        "ORDER_POLICY_REVIEW",
+        "PARTIALLY_DELIVERED",
+        "PARTIALLY_SHIPPED",
+        "PAYMENT_RECONCILIATION",
+        "READY_TO_RESERVE",
+        "SHIPMENT_RESERVATION_MISMATCH",
+        "SOURCE_NOT_OBSERVED",
+        "STATE_INVALID_TRANSITION",
+        "WAITING_SETTLEMENT"
+      ],
+      "id": "lead-to-delivery",
+      "marts": [
+        "channel_performance",
+        "funnel_conversion"
+      ],
+      "states": [
+        "BLOCKED",
+        "CANCELLED",
+        "DELIVERED",
+        "FULFILMENT_READY",
+        "LEAD_OPEN",
+        "LEAD_QUALIFIED",
+        "LOST",
+        "NEW",
+        "ORDER_PLACED",
+        "PARTIALLY_DELIVERED",
+        "PARTIALLY_SHIPPED",
+        "READY_TO_RESERVE",
+        "RESERVED",
+        "SHIPPED",
+        "WAITING_SETTLEMENT"
+      ],
+      "status": "REVIEW",
+      "trigger": "lead_captured"
+    },
+    {
+      "controls": [
+        "experiment_contract",
+        "experiment_evidence",
+        "experiment_window",
+        "market_freshness",
+        "market_provenance",
+        "prospective_assignment",
+        "reason",
+        "research_question",
+        "source_plan",
+        "synthetic_approval"
+      ],
+      "decision": "Evidence brief plus experiment contract with primary metric, guardrail, population, assignment, window, MDE/sample criterion, estimator, stop/close rule, and prohibited inference.",
+      "evidence_refs": [
+        {
+          "path": "processes/business/market-to-experiment.json",
+          "sha256": "01b61cc9b0a50749095a1de38fe93f5cf41929385763509b463b495f70ef1ef2"
+        },
+        {
+          "path": "evidence/v0.2/workspace/processes/market-to-experiment/state.json",
+          "sha256": "78b8e04d5eb955ddbe8d80364ad73f103c0b0f3a283c5c5efca0c5dee63aeae5"
+        },
+        {
+          "path": "evidence/v0.2/workspace/processes/market-to-experiment/decision-packet.json",
+          "sha256": "e3c470cc6d2dbd9bc5481aa4cef213d745cdda9a746925687a93bca38139511b"
+        }
+      ],
+      "exceptions": [
+        "APPROVAL_MISSING",
+        "APPROVAL_PENDING",
+        "CTR_DUPLICATE_EVENT_CONFLICT",
+        "EVIDENCE_REVIEW",
+        "EXPERIMENT_CONTRACT_INCOMPLETE",
+        "EXP_ASSIGNMENT_INVALID",
+        "EXP_EVIDENCE_INSUFFICIENT",
+        "EXP_GUARDRAIL_FAILED",
+        "HYPOTHESIS_DRAFT",
+        "MARKET_PROVENANCE_MISSING",
+        "MARKET_TO_DEMAND_OVERCLAIM",
+        "QUESTION_OPEN",
+        "SOURCE_STALE"
+      ],
+      "id": "market-to-experiment",
+      "marts": [
+        "inventory_position",
+        "experiment_results"
+      ],
+      "states": [
+        "ANALYZING",
+        "APPROVAL_PENDING",
+        "APPROVED",
+        "BLOCKED",
+        "CLOSED",
+        "EVIDENCE_REVIEW",
+        "HYPOTHESIS_DRAFT",
+        "INCONCLUSIVE",
+        "NEW",
+        "QUESTION_OPEN",
+        "REJECTED",
+        "RESEARCHING",
+        "RUNNING"
+      ],
+      "status": "REVIEW",
+      "trigger": "question_opened"
+    },
+    {
+      "controls": [
+        "dispatch_quantity",
+        "full_receipt",
+        "po_totals",
+        "reason",
+        "receipt_inventory_bridge",
+        "receipt_quantity",
+        "synthetic_approval",
+        "valid_po"
+      ],
+      "decision": "Supply review containing open units, expected/observed lead time, receipt variance, accepted value, unknowns, and approval-required next action.",
+      "evidence_refs": [
+        {
+          "path": "processes/business/procure-to-stock.json",
+          "sha256": "b3fa7894a5016d24b9dcc17ac805eca54996edeed50e6e4c024f7c6496343427"
+        },
+        {
+          "path": "evidence/v0.2/workspace/processes/procure-to-stock/state.json",
+          "sha256": "1491acdabebd7378e0dd4a842aae960da434a5bbf70435be5fb3588eaba65a8a"
+        },
+        {
+          "path": "evidence/v0.2/workspace/processes/procure-to-stock/decision-packet.json",
+          "sha256": "32371a0a07534fa9cd95d89d73b260eda64561da41208f812b78a15474331953"
+        }
+      ],
+      "exceptions": [
+        "APPROVAL_MISSING",
+        "CTR_BROKEN_REFERENCE",
+        "FIN_UNKNOWN_COST",
+        "INV_LEDGER_RECEIPT_MISMATCH",
+        "IN_TRANSIT",
+        "PARTIALLY_RECEIVED",
+        "PROC_DUPLICATE_RECEIPT",
+        "PROC_LATE_RECEIPT",
+        "PROC_OVER_DISPATCH",
+        "PROC_OVER_RECEIPT",
+        "PURCHASE_RECEIPT",
+        "WAITING_APPROVAL"
+      ],
+      "id": "procure-to-stock",
+      "marts": [
+        "inventory_position",
+        "procurement"
+      ],
+      "states": [
+        "APPROVED",
+        "BLOCKED",
+        "CANCELLED",
+        "CLOSED",
+        "DRAFT",
+        "IN_TRANSIT",
+        "NEW",
+        "PARTIALLY_RECEIVED",
+        "RECEIVED",
+        "WAITING_APPROVAL"
+      ],
+      "status": "REVIEW",
+      "trigger": "po_drafted"
+    },
+    {
+      "controls": [
+        "disposition",
+        "reason",
+        "refund_approval",
+        "refund_limit",
+        "return_approval",
+        "return_bridge",
+        "return_eligibility",
+        "return_receipt",
+        "tracking_status"
+      ],
+      "decision": "Return case summary with item eligibility, condition, restock/write-off, requested/settled amounts, timing, and approval status.",
+      "evidence_refs": [
+        {
+          "path": "processes/business/return-to-refund.json",
+          "sha256": "c8f6c78b9119abc2f2203dfccdf1d79e9fb4113691cc9a0d68ae33f774f82c1f"
+        },
+        {
+          "path": "evidence/v0.2/workspace/processes/return-to-refund/state.json",
+          "sha256": "e1f3f1458f025d5939655bcf719c9b29674862129c1530358ddd805311f6ab49"
+        },
+        {
+          "path": "evidence/v0.2/workspace/processes/return-to-refund/decision-packet.json",
+          "sha256": "faf204a467add406fa1ebe9674bb9ece7e7cf578bfe6c076d16b20aca06e64ba"
+        }
+      ],
+      "exceptions": [
+        "APPROVAL_MISSING",
+        "FIN_REFUND_EXCEEDS_SETTLED",
+        "IN_TRANSIT",
+        "REFUND_PENDING",
+        "RETURN_CREDIT_MISMATCH",
+        "RETURN_DISPOSITION_UNKNOWN",
+        "RETURN_EXCEEDS_DELIVERED",
+        "RETURN_OVER_RECEIPT",
+        "RTR_EXCHANGE_LINK_MISSING"
+      ],
+      "id": "return-to-refund",
+      "marts": [
+        "inventory_position",
+        "cash_daily"
+      ],
+      "states": [
+        "AUTHORIZED",
+        "BLOCKED",
+        "CLOSED",
+        "INSPECTED",
+        "IN_TRANSIT",
+        "NEW",
+        "RECEIVED",
+        "REFUNDED",
+        "REFUND_PENDING",
+        "REJECTED",
+        "REQUESTED"
+      ],
+      "status": "REVIEW",
+      "trigger": "return_requested"
+    },
+    {
+      "controls": [
+        "agent_request",
+        "evidence_binding",
+        "evidence_response",
+        "next_review",
+        "proposal_limit",
+        "review_period",
+        "synthetic_approval"
+      ],
+      "decision": "Weekly Growth review with facts, unknowns, hypotheses, proposals, primary metric, guardrail, population/window, risk, approver, and closure rule.",
+      "evidence_refs": [
+        {
+          "path": "processes/business/weekly-growth-review.json",
+          "sha256": "4b14da64e8a2541805ed3d2e56e2608a2141afa86da622afffa1c1dab84afc8e"
+        },
+        {
+          "path": "evidence/v0.2/workspace/processes/weekly-growth-review/state.json",
+          "sha256": "dfdf0f9b62dc081c7304ea9fa247e880e5043f89778a6d97f9fa0e08b87377ce"
+        },
+        {
+          "path": "evidence/v0.2/workspace/processes/weekly-growth-review/decision-packet.json",
+          "sha256": "8a17425fa7de0c58b2225b7edfa9d05a76d3e59ce20c531ed1093e08e5c59e2f"
+        }
+      ],
+      "exceptions": [
+        "AGENT_EVIDENCE_UNRESOLVED",
+        "AGENT_REQUEST_INVALID",
+        "ANALYSIS_REQUESTED",
+        "DATA_QUALITY_BLOCK",
+        "DATA_READY",
+        "QUALITY_BLOCKED",
+        "RANKING_INPUT_UNKNOWN",
+        "REVIEW_READY",
+        "WGR_CAUSAL_OVERCLAIM",
+        "WGR_TOO_MANY_ACTIONS"
+      ],
+      "id": "weekly-growth-review",
+      "marts": [
+        "finance_monthly",
+        "channel_performance",
+        "customer_cohorts",
+        "experiment_results",
+        "funnel_conversion"
+      ],
+      "states": [
+        "ANALYSIS_REQUESTED",
+        "ANALYZED",
+        "ARCHIVED",
+        "BLOCKED",
+        "DATA_READY",
+        "DECIDED",
+        "DRAFT",
+        "NEW",
+        "REVIEW_READY"
+      ],
+      "status": "REVIEW",
+      "trigger": "review_opened"
+    }
+  ],
+  "roles": [
+    {
+      "authority": {
+        "external": "PROHIBITED",
+        "read": "synthetic snapshot and cited public sources",
+        "write": "own structured response and query trace"
+      },
+      "evidence_refs": [
+        {
+          "path": "agents/commerce_analyst.json",
+          "sha256": "c9d0278a7f0b77db80610eb8d69cb3d66f85c401d787eea325ac5c8445d45fd5"
+        }
+      ],
+      "id": "commerce_analyst",
+      "inputs": "synthetic snapshot and cited public sources",
+      "outputs": "contracts/native-agent-response.schema.json",
+      "processes": [
+        "lead-to-delivery"
+      ],
+      "reviewer": "independent_evidence_review",
+      "role": "Conversión y entrega"
+    },
+    {
+      "authority": {
+        "external": "PROHIBITED",
+        "read": "synthetic snapshot and cited public sources",
+        "write": "own structured response and query trace"
+      },
+      "evidence_refs": [
+        {
+          "path": "agents/evidence_reviewer.json",
+          "sha256": "f2867500a7052cf3c0c7a9ba553f73ed115db0c07a9724688d119112229e6310"
+        }
+      ],
+      "id": "evidence_reviewer",
+      "inputs": "synthetic snapshot and cited public sources",
+      "outputs": "contracts/native-agent-response.schema.json",
+      "processes": [
+        "finance-close",
+        "lead-to-delivery",
+        "market-to-experiment",
+        "procure-to-stock",
+        "return-to-refund",
+        "weekly-growth-review"
+      ],
+      "reviewer": "independent reviewer of analyst response",
+      "role": "Revisión adversarial"
+    },
+    {
+      "authority": {
+        "external": "PROHIBITED",
+        "read": "synthetic snapshot and cited public sources",
+        "write": "own structured response and query trace"
+      },
+      "evidence_refs": [
+        {
+          "path": "agents/finance_analyst.json",
+          "sha256": "5b33bd44adf6c41fd7c0b74266c8e5b84dd1bd378675cf497d5654cfaed97056"
+        }
+      ],
+      "id": "finance_analyst",
+      "inputs": "synthetic snapshot and cited public sources",
+      "outputs": "contracts/native-agent-response.schema.json",
+      "processes": [
+        "finance-close"
+      ],
+      "reviewer": "independent_evidence_review",
+      "role": "Finanzas de gestión"
+    },
+    {
+      "authority": {
+        "external": "PROHIBITED",
+        "read": "synthetic snapshot and cited public sources",
+        "write": "own structured response and query trace"
+      },
+      "evidence_refs": [
+        {
+          "path": "agents/growth_analyst.json",
+          "sha256": "5566638c4d56c0449c6b742d058ca49ae092d94dfafa7d1ab770f6de6b02b514"
+        }
+      ],
+      "id": "growth_analyst",
+      "inputs": "synthetic snapshot and cited public sources",
+      "outputs": "contracts/native-agent-response.schema.json",
+      "processes": [
+        "weekly-growth-review"
+      ],
+      "reviewer": "independent_evidence_review",
+      "role": "Growth y experimentación"
+    },
+    {
+      "authority": {
+        "external": "PROHIBITED",
+        "read": "synthetic snapshot and cited public sources",
+        "write": "own structured response and query trace"
+      },
+      "evidence_refs": [
+        {
+          "path": "agents/market_researcher.json",
+          "sha256": "50f416faeb91e3ee662a4cd624fcc8b1da91530aa98fbde17ba1c1425ec32364"
+        }
+      ],
+      "id": "market_researcher",
+      "inputs": "synthetic snapshot and cited public sources",
+      "outputs": "contracts/native-agent-response.schema.json",
+      "processes": [
+        "market-to-experiment"
+      ],
+      "reviewer": "independent_evidence_review",
+      "role": "Mercado y aprendizaje"
+    },
+    {
+      "authority": {
+        "external": "PROHIBITED",
+        "read": "synthetic snapshot and cited public sources",
+        "write": "own structured response and query trace"
+      },
+      "evidence_refs": [
+        {
+          "path": "agents/merchandiser.json",
+          "sha256": "66c671d2d37820e71d31ab727cd10c4115dc847bc5d4821615adea6349a98c24"
+        }
+      ],
+      "id": "merchandiser",
+      "inputs": "synthetic snapshot and cited public sources",
+      "outputs": "contracts/native-agent-response.schema.json",
+      "processes": [
+        "procure-to-stock"
+      ],
+      "reviewer": "independent_evidence_review",
+      "role": "Merchandising e inventario"
+    },
+    {
+      "authority": {
+        "external": "PROHIBITED",
+        "read": "synthetic snapshot and cited public sources",
+        "write": "own structured response and query trace"
+      },
+      "evidence_refs": [
+        {
+          "path": "agents/returns_analyst.json",
+          "sha256": "5653f9bd473293c1e08695022f85af5b790a947cc1f8db9a3ae945e4398de373"
+        }
+      ],
+      "id": "returns_analyst",
+      "inputs": "synthetic snapshot and cited public sources",
+      "outputs": "contracts/native-agent-response.schema.json",
+      "processes": [
+        "return-to-refund"
+      ],
+      "reviewer": "independent_evidence_review",
+      "role": "Devoluciones y experiencia"
+    }
+  ],
+  "scope": "Representación estática offline de contratos y evidencia sintética; ninguna acción externa",
+  "sections": {
+    "agents": 7,
+    "decision_packets": 6,
+    "extension_tables": 8,
+    "mart_rows": 792,
+    "marts": 11,
+    "metric_columns": 137,
+    "packet_facts_validated": 49,
+    "processes": 6,
+    "quality_checks": 60,
+    "quality_non_pass": 0,
+    "source_rows": 22844,
+    "sources": 30
+  },
+  "source_content_hash": "d06efe733e4525d731093faa31c86ea51bb9f910856ad62e005032c141eaa3c3",
+  "source_sha256": {
+    "AGENTS.md": "abbf8f9d306eb939b30ef37cb76613af60a0e81583eb55fa375068efe317a9fd",
+    "agents/commerce_analyst.json": "c9d0278a7f0b77db80610eb8d69cb3d66f85c401d787eea325ac5c8445d45fd5",
+    "agents/evidence_reviewer.json": "f2867500a7052cf3c0c7a9ba553f73ed115db0c07a9724688d119112229e6310",
+    "agents/finance_analyst.json": "5b33bd44adf6c41fd7c0b74266c8e5b84dd1bd378675cf497d5654cfaed97056",
+    "agents/growth_analyst.json": "5566638c4d56c0449c6b742d058ca49ae092d94dfafa7d1ab770f6de6b02b514",
+    "agents/market_researcher.json": "50f416faeb91e3ee662a4cd624fcc8b1da91530aa98fbde17ba1c1425ec32364",
+    "agents/merchandiser.json": "66c671d2d37820e71d31ab727cd10c4115dc847bc5d4821615adea6349a98c24",
+    "agents/returns_analyst.json": "5653f9bd473293c1e08695022f85af5b790a947cc1f8db9a3ae945e4398de373",
+    "client/COSTOS_Y_OPERACION.html": "599a8c6398dda799ec40403e0b00df80cbf0349643c4e8e07f7765580162c79d",
+    "client/costs-operations-manifest.json": "e955313459f149445cd48bc3ea207e5a9b65c44fdfbbbb4c66b2a59512a9b62b",
+    "client/example-input.json": "d99f2ab0c7cc3bbb6da1291ba7977d89003e224795479b5b3e2958d84b40c06a",
+    "client/operating-data/cash_scenario_events.csv": "2af2267050197b2cb0f8fd5b87911e15a18d69c1004975b3f65670acf1ecd9d5",
+    "client/operating-data/cost_allocations.csv": "174d1dec9da9928af1c352f0447a62e9bd424fceb687927d6787569b8d16ffa8",
+    "client/operating-data/cost_components.csv": "f9ce813aad07ce93ac28826646556dc40d24003ba28cb3ae1e3e83a1a88fa371",
+    "client/operating-data/cost_versions.csv": "32731059693bd365454fef68fceaa7f9ba1843c70305b95507771333dcc07139",
+    "client/operating-data/obligation_payments.csv": "bcb7a5eb14f2704a24d865f491eda6826f4b05660725d58bae94b871ad6ec068",
+    "client/operating-data/obligations.csv": "a6d9799ad26b1e27e7ab6821c0a4374a96e17921b2d93d93f3ecc057ca24ba30",
+    "client/operating-data/purchase_orders_ops.csv": "a12b6cccd5078efca30725e816900235032c469455438e879837aa55eb1ebae7",
+    "client/operating-data/purchase_receipts_ops.csv": "0a3ce3ceed15853194568012cbfa0908455c9cf4a6c112b6aecfdbac88f07643",
+    "evidence/v0.2/agents/model-provenance.json": "b6b93428540ee2da6ed1fa0f6f465bddc416cdab54684fc52433619a276edf2a",
+    "evidence/v0.2/agents/task-runs.json": "db934a467908d87b7905c61580fbd768660a007d459142b80967376dc8f6a8bd",
+    "evidence/v0.2/workspace/lineage.json": "fa092643bd96f46c6df3a709d7e706db03f4d21a7aea65c6c8fa1d521a6cd780",
+    "evidence/v0.2/workspace/marts/cash_daily.json": "1249bed02a576fafddf79eef10f4b289224915de1a2ac820d6138c9c81983e08",
+    "evidence/v0.2/workspace/marts/channel_performance.json": "73f2149cd09e9c396f5add5ca5115d8e01d99c0bddfd6558ee948a1c4006410c",
+    "evidence/v0.2/workspace/marts/customer_cohorts.json": "5c3b80868f4e6ce33f197946fde850108ffd1dc551546fe4af32de075cdc08f2",
+    "evidence/v0.2/workspace/marts/experiment_results.json": "f44aac0b132aa6ca8d2a15c46f5427c3fdfa97035a339b40510916c74595fe3f",
+    "evidence/v0.2/workspace/marts/finance_monthly.json": "668729a23bc1632e0012d97ae49d3320239ecd8b3b7729dc27fcc220236bd988",
+    "evidence/v0.2/workspace/marts/funnel_conversion.json": "a3528889c352eb61da1204a6c790fda000e13a64bb82e12721732676c8421f78",
+    "evidence/v0.2/workspace/marts/inventory_aging.json": "11ee4d6992bb431945ebd35d8678f17e1226d362e7f529a63a018a1094cd70ef",
+    "evidence/v0.2/workspace/marts/inventory_position.json": "e58278c97e0bd86adcf800d13549b3466e17f45d8fc0db36e15ac58c9ed852da",
+    "evidence/v0.2/workspace/marts/procurement.json": "e1127ac36465159868d8c13b49307f51bb7fece7a9d712fd79a62fb319556361",
+    "evidence/v0.2/workspace/marts/reconciliation.json": "f0a23d8f8e3e12da7fa363f7a192c75cd42b641531ffdeab59db40c3e210db9c",
+    "evidence/v0.2/workspace/marts/sales_daily.json": "befd9177409dbd30dba6292e8dee700b2b3648c3528695f55e6952286227b766",
+    "evidence/v0.2/workspace/processes/finance-close/decision-packet.json": "64c4082ff372e9c6bf93734081f22dad39badcfc286ebbbd8a23e524b763f304",
+    "evidence/v0.2/workspace/processes/finance-close/state.json": "1175a608762a9495d0af272c87da162c8acddecb2dff6771aa88e94a95313d58",
+    "evidence/v0.2/workspace/processes/finance-close/tasks/evidence_reviewer.dispatch.json": "912641e139990db611113446bf126f292ac5fd569c17f2ccb6cd98bfbf4128df",
+    "evidence/v0.2/workspace/processes/finance-close/tasks/evidence_reviewer.request.json": "3747862e0aa9b246e5481011b89ec5ba2550f490ab634a11c81c9d86ab87e595",
+    "evidence/v0.2/workspace/processes/finance-close/tasks/evidence_reviewer.response.json": "0c16312e7f81768e99418a0659c5603a873fa73af374502ce16653ea7866a179",
+    "evidence/v0.2/workspace/processes/finance-close/tasks/finance_analyst.dispatch.json": "5eb967e054c1eb46596d35f427965835563479bb3e2a4a827d96b7bd05595053",
+    "evidence/v0.2/workspace/processes/finance-close/tasks/finance_analyst.request.json": "31eabb2fb2f267a73a04930fbbad631575c2beaf9eb3a19fa394894fb939399b",
+    "evidence/v0.2/workspace/processes/finance-close/tasks/finance_analyst.response.json": "381a00e920e0d88e189c23717f4ea676b86633d2e029eb0c1c0b65f218b1c178",
+    "evidence/v0.2/workspace/processes/lead-to-delivery/decision-packet.json": "f38dc3a2ecbb2a09610ba9240ec40bc834a5aa74bd4e16cde033a4041991b265",
+    "evidence/v0.2/workspace/processes/lead-to-delivery/state.json": "d3c650c9a7a91265e9f1f775fdcb337cb8bd826a9532601fd61322f7c75a0881",
+    "evidence/v0.2/workspace/processes/lead-to-delivery/tasks/commerce_analyst.dispatch.json": "d55d6ccba98441c1f6d8d2d5ac7f4543b30ae687fffb49deec16dbac6b5e2427",
+    "evidence/v0.2/workspace/processes/lead-to-delivery/tasks/commerce_analyst.request.json": "be8543e9e719e842226f9d7465192d22abc69ae52fc0af557086d734dfe833e7",
+    "evidence/v0.2/workspace/processes/lead-to-delivery/tasks/commerce_analyst.response.json": "559742990492a95f396d509273f7c3a2e496cf75dcaf2ddfdb5bf804acd3442a",
+    "evidence/v0.2/workspace/processes/lead-to-delivery/tasks/evidence_reviewer.dispatch.json": "405b3d4f583597362c69cd1872e7c4f30752db662def74050251b0d2eae1d5c0",
+    "evidence/v0.2/workspace/processes/lead-to-delivery/tasks/evidence_reviewer.request.json": "23c176ae9bb7641dfac01db8b1e9cc194819c53e6d29a011dbb6cdeb8a6d0571",
+    "evidence/v0.2/workspace/processes/lead-to-delivery/tasks/evidence_reviewer.response.json": "2af96670bce5ec5e513d43f8f5bdc13cb7ad87114ee7d09a656e28d503016ab3",
+    "evidence/v0.2/workspace/processes/market-to-experiment/decision-packet.json": "e3c470cc6d2dbd9bc5481aa4cef213d745cdda9a746925687a93bca38139511b",
+    "evidence/v0.2/workspace/processes/market-to-experiment/state.json": "78b8e04d5eb955ddbe8d80364ad73f103c0b0f3a283c5c5efca0c5dee63aeae5",
+    "evidence/v0.2/workspace/processes/market-to-experiment/tasks/evidence_reviewer.dispatch.json": "af269224c4656ddf82f25fbeb622186d96cf9d504631e13a5836bfc798fc4bf8",
+    "evidence/v0.2/workspace/processes/market-to-experiment/tasks/evidence_reviewer.request.json": "09f3a806d31cab3b3a90256b8594c193792dc92546539788bb320d4ee9e3ac59",
+    "evidence/v0.2/workspace/processes/market-to-experiment/tasks/evidence_reviewer.response.json": "f526ea720f6ea0cb6e7fe8f482b430e170e22254f65d0ef00074d23cf7f12be3",
+    "evidence/v0.2/workspace/processes/market-to-experiment/tasks/market_researcher.dispatch.json": "2a41ea6c4bd5799ec828029c97168c38fd39aa23b71f8da622f136102587a381",
+    "evidence/v0.2/workspace/processes/market-to-experiment/tasks/market_researcher.request.json": "d99a516f7d799f02df02e2e3f99fa0d493ad6697ca12ad283baed50741295ea9",
+    "evidence/v0.2/workspace/processes/market-to-experiment/tasks/market_researcher.response.json": "20c57ecf7911993215d52497ea5bfb89a023c7ca9e96d301e305ea915bc67eaf",
+    "evidence/v0.2/workspace/processes/procure-to-stock/decision-packet.json": "32371a0a07534fa9cd95d89d73b260eda64561da41208f812b78a15474331953",
+    "evidence/v0.2/workspace/processes/procure-to-stock/state.json": "1491acdabebd7378e0dd4a842aae960da434a5bbf70435be5fb3588eaba65a8a",
+    "evidence/v0.2/workspace/processes/procure-to-stock/tasks/evidence_reviewer.dispatch.json": "4475e981ff0bf22dcf010b98fb9694c535cb56c0a4e0249aa89f9037af864fac",
+    "evidence/v0.2/workspace/processes/procure-to-stock/tasks/evidence_reviewer.request.json": "b9dcde4ce7297c2f900cddaeea958fdc0e2a82e4790b247d0970afab83b55f4f",
+    "evidence/v0.2/workspace/processes/procure-to-stock/tasks/evidence_reviewer.response.json": "663f3c7fec27428acb286155d118ffdbcb485271ab7ffb8f0b8eee0e0f1eae79",
+    "evidence/v0.2/workspace/processes/procure-to-stock/tasks/merchandiser.dispatch.json": "33079dd661adf200f328f457355b0207271fd9abf7de1a9c974acb79e782b310",
+    "evidence/v0.2/workspace/processes/procure-to-stock/tasks/merchandiser.request.json": "8cafeca51884ad72bcb0f04b438f3586d05046e4994945fe56a6e5ddd6d5ce7b",
+    "evidence/v0.2/workspace/processes/procure-to-stock/tasks/merchandiser.response.json": "588ac08268482a9d0ef36f2decdb67eca7291320d239b30a8181e60f230460ca",
+    "evidence/v0.2/workspace/processes/return-to-refund/decision-packet.json": "faf204a467add406fa1ebe9674bb9ece7e7cf578bfe6c076d16b20aca06e64ba",
+    "evidence/v0.2/workspace/processes/return-to-refund/state.json": "e1f3f1458f025d5939655bcf719c9b29674862129c1530358ddd805311f6ab49",
+    "evidence/v0.2/workspace/processes/return-to-refund/tasks/evidence_reviewer.dispatch.json": "e44c16d8420eb66df85cff67d688aca5ad05b956b0ea8535512519ec9975720c",
+    "evidence/v0.2/workspace/processes/return-to-refund/tasks/evidence_reviewer.request.json": "6856562ce17063b62931bcdd86b323a2e4932683559d1deaaeff69b38fa8fd49",
+    "evidence/v0.2/workspace/processes/return-to-refund/tasks/evidence_reviewer.response.json": "4adb1fc2dcc4582bcaed71417b3931b322f0d94eb3c4e56666071d8ec04fcdf8",
+    "evidence/v0.2/workspace/processes/return-to-refund/tasks/returns_analyst.dispatch.json": "df782f9f8d197b6656e3749e1de9aa5f545a0137765370aebab67bd5289e3749",
+    "evidence/v0.2/workspace/processes/return-to-refund/tasks/returns_analyst.request.json": "2d0697dd97247fa4038b4f22ece2e06d2b332894219e1bf878bd4a65047ef0ad",
+    "evidence/v0.2/workspace/processes/return-to-refund/tasks/returns_analyst.response.json": "dd1d73b6c1da02b35b531311b6a60cf2eee3e6fcffda475dc33d9ceeed8c9abb",
+    "evidence/v0.2/workspace/processes/weekly-growth-review/decision-packet.json": "8a17425fa7de0c58b2225b7edfa9d05a76d3e59ce20c531ed1093e08e5c59e2f",
+    "evidence/v0.2/workspace/processes/weekly-growth-review/state.json": "dfdf0f9b62dc081c7304ea9fa247e880e5043f89778a6d97f9fa0e08b87377ce",
+    "evidence/v0.2/workspace/processes/weekly-growth-review/tasks/evidence_reviewer.dispatch.json": "8c0238dad416fb765a6d44a8e76db7471a1ad4cd6502cbfef79d3729b6ea653c",
+    "evidence/v0.2/workspace/processes/weekly-growth-review/tasks/evidence_reviewer.request.json": "4e0709d1ed27b5a99bb9bce6e5a710cb228070897eb3d6813badbb62f808787c",
+    "evidence/v0.2/workspace/processes/weekly-growth-review/tasks/evidence_reviewer.response.json": "e0ec6b2b4026da655ae185210a093245ff7ec6f975d38260366dbbd813276463",
+    "evidence/v0.2/workspace/processes/weekly-growth-review/tasks/growth_analyst.dispatch.json": "97887714c37d895869c27db319225cb8ff035488b1b1068230f249ca2bd32d39",
+    "evidence/v0.2/workspace/processes/weekly-growth-review/tasks/growth_analyst.request.json": "6c0d9df6d84265616b328922c7aeb665575129d142d4a8160124a6fae31ef60a",
+    "evidence/v0.2/workspace/processes/weekly-growth-review/tasks/growth_analyst.response.json": "681cf030c27c128edc20c8e91ae84e42bc4645c49d239740e63aef08dec2e153",
+    "evidence/v0.2/workspace/quality.json": "bb50980c60860b7dace3f0e60c47f8b50406df372cf740959a6ae861b91a740e",
+    "evidence/v0.2/workspace/tables/campaigns.csv": "08b4086ce01aa2a0043c00a56a3001d8e2879263ecd68b93f2411b6e2b3ef85f",
+    "evidence/v0.2/workspace/tables/content_assets.csv": "17637b1d968c31300c74df4723ab503f4036212e17e11b0fca3e19cba349e72b",
+    "evidence/v0.2/workspace/tables/credit_notes.csv": "1bf4b35130fe4d7f03833ac215c5cf9cf77aa69b30f0c6c9759d62e119810244",
+    "evidence/v0.2/workspace/tables/customers.csv": "1783300f5b45a36876d4b6e6de0d7e973a6e7b39bd9d292f2e9cc1904d27ae2a",
+    "evidence/v0.2/workspace/tables/expense_payments.csv": "92d5508975202fc30938b3356a60b5d6be464828ec4e8c5a1bea0f392ebe6f48",
+    "evidence/v0.2/workspace/tables/expenses.csv": "2aeed57cc6ce39277e8af048c3980da521c6bc51427e758ecc8ed38dfc7d6b12",
+    "evidence/v0.2/workspace/tables/experiment_assignments.csv": "cf15c971dce1915895ef478bc979a94a7ada3d2d271bfeb0327cceb302235cec",
+    "evidence/v0.2/workspace/tables/experiment_outcomes.csv": "3142aa7310ac3a581f2179657845573b737c06ec4d746f661d9ae88ab0024664",
+    "evidence/v0.2/workspace/tables/experiments.csv": "5563c510da86dde21f166cff6fff160060633149fb1dbebde87ecb8df22a938e",
+    "evidence/v0.2/workspace/tables/funnel.csv": "b7da28b68fb3da0f12bd20244a904b374a7d9c6e9c3db2c6c0c134ff4538a876",
+    "evidence/v0.2/workspace/tables/inventory_counts.csv": "56af24341cd97630a5576fc975e04a0454d4b57ded87958e5440860dcaf7531a",
+    "evidence/v0.2/workspace/tables/invoices.csv": "2c50ec6f9d9b9941aff6714516d2cb9f87c8f3193e947ace5c34ce15881176b6",
+    "evidence/v0.2/workspace/tables/leads.csv": "d97dadbbae128bee53ab818f7fbcd60e0ef412d5a67f9de28ad67617e7e93b87",
+    "evidence/v0.2/workspace/tables/lifecycle_events.csv": "751622f211ce022f2fb325b1934f7e2a64d9729756f4a8ac2acfac230fc20237",
+    "evidence/v0.2/workspace/tables/movements.csv": "aa8eccd71abcbea1b95e84827c9546e289ef6b416f9d1bd6e3cdbd56c514d933",
+    "evidence/v0.2/workspace/tables/order_items.csv": "ad31c6285b678b5983033edfc5916384f9dd26951f8d7d58ec14a4edd8510e2e",
+    "evidence/v0.2/workspace/tables/orders.csv": "e4fa89a2ffcb58dec9b1c6af5fff5018958ac97c5f1a763b8ebfb03da7278685",
+    "evidence/v0.2/workspace/tables/payments.csv": "344dad05fc631d519c682844e9bf7b3bdad97d1ac61e09879b93f65de914d783",
+    "evidence/v0.2/workspace/tables/products.csv": "2338eb52bb68d02a9170e3cbb42929f93fa1e9df3ae14e46bc010330ea837559",
+    "evidence/v0.2/workspace/tables/purchase_orders.csv": "99eb0d66236943aa43e8e94540180622d52191d8d1278cc5664c649155e00b4d",
+    "evidence/v0.2/workspace/tables/purchase_receipts.csv": "a007b9b342414adfecf084aad1fa86b09111115873a03e04a2773283df249d50",
+    "evidence/v0.2/workspace/tables/refunds.csv": "969bdad56020e021ff8a179ddfec9e52cd03296ff4eb1be7752452c74a0c32ac",
+    "evidence/v0.2/workspace/tables/reservations.csv": "140f990c4f341d9c6c230de4630464fae44e35cd69a113c9ab5cae80d99ed79f",
+    "evidence/v0.2/workspace/tables/returns.csv": "c62d6195a987263201514c74fec73e597c60ed3950d0c0bfd03cb953ea94446e",
+    "evidence/v0.2/workspace/tables/sessions.csv": "ad4bbc6580520b2111298030cab8ce378d8137cefa963d9de56a27b8f5c3dc47",
+    "evidence/v0.2/workspace/tables/shipments.csv": "1675f52b04cb6845ef9793ff786acf0bcd1c9e3eefc57649cdfe32a8c44892fa",
+    "evidence/v0.2/workspace/tables/supplier_payments.csv": "4d538eda490114371c42187db7251cc0354c77a65d28b6d524de2888ab0d8aee",
+    "evidence/v0.2/workspace/tables/suppliers.csv": "ef057aa50bc1d67a2c30c8e9efa69d618f28d4bbee0443ef8f56ba54d08220a3",
+    "evidence/v0.2/workspace/tables/unmet_demand.csv": "cb6b154f946d1057c7e227853d3b0340a766218786daa70768413dc403d1af60",
+    "evidence/v0.2/workspace/tables/variants.csv": "3fdfa034942fc82322b8e922dfeb025eddc14c46c35de95257223fe380e9bdc2",
+    "evidence/v0.2/workspace/workspace.json": "4bb200ccb2236dbe31357feaa5ce6b8637d69796da483adfd04e0310c8087f89",
+    "models/marts/cash_daily.sql": "89d3e68fbc96f5adee334e665d68a2e070405cc2077fa57b529f2816ff9103cd",
+    "models/marts/channel_performance.sql": "acdd965e0c89b3f34a873157436d40768935cdaeee1fde5a160e363636094b72",
+    "models/marts/customer_cohorts.sql": "6654b6ef0a36ea451c526be86d3a42df8f9252b56ddd0939e844fa8174860ada",
+    "models/marts/experiment_results.sql": "564f1d03774820105b5a8bbeca75039833ae79bd97b007b1e261c58d8dc58d53",
+    "models/marts/finance_monthly.sql": "f5340240d7b7efee7161862575adc74ff1a7b666b4b9d169762c968af02b9e57",
+    "models/marts/funnel_conversion.sql": "6785459b1eb7fa0ada73167c485916535e53e9cacb94bec03929993a1f0b4672",
+    "models/marts/inventory_aging.sql": "3959153eea4949c03974373d20671e693c57d514495edd49d0efdeedb6c47973",
+    "models/marts/inventory_position.sql": "4bffc82efe8695f607432b791ea90107880e6e9d2871011c43170ca35f311e01",
+    "models/marts/procurement.sql": "48184d8bb0f6b3f07748d7f8e72cc60a37f3b4e7dbb9f93f11ffbe652899eb42",
+    "models/marts/reconciliation.sql": "2ebfa62d64cbd357a221b94b0f332a3a305b879ca39233525dab7b76d2380ed7",
+    "models/marts/sales_daily.sql": "3b852fcebc0db1f174eb40c823a2bfd79091c4ccb4f54a4744320cfff90192ee",
+    "processes/business/finance-close.json": "745e81ca185da54232614b4fd0a659690edad98ccaefee366632b95de8635b96",
+    "processes/business/lead-to-delivery.json": "21ce3bf2c2bc81b6af695ed0597675d30a405639c712c90912241493455c08ac",
+    "processes/business/market-to-experiment.json": "01b61cc9b0a50749095a1de38fe93f5cf41929385763509b463b495f70ef1ef2",
+    "processes/business/procure-to-stock.json": "b3fa7894a5016d24b9dcc17ac805eca54996edeed50e6e4c024f7c6496343427",
+    "processes/business/return-to-refund.json": "c8f6c78b9119abc2f2203dfccdf1d79e9fb4113691cc9a0d68ae33f774f82c1f",
+    "processes/business/weekly-growth-review.json": "4b14da64e8a2541805ed3d2e56e2608a2141afa86da622afffa1c1dab84afc8e",
+    "specs/AGENT-SYSTEM.md": "7fc1d4c9844aebfff4030dea7f88bebb8c8ec548330fd95b7093b144ea483fe8",
+    "specs/COSTS-OPERATIONS-v3.md": "6b375b26b6cbc0b5af989bd08857fb77180435b4c42d8de4f367a2dbe90c5d9e",
+    "specs/DATA-DICTIONARY.md": "846c08e3e884c7cff986b1e84ce762afa6aa87e658f12a01e4554360e0138147",
+    "specs/METRIC-CATALOG.md": "46f20ed3baa43bd02d5444311562d4a6d6bc1ec025f8f3adfe20a989786c9aab",
+    "specs/PROCESS-CATALOG.md": "1e396e39f3c6be89ca487ce2e1c83f79705a0baacadc85a71351007be5c49e69"
+  },
+  "source_to_marts": {
+    "campaigns": [
+      "channel_performance"
+    ],
+    "content_assets": [],
+    "credit_notes": [
+      "sales_daily",
+      "channel_performance",
+      "reconciliation"
+    ],
+    "customers": [],
+    "expense_payments": [
+      "cash_daily",
+      "reconciliation"
+    ],
+    "expenses": [
+      "finance_monthly"
+    ],
+    "experiment_assignments": [
+      "experiment_results"
+    ],
+    "experiment_outcomes": [
+      "experiment_results"
+    ],
+    "experiments": [
+      "experiment_results"
+    ],
+    "funnel": [
+      "channel_performance",
+      "funnel_conversion",
+      "reconciliation"
+    ],
+    "inventory_counts": [
+      "inventory_position"
+    ],
+    "invoices": [],
+    "leads": [
+      "funnel_conversion"
+    ],
+    "lifecycle_events": [],
+    "movements": [
+      "inventory_position",
+      "inventory_aging"
+    ],
+    "order_items": [
+      "sales_daily",
+      "inventory_position",
+      "channel_performance",
+      "reconciliation"
+    ],
+    "orders": [
+      "sales_daily",
+      "inventory_position",
+      "channel_performance",
+      "customer_cohorts",
+      "funnel_conversion",
+      "reconciliation"
+    ],
+    "payments": [
+      "cash_daily",
+      "reconciliation"
+    ],
+    "products": [
+      "inventory_position"
+    ],
+    "purchase_orders": [
+      "inventory_position",
+      "procurement",
+      "reconciliation"
+    ],
+    "purchase_receipts": [
+      "procurement"
+    ],
+    "refunds": [
+      "cash_daily",
+      "reconciliation"
+    ],
+    "reservations": [
+      "inventory_position"
+    ],
+    "returns": [
+      "sales_daily",
+      "inventory_position",
+      "channel_performance"
+    ],
+    "sessions": [
+      "funnel_conversion"
+    ],
+    "shipments": [],
+    "supplier_payments": [
+      "procurement",
+      "cash_daily",
+      "reconciliation"
+    ],
+    "suppliers": [],
+    "unmet_demand": [],
+    "variants": [
+      "inventory_position"
+    ]
+  },
+  "status_mapping": {
+    "CONFLICT": "CONFLICT",
+    "CONFLICT_OUT_OF_SCOPE": "CONFLICT",
+    "EXISTS": "EXISTS",
+    "IMPLEMENTED_LOCAL": "EXISTS",
+    "MISSING": "MISSING",
+    "PARTIAL": "PARTIAL",
+    "PENDING_AUTHORIZED_DATA": "MISSING",
+    "SPECIFIED": "SPECIFIED",
+    "SPECIFIED_NOT_IMPLEMENTED": "SPECIFIED"
+  },
+  "synthetic": true,
+  "title": "Sistema analítico Alma de Lujo · v0.2",
+  "version": "1.0",
+  "warehouse_contract_version": "2.0"
+}

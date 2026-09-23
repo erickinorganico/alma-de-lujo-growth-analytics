@@ -1,0 +1,809 @@
+{
+  "version": "0.3.0",
+  "as_of": "2026-09-21",
+  "synthetic": true,
+  "status": "IMPLEMENTED_LOCAL_VERTICAL_SLICE",
+  "external_execution": "PROHIBITED",
+  "currency": "MXN cents",
+  "catalog_bridge": {
+    "source_path": "client/example-input.json",
+    "source_collection": "CATALOGO",
+    "source_key": "sku",
+    "local_tables": [
+      "cost_versions.sku",
+      "purchase_orders_ops.sku",
+      "cost_allocations.sku"
+    ],
+    "status": "EXPLICIT_SYNTHETIC_SKU_CONTRACT",
+    "unresolved_skus": []
+  },
+  "sources": [
+    {
+      "name": "cost_versions",
+      "table": "cost_versions",
+      "file": "cost_versions.csv",
+      "source_path": "operating-data/cost_versions.csv",
+      "grain": "one version of management cost per SKU/effective date",
+      "primary_key": "cost_version_id",
+      "fields": [
+        "cost_version_id",
+        "sku",
+        "effective_date",
+        "lifecycle",
+        "quantity_basis",
+        "public_price_cents",
+        "selling_fee_bps",
+        "tax_basis",
+        "source_ref",
+        "synthetic"
+      ],
+      "rows": 3,
+      "row_count": 3,
+      "synthetic": true,
+      "purpose": "precio y versión de costo vigente sin reescribir historia",
+      "decision_use": "precio y versión de costo vigente sin reescribir historia",
+      "evidence_refs": [
+        "SYN-COST-01",
+        "SYN-COST-02",
+        "SYN-COST-03"
+      ],
+      "sha256": "32731059693bd365454fef68fceaa7f9ba1843c70305b95507771333dcc07139"
+    },
+    {
+      "name": "cost_components",
+      "table": "cost_components",
+      "file": "cost_components.csv",
+      "source_path": "operating-data/cost_components.csv",
+      "grain": "one cost component within a cost version",
+      "primary_key": "component_id",
+      "fields": [
+        "component_id",
+        "cost_version_id",
+        "component",
+        "classification",
+        "amount_cents",
+        "required",
+        "quality",
+        "included_in_component_id",
+        "source_ref",
+        "synthetic"
+      ],
+      "rows": 12,
+      "row_count": 12,
+      "synthetic": true,
+      "purpose": "cobertura y procedencia de cada componente",
+      "decision_use": "cobertura y procedencia de cada componente",
+      "evidence_refs": [
+        "SYN-DOC-01",
+        "SYN-DOC-02",
+        "SYN-EST-01",
+        "SYN-EST-02",
+        "SYN-EST-03",
+        "SYN-EST-04",
+        "SYN-EST-05",
+        "SYN-DOC-03",
+        "SYN-DOC-04",
+        "SYN-EST-06",
+        "SYN-EST-07"
+      ],
+      "sha256": "f9ce813aad07ce93ac28826646556dc40d24003ba28cb3ae1e3e83a1a88fa371"
+    },
+    {
+      "name": "cost_allocations",
+      "table": "cost_allocations",
+      "file": "cost_allocations.csv",
+      "source_path": "operating-data/cost_allocations.csv",
+      "grain": "one allocation of a shared cost component",
+      "primary_key": "allocation_id",
+      "fields": [
+        "allocation_id",
+        "component_id",
+        "sku",
+        "method",
+        "allocated_cents",
+        "remainder_cents",
+        "source_ref",
+        "synthetic"
+      ],
+      "rows": 2,
+      "row_count": 2,
+      "synthetic": true,
+      "purpose": "reconciliar costos compartidos sin duplicar",
+      "decision_use": "reconciliar costos compartidos sin duplicar",
+      "evidence_refs": [
+        "SYN-ALLOC-01",
+        "SYN-ALLOC-02"
+      ],
+      "sha256": "174d1dec9da9928af1c352f0447a62e9bd424fceb687927d6787569b8d16ffa8"
+    },
+    {
+      "name": "purchase_orders_ops",
+      "table": "purchase_orders_ops",
+      "file": "purchase_orders_ops.csv",
+      "source_path": "operating-data/purchase_orders_ops.csv",
+      "grain": "one internal purchase intent per supplier and SKU",
+      "primary_key": "purchase_order_id",
+      "fields": [
+        "purchase_order_id",
+        "supplier_ref",
+        "sku",
+        "ordered_qty",
+        "agreed_unit_cents",
+        "order_date",
+        "promised_date",
+        "commercial_status",
+        "source_ref",
+        "synthetic"
+      ],
+      "rows": 2,
+      "row_count": 2,
+      "synthetic": true,
+      "purpose": "compromiso comercial y unidades solicitadas",
+      "decision_use": "compromiso comercial y unidades solicitadas",
+      "evidence_refs": [
+        "SYN-PO-01",
+        "SYN-PO-02"
+      ],
+      "sha256": "a12b6cccd5078efca30725e816900235032c469455438e879837aa55eb1ebae7"
+    },
+    {
+      "name": "purchase_receipts_ops",
+      "table": "purchase_receipts_ops",
+      "file": "purchase_receipts_ops.csv",
+      "source_path": "operating-data/purchase_receipts_ops.csv",
+      "grain": "one physical receipt event for a purchase order",
+      "primary_key": "receipt_id",
+      "fields": [
+        "receipt_id",
+        "purchase_order_id",
+        "received_date",
+        "received_qty",
+        "inspection_qty",
+        "accepted_qty",
+        "rejected_qty",
+        "preparation_status",
+        "source_ref",
+        "synthetic"
+      ],
+      "rows": 1,
+      "row_count": 1,
+      "synthetic": true,
+      "purpose": "separar recibido, inspección y aceptado",
+      "decision_use": "separar recibido, inspección y aceptado",
+      "evidence_refs": [
+        "SYN-RCV-01"
+      ],
+      "sha256": "0a3ce3ceed15853194568012cbfa0908455c9cf4a6c112b6aecfdbac88f07643"
+    },
+    {
+      "name": "obligations",
+      "table": "obligations",
+      "file": "obligations.csv",
+      "source_path": "operating-data/obligations.csv",
+      "grain": "one economic obligation, never an invoice/payment duplicate",
+      "primary_key": "obligation_id",
+      "fields": [
+        "obligation_id",
+        "origin_type",
+        "origin_id",
+        "concept",
+        "due_date",
+        "original_cents",
+        "currency",
+        "status",
+        "source_ref",
+        "synthetic"
+      ],
+      "rows": 2,
+      "row_count": 2,
+      "synthetic": true,
+      "purpose": "importe, vencimiento y saldo de una obligación",
+      "decision_use": "importe, vencimiento y saldo de una obligación",
+      "evidence_refs": [
+        "SYN-OBL-01",
+        "SYN-OBL-02"
+      ],
+      "sha256": "a6d9799ad26b1e27e7ab6821c0a4374a96e17921b2d93d93f3ecc057ca24ba30"
+    },
+    {
+      "name": "obligation_payments",
+      "table": "obligation_payments",
+      "file": "obligation_payments.csv",
+      "source_path": "operating-data/obligation_payments.csv",
+      "grain": "one observed payment applied to an obligation",
+      "primary_key": "obligation_payment_id",
+      "fields": [
+        "obligation_payment_id",
+        "obligation_id",
+        "paid_date",
+        "amount_cents",
+        "source_ref",
+        "synthetic"
+      ],
+      "rows": 1,
+      "row_count": 1,
+      "synthetic": true,
+      "purpose": "pago observado aplicado una sola vez",
+      "decision_use": "pago observado aplicado una sola vez",
+      "evidence_refs": [
+        "SYN-PAY-01"
+      ],
+      "sha256": "bcb7a5eb14f2704a24d865f491eda6826f4b05660725d58bae94b871ad6ec068"
+    },
+    {
+      "name": "cash_scenario_events",
+      "table": "cash_scenario_events",
+      "file": "cash_scenario_events.csv",
+      "source_path": "operating-data/cash_scenario_events.csv",
+      "grain": "one dated cash fact/expectation/scenario event",
+      "primary_key": "scenario_id + event_id",
+      "fields": [
+        "scenario_id",
+        "event_id",
+        "event_date",
+        "level",
+        "direction",
+        "amount_cents",
+        "concept",
+        "source_ref",
+        "synthetic"
+      ],
+      "rows": 5,
+      "row_count": 5,
+      "synthetic": true,
+      "purpose": "separar esperado, comprometido y escenario",
+      "decision_use": "separar esperado, comprometido y escenario",
+      "evidence_refs": [
+        "SYN-OPENING-01",
+        "SYN-CASH-01",
+        "OBL-001",
+        "OBL-002",
+        "PO-OPS-002"
+      ],
+      "sha256": "2af2267050197b2cb0f8fd5b87911e15a18d69c1004975b3f65670acf1ecd9d5"
+    }
+  ],
+  "metrics": {
+    "cost_metrics": [
+      {
+        "cost_version_id": "CV-PIL-NEGRO-1",
+        "sku": "PIL-NEGRO",
+        "status": "COMPLETE_ESTIMATED",
+        "known_total_cents": 1040000,
+        "missing_components": [],
+        "unit_management_cost_cents": 10400,
+        "public_price_cents": 29900,
+        "selling_fee_unit_cents": 2392,
+        "contribution_before_fixed_unit_cents": 17108,
+        "contribution_margin": "0.5722",
+        "markup_on_cost": "1.6450",
+        "tax_basis": "PENDIENTE",
+        "price_changed": false,
+        "decision": "REVIEW_COST_SOURCE"
+      },
+      {
+        "cost_version_id": "CV-PIL-LILA-1",
+        "sku": "PIL-LILA",
+        "status": "PARTIAL",
+        "known_total_cents": 220000,
+        "missing_components": [
+          "COMPRA_PROVEEDOR"
+        ],
+        "unit_management_cost_cents": null,
+        "public_price_cents": 29900,
+        "selling_fee_unit_cents": 2392,
+        "contribution_before_fixed_unit_cents": null,
+        "contribution_margin": null,
+        "markup_on_cost": null,
+        "tax_basis": "PENDIENTE",
+        "price_changed": false,
+        "decision": "REVIEW_COST_SOURCE"
+      },
+      {
+        "cost_version_id": "CV-TOP-NEGRO-S-1",
+        "sku": "TOP-NEGRO-S",
+        "status": "COMPLETE_ESTIMATED",
+        "known_total_cents": 760000,
+        "missing_components": [],
+        "unit_management_cost_cents": 38000,
+        "public_price_cents": 89900,
+        "selling_fee_unit_cents": 7192,
+        "contribution_before_fixed_unit_cents": 44708,
+        "contribution_margin": "0.4973",
+        "markup_on_cost": "1.1765",
+        "tax_basis": "PENDIENTE",
+        "price_changed": false,
+        "decision": "REVIEW_COST_SOURCE"
+      }
+    ],
+    "allocation_controls": [
+      {
+        "component_id": "CC-002",
+        "source_cents": 80000,
+        "allocated_cents": 80000,
+        "remainder_cents": 0,
+        "reconciles": true,
+        "method": "units"
+      },
+      {
+        "component_id": "CC-010",
+        "source_cents": 40000,
+        "allocated_cents": 40000,
+        "remainder_cents": 0,
+        "reconciles": true,
+        "method": "units"
+      }
+    ],
+    "purchase_metrics": [
+      {
+        "purchase_order_id": "PO-OPS-001",
+        "sku": "PIL-NEGRO",
+        "ordered_qty": 20,
+        "received_qty": 18,
+        "accepted_qty": 16,
+        "inspection_qty": 2,
+        "rejected_qty": 0,
+        "still_to_receive_qty": 2,
+        "available_from_receipt_qty": 16,
+        "cash_commitment_cents": 180000,
+        "commercial_status": "AUTHORIZED_SYNTHETIC",
+        "decision": "REVIEW_RECEIPT_DISCREPANCY"
+      },
+      {
+        "purchase_order_id": "PO-OPS-002",
+        "sku": "TOP-NEGRO-S",
+        "ordered_qty": 12,
+        "received_qty": 0,
+        "accepted_qty": 0,
+        "inspection_qty": 0,
+        "rejected_qty": 0,
+        "still_to_receive_qty": 12,
+        "available_from_receipt_qty": 0,
+        "cash_commitment_cents": 420000,
+        "commercial_status": "PROPOSED_SCENARIO",
+        "decision": "PENDING_RECEIPT"
+      }
+    ],
+    "obligation_metrics": [
+      {
+        "obligation_id": "OBL-001",
+        "origin_type": "PURCHASE_ORDER",
+        "origin_id": "PO-OPS-001",
+        "due_date": "2026-09-28",
+        "original_cents": 180000,
+        "paid_cents": 100000,
+        "outstanding_cents": 80000,
+        "status": "OPEN",
+        "decision": "SCHEDULE_PAYMENT_REVIEW"
+      },
+      {
+        "obligation_id": "OBL-002",
+        "origin_type": "FIXED_EXPENSE",
+        "origin_id": "SYN-RENT-01",
+        "due_date": "2026-10-01",
+        "original_cents": 160000,
+        "paid_cents": 0,
+        "outstanding_cents": 160000,
+        "status": "OPEN",
+        "decision": "SCHEDULE_PAYMENT_REVIEW"
+      }
+    ],
+    "cash_scenarios": [
+      {
+        "scenario_id": "BASE",
+        "opening_cents": 8000000,
+        "opening_level": "ASSUMPTION_UNRECONCILED",
+        "opening_status": "ASSUMPTION_UNRECONCILED",
+        "opening_source_ref": "SYN-OPENING-01",
+        "minimum_weekly_closing_cents": 8000000,
+        "closing_cents": 9260000,
+        "level": "ASSUMED_OPENING_PLUS_EXPECTED_AND_COMMITTED",
+        "weeks": [
+          {
+            "week": 1,
+            "start": "2026-09-22",
+            "end": "2026-09-28",
+            "in_cents": 1500000,
+            "out_cents": 80000,
+            "closing_cents": 9420000
+          },
+          {
+            "week": 2,
+            "start": "2026-09-29",
+            "end": "2026-10-05",
+            "in_cents": 0,
+            "out_cents": 160000,
+            "closing_cents": 9260000
+          },
+          {
+            "week": 3,
+            "start": "2026-10-06",
+            "end": "2026-10-12",
+            "in_cents": 0,
+            "out_cents": 0,
+            "closing_cents": 9260000
+          },
+          {
+            "week": 4,
+            "start": "2026-10-13",
+            "end": "2026-10-19",
+            "in_cents": 0,
+            "out_cents": 0,
+            "closing_cents": 9260000
+          },
+          {
+            "week": 5,
+            "start": "2026-10-20",
+            "end": "2026-10-26",
+            "in_cents": 0,
+            "out_cents": 0,
+            "closing_cents": 9260000
+          },
+          {
+            "week": 6,
+            "start": "2026-10-27",
+            "end": "2026-11-02",
+            "in_cents": 0,
+            "out_cents": 0,
+            "closing_cents": 9260000
+          },
+          {
+            "week": 7,
+            "start": "2026-11-03",
+            "end": "2026-11-09",
+            "in_cents": 0,
+            "out_cents": 0,
+            "closing_cents": 9260000
+          },
+          {
+            "week": 8,
+            "start": "2026-11-10",
+            "end": "2026-11-16",
+            "in_cents": 0,
+            "out_cents": 0,
+            "closing_cents": 9260000
+          }
+        ],
+        "decision": "COMPARE_ONLY_NO_EXECUTION"
+      },
+      {
+        "scenario_id": "REINVESTIR_TOP",
+        "opening_cents": 8000000,
+        "opening_level": "ASSUMPTION_UNRECONCILED",
+        "opening_status": "ASSUMPTION_UNRECONCILED",
+        "opening_source_ref": "SYN-OPENING-01",
+        "minimum_weekly_closing_cents": 8000000,
+        "closing_cents": 8840000,
+        "level": "ASSUMED_OPENING_INCLUDES_UNAPPROVED_SCENARIO",
+        "weeks": [
+          {
+            "week": 1,
+            "start": "2026-09-22",
+            "end": "2026-09-28",
+            "in_cents": 1500000,
+            "out_cents": 80000,
+            "closing_cents": 9420000
+          },
+          {
+            "week": 2,
+            "start": "2026-09-29",
+            "end": "2026-10-05",
+            "in_cents": 0,
+            "out_cents": 580000,
+            "closing_cents": 8840000
+          },
+          {
+            "week": 3,
+            "start": "2026-10-06",
+            "end": "2026-10-12",
+            "in_cents": 0,
+            "out_cents": 0,
+            "closing_cents": 8840000
+          },
+          {
+            "week": 4,
+            "start": "2026-10-13",
+            "end": "2026-10-19",
+            "in_cents": 0,
+            "out_cents": 0,
+            "closing_cents": 8840000
+          },
+          {
+            "week": 5,
+            "start": "2026-10-20",
+            "end": "2026-10-26",
+            "in_cents": 0,
+            "out_cents": 0,
+            "closing_cents": 8840000
+          },
+          {
+            "week": 6,
+            "start": "2026-10-27",
+            "end": "2026-11-02",
+            "in_cents": 0,
+            "out_cents": 0,
+            "closing_cents": 8840000
+          },
+          {
+            "week": 7,
+            "start": "2026-11-03",
+            "end": "2026-11-09",
+            "in_cents": 0,
+            "out_cents": 0,
+            "closing_cents": 8840000
+          },
+          {
+            "week": 8,
+            "start": "2026-11-10",
+            "end": "2026-11-16",
+            "in_cents": 0,
+            "out_cents": 0,
+            "closing_cents": 8840000
+          }
+        ],
+        "decision": "COMPARE_ONLY_NO_EXECUTION"
+      }
+    ]
+  },
+  "metric_definitions": [
+    {
+      "id": "known_cost_sum",
+      "formula": "sum known, non-duplicated cost components",
+      "unit": "MXN cents",
+      "grain": "cost version",
+      "window": "effective cost version",
+      "sources": [
+        "cost_versions",
+        "cost_components",
+        "cost_allocations"
+      ],
+      "unknown": "partial sum remains labeled PARTIAL",
+      "guardrail": "never replace missing components with zero",
+      "decision": "complete missing component or review source"
+    },
+    {
+      "id": "contribution_margin",
+      "formula": "(price - selling fee - complete unit management cost) / price",
+      "unit": "ratio",
+      "grain": "cost version / SKU",
+      "window": "effective cost version",
+      "sources": [
+        "cost_versions",
+        "cost_components"
+      ],
+      "unknown": "NULL when cost incomplete or price zero",
+      "guardrail": "not net margin while tax basis is pending",
+      "decision": "compare price/cost; not net profit"
+    },
+    {
+      "id": "markup_on_cost",
+      "formula": "(price - selling fee - complete unit management cost) / complete unit management cost",
+      "unit": "ratio",
+      "grain": "cost version / SKU",
+      "window": "effective cost version",
+      "sources": [
+        "cost_versions",
+        "cost_components"
+      ],
+      "unknown": "NULL when cost incomplete or zero",
+      "guardrail": "kept distinct from contribution margin",
+      "decision": "review commercial economics"
+    },
+    {
+      "id": "purchase_receipt_bridge",
+      "formula": "ordered = received + still_to_receive; received = accepted + inspection + rejected",
+      "unit": "units",
+      "grain": "purchase order",
+      "window": "order through latest receipt",
+      "sources": [
+        "purchase_orders_ops",
+        "purchase_receipts_ops"
+      ],
+      "unknown": "no receipt stays pending",
+      "guardrail": "only accepted units are available from the receipt",
+      "decision": "review discrepancy/preparation before availability"
+    },
+    {
+      "id": "obligation_balance",
+      "formula": "original obligation - applied observed payments",
+      "unit": "MXN cents",
+      "grain": "obligation",
+      "window": "through as_of date",
+      "sources": [
+        "obligations",
+        "obligation_payments"
+      ],
+      "unknown": "unknown payment coverage blocks closure",
+      "guardrail": "one canonical obligation; do not double count its origin",
+      "decision": "schedule review; never execute payment"
+    },
+    {
+      "id": "cash_scenario_closing",
+      "formula": "opening + dated incoming - dated outgoing, carried for 8 weeks",
+      "unit": "MXN cents",
+      "grain": "scenario / week",
+      "window": "next 8 weeks",
+      "sources": [
+        "cash_scenario_events",
+        "obligations",
+        "obligation_payments"
+      ],
+      "unknown": "UNKNOWN coverage: undated or uncovered obligations remain outside and disclosed",
+      "guardrail": "base, expected and unapproved scenario remain visibly separate",
+      "decision": "compare consequences; never call it free cash"
+    }
+  ],
+  "lineage": [
+    {
+      "from_table": "cost_versions",
+      "to_metric": "known_cost_sum"
+    },
+    {
+      "from_table": "cost_components",
+      "to_metric": "known_cost_sum"
+    },
+    {
+      "from_table": "cost_allocations",
+      "to_metric": "known_cost_sum"
+    },
+    {
+      "from_table": "cost_versions",
+      "to_metric": "contribution_margin"
+    },
+    {
+      "from_table": "cost_components",
+      "to_metric": "contribution_margin"
+    },
+    {
+      "from_table": "cost_versions",
+      "to_metric": "markup_on_cost"
+    },
+    {
+      "from_table": "cost_components",
+      "to_metric": "markup_on_cost"
+    },
+    {
+      "from_table": "purchase_orders_ops",
+      "to_metric": "purchase_receipt_bridge"
+    },
+    {
+      "from_table": "purchase_receipts_ops",
+      "to_metric": "purchase_receipt_bridge"
+    },
+    {
+      "from_table": "obligations",
+      "to_metric": "obligation_balance"
+    },
+    {
+      "from_table": "obligation_payments",
+      "to_metric": "obligation_balance"
+    },
+    {
+      "from_table": "cash_scenario_events",
+      "to_metric": "cash_scenario_closing"
+    },
+    {
+      "from_table": "obligations",
+      "to_metric": "cash_scenario_closing"
+    },
+    {
+      "from_table": "obligation_payments",
+      "to_metric": "cash_scenario_closing"
+    }
+  ],
+  "capabilities": [
+    "versioned management costs",
+    "cost coverage and provenance",
+    "receipt-to-availability bridge",
+    "canonical obligations",
+    "8-week scenario comparison"
+  ],
+  "status_mapping": {
+    "EXISTS": "EXISTS",
+    "SPECIFIED": "SPECIFIED",
+    "PARTIAL": "PARTIAL",
+    "MISSING": "MISSING",
+    "CONFLICT": "CONFLICT",
+    "IMPLEMENTED_LOCAL": "EXISTS",
+    "SPECIFIED_NOT_IMPLEMENTED": "SPECIFIED",
+    "PENDING_AUTHORIZED_DATA": "MISSING",
+    "CONFLICT_OUT_OF_SCOPE": "CONFLICT"
+  },
+  "extension_matrix": [
+    {
+      "capability": "visible cost sources and cost coverage",
+      "status": "IMPLEMENTED_LOCAL",
+      "canonical_status": "EXISTS",
+      "evidence": "8 CSV sources + cost metrics",
+      "evidence_refs": [
+        {
+          "path": "client/operating-data/cost_versions.csv",
+          "sha256": "32731059693bd365454fef68fceaa7f9ba1843c70305b95507771333dcc07139"
+        },
+        {
+          "path": "client/operating-data/cost_components.csv",
+          "sha256": "f9ce813aad07ce93ac28826646556dc40d24003ba28cb3ae1e3e83a1a88fa371"
+        }
+      ]
+    },
+    {
+      "capability": "purchase receipt and accepted availability",
+      "status": "IMPLEMENTED_LOCAL",
+      "canonical_status": "EXISTS",
+      "evidence": "purchase_orders_ops + purchase_receipts_ops",
+      "evidence_refs": [
+        {
+          "path": "client/operating-data/purchase_orders_ops.csv",
+          "sha256": "a12b6cccd5078efca30725e816900235032c469455438e879837aa55eb1ebae7"
+        },
+        {
+          "path": "client/operating-data/purchase_receipts_ops.csv",
+          "sha256": "0a3ce3ceed15853194568012cbfa0908455c9cf4a6c112b6aecfdbac88f07643"
+        }
+      ]
+    },
+    {
+      "capability": "canonical obligations without double counting",
+      "status": "IMPLEMENTED_LOCAL",
+      "canonical_status": "EXISTS",
+      "evidence": "obligations + obligation_payments",
+      "evidence_refs": [
+        {
+          "path": "client/operating-data/obligations.csv",
+          "sha256": "a6d9799ad26b1e27e7ab6821c0a4374a96e17921b2d93d93f3ecc057ca24ba30"
+        },
+        {
+          "path": "client/operating-data/obligation_payments.csv",
+          "sha256": "bcb7a5eb14f2704a24d865f491eda6826f4b05660725d58bae94b871ad6ec068"
+        }
+      ]
+    },
+    {
+      "capability": "8-week cash scenarios",
+      "status": "IMPLEMENTED_LOCAL",
+      "canonical_status": "EXISTS",
+      "evidence": "BASE and REINVESTIR_TOP remain separate",
+      "evidence_refs": [
+        {
+          "path": "client/operating-data/cash_scenario_events.csv",
+          "sha256": "2af2267050197b2cb0f8fd5b87911e15a18d69c1004975b3f65670acf1ecd9d5"
+        }
+      ]
+    },
+    {
+      "capability": "React/Supabase transactional application",
+      "status": "CONFLICT_OUT_OF_SCOPE",
+      "canonical_status": "CONFLICT",
+      "evidence": "current repository contract is analytical CLI/files/reports",
+      "evidence_refs": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "abbf8f9d306eb939b30ef37cb76613af60a0e81583eb55fa375068efe317a9fd"
+        },
+        {
+          "path": "specs/COSTS-OPERATIONS-v3.md",
+          "sha256": "6b375b26b6cbc0b5af989bd08857fb77180435b4c42d8de4f367a2dbe90c5d9e"
+        }
+      ]
+    },
+    {
+      "capability": "real bank, tax and customer integrations",
+      "status": "PENDING_AUTHORIZED_DATA",
+      "canonical_status": "MISSING",
+      "evidence": "synthetic fixture only",
+      "evidence_refs": [
+        {
+          "path": "specs/COSTS-OPERATIONS-v3.md",
+          "sha256": "6b375b26b6cbc0b5af989bd08857fb77180435b4c42d8de4f367a2dbe90c5d9e"
+        }
+      ]
+    }
+  ],
+  "source": "candidate handoff integrated against current repository; React/Supabase claims not implemented",
+  "limitations": [
+    "Synthetic fixture only",
+    "Tax basis pending; no net margin",
+    "Weekly scenario does not reconcile a real bank",
+    "No autonomous purchase, payment, price change or publication"
+  ]
+}
