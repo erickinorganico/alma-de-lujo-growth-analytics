@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import tempfile
 import unittest
+import json
+import shutil
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -101,6 +103,57 @@ class CashTests(unittest.TestCase):
                 self.assertEqual(("synthetic:cash-actual-001",), cash["active_event_ids"])
                 self.assertEqual(-900000, cash["actual_movements_cents"])
                 self.assertIsNone(cash["reconciled_close_cents"])
+
+
+class BudgetTests(unittest.TestCase):
+    def test_one_source_two_targets_and_two_payments_reconcile_once(self) -> None:
+        from alma.operating_finance_marts import allocate_source_cents, distribute_state_cents
+
+        allocations = [
+            {"budget_allocation_id": "a1", "origin_type": "EXPENSE", "origin_id": "e1",
+             "budget_id": "b1", "drop_code": "d1", "channel_code": "direct", "allocated_cents": 50},
+            {"budget_allocation_id": "a2", "origin_type": "EXPENSE", "origin_id": "e1",
+             "budget_id": "b2", "drop_code": "d2", "channel_code": "wholesale", "allocated_cents": 50},
+        ]
+        shares = allocate_source_cents(("EXPENSE", "e1"), 101, allocations)
+        self.assertEqual(1, shares["unallocated_cents"])
+        self.assertEqual(101, sum(shares["target_cents"].values()) + shares["unallocated_cents"])
+        paid = distribute_state_cents(60, 101, shares)
+        self.assertEqual(60, sum(paid["target_cents"].values()) + paid["unallocated_cents"])
+        self.assertEqual([30, 30], sorted(paid["target_cents"].values()))
+        with self.assertRaises(ValueError):
+            allocate_source_cents(("EXPENSE", "e1"), 101, allocations + [allocations[0]])
+        with self.assertRaises(ValueError):
+            allocate_source_cents(("EXPENSE", "e1"), 99, allocations)
+
+    def test_budget_states_and_policy_gated_headroom(self) -> None:
+        from alma.operating_finance_marts import project_budgets
+        from alma.operating_mart_contracts import load_policy
+
+        policy = load_policy(ROOT / "policies" / "operating-metrics-synthetic-v1.json", as_of="2026-09-21", real_cut=False)
+        with tempfile.TemporaryDirectory() as tmp:
+            result = build_operating_workspace(PACK, private_root=Path(tmp) / "partial")
+            with bind_cut(result["destination"]) as cut:
+                budget = project_budgets(cut, "2026-09-21", policy)
+                target = budget["targets"][0]
+                self.assertEqual(1200000, target["approved_ceiling_cents"])
+                self.assertEqual(90000, target["open_commitment_cents"])
+                self.assertEqual(910000, target["incurred_cents"])
+                self.assertEqual(900000, target["paid_cents"])
+                self.assertEqual(100000, target["outstanding_obligation_cents"])
+                self.assertIsNone(target["headroom_cents"])
+            pack = Path(tmp) / "pack"
+            shutil.copytree(PACK, pack)
+            metadata_path = pack / "metadata.json"
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            for source in ("budgets", "budget_allocations", "expenses", "purchase_orders", "purchase_receipts",
+                           "obligations", "obligation_payments"):
+                metadata["coverage"][source]["status"] = "COMPLETE"
+            metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
+            result = build_operating_workspace(pack, private_root=Path(tmp) / "complete")
+            with bind_cut(result["destination"]) as cut:
+                target = project_budgets(cut, "2026-09-21", policy)["targets"][0]
+                self.assertEqual(200000, target["headroom_cents"])
 
 
 if __name__ == "__main__":
