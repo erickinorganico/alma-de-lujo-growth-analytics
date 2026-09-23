@@ -286,6 +286,22 @@ class OperatingRestoreTests(OperatingArchiveFixture):
             )
             self.assertEqual([], list(root.glob(".restore-*")))
 
+    def test_restore_rejects_one_byte_source_and_database_tamper(self) -> None:
+        for filename, code in (
+            ("sku_catalog.csv", "verify.source_hash"),
+            ("operating.sqlite3", "verify.sqlite_hash"),
+        ):
+            with self.subTest(filename=filename), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                _, original = self.exported(root)
+                members = self.archive_members(original)
+                members[filename] += b"x"
+                candidate = root / "operating-exports" / f"tampered-{filename}.zip"
+                self.write_archive(candidate, list(members.items()))
+                destination = root / f"restored-{filename}"
+                self.assert_error(code, lambda: restore_cut(candidate, destination, private_root=root))
+                self.assertFalse(destination.exists())
+
     def test_restore_revalidates_cash_supersession_balance_and_cohort_gates(self) -> None:
         def cash_bytes(raw: bytes, mutation: str) -> bytes:
             rows = list(csv.DictReader(io.StringIO(raw.decode("utf-8"), newline="")))

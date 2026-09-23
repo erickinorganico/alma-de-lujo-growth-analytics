@@ -9,7 +9,7 @@ import sqlite3
 import stat
 import tempfile
 import zipfile
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any
 
 from .operating_contracts import (
@@ -115,6 +115,19 @@ def _read_canonical_json(path: Path, *, maximum: int, code: str) -> dict[str, An
     return value
 
 
+def _sha256_file(path: Path, *, maximum: int, code: str) -> str:
+    try:
+        if path.stat().st_size > maximum:
+            _fail(code, path.name)
+        digest = hashlib.sha256()
+        with path.open("rb") as stream:
+            while chunk := stream.read(1024 * 1024):
+                digest.update(chunk)
+        return digest.hexdigest()
+    except OSError as exc:
+        raise OperatingContractError(code, path.name) from exc
+
+
 def _cut_id(parsed: dict[str, Any]) -> str:
     metadata = parsed["metadata"]
     identity = {
@@ -202,11 +215,13 @@ def verify_cut(path: str | Path, *, private_root: str | Path | None = None) -> d
     manifest = _read_canonical_json(cut / MANIFEST_FILENAME, maximum=MAX_MANIFEST_BYTES, code="verify.manifest")
     if frozenset(manifest) != _MANIFEST_KEYS:
         _fail("verify.manifest_keys", MANIFEST_FILENAME)
-    metadata_digest = hashlib.sha256((cut / "metadata.json").read_bytes()).hexdigest()
+    metadata_digest = _sha256_file(cut / "metadata.json", maximum=MAX_METADATA_BYTES, code="verify.metadata_size")
     if manifest.get("metadata_sha256") != metadata_digest:
         _fail("verify.metadata_hash", "metadata.json")
     source_digests = {
-        f"{source}.csv": hashlib.sha256((cut / f"{source}.csv").read_bytes()).hexdigest()
+        f"{source}.csv": _sha256_file(
+            cut / f"{source}.csv", maximum=MAX_CSV_BYTES, code="verify.source_size"
+        )
         for source in SOURCE_NAMES
     }
     if manifest.get("source_sha256") != source_digests:
@@ -232,13 +247,11 @@ def verify_cut(path: str | Path, *, private_root: str | Path | None = None) -> d
             _fail("verify.database_name", MANIFEST_FILENAME)
 
         database = cut / DATABASE_FILENAME
-        if database.stat().st_size > MAX_DATABASE_BYTES:
-            _fail("verify.sqlite_size", DATABASE_FILENAME)
-        sqlite_digest = hashlib.sha256(database.read_bytes()).hexdigest()
+        sqlite_digest = _sha256_file(database, maximum=MAX_DATABASE_BYTES, code="verify.sqlite_size")
         if manifest.get("sqlite_sha256") != sqlite_digest:
             _fail("verify.sqlite_hash", DATABASE_FILENAME)
         try:
-            connection = sqlite3.connect(f"file:{database.as_posix()}?mode=ro", uri=True)
+            connection = sqlite3.connect(f"{database.resolve(strict=True).as_uri()}?mode=ro", uri=True)
         except sqlite3.Error as exc:
             raise OperatingContractError("verify.sqlite_open", DATABASE_FILENAME) from exc
         try:
@@ -309,12 +322,8 @@ def export_cut(
     exports = root / "operating-exports"
     if exports.exists() and (exports.is_symlink() or not exports.is_dir()):
         _fail("path.symlink", "operating-exports")
-    output_path = Path(output)
-    try:
-        proposed_parent = output_path.parent.resolve(strict=True)
-    except OSError:
-        proposed_parent = output_path.parent
-    if proposed_parent != exports or output_path.name in {"", ".", ".."} or output_path.suffix.lower() != ".zip":
+    output_path = Path(output).resolve(strict=False)
+    if output_path.parent != exports or output_path.name in {"", ".", ".."} or output_path.suffix.lower() != ".zip":
         _fail("path.private_root", "output")
     if output_path.exists() or output_path.is_symlink():
         _fail("archive.exists", "output")
@@ -331,10 +340,14 @@ def export_cut(
     try:
         with zipfile.ZipFile(temporary, "w", allowZip64=False) as archive:
             for name in sorted(EXPECTED_FILES):
-                data = (cut / name).read_bytes()
-                archive.writestr(_archive_member(name, data), data, compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+                info = _archive_member(name, b"")
+                info._compresslevel = 9
+                with (cut / name).open("rb") as source_stream, archive.open(info, "w") as archive_stream:
+                    shutil.copyfileobj(source_stream, archive_stream, length=1024 * 1024)
         if temporary.stat().st_size > MAX_ARCHIVE_BYTES:
             _fail("archive.size", "output")
+        if output_path.exists() or output_path.is_symlink():
+            _fail("archive.exists", "output")
         os.replace(temporary, output_path)
         published = True
         return {
@@ -342,7 +355,7 @@ def export_cut(
             "cut_id": verification["cut_id"],
             "archive": str(output_path.resolve(strict=True)),
             "members": len(EXPECTED_FILES),
-            "archive_sha256": hashlib.sha256(output_path.read_bytes()).hexdigest(),
+            "archive_sha256": _sha256_file(output_path, maximum=MAX_ARCHIVE_BYTES, code="archive.size"),
         }
     except OSError as exc:
         raise OperatingContractError("archive.output", "output") from exc
@@ -353,11 +366,180 @@ def export_cut(
             exports.rmdir()
 
 
+def _member_limit(name: str) -> int:
+    if name == "metadata.json":
+        return MAX_METADATA_BYTES
+    if name == MANIFEST_FILENAME:
+        return MAX_MANIFEST_BYTES
+    if name == DATABASE_FILENAME:
+        return MAX_DATABASE_BYTES
+    return MAX_CSV_BYTES
+
+
+def _preflight_archive(path: Path) -> tuple[zipfile.ZipFile, dict[str, zipfile.ZipInfo]]:
+    try:
+        if path.stat().st_size > MAX_ARCHIVE_BYTES:
+            _fail("archive.size", "archive")
+        archive = zipfile.ZipFile(path, "r")
+        infos = archive.infolist()
+    except (OSError, zipfile.BadZipFile) as exc:
+        raise OperatingContractError("archive.invalid", "archive") from exc
+    try:
+        if len(infos) > len(EXPECTED_FILES) * 2:
+            _fail("archive.members", "archive")
+        seen: set[str] = set()
+        by_name: dict[str, zipfile.ZipInfo] = {}
+        total = 0
+        for info in infos:
+            name = info.filename
+            folded = name.casefold()
+            if folded in seen:
+                _fail("archive.duplicate", "archive")
+            seen.add(folded)
+            posix = PurePosixPath(name)
+            windows = PureWindowsPath(name)
+            if (
+                not name
+                or "\\" in name
+                or posix.is_absolute()
+                or windows.is_absolute()
+                or windows.drive
+                or len(posix.parts) != 1
+                or any(part in {"", ".", ".."} for part in posix.parts)
+            ):
+                _fail("archive.path", "archive")
+            mode = (info.external_attr >> 16) & 0xFFFF
+            if stat.S_ISLNK(mode):
+                _fail("archive.symlink", "archive")
+            file_type = stat.S_IFMT(mode)
+            if info.is_dir() or file_type not in {0, stat.S_IFREG}:
+                _fail("archive.member_type", "archive")
+            if info.flag_bits & 0x1:
+                _fail("archive.encrypted", "archive")
+            if info.compress_type not in {zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED}:
+                _fail("archive.compression", "archive")
+            if name not in EXPECTED_FILES:
+                _fail("archive.member", "archive")
+            if info.file_size < 0 or info.file_size > _member_limit(name):
+                _fail("archive.member_size", name)
+            if info.compress_size < 0 or info.compress_size > MAX_ARCHIVE_BYTES:
+                _fail("archive.member_size", name)
+            if info.file_size > MAX_COMPRESSION_RATIO * max(info.compress_size, 1):
+                _fail("archive.compression_ratio", name)
+            total += info.file_size
+            if total > MAX_ARCHIVE_TOTAL_BYTES:
+                _fail("archive.total_size", "archive")
+            by_name[name] = info
+        if set(by_name) != EXPECTED_FILES or len(infos) != len(EXPECTED_FILES):
+            _fail("archive.members", "archive")
+        return archive, by_name
+    except BaseException:
+        archive.close()
+        raise
+
+
+def _new_private_destination(destination: str | Path, root: Path) -> tuple[Path, list[Path]]:
+    candidate = Path(destination)
+    lexical = candidate if candidate.is_absolute() else Path.cwd() / candidate
+    for ancestor in (lexical, *lexical.parents):
+        if ancestor.exists() and ancestor.is_symlink():
+            _fail("path.symlink", "destination")
+        if ancestor == root:
+            break
+    resolved = candidate.resolve(strict=False)
+    if resolved == root or not _inside(resolved, root):
+        _fail("path.private_root", "destination")
+    if candidate.exists() or candidate.is_symlink():
+        _fail("archive.destination_exists", "destination")
+    missing: list[Path] = []
+    parent = resolved.parent
+    while parent != root and not parent.exists():
+        missing.append(parent)
+        parent = parent.parent
+    if not parent.is_dir() or parent.is_symlink():
+        _fail("path.private_root", "destination")
+    return resolved, list(reversed(missing))
+
+
+def restore_cut(
+    archive_path: str | Path,
+    destination: str | Path,
+    *,
+    private_root: str | Path | None = None,
+) -> dict[str, Any]:
+    """Restore one exact archive into a new, verified private destination."""
+
+    root = _private_root(private_root, create=True)
+    source = _private_existing(archive_path, root, "archive")
+    if not source.is_file():
+        _fail("path.file", "archive")
+    target, missing_parents = _new_private_destination(destination, root)
+    archive, infos = _preflight_archive(source)
+    stage = Path(tempfile.mkdtemp(prefix=".restore-", dir=root))
+    published = False
+    created_parents: list[Path] = []
+    try:
+        try:
+            for name in sorted(EXPECTED_FILES):
+                info = infos[name]
+                target_file = stage / name
+                written = 0
+                with archive.open(info, "r") as source_stream, target_file.open("xb") as destination_stream:
+                    while True:
+                        chunk = source_stream.read(1024 * 1024)
+                        if not chunk:
+                            break
+                        written += len(chunk)
+                        if written > _member_limit(name):
+                            _fail("archive.member_size", name)
+                        destination_stream.write(chunk)
+                if written != info.file_size:
+                    _fail("archive.member_size", name)
+        except (OSError, EOFError, RuntimeError, zipfile.BadZipFile) as exc:
+            raise OperatingContractError("archive.extract", "archive") from exc
+        finally:
+            archive.close()
+
+        verification = verify_cut(stage, private_root=root)
+        for parent in missing_parents:
+            try:
+                parent.mkdir()
+                created_parents.append(parent)
+            except FileExistsError:
+                if not parent.is_dir() or parent.is_symlink():
+                    _fail("path.private_root", "destination")
+        if target.exists() or target.is_symlink():
+            _fail("archive.destination_exists", "destination")
+        try:
+            os.replace(stage, target)
+        except OSError as exc:
+            raise OperatingContractError("archive.publish", "destination") from exc
+        published = True
+        return {
+            "status": "PASS",
+            "cut_id": verification["cut_id"],
+            "destination": str(target.resolve(strict=True)),
+            "checked_files": verification["checked_files"],
+        }
+    finally:
+        archive.close()
+        if not published and stage.exists():
+            shutil.rmtree(stage, ignore_errors=True)
+        if not published:
+            for parent in reversed(created_parents):
+                try:
+                    parent.rmdir()
+                except OSError:
+                    break
+
+
 __all__ = [
     "EXPECTED_FILES",
     "MAX_ARCHIVE_BYTES",
     "MAX_ARCHIVE_TOTAL_BYTES",
     "MAX_COMPRESSION_RATIO",
+    "MAX_MANIFEST_BYTES",
     "export_cut",
+    "restore_cut",
     "verify_cut",
 ]

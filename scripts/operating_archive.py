@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from alma.operating_archive import export_cut, verify_cut  # noqa: E402
+from alma.operating_archive import export_cut, restore_cut, verify_cut  # noqa: E402
 from alma.operating_contracts import OperatingContractError  # noqa: E402
 
 
@@ -22,7 +22,7 @@ def _parser() -> argparse.ArgumentParser:
         description=__doc__,
         epilog=(
             "Local commands: verify --cut CUT; export --cut CUT --output ARCHIVE; "
-            "restore --archive ARCHIVE --destination CUT (available after restore support is installed)."
+            "restore --archive ARCHIVE --destination CUT."
         ),
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -33,6 +33,10 @@ def _parser() -> argparse.ArgumentParser:
     export.add_argument("--cut", required=True, type=Path)
     export.add_argument("--output", required=True, type=Path)
     export.add_argument("--private-root", type=Path)
+    restore = subparsers.add_parser("restore", help="verify and restore a private cut archive")
+    restore.add_argument("--archive", required=True, type=Path)
+    restore.add_argument("--destination", required=True, type=Path)
+    restore.add_argument("--private-root", type=Path)
     return parser
 
 
@@ -41,8 +45,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if args.command == "verify":
             receipt = verify_cut(args.cut, private_root=args.private_root)
-        else:
+        elif args.command == "export":
             receipt = export_cut(args.cut, args.output, private_root=args.private_root)
+        else:
+            receipt = restore_cut(args.archive, args.destination, private_root=args.private_root)
     except OperatingContractError as exc:
         print(json.dumps({"status": "ERROR", "code": exc.code, "location": exc.location}, sort_keys=True), file=sys.stderr)
         return 2
