@@ -2,7 +2,14 @@
 from __future__ import annotations
 
 import math
+import csv
+import json
+import re
+import subprocess
+import sys
+import tempfile
 import unittest
+from pathlib import Path
 
 from alma.operating_contracts import (
     CONTRACT_VERSION,
@@ -172,6 +179,137 @@ class MetadataContractTests(unittest.TestCase):
             with self.subTest(code=expected_code):
                 self.assert_contract_error(expected_code, value)
 
+
+class OperatingPackTests(unittest.TestCase):
+    ROOT = Path(__file__).resolve().parents[1]
+    SCRIPT = ROOT / "scripts" / "operating_pack.py"
+
+    def run_init(self, kind: str, output: Path) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            [sys.executable, str(self.SCRIPT), "init", "--kind", kind, "--output", str(output)],
+            cwd=self.ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+    @staticmethod
+    def read_rows(pack: Path, source: str) -> list[dict[str, str]]:
+        with (pack / f"{source}.csv").open(encoding="utf-8", newline="") as stream:
+            return list(csv.DictReader(stream))
+
+    def test_cli_regenerates_checked_in_packs_byte_for_byte(self) -> None:
+        expected_files = {"metadata.json", *(f"{name}.csv" for name in SOURCE_NAMES)}
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for kind in ("blank", "synthetic"):
+                generated = root / kind
+                result = self.run_init(kind, generated)
+                self.assertEqual(0, result.returncode, result.stderr)
+                checked_in = self.ROOT / "client" / "source-packs" / "v1" / kind
+                self.assertEqual(expected_files, {path.name for path in generated.iterdir()})
+                self.assertEqual(expected_files, {path.name for path in checked_in.iterdir()})
+                for filename in expected_files:
+                    with self.subTest(kind=kind, filename=filename):
+                        self.assertEqual((checked_in / filename).read_bytes(), (generated / filename).read_bytes())
+
+    def test_blank_pack_has_only_headers_and_nonbuildable_metadata(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "blank"
+            result = self.run_init("blank", output)
+            self.assertEqual(0, result.returncode, result.stderr)
+            value = json.loads((output / "metadata.json").read_text(encoding="utf-8"))
+            self.assertEqual("BLANK", value["input_class"])
+            self.assertIsNone(validate_metadata(value, allow_blank=True))
+            with self.assertRaises(OperatingContractError) as raised:
+                validate_metadata(value)
+            self.assertEqual("metadata.blank_not_buildable", raised.exception.code)
+            for name in SOURCE_NAMES:
+                with self.subTest(source=name):
+                    self.assertEqual([], self.read_rows(output, name))
+                    self.assertEqual(",".join(columns_for(name)) + "\n", (output / f"{name}.csv").read_text(encoding="utf-8"))
+
+    def test_synthetic_pack_exercises_linked_operating_facts_and_cash_replacement(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "synthetic"
+            result = self.run_init("synthetic", output)
+            self.assertEqual(0, result.returncode, result.stderr)
+            value = json.loads((output / "metadata.json").read_text(encoding="utf-8"))
+            self.assertEqual("SYNTHETIC_EXAMPLE", value["input_class"])
+            self.assertIsNone(validate_metadata(value))
+
+            rows = {name: self.read_rows(output, name) for name in SOURCE_NAMES}
+            self.assertTrue(all(rows.values()))
+            self.assertTrue(all(row["source_ref"].startswith("synthetic:") for table in rows.values() for row in table))
+
+            order = rows["purchase_orders"][0]
+            receipt = rows["purchase_receipts"][0]
+            self.assertEqual("20", order["ordered_units"])
+            self.assertEqual(("18", "2", "16", "0"), tuple(receipt[key] for key in ("received_units", "inspection_units", "accepted_units", "rejected_units")))
+            self.assertEqual(order["purchase_order_id"], receipt["purchase_order_id"])
+
+            movement_types = {row["movement_type"] for row in rows["inventory_movements"]}
+            self.assertLessEqual({"OPENING", "RECEIPT_ACCEPTED"}, movement_types)
+            accepted = next(row for row in rows["inventory_movements"] if row["movement_type"] == "RECEIPT_ACCEPTED")
+            self.assertEqual(receipt["receipt_id"], accepted["receipt_id"])
+            self.assertEqual("16", accepted["units"])
+            self.assertLessEqual({"PLACE", "RELEASE"}, {row["event_type"] for row in rows["inventory_reservations"]})
+            self.assertTrue(rows["availability_daily"])
+            self.assertTrue(rows["unmet_demand"])
+            self.assertEqual({"PURCHASE_ORDER", "EXPENSE"}, {row["origin_type"] for row in rows["budget_allocations"]})
+            self.assertEqual("OBSERVED", rows["cash_balance_evidence"][0]["evidence_status"])
+            self.assertTrue(rows["quality_events"][0]["delivery_cohort_id"])
+
+            cash = rows["cash_events"]
+            self.assertEqual(2, len(cash))
+            forecast = next(row for row in cash if row["supersedes_event_id"] == "")
+            actual = next(row for row in cash if row["supersedes_event_id"])
+            self.assertEqual(forecast["economic_event_id"], actual["economic_event_id"])
+            self.assertEqual(forecast["event_id"], actual["supersedes_event_id"])
+            self.assertEqual("RECONCILED", actual["level"])
+
+    def test_public_rows_use_only_declared_bounded_values(self) -> None:
+        forbidden_headers = {"name", "email", "phone", "address", "customer_id", "order_id", "notes", "description"}
+        token = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$")
+        integer = re.compile(r"^-?[0-9]+$")
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "synthetic"
+            result = self.run_init("synthetic", output)
+            self.assertEqual(0, result.returncode, result.stderr)
+            for source in SOURCE_NAMES:
+                contract = source_contract(source)
+                fields = {field["name"]: field for field in contract["fields"]}
+                self.assertFalse(forbidden_headers.intersection(fields))
+                for row in self.read_rows(output, source):
+                    for name, raw in row.items():
+                        if raw == "":
+                            self.assertTrue(fields[name]["nullable"])
+                        elif fields[name]["type"] in {"integer", "nonnegative_integer", "signed_integer"}:
+                            self.assertRegex(raw, integer)
+                        elif fields[name]["type"] == "date":
+                            self.assertRegex(raw, r"^\d{4}-\d{2}-\d{2}$")
+                        elif fields[name]["type"] == "timestamp":
+                            self.assertRegex(raw, r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$")
+                        else:
+                            self.assertRegex(raw, token)
+
+    def test_refuses_nonempty_destination_and_private_public_output_without_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            existing = root / "existing"
+            existing.mkdir()
+            marker = existing / "keep.bin"
+            marker.write_bytes(b"do-not-change")
+            before = {path.relative_to(existing): path.read_bytes() for path in existing.rglob("*") if path.is_file()}
+            result = self.run_init("synthetic", existing)
+            self.assertNotEqual(0, result.returncode)
+            after = {path.relative_to(existing): path.read_bytes() for path in existing.rglob("*") if path.is_file()}
+            self.assertEqual(before, after)
+
+            public = root / "client" / "source-packs" / "v1" / "private"
+            result = self.run_init("private", public)
+            self.assertNotEqual(0, result.returncode)
+            self.assertFalse(public.exists())
 
 if __name__ == "__main__":
     unittest.main()
