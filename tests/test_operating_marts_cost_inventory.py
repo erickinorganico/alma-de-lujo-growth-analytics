@@ -63,5 +63,48 @@ class MartContractTests(unittest.TestCase):
             load_policy(ROOT / "policies" / "absent.json", as_of="2026-09-21", real_cut=True)
 
 
+class CostMartTests(unittest.TestCase):
+    def test_indivisible_cents_and_missing_component(self) -> None:
+        from alma.operating_cost_inventory import allocate_unit_cents, evaluate_cost_version
+        from alma.operating_mart_contracts import load_policy
+
+        self.assertEqual((34, 34, 33), allocate_unit_cents(101, 3))
+        policy = load_policy(ROOT / "policies" / "operating-metrics-synthetic-v1.json", as_of="2026-09-21", real_cut=False)
+        version = {"cost_version_id": "v1", "sku_id": "s1", "quantity_basis": 3, "public_price_cents": 200}
+        component = {"component_id": "c1", "classification": "DIRECT", "amount_cents": 101,
+                     "quality_status": "KNOWN", "required_flag": 1, "included_in_component_id": None,
+                     "source_ref": "source:c1"}
+        allocation = {"allocation_id": "a1", "component_id": "c1", "sku_id": "s1",
+                      "allocated_cents": 101, "remainder_cents": 0, "source_ref": "source:a1"}
+        result = evaluate_cost_version(version, [component], [allocation], policy)
+        self.assertEqual(101, result["known_sum_cents"])
+        self.assertEqual((34, 34, 33), result["unit_cost_cents"])
+        self.assertEqual(0, result["unallocated_cents"])
+        self.assertEqual("COMPLETE_DOCUMENTED", result["quality"])
+        missing = dict(component, component_id="c2", amount_cents=None, quality_status="MISSING")
+        incomplete = evaluate_cost_version(version, [component, missing], [allocation], policy)
+        self.assertEqual(101, incomplete["known_sum_cents"])
+        self.assertIsNone(incomplete["complete_cost_cents"])
+        self.assertEqual("PARTIAL", incomplete["status"])
+        estimated = evaluate_cost_version(version, [dict(component, quality_status="ESTIMATED")], [allocation], policy)
+        self.assertEqual("COMPLETE_ESTIMATED", estimated["quality"])
+
+    def test_effective_version_and_ratios(self) -> None:
+        from alma.operating_cost_inventory import select_cost_version, economics_ratios
+
+        versions = [
+            {"cost_version_id": "old", "effective_date": "2026-09-01", "lifecycle_status": "ACTIVE"},
+            {"cost_version_id": "new", "effective_date": "2026-09-20", "lifecycle_status": "ACTIVE"},
+        ]
+        self.assertEqual("old", select_cost_version(versions, "2026-09-15")["cost_version_id"])
+        self.assertEqual("new", select_cost_version(versions, "2026-09-21")["cost_version_id"])
+        ratios = economics_ratios(1200, 400, 200)
+        self.assertEqual("2", ratios["markup"])
+        self.assertEqual("0.6666666667", ratios["gross_margin"])
+        self.assertEqual("0.5", ratios["contribution_margin"])
+        self.assertIsNone(economics_ratios(0, 0, 0)["gross_margin"])
+        self.assertIsNone(economics_ratios(100, 0, 0)["markup"])
+
+
 if __name__ == "__main__":
     unittest.main()
