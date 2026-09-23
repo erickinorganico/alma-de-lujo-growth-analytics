@@ -1,7 +1,9 @@
 """Private operating-cut verification, export, and restore tests."""
 from __future__ import annotations
 
+import csv
 import hashlib
+import io
 import json
 import shutil
 import sqlite3
@@ -12,7 +14,13 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from alma.operating_archive import export_cut, verify_cut
+from alma.operating_archive import (
+    MAX_COMPRESSION_RATIO,
+    MAX_MANIFEST_BYTES,
+    export_cut,
+    restore_cut,
+    verify_cut,
+)
 from alma.operating_contracts import SOURCE_NAMES, OperatingContractError, canonical_json
 from alma.operating_workspace import build_operating_workspace, relationship_summary
 
@@ -44,6 +52,21 @@ class OperatingArchiveFixture(unittest.TestCase):
         self.assertEqual(code, raised.exception.code)
         self.assertTrue(raised.exception.location)
         return raised.exception
+
+    def exported(self, root: Path) -> tuple[Path, Path]:
+        _, cut = self.build(root)
+        archive = root / "operating-exports" / "cut.zip"
+        export_cut(cut, archive, private_root=root)
+        return cut, archive
+
+    def archive_members(self, archive: Path) -> dict[str, bytes]:
+        with zipfile.ZipFile(archive) as source:
+            return {info.filename: source.read(info) for info in source.infolist()}
+
+    def write_archive(self, path: Path, members: list[tuple[str | zipfile.ZipInfo, bytes]]) -> None:
+        with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+            for name, data in members:
+                archive.writestr(name, data)
 
 
 class OperatingVerifyExportTests(OperatingArchiveFixture):
@@ -169,6 +192,224 @@ class OperatingVerifyExportTests(OperatingArchiveFixture):
             receipt = json.loads(export.stdout)
             self.assertEqual("PASS", receipt["status"])
             self.assertEqual(str(archive.resolve()), receipt["archive"])
+
+
+class OperatingRestoreTests(OperatingArchiveFixture):
+    def test_round_trip_preserves_every_byte_and_identity_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            cut, archive = self.exported(root)
+            destination = root / "restored-cut"
+            receipt = restore_cut(archive, destination, private_root=root)
+
+            self.assertEqual("PASS", receipt["status"])
+            self.assertEqual(destination.resolve(), Path(receipt["destination"]))
+            self.assertEqual(file_bytes(cut), file_bytes(destination))
+            original_manifest = json.loads((cut / "workspace.json").read_text(encoding="utf-8"))
+            restored_manifest = json.loads((destination / "workspace.json").read_text(encoding="utf-8"))
+            for key in (
+                "cut_id",
+                "source_sha256",
+                "normalized_rows_digest",
+                "sqlite_sha256",
+                "row_counts",
+                "key_counts",
+                "relationship_check",
+            ):
+                self.assertEqual(original_manifest[key], restored_manifest[key])
+            self.assertEqual("PASS", verify_cut(destination, private_root=root)["status"])
+
+    def test_restore_rejects_duplicate_unexpected_missing_and_unsafe_members(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _, original = self.exported(root)
+            members = self.archive_members(original)
+            cases: dict[str, tuple[str, list[tuple[str | zipfile.ZipInfo, bytes]]]] = {
+                "duplicate": (
+                    "archive.duplicate",
+                    [(name, data) for name, data in members.items()] + [("metadata.json", members["metadata.json"])],
+                ),
+                "unexpected": (
+                    "archive.member",
+                    [(name, data) for name, data in members.items()] + [("extra.txt", b"x")],
+                ),
+                "missing": (
+                    "archive.members",
+                    [(name, data) for name, data in members.items() if name != "metadata.json"],
+                ),
+                "traversal": (
+                    "archive.path",
+                    [(name, data) for name, data in members.items()] + [("../escape.txt", b"x")],
+                ),
+                "absolute": (
+                    "archive.path",
+                    [(name, data) for name, data in members.items()] + [("/absolute.txt", b"x")],
+                ),
+            }
+            symlink = zipfile.ZipInfo("unsafe-link")
+            symlink.create_system = 3
+            symlink.external_attr = (0o120777 << 16)
+            cases["symlink"] = (
+                "archive.symlink",
+                [(name, data) for name, data in members.items()] + [(symlink, b"metadata.json")],
+            )
+            for case, (code, contents) in cases.items():
+                with self.subTest(case=case):
+                    candidate = root / "operating-exports" / f"{case}.zip"
+                    self.write_archive(candidate, contents)
+                    destination = root / f"restored-{case}"
+                    self.assert_error(code, lambda: restore_cut(candidate, destination, private_root=root))
+                    self.assertFalse(destination.exists())
+
+    def test_restore_rejects_oversized_and_high_ratio_members_before_extraction(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _, original = self.exported(root)
+            members = self.archive_members(original)
+
+            oversized = root / "operating-exports" / "oversized.zip"
+            oversized_members = dict(members)
+            oversized_members["workspace.json"] = b"x" * (MAX_MANIFEST_BYTES + 1)
+            self.write_archive(oversized, list(oversized_members.items()))
+            self.assert_error(
+                "archive.member_size",
+                lambda: restore_cut(oversized, root / "restored-oversized", private_root=root),
+            )
+
+            bomb = root / "operating-exports" / "bomb.zip"
+            bomb_members = dict(members)
+            bomb_members["sku_catalog.csv"] = b"0" * (MAX_COMPRESSION_RATIO * 1000)
+            self.write_archive(bomb, list(bomb_members.items()))
+            self.assert_error(
+                "archive.compression_ratio",
+                lambda: restore_cut(bomb, root / "restored-bomb", private_root=root),
+            )
+            self.assertEqual([], list(root.glob(".restore-*")))
+
+    def test_restore_revalidates_cash_supersession_balance_and_cohort_gates(self) -> None:
+        def cash_bytes(raw: bytes, mutation: str) -> bytes:
+            rows = list(csv.DictReader(io.StringIO(raw.decode("utf-8"), newline="")))
+            if mutation == "self":
+                rows[1]["supersedes_event_id"] = rows[1]["event_id"]
+            elif mutation == "cycle":
+                rows[0]["supersedes_event_id"] = rows[1]["event_id"]
+            elif mutation == "double_count":
+                rows[1]["supersedes_event_id"] = ""
+            elif mutation == "fork":
+                fork = dict(rows[1])
+                fork["event_id"] = "synthetic:cash-actual-fork"
+                fork["payment_id"] = ""
+                rows.append(fork)
+            output = io.StringIO(newline="")
+            writer = csv.DictWriter(output, fieldnames=rows[0].keys(), lineterminator="\n")
+            writer.writeheader()
+            writer.writerows(rows)
+            return output.getvalue().encode("utf-8")
+
+        cases = {
+            "self": ("cash_events.csv", "cash.supersedes_self"),
+            "cycle": ("cash_events.csv", "cash.supersedes_cycle"),
+            "fork": ("cash_events.csv", "key.duplicate"),
+            "double_count": ("cash_events.csv", "cash.supersedes_chain"),
+            "balance": ("cash_balance_evidence.csv", "cash.balance"),
+        }
+        for case, (filename, code) in cases.items():
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                _, original = self.exported(root)
+                members = self.archive_members(original)
+                if filename == "cash_events.csv":
+                    members[filename] = cash_bytes(members[filename], case)
+                else:
+                    members[filename] = members[filename].replace(b",1100000,", b",1100001,")
+                manifest = json.loads(members["workspace.json"].decode("utf-8"))
+                manifest["source_sha256"][filename] = hashlib.sha256(members[filename]).hexdigest()
+                members["workspace.json"] = canonical_json(manifest) + b"\n"
+                candidate = root / "operating-exports" / f"{case}.zip"
+                self.write_archive(candidate, list(members.items()))
+                destination = root / f"restored-{case}"
+                self.assert_error(code, lambda: restore_cut(candidate, destination, private_root=root))
+                self.assertFalse(destination.exists())
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _, original = self.exported(root)
+            members = self.archive_members(original)
+            metadata = json.loads(members["metadata.json"].decode("utf-8"))
+            metadata["coverage"]["quality_events"]["status"] = "COMPLETE"
+            members["metadata.json"] = canonical_json(metadata) + b"\n"
+            quality = members["quality_events.csv"].decode("utf-8").replace(
+                "synthetic:cohort-001,2026-09-19,RETURN_REPORTED",
+                ",2026-09-19,RETURN_REPORTED",
+            ).encode("utf-8")
+            members["quality_events.csv"] = quality
+            manifest = json.loads(members["workspace.json"].decode("utf-8"))
+            manifest["metadata_sha256"] = hashlib.sha256(members["metadata.json"]).hexdigest()
+            manifest["source_sha256"]["quality_events.csv"] = hashlib.sha256(quality).hexdigest()
+            members["workspace.json"] = canonical_json(manifest) + b"\n"
+            candidate = root / "operating-exports" / "cohort.zip"
+            self.write_archive(candidate, list(members.items()))
+            self.assert_error(
+                "quality.cohort_required",
+                lambda: restore_cut(candidate, root / "restored-cohort", private_root=root),
+            )
+
+    def test_existing_or_outside_destination_fails_without_changing_prior_bytes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _, archive = self.exported(root)
+            destination = root / "existing"
+            destination.mkdir()
+            marker = destination / "marker.txt"
+            marker.write_bytes(b"prior")
+            self.assert_error(
+                "archive.destination_exists",
+                lambda: restore_cut(archive, destination, private_root=root),
+            )
+            self.assertEqual(b"prior", marker.read_bytes())
+            outside = root.parent / "outside-restored-cut"
+            self.assert_error(
+                "path.private_root",
+                lambda: restore_cut(archive, outside, private_root=root),
+            )
+            self.assertFalse(outside.exists())
+            self.assertEqual([], list(root.glob(".restore-*")))
+
+    def test_restore_cli_documents_and_runs_all_three_routes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            _, archive = self.exported(root)
+            destination = root / "cli-restored"
+            help_result = subprocess.run(
+                [sys.executable, str(self.SCRIPT), "--help"],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(0, help_result.returncode)
+            for command in ("verify", "export", "restore"):
+                self.assertIn(command, help_result.stdout)
+            restored = subprocess.run(
+                [
+                    sys.executable,
+                    str(self.SCRIPT),
+                    "restore",
+                    "--archive",
+                    str(archive),
+                    "--destination",
+                    str(destination),
+                    "--private-root",
+                    str(root),
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(0, restored.returncode, restored.stderr)
+            self.assertEqual("PASS", json.loads(restored.stdout)["status"])
+            self.assertTrue(destination.is_dir())
 
 
 if __name__ == "__main__":
