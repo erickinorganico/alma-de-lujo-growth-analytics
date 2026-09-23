@@ -10,7 +10,8 @@ from pathlib import Path
 
 from alma.operating_workspace import build_operating_workspace
 from alma.operating_marts import build_operating_marts
-from alma.weekly_cycle import start_cycle, start_cycle_from_source_pack, verify_cycle, cycle_status
+from alma.weekly_cycle import (start_cycle, start_cycle_from_source_pack, verify_cycle,
+                               cycle_status, resolve_pointer)
 
 ROOT = Path(__file__).resolve().parents[1]
 PACK = ROOT / "client" / "source-packs" / "v1" / "synthetic"
@@ -86,3 +87,62 @@ class WeeklyCycleEvidenceTests(unittest.TestCase):
             current.write_bytes(current.read_bytes() + b"\n")
             with self.assertRaises(ValueError):
                 verify_cycle(result["destination"])
+
+
+class WeeklyCycleTaskBundleTests(unittest.TestCase):
+    def test_six_role_specific_hash_bound_requests(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            cut, mart = upstream(home)
+            state = start_cycle(cut, mart, home / ".local" / "weekly-cycles")
+            directory = Path(state["destination"])
+            bundle_raw = (directory / "task-bundle.json").read_bytes()
+            bundle = json.loads(bundle_raw)
+            self.assertEqual(hashlib.sha256(bundle_raw).hexdigest(), state["task_bundle_sha256"])
+            self.assertEqual(6, len(bundle["requests"]))
+            role_families = {}
+            for role, item in bundle["requests"].items():
+                raw = (directory / item["path"]).read_bytes()
+                request = json.loads(raw)
+                self.assertEqual(hashlib.sha256(raw).hexdigest(), item["sha256"])
+                self.assertEqual(state["cut_id"], request["cut_id"])
+                self.assertEqual(state["current_cut_sha256"], request["current_cut_sha256"])
+                self.assertEqual(state["manifest_sha256"], request["manifest_sha256"])
+                self.assertEqual(request["evidence_hash"], hashlib.sha256(
+                    json.dumps(request["evidence"], ensure_ascii=False, sort_keys=True,
+                               separators=(",", ":")).encode("utf-8")).hexdigest())
+                self.assertEqual("native-codex-task-bridge", request["execution_mode"])
+                self.assertEqual([f"tasks/{role}.response.json", f"tasks/{role}.query-trace.json"],
+                                 request["write_scope"])
+                self.assertTrue(request["synthetic_business_data"])
+                self.assertEqual("terra" if role in {"merchandiser", "finance_analyst"} else
+                                 "luna" if role in {"commerce_analyst", "returns_analyst"} else "sol",
+                                 request["expected_model_family"])
+                self.assertTrue(request["evidence_refs"])
+                for pointer in request["evidence_refs"]:
+                    resolve_pointer(request["evidence"], pointer)
+                role_families[role] = set(request["evidence"]["families"])
+            self.assertNotEqual(role_families["merchandiser"], role_families["finance_analyst"])
+            self.assertIn("cash", role_families["finance_analyst"])
+            self.assertNotIn("cash", role_families["commerce_analyst"])
+            self.assertEqual("WAITING_ANALYSTS", cycle_status(directory)["status"])
+
+    def test_idempotent_bytes_and_strict_local_json_pointers(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            cut, mart = upstream(home)
+            root = home / ".local" / "weekly-cycles"
+            first = start_cycle(cut, mart, root)
+            request = Path(first["destination"]) / "tasks" / "finance_analyst.request.json"
+            original = request.read_bytes()
+            second = start_cycle(cut, mart, root)
+            self.assertEqual(first["run_id"], second["run_id"])
+            self.assertEqual(original, request.read_bytes())
+            example = json.loads(original)["evidence"]
+            self.assertEqual("ok", resolve_pointer({"a/b": {"~": ["ok"]}}, "/a~1b/~0/0"))
+            for pointer in ("https://outside.example/fact", "../../private", "/a~2b", "/a~", "/0x", "/a/01"):
+                with self.subTest(pointer=pointer), self.assertRaises(ValueError):
+                    resolve_pointer(example, pointer)
+            request.write_bytes(original + b"\n")
+            with self.assertRaises(ValueError):
+                verify_cycle(first["destination"])
