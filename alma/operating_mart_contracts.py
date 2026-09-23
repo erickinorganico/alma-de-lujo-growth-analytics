@@ -206,6 +206,10 @@ class BoundCut:
         day = date.fromisoformat(as_of)
         if day > datetime.fromisoformat(self.cutoff_at).date():
             raise ValueError("as-of after cut")
+        if entry["status"] == "MISSING":
+            if entry["window_start"] is not None or entry["window_end"] is not None:
+                raise ValueError("missing coverage has a window")
+            return "MISSING"
         if not date.fromisoformat(entry["window_start"]) <= day <= date.fromisoformat(entry["window_end"]):
             return "MISSING"
         return entry["status"]

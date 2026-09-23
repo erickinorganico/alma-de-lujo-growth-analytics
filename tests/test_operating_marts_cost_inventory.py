@@ -5,6 +5,7 @@ import json
 import hashlib
 import shutil
 import csv
+import sqlite3
 import tempfile
 import unittest
 from pathlib import Path
@@ -17,6 +18,25 @@ SYNTHETIC_PACK = ROOT / "client" / "source-packs" / "v1" / "synthetic"
 
 
 class MartContractTests(unittest.TestCase):
+    def test_missing_coverage_with_null_window_stays_missing(self) -> None:
+        from alma.operating_mart_contracts import BoundCut
+
+        connection = sqlite3.connect(":memory:")
+        cut = BoundCut(connection, {
+            "cut_id": "synthetic:missing-cut",
+            "timezone": "America/Tijuana",
+            "cutoff_at": "2026-09-21T23:59:59-07:00",
+            "coverage": {
+                "unmet_demand": {"status": "MISSING", "window_start": None, "window_end": None},
+            },
+            "source_sha256": {},
+            "input_class": "SYNTHETIC",
+        })
+        try:
+            self.assertEqual("MISSING", cut.coverage_status("unmet_demand", "2026-09-21"))
+        finally:
+            connection.close()
+
     def test_source_registry_and_verified_two_cut_binding(self) -> None:
         from alma.operating_mart_contracts import bind_cut, SOURCE_BINDINGS, REQUIRED_SEMANTIC_FIELDS
 
