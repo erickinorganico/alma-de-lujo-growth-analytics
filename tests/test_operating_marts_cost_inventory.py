@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import shutil
 import tempfile
 import unittest
@@ -41,6 +42,8 @@ class MartContractTests(unittest.TestCase):
                     self.assertEqual(22, len(cut.source_hashes))
                     self.assertEqual("PARTIAL", cut.coverage["availability_daily"]["status"])
                     self.assertEqual("query_only", cut.connection.execute("PRAGMA query_only").fetchone()[0] and "query_only")
+                    with self.assertRaises(ValueError):
+                        cut.coverage_status("sales_aggregates", "2026-09-22")
             destination = Path(first["destination"])
             manifest = destination / "workspace.json"
             data = json.loads(manifest.read_text(encoding="utf-8"))
@@ -48,6 +51,10 @@ class MartContractTests(unittest.TestCase):
             manifest.write_text(json.dumps(data), encoding="utf-8")
             with self.assertRaises(ValueError):
                 bind_cut(destination)
+            source = Path(second["destination"]) / "cost_components.csv"
+            source.write_bytes(source.read_bytes() + b"\n")
+            with self.assertRaises(ValueError):
+                bind_cut(second["destination"])
 
     def test_metric_status_and_policy_authority(self) -> None:
         from alma.operating_mart_contracts import MetricDefinition, MetricRow, load_policy
@@ -56,6 +63,9 @@ class MartContractTests(unittest.TestCase):
         self.assertEqual("known_cost", definition.id)
         with self.assertRaises(ValueError):
             MetricRow("known_cost", "cut", "2026-09-21", {}, None, None, 0, "BOGUS", (), (), "r1")
+        with self.assertRaises(ValueError):
+            MetricRow("known_cost", "cut", "2026-09-21", {}, None, None, 0, "UNKNOWN", (), (), "r1")
+        self.assertEqual(0, MetricRow("known_cost", "cut", "2026-09-21", {}, 0, 1, 0, "MEASURED", (), (), "r1").value)
         policy_path = ROOT / "policies" / "operating-metrics-synthetic-v1.json"
         policy = load_policy(policy_path, as_of="2026-09-21", real_cut=False)
         self.assertEqual("SYNTHETIC_EXAMPLE", policy.status)
@@ -65,6 +75,19 @@ class MartContractTests(unittest.TestCase):
             load_policy(policy_path, as_of="2030-01-01", real_cut=False)
         with self.assertRaises(ValueError):
             load_policy(ROOT / "policies" / "absent.json", as_of="2026-09-21", real_cut=True)
+        with tempfile.TemporaryDirectory() as tmp:
+            policy_copy = Path(tmp) / "policy.json"
+            content = json.loads(policy_path.read_text(encoding="utf-8"))
+            for status in ("REVIEW", "APPROVED"):
+                content["status"] = status
+                content["owner_approval_ref"] = "synthetic:approval-001" if status == "APPROVED" else None
+                content["sha256"] = hashlib.sha256(json.dumps(
+                    {key: value for key, value in content.items() if key != "sha256"},
+                    sort_keys=True, ensure_ascii=False, separators=(",", ":"), allow_nan=False,
+                ).encode("utf-8")).hexdigest()
+                policy_copy.write_text(json.dumps(content), encoding="utf-8")
+                loaded = load_policy(policy_copy, as_of="2026-09-21", real_cut=True)
+                self.assertEqual(status == "APPROVED", loaded.authorizes_real_cut)
 
 
 class CostMartTests(unittest.TestCase):

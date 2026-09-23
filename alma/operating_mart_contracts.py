@@ -152,6 +152,17 @@ def load_policy(path: str | Path, *, as_of: str, real_cut: bool) -> Policy:
         raise ValueError("policy approval reference missing")
     if not isinstance(content["bases"], dict) or not isinstance(content["thresholds"], dict) or not isinstance(content["maturity_windows"], dict):
         raise ValueError("invalid policy bases")
+    required_bases = {"landed_cost_inclusions", "revenue_basis", "cogs_basis", "variable_cost_basis",
+                      "tax_basis", "shipping_basis", "discount_basis"}
+    if (set(content["bases"]) != required_bases
+            or not isinstance(content["bases"]["landed_cost_inclusions"], list)
+            or not content["bases"]["landed_cost_inclusions"]
+            or set(content["bases"]["landed_cost_inclusions"]) - {"DIRECT", "ALLOCATED"}
+            or any(not isinstance(content["bases"][name], str) or not content["bases"][name]
+                   for name in required_bases - {"landed_cost_inclusions"})
+            or any(not isinstance(value, int) or value < 0 for value in content["thresholds"].values())
+            or any(not isinstance(value, int) or value < 0 for value in content["maturity_windows"].values())):
+        raise ValueError("invalid policy rule values")
     return Policy(content, digest)
 
 
