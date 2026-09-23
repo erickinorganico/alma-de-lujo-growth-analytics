@@ -1,213 +1,195 @@
 ---
 phase: 02-reconciled-decision-metrics
-verified: 2026-09-23T05:31:00Z
+verified: 2026-09-23T06:31:09Z
 status: gaps_found
-score: 2/10 must-haves verified
+score: 7/10 must-haves verified
 overrides_applied: 0
+re_verification:
+  previous_status: gaps_found
+  previous_score: 2/10
+  gaps_closed:
+    - "Canonical COGS now preserves cents across daily/channel partitions and estimated economics remains ESTIMATED."
+    - "Mature returns and defects now use selected eligible delivery cohorts."
+    - "Valid observed inflows are accepted and all five cash layers have normalized rows."
+    - "Every existing family decision-measure path now has a semantic definition and normalized counterpart."
+  gaps_remaining:
+    - "Missing cash with retained independent balance evidence still blocks publication of unrelated families."
+  regressions:
+    - "New semantic daily cash forecasts and minimum projections are labeled MEASURED."
 gaps:
-  - truth: "Economics reconcile to the cent across reporting partitions and preserve estimated cost quality."
+  - truth: "Missing source coverage blocks only dependent complete metrics and preserves unrelated families."
     status: failed
-    reason: "Realized COGS resets residual ordinals for every channel/window, and estimated complete costs become MEASURED economics."
-    artifacts:
-      - path: alma/operating_cost_inventory.py
-        issue: "Lines 173-189 initialize per-call ordinals; line 198 ignores ESTIMATED input quality."
-    missing:
-      - "Allocate cents against stable canonical sales/unit ordinals before channel/window filtering; prove partition additivity."
-      - "Propagate estimated cost quality into contribution, margin, markup and their metric rows."
-  - truth: "Mature return and quality rates use eligible linked cohorts with correct denominators."
-    status: failed
-    reason: "The oldest sale date matures all sales in the window; quality rows are selected for the SKU without matching the selected delivery cohorts."
-    artifacts:
-      - path: alma/operating_learning_exceptions.py
-        issue: "Lines 230-254 aggregate all sales and use min(sales_date) for both return and defect maturity."
-      - path: models/operating_learning_exceptions.sql
-        issue: "quality_events filters SKU and event_date only; no selected-cohort join."
-    missing:
-      - "Evaluate maturity, numerator, denominator and coverage per delivery_cohort_id; aggregate only eligible cohorts."
-      - "Exclude returns/inspections from cohorts outside the denominator and retain immature/unlinked rows as UNKNOWN."
-      - "Test mixed mature/immature and out-of-window linked cohorts through project_learning, not only scalar helpers."
-  - truth: "Cash marts accept canonical reconciled inflows and publish all separate cash layers."
-    status: failed
-    reason: "Phase 2 rejects observed cash inflows allowed by Phase 1 because every reconciled event must have a payable payment_id; normalized cash rows omit reconciled, committed and expected layers."
+    reason: "A valid MISSING cash_events domain with retained observed opening/closing evidence fails publication with 'unknown metric has a value'. The current empty-cash test removes the independent balance domain too, hiding this case."
     artifacts:
       - path: alma/operating_finance_marts.py
-        issue: "active_cash_events requires payment_id for all RECONCILED events, including independently evidenced INFLOW."
+        issue: "project_cash retains actual_movements_cents=0 and horizon zero sums when missing events still have an observed scenario."
       - path: alma/operating_marts.py
-        issue: "Lines 156-164 look for committed_cents/planned_cents, but cash_horizons supplies layers_cents with RECONCILED/COMMITTED/EXPECTED."
+        issue: "_semantic_status marks numeric cash values UNKNOWN, then _semantic_publication passes those numbers to MetricRow; further raw-zero versus normalized-null cash-layer mismatches also require consistent handling."
     missing:
-      - "Honor Phase 1 observed-source inflow/outflow evidence and preserve payment checks only for obligation-linked settlements."
-      - "Serialize the actual nested cash-layer contract into normalized rows for both horizons with truthful statuses and lineage."
-      - "Test a valid observed inflow plus nonzero committed/expected events end to end."
-  - truth: "A missing or zero-event source blocks only dependent complete metrics, not unrelated families."
+      - "Keep recorded source facts distinct from authoritative missing-domain measures; emit null UNKNOWN cash measures consistently in families and normalized rows."
+      - "Preserve independent balance evidence and publish unrelated families when cash movements are MISSING."
+      - "Add a real intake-to-bundle case with cash_events MISSING/null windows and cash_balance_evidence retained with equal opening/closing."
+  - truth: "Expected/scenario-derived cash projections retain forecast status in every normalized semantic measure."
     status: failed
-    reason: "A valid Phase 1 cut with ZERO unmet_demand fails the whole bundle because registry IDs must equal emitted row IDs."
+    reason: "A complete-coverage EXPECTED outflow of 13 cents is ESTIMATED in its layer, but its derived daily close and daily minimum of 1099987 cents are MEASURED."
     artifacts:
       - path: alma/operating_marts.py
-        issue: "Line 180 requires every registered metric to emit a row, although event-grain domains legitimately have no rows."
+        issue: "_semantic_status falls back to MEASURED for cash when source coverage is complete; daily_closes_cents and daily_minimum_cents do not inherit forecast semantics."
     missing:
-      - "Require every emitted metric to have a definition without requiring invented event rows for empty domains."
-      - "Represent empty/unknown domain coverage explicitly and preserve unrelated metrics."
-      - "Build a valid zero-unmet-demand bundle and exercise missing/zero sales, budgets, payments and cash domains."
-  - truth: "Every published metric exposes its formula, grain, unit, window, sources, unknown rule, guardrail, owner and decision use."
+      - "Assign metric-specific status from the meaning and dependencies of each cash measure; complete source coverage does not turn a forecast into an observation."
+      - "Mark forecast daily closes/minima and weekly EXPECTED/SCENARIO aggregates consistently, preserving PARTIAL/UNKNOWN when coverage requires it."
+      - "Read final metric_rows.json in a regression test and verify projected values remain ESTIMATED beside a separately MEASURED reconciled close."
+  - truth: "The canonical intake can supply dated expected/committed/scenario events for genuine future 56-day and 91-day cash views."
     status: failed
-    reason: "The registry covers selected normalized metrics only; published known cost, markup, gross margin, contribution margin and financial-state measures have no individual definitions."
+    reason: "With cutoff 2026-09-21, a correctly shaped EXPECTED event dated 2026-09-22 is rejected by Phase 1 as value.after_cutoff at cash_events.csv:4:event_date. The input contract currently prevents future forecast facts from reaching the implemented horizons."
     artifacts:
-      - path: alma/operating_marts.py
-        issue: "COST_DEFINITIONS contains only complete cost, available units, purchase remaining and realized contribution; families.json also publishes additional decision metrics."
-      - path: alma/operating_finance_marts.py
-        issue: "FINANCE_DEFINITIONS covers headroom but not the separately published approved/committed/incurred/paid/outstanding/unallocated measures."
+      - path: alma/operating_interchange.py
+        issue: "Line 104 exempts promised_date, due_date and period_end only; cash forecast event_date is subject to the observed-event cutoff."
+      - path: tests/test_operating_marts_publication.py
+        issue: "The all-layers publication fixture dates every forecast on the cutoff day, so it does not exercise future input dates."
     missing:
-      - "Inventory all decision measures in families.json and give each a complete definition and faithful normalized representation, or explicitly model documented facts separately."
-      - "Check semantic registry coverage against published measures rather than only comparing the already-selected metric_rows IDs."
+      - "Reconcile the Phase 1/Phase 2 temporal contract explicitly: allow future dates only for eligible forecast cash layers while preserving the cutoff guard for reconciled/observed facts."
+      - "Build a genuine source pack with nonzero future committed/expected/scenario cash and verify day 55/56/90/91 boundaries through intake, bundle, and normalized rows."
 ---
 
-# Phase 2: Reconciled Decision Metrics Verification Report
+# Phase 2: Reconciled Decision Metrics Re-verification
 
 **Phase Goal:** Analysts and owners can inspect one exact, coverage-aware account of costs, units, cash, demand learning, and actionable exceptions for a cut.
 
-**Verified:** 2026-09-23T05:31:00Z  
-**Status:** gaps_found  
-**Re-verification:** No — initial verification; no previous verification or overrides existed.  
-**Inspected HEAD:** `33d512c8db31a968339448cebbb683aec80b0f8c`
+**Status:** gaps_found
+
+**Score:** 7/10 must-haves verified
+
+**Re-verification:** Yes — after Plan 02-04 gap closure.
+
+**Inspected HEAD:** `06e84c850fe320188ca5fda589d636833fd1019d`
+
+The original arithmetic, cohort, observed-inflow and semantic-catalog failures were repaired. A remaining missing-domain case, a forecast-status regression and an input-boundary failure still prevent the complete goal. No overrides exist. Only this report was edited; synthetic tests used disposable directories or in-memory SQLite.
+
+## Re-verification Evidence
+
+The verification read Plan 02-04 and its summary, compared actual changes from the original inspected commit, reran the focused tests and historical acceptance driver, repeated the original arithmetic/cohort counterexamples independently, and added bounded checks at the repaired cash/publication boundaries. Summary pass claims were not used as evidence.
+
+| Previous blocker | New evidence | Disposition |
+|---|---|---|
+| Partition-dependent COGS | `realized_economics` orders canonical SKU sales before reporting filters and tracks ordinals per version. Independent replay returns combined 101 and daily [34,34,33], sum 101. | CLOSED |
+| Estimated economics promoted to MEASURED | Estimated quality is accumulated from selected cost versions and returned as ESTIMATED; real intake-to-bundle serialization tests assert COGS, contribution and ratios. | CLOSED |
+| Pooled immature cohort | Quality SQL restricts to selected delivery cohorts; per-cohort latest delivery controls maturity. Independent original replay returns 1/10 = 0.1, while the 90-unit recent cohort stays UNKNOWN. | CLOSED |
+| Observed inflow rejected / cash layers omitted | Cash permits independent observed source evidence; serializer consumes nested layers_cents. Real bundle test proves 100, -11, -13, -7, -5 for RECONCILED/COMMITTED/EXPECTED/UNDATED/SCENARIO in both horizons. | CLOSED for original cases; further cash gaps below |
+| Valid zero-event domain blocked | ZERO and MISSING unmet demand now publish without fabricated demand rows. Sales/budget/payment/cash empty fixtures pass. | PARTIALLY CLOSED: MISSING cash with retained balance evidence fails |
+| Incomplete semantic registry | Explicit family-path formulas, metric/fact catalog, generated definitions and normalized rows are independently compared before publication. Missing definition+row and unclassified-field negatives fail before output. | CLOSED structurally; forecast measure status regression remains |
 
 ## Goal Achievement
 
-The implementation is substantive and the existing tests pass, but the goal is not achieved. Five groups of reproducible blockers affect exact economics, cohort learning, cash admissibility and serialization, empty-domain publication, and complete metric documentation. No code or source data was changed by this verification. Tests used disposable synthetic fixtures; additional arithmetic checks used in-memory SQLite.
-
 ### Observable Truths
 
-The five roadmap criteria are retained verbatim. Five additional plan requirements cover behaviors not fully stated in those criteria; repeated plan formulations were merged into the roadmap wording.
+The original ten truths and denominator are preserved for comparison. Plan 02-04 adds specificity to those same obligations rather than a reduced scope.
 
 | # | Truth | Status | Evidence |
 |---|---|---|---|
-| 1 | An owner can compare known cost, complete cost, markup, gross margin, and contribution by effective cost version; allocations reconcile to the cent and incomplete costs remain unknown. | FAILED — BLOCKER | Cost version/coverage code exists, but `realized_economics` resets its ordinal at each call: combined 101-cent COGS becomes 102 cents across three daily windows. |
-| 2 | An analyst can reconcile ordered, received, inspected, accepted, rejected, non-sellable, loaned, reserved, and available units once, with no duplicate receipt or return event inflating stock. | VERIFIED | `reconcile_purchase`, `project_purchases`, `project_inventory` and SQL use one accepted movement per receipt, distinct restock IDs, count variance and custody/reservation controls. Focused receipt/custody/variance tests pass with 20 ordered, 18 received, 16 accepted, 2 inspection, 21 available. |
-| 3 | An owner can view outstanding obligations and applied payments alongside separate reconciled, committed, expected, undated, and scenario cash in eight- and thirteen-week windows; budget and drop/channel financial states reconcile without double counting. | FAILED — BLOCKER | Obligations and ordinary budget calculations pass, but a Phase 1-valid observed inflow is rejected by `active_cash_events`. Normalized rows include only undated/scenario cash; the other layers remain stranded in nested family facts. |
-| 4 | An owner can inspect launch sell-through, variant mix, mature return/quality rates, stock exposure, and recorded unmet demand with explicit denominators, windows, and coverage; an exposed stockout does not become a weak-preference claim. | FAILED — BLOCKER | Ten mature deliveries plus ninety one-day-old deliveries yield a MEASURED return rate of 1/100 instead of a mature-cohort denominator of 10, or an explicitly unknown pooled rate. |
-| 5 | Sales-facing readiness and quality/loan exceptions show an owner, action, date, and closure state without internal cost disclosure; every metric exposes its formula, unit, grain, sources, unknown rule, guardrail, owner, and decision use. | FAILED — BLOCKER | Fixed public category/field/value validation works; missing due/closure evidence stays unresolved as allowed by Plan 02-03. However many metrics exposed in families.json have no definition. |
-| 6 | Missing Phase 1 input or incomplete source coverage blocks only dependent complete metrics and never converts unknown into zero. | FAILED — BLOCKER | Empty `unmet_demand.csv` plus coverage ZERO passes real intake, then the bundle fails `metric registry and emitted rows differ`; unrelated metrics cannot be published. |
-| 7 | Documented and estimated complete costs remain distinguishable in dependent economics. | FAILED — BLOCKER | A Phase 1-valid ESTIMATED component produces cost status ESTIMATED and economics status MEASURED. The helper-only estimated-cost test does not inspect the consumer. |
-| 8 | One obligation balance retains recorded unpaid under partial application coverage while withholding authoritative outstanding. | VERIFIED | `reconcile_obligation`/`project_obligations`; independently rerun 180000 minus 100000 oracle, partial coverage, overapplication, duplicate payment and VOID controls pass. |
-| 9 | Unavailable variants, immature/unlinked return cohorts and absent unmet-demand logging cannot produce false preference or zero-demand claims. | FAILED — BLOCKER | Exposure and recorded-demand safeguards exist, but the mixed-cohort runtime counterexample violates the immature-cohort clause. |
-| 10 | All Phase 2 metric definitions and results validate together; missing/stale policy, unsafe paths or failed reconciliation publish no derived bundle. | FAILED — BLOCKER | Hash/path/staging negative controls pass, but cash contract mismatch silently omits three layers and registry equality incorrectly rejects a valid zero-event domain. |
+| 1 | An owner can compare known cost, complete cost, markup, gross margin, and contribution by effective cost version; allocations reconcile to the cent and incomplete costs remain unknown. | VERIFIED | Canonical pre-filter ordinals, cost version selection, missing component/coverage controls, full semantic cost/economics definitions; independent 101-cent replay passes. |
+| 2 | An analyst can reconcile ordered, received, inspected, accepted, rejected, non-sellable, loaned, reserved, and available units once, with no duplicate receipt or return event inflating stock. | VERIFIED | Existing purchase/custody/count-variance controls remain unchanged and all focused regression cases pass. |
+| 3 | An owner can view outstanding obligations and applied payments alongside separate reconciled, committed, expected, undated, and scenario cash in eight- and thirteen-week windows; budget and drop/channel financial states reconcile without double counting. | FAILED — BLOCKER | Original layers now flow, but future forecast facts are rejected at intake and forecast daily/minimum measures are mislabeled MEASURED. |
+| 4 | An owner can inspect launch sell-through, variant mix, mature return/quality rates, stock exposure, and recorded unmet demand with explicit denominators, windows, and coverage; an exposed stockout does not become a weak-preference claim. | VERIFIED | Independent mixed-cohort replay returns 1/10; tests cover outside-cohort exclusions, defect denominator, stock exposure and recorded-demand lower bounds. |
+| 5 | Sales-facing readiness and quality/loan exceptions show an owner, action, date, and closure state without internal cost disclosure; every metric exposes its formula, unit, grain, sources, unknown rule, guardrail, owner, and decision use. | VERIFIED | Public category/field/value controls remain; semantic registry now declares all existing family measures and compares actual family paths with normalized counterparts. Runtime status accuracy is separately failed under truths 3/10. |
+| 6 | Missing Phase 1 input or incomplete source coverage blocks only dependent complete metrics and never converts unknown into zero. | FAILED — BLOCKER | Real Phase 1-valid MISSING cash plus retained observed balances aborts the entire mart bundle. |
+| 7 | Documented and estimated complete costs remain distinguishable in dependent economics. | VERIFIED | Corrected estimate propagation and final bundle tests preserve ESTIMATED for COGS, contribution, markup and margins. |
+| 8 | One obligation balance retains recorded unpaid under partial application coverage while withholding authoritative outstanding. | VERIFIED | Original balance tests pass; missing payments retain recorded exposure while authoritative outstanding/headroom is withheld. |
+| 9 | Unavailable variants, immature/unlinked return cohorts and absent unmet-demand logging cannot produce false preference or zero-demand claims. | VERIFIED | Mature and recent cohorts are separated; unlinked/outside evidence retained; empty demand has no fabricated channel/event rows. |
+| 10 | All Phase 2 metric definitions and results validate together; missing/stale policy, unsafe paths or failed reconciliation publish no derived bundle. | FAILED — BLOCKER | Completeness, path/hash/atomic controls work, but the semantic status fallback publishes EXPECTED-derived daily cash as MEASURED. |
 
-**Score:** 2/10 truths verified. Every failed truth is a BLOCKER; none is treated as uncertain or accepted by override.
+**Score:** 7/10 verified. Three failed truths require repair; no truth is merely uncertain.
 
-### Required Artifacts
+### Required Artifacts and Wiring
 
-All 13 plan artifacts exist and contain substantive implementation. GSD `verify.artifacts` returned 6/6, 3/3 and 4/4; these are existence/shape checks, not behavioral proof.
+| Artifact / link | Existence and substance | Wiring / result |
+|---|---|---|
+| `alma/operating_cost_inventory.py` → canonical sales/cost SQL | Substantive | VERIFIED: ordinals allocated before date/channel selection; estimates preserved |
+| `alma/operating_learning_exceptions.py` → `models/operating_learning_exceptions.sql` | Substantive | VERIFIED: selected-cohort SQL and per-cohort eligibility feed aggregate and cohort metric rows |
+| `alma/operating_finance_marts.py` → shared contracts/finance SQL | Substantive | PARTIAL: ordinary obligations/finance work; retained-balance missing-cash branch incomplete |
+| `alma/operating_marts.py` → five cash layers | Substantive | WIRED: all five normalized layer rows now produced for both horizons |
+| `alma/operating_marts.py` → semantic catalog/registry | Substantive | WIRED with BLOCKER: definitions/values linked, cash projection status inference incorrect |
+| `alma/operating_mart_contracts.py` → coverage | Substantive | VERIFIED for tested MISSING null-window rule; downstream numeric handling remains defective |
+| `alma/operating_interchange.py` → future cash forecast input | Existing Phase 1 implementation | NOT WIRED for future forecasts: generic date guard prevents forecast events after cutoff |
+| Policy JSON, cost/finance SQL, original three test modules | Present, substantive | Previous passing controls regress successfully |
+| `tests/test_operating_marts_publication.py` | New substantive integration tests | Seven tests pass; remaining cases identify gaps in its empty-cash and forecast fixtures |
+| Builder → private atomic directory | Substantive | VERIFIED: unsafe/missing/tampered inputs and semantic mismatch leave no accepted output |
 
-| Artifact | Expected | Status | Details |
+The policy schema remains documentation paired with manual runtime validation, as noted previously. This informational implementation choice did not cause the three reproduced failures and is not treated as an additional human approval gate.
+
+### Data-Flow Trace
+
+| Output | Upstream data | Result |
+|---|---|---|
+| Cost/COGS/margins | Actual verified cost components and canonical sales | FLOWING; original cent/estimate defects fixed |
+| Cohort and eligible aggregate rates | Selected delivery cohorts and SQL-linked quality events | FLOWING at correct grain |
+| Five cash-layer rows | Actual horizon.layers_cents plus undated/scenario fields | FLOWING |
+| Daily projected close/minimum | Reconciled starting balance plus commitments/expectations | FLOWING, but status wrongly MEASURED |
+| Missing cash with independent balances | Empty MISSING cash domain plus observed equal opening/closing | BLOCKED in semantic publication |
+| Future forecast horizon | Source cash event dated after cut | BLOCKED before workspace: value.after_cutoff |
+| Catalog and normalized measures | Explicit finite family paths traversed against actual families | FLOWING; same meaning/status requires the remaining correction |
+| Public sales readiness | Allowlisted canonical exception evidence | FLOWING; no new internal-cost fields |
+
+## Commands and Results
+
+| Check | Command / fixture | Result |
+|---|---|---|
+| Focused suite | `.venv/Scripts/python.exe -m unittest discover -s tests -p 'test_operating_marts_*.py' -v` | PASS: 33 tests in 7.828s |
+| Full regression and historical scenarios | `.venv/Scripts/python.exe scripts/verify_v2.py --output build/verification-v2-phase2-reverification` | PASS: 183 tests, zero failures/errors; all six expected scenario outcomes pass; receipt elapsed 80.18s |
+| Original exact COGS counterexample | Python stdin, in-memory STRICT schema; one 101-cent/3-unit cost and one-unit sales Sep15/16/17; combined and daily calls | PASS: 101 versus [34,34,33] = 101 |
+| Original exact cohort counterexample | Python stdin, in-memory schema; 10 deliveries Sep15, 90 Oct20, one physical return linked to Sep15, as_of Oct21 | PASS: numerator 1 / denominator 10 = 0.1; recent cohort UNKNOWN |
+| Original observed cash, empty unmet and estimated serialization | Focused real intake-to-bundle tests with validated disposable packs | PASS |
+| Remaining missing-cash case | Clear only cash_events; set MISSING/null windows; retain observed cash_balance_evidence and set closing equal opening; real intake then builder | FAIL: intake succeeds; bundle raises `ValueError: unknown metric has a value` |
+| Forecast semantic status | Complete cash coverage; add 13-cent EXPECTED outflow dated cutoff; real intake/bundle; read final metric_rows.json | FAIL: layer -13 ESTIMATED; daily close and daily minimum 1099987 MEASURED |
+| Genuine future expected event | Cutoff Sep21, append correctly shaped EXPECTED event Sep22 with unique IDs/source ref and no obligation/payment | FAIL at intake: `value.after_cutoff at cash_events.csv:4:event_date` |
+| Anti-pattern scan | `rg -n 'TBD|FIXME|XXX|TODO|HACK|PLACEHOLDER' alma models tests -g '*operating*'` | No matching debt/stub markers |
+
+The bounded stdin checks each finished below three seconds; full acceptance is a separate requested gate. The acceptance driver itself reran the entire 183-test suite, so a duplicate standalone full run was unnecessary. Fresh receipts are in `build/verification-v2-phase2-reverification/verification.json` and `tests.log`; these are current local execution evidence, not claims from the summary.
+
+### Exact Remaining Reproduction Inputs
+
+1. **Retained independent balances with missing movements:** Copy the synthetic pack into a temporary directory. Write only the original header to `cash_events.csv`; set its coverage to `{"status":"MISSING","window_start":null,"window_end":null}`. In `cash_balance_evidence.csv`, set closing_balance_cents equal to its existing opening_balance_cents (2000000), retaining OBSERVED evidence and dates. Leave other domains unchanged. `build_operating_workspace` succeeds. `build_operating_marts` fails with the error above.
+2. **Forecast promoted to observation:** Copy the synthetic pack. Set cash_events and cash_balance_evidence coverage COMPLETE. Append a unique EXPECTED/OUTFLOW event for 2026-09-21, amount 13, empty obligation/payment/supersedes fields, and a synthetic source reference. Keep the independent close 1100000. Publication succeeds, but `cash.horizons.56.daily_closes_cents.2026-09-21` and `cash.horizons.56.daily_minimum_cents` normalize 1099987 as MEASURED. The underlying EXPECTED layer is correctly ESTIMATED.
+3. **Future forecast blocked:** Use the same well-formed EXPECTED event with event_date 2026-09-22 and cutoff 2026-09-21. The generic date coercion checks event_date against cutoff without a cash-layer exception. This is an input-contract failure, not missing real client data.
+
+## Requirements Coverage
+
+| Requirement | Plans | Status | Evidence |
 |---|---|---|---|
-| `alma/operating_mart_contracts.py` | Verified cut binding, policy and row contracts | VERIFIED with warning | Reads actual SQLite/source hashes, semantic fields, PK/FKs and read-only connection. Policy validated manually rather than by loading its JSON schema. |
-| `contracts/operating-metrics-policy-v1.schema.json` | Policy contract | WARNING — runtime link incomplete | Present, substantive; `load_policy` duplicates validation rules without loading this artifact. |
-| `policies/operating-metrics-synthetic-v1.json` | Explicit synthetic policy | VERIFIED | Read by load_policy; canonical SHA-256 and status/effective interval checked. |
-| `alma/operating_cost_inventory.py` | Exact costs and unit conservation | FAILED | Wired calculations; cents partitioning and estimated economics defects above. |
-| `models/operating_cost_inventory.sql` | Source-grain projections | VERIFIED | `_query` reads named SQL and actual cut connection executes it. |
-| `tests/test_operating_marts_cost_inventory.py` | Cost/unit hand oracles | VERIFIED, incomplete coverage | 8 existing tests pass; no partitioned residual or estimated downstream-economics test. |
-| `alma/operating_finance_marts.py` | Obligations/cash/budget controls | FAILED | Actual finance computations; rejects valid non-payable reconciled cash. |
-| `models/operating_finance_marts.sql` | Canonical finance aggregates | VERIFIED | Used by project functions with integer sums and dated filters. |
-| `tests/test_operating_marts_finance.py` | Finance oracles | VERIFIED, incomplete coverage | 6 tests pass; reconciled example uses payable outflow only. |
-| `alma/operating_learning_exceptions.py` | Learning and exceptions | FAILED | Real source queries and public allowlists; cohort maturity/grain violation. |
-| `models/operating_learning_exceptions.sql` | Cohort/exposure source queries | FAILED | Used at runtime, but quality selection lacks denominator-cohort restriction. |
-| `alma/operating_marts.py` | Registry and private atomic bundle | FAILED | Real staging/hashing/publication; serializer/registry defects above. |
-| `tests/test_operating_marts_learning.py` | Learning/privacy/publication tests | VERIFIED, incomplete coverage | 8 tests pass; no mixed-cohort projection or valid zero-event bundle test. |
+| MET-01 | 02-01, 02-04 | SATISFIED | Original arithmetic and estimate failures repaired and independently rechecked |
+| MET-02 | 02-01, 02-04 | SATISFIED | Unit/custody/variance regressions pass |
+| MET-03 | 02-02, 02-04 | BLOCKED | Missing-cash publication, forecast status and future-event intake gaps |
+| MET-04 | 02-03, 02-04 | SATISFIED | Cohort-specific maturity and numerator/denominator restrictions verified |
+| MET-05 | 02-02, 02-04 | SATISFIED for tested canonical contract | Source-grain states, payment non-additivity and residual allocations preserved |
+| MET-06 | 02-03, 02-04 | SATISFIED | Governed exception and public projection tests remain green |
+| MET-07 | All plans | Definitions satisfied; semantic result validation BLOCKED | Complete catalog exists, but projected cash gets the wrong measurement status |
 
-### Key Link Verification
+All seven requirements remain claimed by plans; no orphaned Phase 2 requirement was found.
 
-The GSD text-pattern helper reported all 8 plan links unverified because targets use prose, Python module imports and composed Path expressions. Manual tracing supersedes these false negatives where actual calls exist.
+## Anti-Patterns and Disconfirmation
 
-| From | To | Via | Status | Details |
-|---|---|---|---|---|
-| Shared contracts | Phase 1 schema/manifest | bind_cut and relationship_summary | WIRED | Actual source bytes, manifest, SQLite and semantic checks. |
-| Cost/inventory Python | Cost/inventory SQL | SQL_PATH, _query, connection.execute | WIRED | Runtime tests exercise the named queries. |
-| Finance Python | Shared contracts and finance SQL | Imports, _query, MetricRow | WIRED | Actual inputs and output rows. |
-| Learning Python | Shared contracts/learning SQL | Imports, _query, MetricRow | WIRED, behavior defective | SQL-selected cohort facts are aggregated at the wrong grain. |
-| Bundle builder | Cost/inventory/finance/learning | _collect | PARTIAL — BLOCKER | Calls all builders; finance `layers_cents` contract is not consumed faithfully. |
-| Bundle builder | Private output directory | _private_root, stage, os.replace | WIRED | Disposable synthetic bundle test verifies artifacts/hashes and unsafe path failures. |
-| Builder/load_policy | JSON policy schema | Manual validation | PARTIAL — WARNING | The schema file itself is not read at runtime; document or remove the duplicated contract after reconciliation. |
+No stubs or unreferenced debt markers were found. The remaining defects are boundary and semantic failures.
 
-### Data-Flow Trace (Level 4)
+- **Partially met requirement:** MET-03 can calculate horizons but cannot import a nonzero forecast dated after the cutoff.
+- **Passing test with limited scope:** The all-layer bundle test dates committed/expected/scenario events on the cutoff itself. Its passing result does not prove future 56/91-day data can traverse intake.
+- **Uncovered error path:** The empty cash matrix clears both cash events and independent balances. It bypasses the branch reached when balances remain and only movements are missing.
+- **Status regression:** Generic complete-coverage handling labels derived daily/minimum projections MEASURED even when their only change from the observed close is an EXPECTED flow.
 
-No dynamic UI belongs to this phase; equivalent traces cover its serialized analytical outputs.
+## Probe Execution
 
-| Artifact | Data variable | Source | Real data | Status |
-|---|---|---|---|---|
-| Cost/economics family | cost rows, cogs, ratios | SQLite cost components/allocations and sales_aggregates | Yes | FLOWING, arithmetic/status defects |
-| Inventory/purchase family | custody and receipt units | SQLite unique movement, receipt, count, loan and reservation rows | Yes | FLOWING |
-| Finance family | obligations, targets, horizons | SQLite obligation/payment/cash/evidence/budget rows | Yes | FLOWING with admissibility defect |
-| Normalized cash rows | metrics | project_cash.horizons.layers_cents | Yes upstream | DISCONNECTED for RECONCILED/COMMITTED/EXPECTED |
-| Learning family | return/defect rates | SQLite sales and quality rows | Yes | FLOWING at incorrect cohort grain |
-| Public readiness | allowlisted exception fields | Canonical exceptions and SKU variant codes | Yes | FLOWING, fixed public allowlists |
-| Registry | definition dictionaries | 15 selected definitions | Static metadata by design | Incomplete coverage of published decision measures |
+No explicit or conventional `probe-*.sh` is declared for this phase. The Python acceptance driver was independently executed and its fresh result recorded above.
 
-### Behavioral Spot-Checks
+## Human Verification Required
 
-Existing tests and additional verifier commands were run independently, not inferred from summaries. In-memory checks used `parse_pack` on the checked-in synthetic pack, the actual STRICT schema and production projection functions; only the specified synthetic inputs were varied. End-to-end fixture checks below used disposable directories and the real intake/build functions. No repository source or accepted cut was mutated.
+None for the synthetic Phase 2 contract. EXT-01..03 still govern real owner approval, fiscal policy and real-client adoption. These are outside this phase and do not explain the reproduced software failures.
 
-| Behavior | Command / exact setup | Result | Status |
-|---|---|---|---|
-| Phase 2 focused suite | `.venv/Scripts/python.exe -m unittest discover -s tests -p 'test_operating_marts_*.py' -v` | 22 tests, 4.785 seconds, exit 0 | PASS |
-| Repository regression | `.venv/Scripts/python.exe -m unittest discover -s tests -v` | 172 tests, 57.350 seconds, exit 0 | PASS |
-| COGS partition invariance | Python stdin, in-memory schema; one 101-cent component, quantity_basis=3, three one-unit sales on Sep 15/16/17; compare `realized_economics(..., Sep15, Sep18)` with three one-day calls | Combined 101; daily `[34,34,34]`, sum 102 | FAIL |
-| Estimated quality propagation | Python stdin; disposable synthetic pack with complete sales/cost coverage and component quality ESTIMATED, validated through build_operating_workspace/bind_cut | `project_cost.status=ESTIMATED`; `realized_economics.status=MEASURED` | FAIL |
-| Mixed cohort maturity | Python stdin; in-memory production projection, 10 deliveries Sep15 and 90 Oct20, one linked physical return on Oct1, as_of Oct21, policy maturity 30 days | `{'numerator':1,'denominator':100,'value':'0.01','status':'MEASURED'}` | FAIL |
-| Valid observed inflow | Python stdin; append independent 100-cent RECONCILED INFLOW with unique source/event identity, no obligation/payment, increase observed closing balance by 100; real Phase 1 build/bind, then project_cash | Phase 1 valid; Phase 2 raises `settled cash lacks payment evidence` | FAIL |
-| Valid ZERO unmet domain | Python stdin; keep unmet CSV header, delete its observations, set metadata coverage ZERO; real Phase 1 build then build_operating_marts | Phase 1 valid; `metric registry and emitted rows differ`; output root absent | FAIL |
-| Normalized cash-layer wiring | Python stdin; production `_collect` on in-memory checked-in synthetic rows | Fact keys RECONCILED/COMMITTED/EXPECTED exist; normalized layer dimensions only undated_cents/scenario_cents for both horizons | FAIL |
+## Deferred-Item Review
 
-The extra stdin checks each finished in under 3 seconds. The 57-second regression is the requested test suite, not a bounded spot-check. No server or external service was started. `scripts/verify_v2.py` was inspected but not rerun in this verification; earlier SUMMARY claims about that driver are not counted as fresh evidence. Existing final regression and the reproduced Phase 2 blockers suffice for this failing verdict.
+No later phase explicitly owns these three corrections. Phase 3 consumes the metrics, Phase 4 packages the experience, and Phase 5 verifies/releases it. The future-event restriction originates in Phase 1, but the Phase 2 plan explicitly requires reconciling missing source semantics before dependent metrics are declared complete. It therefore remains a Phase 2 dependency gap, not an accepted deferral.
 
-### Probe Execution
+## Conclusion
 
-No declared `probe-*.sh` or conventional shell probe was found. Not applicable. Python tests and stdin counterexamples were independently executed as recorded above.
-
-### Requirements Coverage
-
-All MET-01..07 appear in plan frontmatter; no Phase 2 requirement is orphaned.
-
-| Requirement | Source plan | Description | Status | Evidence |
-|---|---|---|---|---|
-| MET-01 | 02-01 | Versioned exact cost and economics | BLOCKED | Partition changes COGS; estimated status lost downstream. |
-| MET-02 | 02-01 | Canonical units and custody | SATISFIED | Actual event/count/custody code and focused negative controls. |
-| MET-03 | 02-02 | Obligations and layered 8/13-week cash | BLOCKED | Valid independent cash inflows rejected; normalized layers omitted. |
-| MET-04 | 02-03 | Eligible product learning | BLOCKED | Mixed mature/immature denominator and absent cohort restriction. |
-| MET-05 | 02-02 | Distinct reconciled budget/drop/channel states | SATISFIED for tested canonical contract | Native-grain source bridge, payment non-additivity, residual cent controls and complete/partial headroom tests pass. |
-| MET-06 | 02-03 | Governed exceptions and sales privacy | SATISFIED | Deterministic IDs, policy owner/action, due/closure fields, unresolved missing evidence, exact public field/category/value validation. |
-| MET-07 | All three | Complete definitions for every metric | BLOCKED | Extra family measures lack definitions; selected-row equality hides omissions and rejects legitimate empty domains. |
-
-### Anti-Patterns Found
-
-No unreferenced TBD/FIXME/XXX or TODO/HACK/PLACEHOLDER markers were found in the phase implementation/test/model/policy files. Null returns inspected are legitimate undefined-ratio/no-issue outcomes. There are no placeholder modules; these are semantic and wiring failures.
-
-| File | Line | Pattern | Severity | Impact |
-|---|---|---|---|---|
-| alma/operating_cost_inventory.py | 173 | Per-call residual ordinal | BLOCKER | Report partition changes cents. |
-| alma/operating_cost_inventory.py | 198 | MEASURED whenever complete | BLOCKER | Estimated economics mislabeled. |
-| alma/operating_learning_exceptions.py | 238 | min(sales_date) as pooled maturity date | BLOCKER | Immature deliveries dilute mature rates. |
-| alma/operating_marts.py | 158 | Consumer key names differ from producer | BLOCKER | Silent loss of three normalized cash layers. |
-| alma/operating_marts.py | 180 | Registry set equality with emitted rows | BLOCKER | Zero-event domain blocks unrelated results. |
-| tests/test_operating_marts_learning.py | 17 | Scalar maturity helper only | WARNING | Passing test does not exercise actual multi-cohort projector. |
-
-### Disconfirmation Pass
-
-- **Partially met requirement:** MET-07 validates all selected normalized definitions, but it does not cover every published decision measure.
-- **Misleading passing test:** The scalar mature_return_rate test proves a single cohort's date comparison. It cannot prove project_learning's pooled date and denominator are correct. Similarly, the 101-cent allocator test does not prove COGS remains additive after window/channel filtering.
-- **Uncovered input/error path:** A valid reconciled inflow without a payable payment_id passes Phase 1 and fails Phase 2. The existing cash test only supplies a settled payable outflow.
-
-### Human Verification Required
-
-None for this synthetic analytical phase, consistent with `02-VALIDATION.md`. Owner policy approval, fiscal treatment, real-cut correctness and adoption remain EXT-01..03; they neither excuse these implementation failures nor become new Phase 2 approval gates.
-
-### Deferred-Item Review
-
-The full milestone roadmap was checked. Phase 3 owns interpretation/review/decision carry-forward, Phase 4 owns portal/workbooks, and Phase 5 owns acceptance/release. None explicitly defers exact COGS, cohort maturity, cash input support, truthful source coverage or metric registry completeness. All five groups remain current Phase 2 gaps.
-
-### Gaps Summary
-
-Close the five frontmatter gap groups before advancing the phase. Existing test success is useful regression evidence, but it does not falsify the reproduced counterexamples. After repair, rerun affected projector/bundle tests with these concrete inputs, then the full required acceptance gates. No overrides were applied or proposed: these are implementation defects, not intentional equivalent designs.
+The repair substantially improves the phase: seven of ten observable truths now pass and the original high-impact arithmetic/cohort failures are closed. Keep the phase blocked until the three structured gaps above are corrected and their real intake-to-bundle counterexamples pass.
 
 ---
-
-_Verified: 2026-09-23T05:31:00Z_  
-_Verifier: independent gsd-verifier; report only, no commit_
+_Verifier: independent gsd-verifier. Report updated only; no commit._
