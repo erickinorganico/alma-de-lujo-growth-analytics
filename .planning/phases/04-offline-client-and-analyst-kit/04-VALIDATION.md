@@ -42,6 +42,8 @@ created: 2026-09-22
 | 04-03-01 | 03 | 3 | CLIENT-03 | T-04-08/09/11 | Weekly creation plus exact record/submit/resume/packet/register continuation from a clean checkout | end-to-end | `.venv\Scripts\python.exe -m unittest tests.test_weekly_kit.WeeklyCommandTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
 | 04-03-02 | 03 | 3 | CLIENT-04 | T-04-10 | Informational/synthetic public ZIP excludes runtime/private/native content and resolves offline | adversarial | `.venv\Scripts\python.exe -m unittest tests.test_weekly_kit.ClientKitTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
 | 04-03-03 | 03 | 3 | CLIENT-03/04 | T-04-08/10/11 | Creation/continuation help, clean-checkout restart and public-kit boundaries agree | integration | `.venv\Scripts\python.exe -m unittest tests.test_weekly_kit.GuideContractTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
+| 04-04-01 | 04 | 4 | CLIENT-03 | T-04-12/13/14/15/16 | Integrated package-stage exact contract, determinism, replay refusal, atomic failure, tamper rejection and clean-process restart | end-to-end | `.venv\Scripts\python.exe -m unittest tests.test_weekly_kit.WeeklyPackageStageTests tests.test_weekly_kit.GuideContractTests -v` | task extends in RED | ⬜ planned RED |
+| 04-04-02 | 04 | 4 | CLIENT-03 | T-04-12/13/14/15/16 | Public-only builder/auditor reuse, immutable package receipt/index and truthful weekly result | integration | `.venv\Scripts\python.exe -m unittest tests.test_weekly_kit.WeeklyPackageStageTests tests.test_weekly_kit.WeeklyCommandTests tests.test_weekly_kit.ClientKitTests tests.test_weekly_kit.GuideContractTests -v` | Task 1 creates RED contract | ⬜ planned GREEN |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -52,6 +54,8 @@ created: 2026-09-22
 - [x] No plan depends on a missing Wave 0 test file: test creation is an explicit first step inside the same task that implements the behavior.
 - [x] Task 04-03-03 runs its focused guide-contract smoke first, then the slower package/privacy regressions, full `unittest` discovery and release audit as final gates.
 - [x] Wave order is explicit: 04-01 workbook truth → 04-02 portal/parity/visual truth → 04-03 weekly/package integration.
+- [x] Gap-closure Wave 4 runs only after 04-03 and uses a dedicated RED contract before wiring `weekly` to the existing public package builder/auditor.
+- [x] Phase 5 Plan 05-03 retains ownership of deep self-consistent secret/PII scanning inside allowlisted members; 04-04 does not broaden or claim that audit.
 - [x] The two independent parity oracles have non-overlapping ownership: workbook→pack→manifest in 04-01 and mart→portal→CSV→JSON in 04-02.
 - [x] Portal visual evidence is owned and blocking in 04-02; it is not deferred to an unowned Phase 5 step.
 - [x] Phase 5 Plan 05-02 already owns fresh Excel formula/cache/page evidence for final bytes; Phase 4 makes no broader unexecuted spreadsheet-engine claim.
