@@ -40,6 +40,7 @@ def terminal_cycle(home: Path) -> Path:
     for role in sorted(MODELS):
         request = json.loads((cycle / "tasks" / f"{role}.request.json").read_text("utf-8"))
         response, trace = response_for(request), trace_for(request)
+        response["recommendations"][0]["id"] = f"{role}-inspect-one"
         response_path = cycle / "tasks" / f"{role}.response.json"
         trace_path = cycle / "tasks" / f"{role}.query-trace.json"
         response_path.write_bytes(canonical_json(response))
@@ -153,4 +154,3 @@ class DecisionRegisterContractTests(unittest.TestCase):
 
 class DecisionContinuityTests(unittest.TestCase):
     """Task 2 tests are added during its RED phase."""
-
