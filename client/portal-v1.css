@@ -138,13 +138,19 @@ footer { border-top: 1px solid var(--line); padding: 24px 0; background: var(--p
 }
 
 @media (max-width: 600px) {
+  body { width: 390px; max-width: 100%; overflow-x: hidden; }
   .shell { width: min(100% - 32px, 1480px); }
   header { padding-block: 34px 30px; }
+  header h1 { max-width: 100%; font-size: clamp(2rem, 11vw, 2.7rem); overflow-wrap: anywhere; }
+  header p, .provenance-label, .print-provenance { max-width: 100%; overflow-wrap: anywhere; word-break: break-word; }
+  .nav-inner { flex-wrap: wrap; gap: 0 14px; padding-block: 4px; white-space: normal; }
+  nav a { min-height: 40px; padding-block: 9px; }
   .fact-grid { grid-template-columns: 1fr; }
   .search-tools { grid-template-columns: 1fr; }
   .source-card summary { flex-direction: column; }
   section { margin-bottom: 54px; }
   th, td { padding: 9px 10px; }
+  code, td, dd, .hash { overflow-wrap: anywhere; word-break: break-word; }
 }
 
 @media (prefers-reduced-motion: reduce) {
