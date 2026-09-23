@@ -323,6 +323,8 @@ class InventoryMartTests(unittest.TestCase):
                 self.assertEqual(21, stock["available_units"])
                 self.assertEqual("PARTIAL", stock["status"])
                 cut.coverage["inventory_movements"]["status"] = "MISSING"
+                cut.coverage["inventory_movements"]["window_start"] = None
+                cut.coverage["inventory_movements"]["window_end"] = None
                 blocked = project_inventory(cut, "synthetic:sku-001", "2026-09-21")
                 self.assertEqual("UNKNOWN", blocked["status"])
                 self.assertIsNone(blocked["available_units"])
