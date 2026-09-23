@@ -3,11 +3,13 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 import sys
 import tempfile
 import unittest
+import zipfile
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -43,6 +45,12 @@ def weekly_home():
     finally:
         target = Path("\\\\?\\" + str(path)) if sys.platform == "win32" else path
         shutil.rmtree(target, ignore_errors=True)
+
+
+def long_path(path: Path) -> Path:
+    if sys.platform == "win32" and not str(path).startswith("\\\\?\\"):
+        return Path("\\\\?\\" + str(path.resolve()))
+    return path
 
 
 class WeeklyCommandTests(unittest.TestCase):
@@ -168,6 +176,46 @@ class WeeklyCommandTests(unittest.TestCase):
                                      cwd=ROOT, text=True, capture_output=True, check=False)
             self.assertEqual(0, process.returncode, process.stderr)
             self.assertEqual("WAITING_ANALYSTS", json.loads(process.stdout)["status"])
+
+    def test_clean_git_archive_process_resumes_explicit_restored_private_run(self) -> None:
+        with weekly_home() as home:
+            pack, _ = generated_materials(home)
+            result = create_weekly_run(pack, POLICY, home / ".local" / "client-runs")
+            run = Path(result["run"])
+            immutable = {
+                path.relative_to(run).as_posix(): path.read_bytes()
+                for path in (run / "receipts").iterdir()
+            }
+            immutable["run-index.json"] = (run / "run-index.json").read_bytes()
+
+            archive = home / "committed.zip"
+            archived = subprocess.run(
+                ["git", "archive", "--format=zip", "-o", str(archive), "HEAD"],
+                cwd=ROOT, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(0, archived.returncode, archived.stderr)
+            checkout = home / "clean-checkout"
+            with zipfile.ZipFile(archive) as bundle:
+                bundle.extractall(checkout)
+            self.assertFalse((checkout / ".git").exists())
+
+            backup = home / "explicit-private-run"
+            shutil.copytree(long_path(run), long_path(backup))
+            shutil.rmtree(long_path(run))
+            run.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copytree(long_path(backup), long_path(run))
+            env = {**os.environ, "PYTHONPATH": str(checkout)}
+            process = subprocess.run(
+                [sys.executable, "-m", "alma.weekly", "weekly-resume",
+                 "--run", str(run), "--action", "resume"],
+                cwd=checkout, env=env, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(0, process.returncode, process.stderr)
+            self.assertEqual("WAITING_ANALYSTS", json.loads(process.stdout)["status"])
+            self.assertEqual(immutable["run-index.json"], (run / "run-index.json").read_bytes())
+            for relative, raw in immutable.items():
+                if relative != "run-index.json":
+                    self.assertEqual(raw, (run / relative).read_bytes())
 
 
 if __name__ == "__main__":
