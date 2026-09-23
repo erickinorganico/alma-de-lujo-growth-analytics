@@ -7,11 +7,11 @@
 
 ### Versioned data intake
 
-- [ ] **DATA-01**: Analyst can initialize blank or synthetic-example v1 source packs with exact CSV schemas, grains, keys, units and provenance fields.
-- [ ] **DATA-02**: Analyst can build a private immutable operating workspace from a source pack; malformed, duplicate or conflicting rows fail before metrics are published.
-- [ ] **DATA-03**: Every cut records source hashes, cutoff, timezone, coverage, quality, relationships and a stable cut identity without PII.
-- [ ] **DATA-04**: Costs, purchases, receipts, obligations, payments, cash, inventory, budgets, quality, sales readiness and loans share canonical SKU/event identities and never create competing ledgers.
-- [ ] **DATA-05**: A workspace can be exported, restored and verified with the same hashes and row relationships.
+- [x] **DATA-01**: Analyst can initialize blank or synthetic-example v1 source packs with exact CSV schemas, grains, keys, units and provenance fields.
+- [x] **DATA-02**: Analyst can build a private immutable operating workspace from a source pack; malformed, duplicate or conflicting rows fail before metrics are published.
+- [x] **DATA-03**: Every cut records source hashes, cutoff, timezone, coverage, quality, relationships and a stable cut identity without PII.
+- [x] **DATA-04**: Costs, purchases, receipts, obligations, payments, cash, inventory, budgets, quality, sales readiness and loans share canonical SKU/event identities and never create competing ledgers.
+- [x] **DATA-05**: A workspace can be exported, restored and verified with the same hashes and row relationships.
 
 ### Metrics and decisions
 
@@ -65,7 +65,7 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DATA-01..05 | Phase 1 | Pending |
+| DATA-01..05 | Phase 1 | Complete |
 | MET-01..07 | Phase 2 | Pending |
 | FLOW-01..05 | Phase 3 | Pending |
 | CLIENT-01..04 | Phase 4 | Pending |

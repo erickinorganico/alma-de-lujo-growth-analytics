@@ -1,7 +1,7 @@
 ---
 phase: 01
 slug: versioned-operating-intake
-status: draft
+status: passed
 nyquist_compliant: true
 wave_0_complete: true
 created: 2026-09-22
@@ -40,12 +40,12 @@ Focused feedback should finish promptly; if a command exceeds a minute, keep it 
 
 | Task | Wave | Requirements | Test file and behavior | Automated gate | Status |
 | --- | --- | --- | --- | --- | --- |
-| 01-01 Task 1 | 1 | DATA-01, DATA-04 | `tests/test_operating_contracts.py`: literal 22 headers, grain/key/type/unit/FK/provenance, `cash_events.economic_event_id` required and `supersedes_event_id` nullable, metadata versions/coverage | `python -m unittest discover -s tests -p 'test_operating_contracts.py' -v` | Planned red/green |
-| 01-01 Task 2 | 1 | DATA-01, DATA-04 | Same file: blank/synthetic generation, byte-stable 22 CSVs plus metadata, explicit synthetic mark, linked cash forecast→actual event, private-public path rejection | `python -m unittest discover -s tests -p 'test_operating_contracts.py' -v` | Planned red/green |
-| 01-02 Task 1 | 2 | DATA-02, DATA-04 | `tests/test_operating_intake.py`: exact headers/typed rows; malformed, duplicate, conflict, PII, FK, stock/reservation, budget and cash self/cycle/fork/cross-origin negatives | `python -m unittest discover -s tests -p 'test_operating_intake.py' -v` | Planned red/green |
-| 01-02 Task 2 | 2 | DATA-02, DATA-03, DATA-04 | Same file: immutable private SQLite, source/typed/DB/relationship digests, stable cut ID, 22 `STRICT` tables, active-leaf-only cash and balance reconciliation | `python -m unittest discover -s tests -p 'test_operating_intake.py' -v` | Planned red/green |
-| 01-03 Task 1 | 3 | DATA-03, DATA-05 | `tests/test_operating_archive.py`: live verification, exact private archive, one-byte tamper, changed supersession edge or active leaf, no source-value disclosure | `python -m unittest discover -s tests -p 'test_operating_archive.py' -v` | Planned red/green |
-| 01-03 Task 2 | 3 | DATA-02, DATA-03, DATA-04, DATA-05 | Same file plus existing suite: exact restore equality, unsafe ZIP/path/tamper/preexisting destination, unknown/reconciled evidence and old-version regressions | `python -m unittest discover -s tests -v` | Planned red/green |
+| 01-01 Task 1 | 1 | DATA-01, DATA-04 | `tests/test_operating_contracts.py`: literal 22 headers, grain/key/type/unit/FK/provenance, `cash_events.economic_event_id` required and `supersedes_event_id` nullable, metadata versions/coverage | `python -m unittest discover -s tests -p 'test_operating_contracts.py' -v` | Green — 13/13 focused |
+| 01-01 Task 2 | 1 | DATA-01, DATA-04 | Same file: blank/synthetic generation, byte-stable 22 CSVs plus metadata, explicit synthetic mark, linked cash forecast→actual event, private-public path rejection | `python -m unittest discover -s tests -p 'test_operating_contracts.py' -v` | Green — 46 generated files byte-stable |
+| 01-02 Task 1 | 2 | DATA-02, DATA-04 | `tests/test_operating_intake.py`: exact headers/typed rows; malformed, duplicate, conflict, PII, FK, stock/reservation, budget and cash self/cycle/fork/cross-origin negatives | `python -m unittest discover -s tests -p 'test_operating_intake.py' -v` | Green — 15/15 focused |
+| 01-02 Task 2 | 2 | DATA-02, DATA-03, DATA-04 | Same file: immutable private SQLite, source/typed/DB/relationship digests, stable cut ID, 22 `STRICT` tables, active-leaf-only cash and balance reconciliation | `python -m unittest discover -s tests -p 'test_operating_intake.py' -v` | Green — 22/22 STRICT, no FK violations |
+| 01-03 Task 1 | 3 | DATA-03, DATA-05 | `tests/test_operating_archive.py`: live verification, exact private archive, one-byte tamper, changed supersession edge or active leaf, no source-value disclosure | `python -m unittest discover -s tests -p 'test_operating_archive.py' -v` | Green — 12/12 focused |
+| 01-03 Task 2 | 3 | DATA-02, DATA-03, DATA-04, DATA-05 | Same file plus existing suite: exact restore equality, unsafe ZIP/path/tamper/preexisting destination, unknown/reconciled evidence and old-version regressions | `python -m unittest discover -s tests -v` | Green — 150/150 full regression |
 
 ## Requirement and Negative-Control Coverage
 
@@ -78,7 +78,7 @@ None for Phase 1. Observed private client correctness and owner adoption are ext
 - [x] Each task has immediate focused feedback; no three-task gap exists.
 - [x] No new test framework or Wave 0 dependency is needed.
 - [x] No watch mode or manual-only acceptance substitute.
-- [ ] Focused tests green on implemented code.
-- [ ] Final full suite green with v0.2/v0.3 compatibility.
+- [x] Focused tests green on implemented code.
+- [x] Final full suite green with v0.2/v0.3 compatibility.
 
-**Approval:** Pending execution evidence.
+**Approval:** Passed on 2026-09-22. Evidence is recorded in `01-VERIFICATION.md` and the three plan summaries.

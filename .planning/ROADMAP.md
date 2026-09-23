@@ -6,7 +6,7 @@ A private weekly cut moves through versioned intake, canonical analytical marts,
 
 ## Phases
 
-- [ ] **Phase 1: Versioned Operating Intake** - A validated private cut becomes an immutable, restorable analytical workspace.
+- [x] **Phase 1: Versioned Operating Intake** - A validated private cut becomes an immutable, restorable analytical workspace.
 - [ ] **Phase 2: Reconciled Decision Metrics** - Canonical marts expose exact, coverage-aware operating and product measures.
 - [ ] **Phase 3: Governed Weekly Decision Cycle** - Current-cut evidence reaches real native analysis, independent review, and next-cut closure.
 - [ ] **Phase 4: Offline Client and Analyst Kit** - Users receive usable workbooks, a navigable offline portal, and a one-command weekly workflow.
@@ -27,9 +27,9 @@ A private weekly cut moves through versioned intake, canonical analytical marts,
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: Define versioned operating-source contracts, keys, units, provenance, and blank/synthetic pack initialization.
-- [ ] 01-02: Build strict import, canonical identity validation, immutable SQLite workspace, and coverage/quality manifest.
-- [ ] 01-03: Add export/restore verification and intake failure controls for duplicates, conflicts, tampering, and privacy.
+- [x] 01-01: Define versioned operating-source contracts, keys, units, provenance, and blank/synthetic pack initialization.
+- [x] 01-02: Build strict import, canonical identity validation, immutable SQLite workspace, and coverage/quality manifest.
+- [x] 01-03: Add export/restore verification and intake failure controls for duplicates, conflicts, tampering, and privacy.
 
 ### Phase 2: Reconciled Decision Metrics
 **Goal**: Analysts and owners can inspect one exact, coverage-aware account of costs, units, cash, demand learning, and actionable exceptions for a cut.
@@ -104,7 +104,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Versioned Operating Intake | 0/3 | Not started | - |
+| 1. Versioned Operating Intake | 3/3 | Complete | 2026-09-22 |
 | 2. Reconciled Decision Metrics | 0/3 | Not started | - |
 | 3. Governed Weekly Decision Cycle | 0/3 | Not started | - |
 | 4. Offline Client and Analyst Kit | 0/3 | Not started | - |
