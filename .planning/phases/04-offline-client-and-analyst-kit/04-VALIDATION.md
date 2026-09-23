@@ -1,7 +1,7 @@
 ---
 phase: 04
 slug: offline-client-and-analyst-kit
-status: draft
+status: approved
 nyquist_compliant: true
 wave_0_complete: true
 created: 2026-09-22
@@ -35,13 +35,13 @@ created: 2026-09-22
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 04-01-01 | 01 | 1 | CLIENT-01 | T-04-01/02/03 | Registry-complete, safe blank/example workbook and policy-material generation | integration | `.venv\Scripts\python.exe -m unittest tests.test_operating_workbooks.OperatingWorkbookGenerationTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
-| 04-01-02 | 01 | 1 | CLIENT-01 | T-04-01/02 | Workbook input fails closed before canonical export | adversarial | `.venv\Scripts\python.exe -m unittest tests.test_operating_workbooks.WorkbookImportTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
-| 04-02-01 | 02 | 1 | CLIENT-02 | T-04-04/05/06 | Demo/private provenance and hashes cannot mix | integration | `.venv\Scripts\python.exe -m unittest tests.test_offline_portal_v1.PortalEvidenceTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
-| 04-02-02 | 02 | 1 | CLIENT-02 | T-04-06/07 | Static portal is escaped, accessible and link-complete | integration | `.venv\Scripts\python.exe -m unittest tests.test_offline_portal_v1.PortalAccessibilityTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
-| 04-03-01 | 03 | 2 | CLIENT-03 | T-04-08/09/11 | Weekly command preserves policy, prior-cycle and waiting/native boundaries | end-to-end | `.venv\Scripts\python.exe -m unittest tests.test_weekly_kit.WeeklyCommandTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
-| 04-03-02 | 03 | 2 | CLIENT-04 | T-04-10 | Public ZIP excludes private/native content and resolves offline | adversarial | `.venv\Scripts\python.exe -m unittest tests.test_weekly_kit.ClientKitTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
-| 04-03-03 | 03 | 2 | CLIENT-03/04 | T-04-08/10/11 | Guides, launcher help and package paths agree | integration | `.venv\Scripts\python.exe -m unittest tests.test_weekly_kit.GuideContractTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
+| 04-01-01 | 01 | 1 | CLIENT-01 | T-04-01/02/03 | Registry-complete generation plus parameterized omission state for each of 22 relations | integration | `.venv\Scripts\python.exe -m unittest tests.test_operating_workbooks.OperatingWorkbookGenerationTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
+| 04-01-02 | 01 | 1 | CLIENT-01 | T-04-01/02 | Independent workbook→pack→manifest oracle and fail-closed canonical export | adversarial | `.venv\Scripts\python.exe -m unittest tests.test_operating_workbooks.WorkbookImportTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
+| 04-02-01 | 02 | 2 | CLIENT-02 | T-04-04/05/06 | Demo/private provenance and hashes cannot mix | integration | `.venv\Scripts\python.exe -m unittest tests.test_offline_portal_v1.PortalEvidenceTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
+| 04-02-02 | 02 | 2 | CLIENT-02 | T-04-06/07 | Mart→portal→CSV→JSON boundary parity, accessible rendering and hash-bound visual evidence | integration | `.venv\Scripts\python.exe -m unittest tests.test_offline_portal_v1.PortalAccessibilityTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
+| 04-03-01 | 03 | 3 | CLIENT-03 | T-04-08/09/11 | Weekly creation plus exact record/submit/resume/packet/register continuation from a clean checkout | end-to-end | `.venv\Scripts\python.exe -m unittest tests.test_weekly_kit.WeeklyCommandTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
+| 04-03-02 | 03 | 3 | CLIENT-04 | T-04-10 | Informational/synthetic public ZIP excludes runtime/private/native content and resolves offline | adversarial | `.venv\Scripts\python.exe -m unittest tests.test_weekly_kit.ClientKitTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
+| 04-03-03 | 03 | 3 | CLIENT-03/04 | T-04-08/10/11 | Creation/continuation help, clean-checkout restart and public-kit boundaries agree | integration | `.venv\Scripts\python.exe -m unittest tests.test_weekly_kit.GuideContractTests -v` | task creates/extends in RED | ⬜ planned RED/GREEN |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -51,13 +51,18 @@ created: 2026-09-22
 - [x] Every implementation task owns the named test file/class and first creates or extends a failing test, runs its focused command to record the expected RED result, and only then changes production or generated-output code until GREEN.
 - [x] No plan depends on a missing Wave 0 test file: test creation is an explicit first step inside the same task that implements the behavior.
 - [x] Task 04-03-03 runs its focused guide-contract smoke first, then the slower package/privacy regressions, full `unittest` discovery and release audit as final gates.
+- [x] Wave order is explicit: 04-01 workbook truth → 04-02 portal/parity/visual truth → 04-03 weekly/package integration.
+- [x] The two independent parity oracles have non-overlapping ownership: workbook→pack→manifest in 04-01 and mart→portal→CSV→JSON in 04-02.
+- [x] Portal visual evidence is owned and blocking in 04-02; it is not deferred to an unowned Phase 5 step.
+- [x] Phase 5 Plan 05-02 already owns fresh Excel formula/cache/page evidence for final bytes; Phase 4 makes no broader unexecuted spreadsheet-engine claim.
 
 ## Manual-Only Verifications
 
 | Behavior | Requirement | Why Manual | Test Instructions |
 |----------|-------------|------------|-------------------|
-| Desktop/narrow/print portal inspection | CLIENT-02 | Visual hierarchy and print legibility need rendered inspection | Open public and private fixtures via `file://`, inspect desktop/narrow/print, keyboard focus, provenance and warning visibility; save screenshots/receipt under Phase 05 evidence. |
-| Excel desktop open/recalculation when formulas change | CLIENT-01 | Microsoft Excel behavior cannot be inferred from openpyxl | Recalculate the delivered bytes with the pinned PowerShell script, reopen read-only, inspect sheets/print setup and record hash-bound receipt. |
+| Desktop/narrow/print portal inspection | CLIENT-02 | Visual hierarchy and print legibility need rendered inspection | Owned by 04-02 Task 2: open exact public and safe synthetic-current fixtures via `file://`; capture desktop 1440px, narrow 390px and every print/PDF page; inspect focus, clipping, provenance, warnings and links; write `evidence/v1.0/portal/portal-visual-inspection.json` with exact hashes and dispositions. Missing or BLOCKED evidence prevents 04-02 completion. |
+| Excel desktop open/recalculation for final delivered bytes | CLIENT-01 / REL-02 | Microsoft Excel behavior cannot be inferred from openpyxl | Phase 4 proves OOXML structure and workbook→pack→manifest parity. Phase 5 Plan 05-02 treats the books as changed, recalculates the exact final bytes in desktop Excel, independently checks formulas/caches and records hash-bound page evidence. Desktop Excel is the declared engine boundary; CSV is the reader-neutral fallback, so no unexecuted LibreOffice claim remains. |
+| Clean-checkout process restart | CLIENT-03 | Process and filesystem isolation must be exercised across OS processes | Owned by 04-03 Task 1: start a synthetic cut to WAITING, terminate, continue from a second process in a clean `git archive`/repository checkout with the ignored private run supplied explicitly, exercise record/submit/resume/packet/register and prove all earlier receipt bytes unchanged. |
 
 ## Validation Sign-Off
 
@@ -68,4 +73,4 @@ created: 2026-09-22
 - [x] Focused per-task feedback target is under 30 seconds; slower full final gates are identified separately.
 - [x] `nyquist_compliant: true` is set in frontmatter.
 
-**Approval:** strategy approved for autonomous execution; evidence remains pending.
+**Approval:** strategy revised and approved 2026-09-23; execution evidence remains pending.
