@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alma-de-lujo.local/contracts/weekly-cycle-v1.schema.json",
+  "title": "Immutable operating-cycle-v1 evidence and native-task exchange",
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "role": {"enum": ["merchandiser", "finance_analyst", "commerce_analyst", "returns_analyst", "growth_analyst", "market_researcher"]},
+    "current_cut": {
+      "type": "object",
+      "required": ["version", "cut_id", "cutoff_at", "timezone", "input_class", "synthetic_business_data", "manifest_sha256", "mart_bundle_sha256", "metric_contract_sha256", "source_sha256", "coverage", "quality", "reconciliation", "lineage", "manifest", "mart_manifest", "metric_definitions", "semantic_catalog", "domain_coverage", "metric_rows", "families", "exceptions", "sales_readiness", "task_scope"],
+      "properties": {"version": {"const": "operating-cycle-v1"}, "cut_id": {"$ref": "#/$defs/sha256"}, "cutoff_at": {"type": "string"}, "timezone": {"type": "string"}, "input_class": {"type": "string"}, "synthetic_business_data": {"type": "boolean"}, "manifest_sha256": {"$ref": "#/$defs/sha256"}, "mart_bundle_sha256": {"$ref": "#/$defs/sha256"}, "metric_contract_sha256": {"$ref": "#/$defs/sha256"}, "source_sha256": {"type": "object"}, "coverage": {"type": "object"}, "quality": {"type": "object"}, "reconciliation": {"type": "object"}, "lineage": {"type": "object"}, "manifest": {"type": "object"}, "mart_manifest": {"type": "object"}, "metric_definitions": {"type": "object"}, "semantic_catalog": {"type": "object"}, "domain_coverage": {"type": "object"}, "metric_rows": {"type": "array"}, "families": {"type": "object"}, "exceptions": {"type": "array"}, "sales_readiness": {"type": "array"}, "task_scope": {"type": "array", "items": {"$ref": "#/$defs/role"}}},
+      "additionalProperties": false
+    },
+    "request": {
+      "type": "object",
+      "required": ["version", "request_id", "cut_id", "run_id", "role", "expected_model_family", "execution_mode", "synthetic_business_data", "current_cut_sha256", "manifest_sha256", "mart_bundle_sha256", "metric_contract_sha256", "evidence_hash", "evidence", "response_contract", "write_scope"],
+      "properties": {"version": {"const": "operating-cycle-v1"}, "request_id": {"$ref": "#/$defs/sha256"}, "cut_id": {"$ref": "#/$defs/sha256"}, "run_id": {"type": "string", "pattern": "^[0-9a-f]{24}$"}, "role": {"$ref": "#/$defs/role"}, "expected_model_family": {"enum": ["terra", "luna", "sol"]}, "execution_mode": {"const": "native-codex-task-bridge"}, "synthetic_business_data": {"type": "boolean"}, "current_cut_sha256": {"$ref": "#/$defs/sha256"}, "manifest_sha256": {"$ref": "#/$defs/sha256"}, "mart_bundle_sha256": {"$ref": "#/$defs/sha256"}, "metric_contract_sha256": {"$ref": "#/$defs/sha256"}, "evidence_hash": {"$ref": "#/$defs/sha256"}, "evidence": {"type": "object"}, "response_contract": {"const": "contracts/weekly-cycle-v1.schema.json#/$defs/response"}, "write_scope": {"type": "array", "items": {"type": "string"}, "minItems": 2, "maxItems": 2}},
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "required": ["version", "request_id", "role", "evidence_hash", "summary", "facts", "unknowns", "hypotheses", "recommendations", "challenges", "verdict"],
+      "properties": {"version": {"const": "operating-cycle-v1"}, "request_id": {"$ref": "#/$defs/sha256"}, "role": {"type": "string"}, "evidence_hash": {"$ref": "#/$defs/sha256"}, "summary": {"type": "string"}, "facts": {"type": "array"}, "unknowns": {"type": "array"}, "hypotheses": {"type": "array"}, "recommendations": {"type": "array"}, "challenges": {"type": "array"}, "verdict": {"enum": ["REVIEW", "BLOCKED", "READY_FOR_OWNER"]}},
+      "additionalProperties": false
+    },
+    "dispatch_receipt": {
+      "type": "object",
+      "required": ["version", "request_id", "task_id", "model", "effort", "started_at_utc", "completed_at_utc", "response_sha256", "query_trace_sha256"],
+      "properties": {"version": {"const": "operating-cycle-v1"}, "request_id": {"$ref": "#/$defs/sha256"}, "task_id": {"type": "string"}, "model": {"type": "string"}, "effort": {"type": "string"}, "started_at_utc": {"type": "string", "format": "date-time"}, "completed_at_utc": {"type": "string", "format": "date-time"}, "response_sha256": {"$ref": "#/$defs/sha256"}, "query_trace_sha256": {"$ref": "#/$defs/sha256"}},
+      "additionalProperties": false
+    },
+    "packet": {
+      "type": "object",
+      "required": ["version", "cut_id", "run_id", "status", "analyses", "review", "recommendations", "evidence_hashes"],
+      "properties": {"version": {"const": "operating-cycle-v1"}, "cut_id": {"$ref": "#/$defs/sha256"}, "run_id": {"type": "string"}, "status": {"enum": ["READY_FOR_OWNER", "REVIEW", "BLOCKED"]}, "analyses": {"type": "array"}, "review": {"type": "object"}, "recommendations": {"type": "array"}, "evidence_hashes": {"type": "object"}},
+      "additionalProperties": false
+    }
+  }
+}

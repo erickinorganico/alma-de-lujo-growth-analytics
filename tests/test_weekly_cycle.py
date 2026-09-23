@@ -47,6 +47,9 @@ class WeeklyCycleEvidenceTests(unittest.TestCase):
             self.assertIn("realized_gross_margin", report["metric_definitions"])
             self.assertTrue(report["metric_rows"])
             self.assertEqual("WAITING_ANALYSTS", verify_cycle(source["destination"])["status"])
+            schema = json.loads((ROOT / "contracts" / "weekly-cycle-v1.schema.json").read_text(encoding="utf-8"))
+            self.assertTrue({"current_cut", "request", "response", "dispatch_receipt", "packet"}
+                            <= set(schema["$defs"]))
 
     def test_tampered_upstream_bytes_fail_before_request_publication(self) -> None:
         for target in ("source", "manifest", "sqlite", "metric_registry", "mart_manifest"):
@@ -68,6 +71,16 @@ class WeeklyCycleEvidenceTests(unittest.TestCase):
             cut, mart = upstream(home)
             with self.assertRaises(ValueError):
                 start_cycle(cut, mart, home / "public")
+            with self.assertRaises(ValueError):
+                start_cycle(cut, mart, home / ".local" / ".." / "outside" / "weekly-cycles")
+            link = home / "linked"
+            try:
+                link.symlink_to(home, target_is_directory=True)
+            except OSError:
+                pass  # Unprivileged Windows configurations may forbid symlinks.
+            else:
+                with self.assertRaises(ValueError):
+                    start_cycle(cut, mart, link / ".local" / "weekly-cycles")
             result = start_cycle(cut, mart, home / ".local" / "weekly-cycles")
             current = Path(result["destination"]) / "current-cut.json"
             current.write_bytes(current.read_bytes() + b"\n")
