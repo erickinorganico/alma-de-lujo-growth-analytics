@@ -4,8 +4,12 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import shutil
 import tempfile
 import unittest
+import zipfile
+from datetime import date, datetime
+from decimal import Decimal
 from pathlib import Path
 
 from openpyxl import load_workbook
@@ -125,7 +129,160 @@ class OperatingWorkbookGenerationTests(unittest.TestCase):
 
 
 class WorkbookImportTests(unittest.TestCase):
-    """Task 2 tests are completed after the generator contract is green."""
+    def _generated(self, root: Path) -> tuple[Path, Path]:
+        from scripts.build_operating_workbooks import build_operating_workbooks
+
+        build_operating_workbooks(root / "generated")
+        return (
+            root / "generated" / "operating-v1-synthetic.xlsx",
+            root / "generated" / "source-packs" / "synthetic",
+        )
+
+    def _export(self, workbook: Path, root: Path) -> dict:
+        from alma.operating_workbook import export_workbook_to_pack
+
+        private_root = root / "private"
+        private_root.mkdir(exist_ok=True)
+        return export_workbook_to_pack(workbook, private_root / "export", private_root=private_root)
+
+    @staticmethod
+    def _raw_workbook_rows(path: Path, relation: str) -> list[list[object]]:
+        workbook = load_workbook(path, data_only=False, keep_links=False)
+        sheet = workbook[relation]
+        width = len(columns_for(relation))
+        rows = [
+            [sheet.cell(row, column).value for column in range(1, width + 1)]
+            for row in range(7, sheet.max_row + 1)
+        ]
+        workbook.close()
+        return [row for row in rows if any(value is not None for value in row)]
+
+    def test_workbook_pack_manifest_oracle_covers_all_relations(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            workbook_path, _ = self._generated(root)
+            original = workbook_path.read_bytes()
+            receipt = self._export(workbook_path, root)
+            self.assertEqual("PASS", receipt["status"])
+            self.assertEqual(list(SOURCE_NAMES), receipt["relations"])
+            self.assertEqual(hashlib.sha256(original).hexdigest(), receipt["workbook_sha256"])
+            self.assertEqual(original, workbook_path.read_bytes())
+            pack = Path(receipt["pack_path"])
+            manifest = json.loads(Path(receipt["manifest_path"]).read_text(encoding="utf-8"))
+            parsed = parse_pack(pack)
+            self.assertEqual("SYNTHETIC_EXAMPLE", parsed["metadata"]["input_class"])
+            self.assertEqual(22, len(manifest["relations"]))
+            for relation in SOURCE_NAMES:
+                with self.subTest(relation=relation):
+                    fields = list(columns_for(relation))
+                    workbook_rows = self._raw_workbook_rows(workbook_path, relation)
+                    with (pack / f"{relation}.csv").open(encoding="utf-8", newline="") as stream:
+                        csv_rows = list(csv.DictReader(stream))
+                    self.assertEqual(len(workbook_rows), len(csv_rows))
+                    self.assertEqual(fields, list(csv_rows[0]) if csv_rows else fields)
+                    self.assertEqual(
+                        hashlib.sha256((pack / f"{relation}.csv").read_bytes()).hexdigest(),
+                        manifest["relations"][relation]["sha256"],
+                    )
+                    for raw, exported in zip(workbook_rows, csv_rows, strict=True):
+                        expected = ["" if value is None else value.isoformat() if isinstance(value, (date, datetime)) else str(value)
+                                    for value in raw]
+                        self.assertEqual(expected, [exported[field] for field in fields])
+                    cents = [field for field in fields if field.endswith("_cents")]
+                    for field in cents:
+                        self.assertEqual("MXN cents", manifest["relations"][relation]["units"][field])
+                        for row in csv_rows:
+                            if row[field] != "":
+                                self.assertEqual(Decimal(row[field]), Decimal(row[field]).to_integral_value())
+            self.assertIsNone(parsed["tables"]["loans"][0]["returned_date"])
+            self.assertEqual(0, parsed["tables"]["purchase_receipts"][0]["rejected_units"])
+
+    def test_structural_and_hidden_content_fail_before_publication(self) -> None:
+        cases = (
+            ("extra_sheet", lambda wb: wb.create_sheet("PRIVATE_NOTES"), "workbook.sheet_set"),
+            ("missing_sheet", lambda wb: wb.remove(wb["loans"]), "workbook.sheet_set"),
+            ("header", lambda wb: setattr(wb["sales_aggregates"]["A6"], "value", "wrong"), "workbook.header"),
+            ("formula", lambda wb: setattr(wb["sales_aggregates"]["H7"], "value", "=1+1"), "workbook.formula"),
+            ("hidden_sheet", lambda wb: setattr(wb["loans"], "sheet_state", "hidden"), "workbook.hidden_sheet"),
+            ("hidden_row", lambda wb: setattr(wb["sales_aggregates"].row_dimensions[7], "hidden", True), "workbook.hidden_row"),
+            ("hidden_column", lambda wb: setattr(wb["sales_aggregates"].column_dimensions["A"], "hidden", True), "workbook.hidden_column"),
+            ("comment", lambda wb: setattr(wb["sales_aggregates"]["A7"], "comment", __import__("openpyxl").comments.Comment("private", "x")), "workbook.comment"),
+            ("external_link", lambda wb: setattr(wb["sales_aggregates"]["A7"], "hyperlink", "https://example.com"), "workbook.hyperlink"),
+        )
+        for name, mutate, code in cases:
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                source, _ = self._generated(root)
+                candidate = root / f"{name}.xlsx"
+                shutil.copyfile(source, candidate)
+                workbook = load_workbook(candidate, data_only=False, keep_links=False)
+                mutate(workbook)
+                workbook.save(candidate)
+                workbook.close()
+                from alma.operating_workbook import WorkbookContractError, export_workbook_to_pack
+                private = root / "private"
+                private.mkdir()
+                with self.assertRaises(WorkbookContractError) as raised:
+                    export_workbook_to_pack(candidate, private / "export", private_root=private)
+                self.assertEqual(code, raised.exception.code)
+                self.assertFalse((private / "export").exists())
+
+    def test_value_relationship_pii_and_overwrite_controls(self) -> None:
+        cases = (
+            ("fractional_cents", "sales_aggregates", "H7", 10.5, "value.integer"),
+            ("bad_date", "sales_aggregates", "A7", "2026-99-99", "value.date"),
+            ("duplicate_key", "sku_catalog", "A8", "synthetic:sku-001", "value.required"),
+            ("broken_relation", "sales_aggregates", "B7", "synthetic:missing", "relation.sku"),
+            ("pii", "sales_aggregates", "K7", "5551234567", "value.pii"),
+        )
+        for name, relation, cell, value, expected in cases:
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                source, _ = self._generated(root)
+                candidate = root / f"{name}.xlsx"
+                shutil.copyfile(source, candidate)
+                workbook = load_workbook(candidate, data_only=False, keep_links=False)
+                if name == "duplicate_key":
+                    for column in range(1, len(columns_for(relation)) + 1):
+                        workbook[relation].cell(8, column).value = workbook[relation].cell(7, column).value
+                else:
+                    workbook[relation][cell] = value
+                workbook.save(candidate)
+                workbook.close()
+                from alma.operating_workbook import WorkbookContractError, export_workbook_to_pack
+                private = root / "private"
+                private.mkdir()
+                with self.assertRaises(WorkbookContractError) as raised:
+                    export_workbook_to_pack(candidate, private / "export", private_root=private)
+                self.assertEqual(expected, raised.exception.upstream_code or raised.exception.code)
+                self.assertTrue(raised.exception.sheet)
+                self.assertTrue(raised.exception.correction)
+                self.assertFalse((private / "export").exists())
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source, _ = self._generated(root)
+            first = self._export(source, root)
+            from alma.operating_workbook import WorkbookContractError, export_workbook_to_pack
+            with self.assertRaises(WorkbookContractError) as raised:
+                export_workbook_to_pack(source, first["bundle_path"], private_root=root / "private")
+            self.assertEqual("output.exists", raised.exception.code)
+
+    def test_archive_member_injection_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source, _ = self._generated(root)
+            candidate = root / "injected.xlsx"
+            shutil.copyfile(source, candidate)
+            with zipfile.ZipFile(candidate, "a") as archive:
+                archive.writestr("xl/externalLinks/externalLink1.xml", "private")
+            from alma.operating_workbook import WorkbookContractError, export_workbook_to_pack
+            private = root / "private"
+            private.mkdir()
+            with self.assertRaises(WorkbookContractError) as raised:
+                export_workbook_to_pack(candidate, private / "export", private_root=private)
+            self.assertEqual("workbook.external_content", raised.exception.code)
+            self.assertFalse((private / "export").exists())
 
     pass
 
