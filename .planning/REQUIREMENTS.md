@@ -25,11 +25,11 @@
 
 ### Governed weekly cycle
 
-- [ ] **FLOW-01**: A private workbook or v1 source pack produces a current-cut report and task bundle bound to its evidence hash.
-- [ ] **FLOW-02**: Native analyst responses are schema-validated, cite exact current-cut JSON references and cannot alter the workspace.
-- [ ] **FLOW-03**: A different native agent independently reviews each analysis; stale hashes, changed evidence and identical reviewer identity fail closed.
-- [ ] **FLOW-04**: A terminal packet separates facts, unknowns, hypotheses and recommendations, and every recommendation includes metric, guardrail, population, window and closure rule.
-- [ ] **FLOW-05**: Reviewed decisions enter a validated register with source hash, owner, due date, status and closure evidence; open items carry into the next cut and stale actions are flagged.
+- [x] **FLOW-01**: A private workbook or v1 source pack produces a current-cut report and task bundle bound to its evidence hash.
+- [x] **FLOW-02**: Native analyst responses are schema-validated, cite exact current-cut JSON references and cannot alter the workspace.
+- [x] **FLOW-03**: A different native agent independently reviews each analysis; stale hashes, changed evidence and identical reviewer identity fail closed.
+- [x] **FLOW-04**: A terminal packet separates facts, unknowns, hypotheses and recommendations, and every recommendation includes metric, guardrail, population, window and closure rule.
+- [x] **FLOW-05**: Reviewed decisions enter a validated register with source hash, owner, due date, status and closure evidence; open items carry into the next cut and stale actions are flagged.
 
 ### Client and analyst experience
 
@@ -67,7 +67,7 @@
 |-------------|-------|--------|
 | DATA-01..05 | Phase 1 | Complete |
 | MET-01..07 | Phase 2 | Complete |
-| FLOW-01..05 | Phase 3 | Pending |
+| FLOW-01..05 | Phase 3 | Complete |
 | CLIENT-01..04 | Phase 4 | Pending |
 | REL-01..04 | Phase 5 | Pending |
 

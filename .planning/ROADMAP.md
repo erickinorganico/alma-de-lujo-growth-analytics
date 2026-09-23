@@ -8,7 +8,7 @@ A private weekly cut moves through versioned intake, canonical analytical marts,
 
 - [x] **Phase 1: Versioned Operating Intake** - A validated private cut becomes an immutable, restorable analytical workspace.
 - [x] **Phase 2: Reconciled Decision Metrics** - Canonical marts expose exact, coverage-aware operating and product measures.
-- [ ] **Phase 3: Governed Weekly Decision Cycle** - Current-cut evidence reaches real native analysis, independent review, and next-cut closure.
+- [x] **Phase 3: Governed Weekly Decision Cycle** - Current-cut evidence reaches real native analysis, independent review, and next-cut closure.
 - [ ] **Phase 4: Offline Client and Analyst Kit** - Users receive usable workbooks, a navigable offline portal, and a one-command weekly workflow.
 - [ ] **Phase 5: Acceptance and v1.0.0 Release** - Regression, two-week closure, privacy, Excel, archive, and CI evidence support a reproducible release.
 
@@ -66,7 +66,7 @@ Plans:
 - [x] 03-01: Bridge workbook/source-pack intake to a current-cut report and hash-bound native task requests.
 - [x] 03-02: Validate real native analyst dispatch/response and separate reviewer dispatch/response, then produce governed terminal packets.
 - [x] 03-03: Implement validated decision register, next-cut carry-forward, stale-action detection, and closure evidence checks.
-- [ ] 03-04: Align the executable weekly-cycle schema with real terminal packets and governed later cuts, with strict drift and privacy regressions.
+- [x] 03-04: Align the executable weekly-cycle schema with real terminal packets and governed later cuts, with strict drift and privacy regressions.
 
 ### Phase 4: Offline Client and Analyst Kit
 **Goal**: A client can prepare a cut offline and an analyst can navigate, run, and package the full local weekly workflow.
@@ -109,7 +109,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Versioned Operating Intake | 3/3 | Complete | 2026-09-22 |
 | 2. Reconciled Decision Metrics | 5/5 | Complete | 2026-09-23 |
-| 3. Governed Weekly Decision Cycle | 3/4 | Gap closure | - |
+| 3. Governed Weekly Decision Cycle | 4/4 | Complete | 2026-09-23 |
 | 4. Offline Client and Analyst Kit | 0/3 | Not started | - |
 | 5. Acceptance and v1.0.0 Release | 0/3 | Not started | - |
 
