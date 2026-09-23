@@ -41,6 +41,13 @@ class ObligationTests(unittest.TestCase):
             as_of="2026-09-21", application_coverage="COMPLETE")
         self.assertEqual(60, split["recorded_applied_cents"])
         self.assertEqual(41, split["recorded_unpaid_cents"])
+        void = reconcile_obligation(dict(obligation, status_code="VOID"), [],
+            as_of="2026-09-21", application_coverage="COMPLETE")
+        self.assertEqual(180000, void["documented_adjustments_cents"])
+        self.assertEqual(0, void["authoritative_outstanding_cents"])
+        with self.assertRaises(ValueError):
+            reconcile_obligation(dict(obligation, status_code="VOID"), [payment],
+                as_of="2026-09-21", application_coverage="COMPLETE")
 
     def test_verified_cut_obligations_use_source_grain(self) -> None:
         from alma.operating_finance_marts import project_obligations, FINANCE_DEFINITIONS

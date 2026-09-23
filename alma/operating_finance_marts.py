@@ -72,12 +72,16 @@ def reconcile_obligation(
     if any(not isinstance(payment["amount_cents"], int) or payment["amount_cents"] < 0 for payment in payments):
         raise ValueError("invalid payment cents")
     applied = sum(payment["amount_cents"] for payment in payments)
-    if applied > original:
+    documented_adjustments = original if obligation.get("status_code") == "VOID" else 0
+    adjusted_original = original - documented_adjustments
+    if applied > adjusted_original:
         raise ValueError("payment over-applied")
     if application_coverage not in {"COMPLETE", "PARTIAL", "ZERO", "MISSING", "ERROR", "ESTIMATED", "NOT_APPLICABLE"}:
         raise ValueError("invalid application coverage")
     complete = application_coverage in {"COMPLETE", "ZERO"}
-    recorded_unpaid = original - applied
+    recorded_unpaid = adjusted_original - applied
+    if complete and obligation.get("status_code") == "SETTLED" and recorded_unpaid:
+        raise ValueError("settled obligation retains balance")
     return {
         "obligation_id": obligation["obligation_id"],
         "origin_type": obligation["origin_type"],
@@ -85,7 +89,7 @@ def reconcile_obligation(
         "due_date": obligation["due_date"],
         "due_bucket": obligation["due_date"] or "UNDATED",
         "original_cents": original,
-        "documented_adjustments_cents": 0,
+        "documented_adjustments_cents": documented_adjustments,
         "recorded_applied_cents": applied,
         "recorded_unpaid_cents": recorded_unpaid,
         "authoritative_outstanding_cents": recorded_unpaid if complete else None,
