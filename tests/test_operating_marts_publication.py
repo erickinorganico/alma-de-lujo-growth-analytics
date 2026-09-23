@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import shutil
 import tempfile
@@ -56,6 +57,8 @@ class PublicationGapTests(unittest.TestCase):
                 balance_file.write_text(balance_file.read_text(encoding="utf-8").replace(
                     ",1100000,", ",2000000,"), encoding="utf-8")
                 cut = build_operating_workspace(pack, private_root=home / "cuts")
+                self.assertEqual(hashlib.sha256(balance_file.read_bytes()).hexdigest(),
+                                 cut["manifest"]["source_sha256"]["cash_balance_evidence.csv"])
                 result = operating_marts.build_operating_marts(cut["destination"],
                     home / ".local" / "operating-marts", policy_path=POLICY,
                     private_root=home / ".local" / "operating-marts")
@@ -70,6 +73,12 @@ class PublicationGapTests(unittest.TestCase):
                 self.assertEqual(expected, cash["actual_movements_cents"])
                 self.assertEqual(None if event_status == "MISSING" else 2000000,
                                  cash["reconciled_close_cents"])
+                for path, expected_value in (("cash.actual_movements_cents", expected),
+                    ("cash.reconciled_close_cents", None if event_status == "MISSING" else 2000000)):
+                    semantic = next(row for row in metrics if row["dimensions"].get("family_path") == path)
+                    self.assertEqual(expected_value, semantic["value"])
+                    if event_status == "MISSING":
+                        self.assertEqual("UNKNOWN", semantic["status"])
                 for horizon in (56, 91):
                     details = cash["horizons"][str(horizon)]
                     self.assertEqual(expected, details["layers_cents"]["RECONCILED"])
@@ -79,6 +88,11 @@ class PublicationGapTests(unittest.TestCase):
                     self.assertEqual(expected, details["scenario_cents"])
                     self.assertEqual(None if event_status == "MISSING" else 2000000,
                                      details["daily_minimum_cents"])
+                    minimum = next(row for row in metrics if row["dimensions"].get("family_path") ==
+                                   f"cash.horizons.{horizon}.daily_minimum_cents")
+                    self.assertEqual(details["daily_minimum_cents"], minimum["value"])
+                    if event_status == "MISSING":
+                        self.assertEqual("UNKNOWN", minimum["status"])
                     if event_status == "MISSING":
                         self.assertIsNone(details["cash_floor_breached"])
                     for layer in ("RECONCILED", "COMMITTED", "EXPECTED", "UNDATED", "SCENARIO"):

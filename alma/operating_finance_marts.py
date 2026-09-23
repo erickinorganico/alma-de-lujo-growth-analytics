@@ -309,11 +309,22 @@ def project_cash(
         raise ValueError("ambiguous independent balance evidence")
     evidence = evidence_rows[0] if evidence_rows else None
     coverage_values = [cut.coverage_status(source, as_of) for source in ("cash_events", "cash_balance_evidence")]
+    movement_coverage = coverage_values[0]
     coverage = "COMPLETE" if all(value in {"COMPLETE", "ZERO"} for value in coverage_values) else "PARTIAL"
     close = reconcile_cash_close(selected, evidence, coverage=coverage)
     approved = cut.input_class == "SYNTHETIC_EXAMPLE" or policy.authorizes_real_cut
     horizons = cash_horizons([*selected, *(event for event in scenario_events if event not in selected)], as_of,
                              starting_close_cents=close["close_cents"] if approved else None)
+    if movement_coverage in {"MISSING", "ERROR"}:
+        # An independent balance identifies the scenario; it cannot prove that
+        # unobserved movements or their projected layer amounts were zero.
+        for horizon in horizons.values():
+            horizon["layers_cents"] = {level: None for level in horizon["layers_cents"]}
+            horizon["undated_cents"] = None
+            horizon["scenario_cents"] = None
+            horizon["weekly_layers_cents"] = {}
+            horizon["daily_closes_cents"] = None
+            horizon["daily_minimum_cents"] = None
     cash_floor_cents = policy.content["thresholds"].get("minimum_cash_floor_cents")
     if not isinstance(cash_floor_cents, int) or cash_floor_cents < 0:
         raise ValueError("invalid cash floor policy")
@@ -321,7 +332,8 @@ def project_cash(
         horizon["minimum_cash_floor_cents"] = cash_floor_cents
         horizon["cash_floor_breached"] = (None if horizon["daily_minimum_cents"] is None
                                          else horizon["daily_minimum_cents"] < cash_floor_cents)
-    actual = sum(_signed(event) for event in selected if event["level"] == "RECONCILED")
+    actual = (None if movement_coverage in {"MISSING", "ERROR"} else
+              sum(_signed(event) for event in selected if event["level"] == "RECONCILED"))
     refs = tuple(sorted({event["source_ref"] for event in selected}
                         | ({evidence["source_ref"]} if evidence else set())))
     metric_row = MetricRow(
@@ -351,7 +363,8 @@ def project_cash(
                 "level": event["level"], "direction": event["direction"],
                 "amount_cents": event["amount_cents"], "event_date": event["event_date"],
                 "source_ref": event["source_ref"]} for event in scenario_events),
-            "domain_status": cut.coverage_status("cash_events", as_of), "empty_reason": None,
+            "domain_status": movement_coverage,
+            "empty_reason": "MISSING_MOVEMENTS_WITH_BALANCE" if movement_coverage == "MISSING" else None,
             "metric_row": metric_row, "reconciliation_id": metric_row.reconciliation_id}
 
 
