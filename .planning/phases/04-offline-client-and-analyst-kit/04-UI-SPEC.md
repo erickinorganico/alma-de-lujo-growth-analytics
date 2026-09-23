@@ -1,7 +1,8 @@
 ---
 phase: 4
 slug: offline-client-and-analyst-kit
-status: draft
+status: approved
+reviewed_at: 2026-09-22
 shadcn_initialized: false
 preset: none
 created: 2026-09-22
@@ -41,14 +42,14 @@ Exceptions: maintain a 44px minimum hit area for pointer/touch controls and 24px
 
 ## Typography
 
-Use exactly these four sizes and two weights throughout the portal. In the workbook, use the same hierarchy where Excel allows it; retain existing formula/input emphasis and do not make numeric data smaller than 11pt in printed sheets.
+Use exactly these four sizes and two weights throughout the portal. In the workbook, map the same four semantic roles to the existing workbook styles without introducing an additional type-size token; retain existing formula/input emphasis.
 
 | Role | Size | Weight | Line Height |
 |------|------|--------|-------------|
 | Label / compact metadata | 12px | Semibold (600) | 1.4 |
 | Body / tables | 16px | Regular (400) | 1.55 |
 | Section heading | 32px | Regular (400) | 1.2 |
-| Display heading | 56px, responsive clamp 36–56px | Regular (400) | 1.05 |
+| Display heading | 48px; reuse the 32px section-heading token below 600px | Regular (400) | 1.05 |
 
 Use tabular numerals for measures, dates, and IDs. Keep long source IDs and paths in a local monospace fallback at body size; wrap them rather than allowing horizontal page overflow. The workbook can use bold/semibold for labels and headers only; reserve regular for values and prose.
 
@@ -61,7 +62,7 @@ Use tabular numerals for measures, dates, and IDs. Keep long source IDs and path
 | Accent (10%) | `#0D7167` | Primary CTA, active navigation marker, keyboard focus ring, and source/lineage links only |
 | Destructive | `#9B4839` | Validation errors and destructive/reset confirmations only |
 
-Accent reserved for: the primary “Abrir corte actual”/“Abrir ejemplo sintético” entry action where applicable, the selected navigation item, keyboard focus indicator, and links that open source or lineage evidence. Do not color every control teal. Use `#B98236` for REVIEW/attention notices and the separate example-provenance badge; use neutral gray-green for ordinary statuses. Keep the existing 60/30/10 visual balance, with an ample cream canvas and white evidence cards.
+Accent reserved for: the primary “Abrir corte actual”/“Abrir ejemplo sintético” entry action where applicable, the selected navigation item, keyboard focus indicator, and links that open source or lineage evidence. Do not color every control teal. Reserve `#B98236` for borders, fills and non-text accents. Use `#745323` for normal REVIEW/attention text on cream or white (6.30:1 on the cream canvas), always retaining the visible status word. Use neutral gray-green for ordinary statuses. Keep the existing 60/30/10 visual balance, with an ample cream canvas and white evidence cards.
 
 Status must never be communicated by color alone. Pair every color or icon with a visible word: `LISTO`, `REVISAR`, `DESCONOCIDO`, `BLOQUEADO`, `PENDIENTE`, or `CERRADO`. Meet WCAG AA text contrast for foreground/background combinations; preserve visible keyboard focus. In Excel, keep the established blue fill for editable input cells, pair it with an “Entrada” legend and cell comments/instructions, and use text/status labels for output state.
 
@@ -96,12 +97,12 @@ Use a single static HTML portal with a compact sticky in-page navigation and the
 2. **Recorrido semanal** — show the ordered stages `Fuentes → Validación → Marts y métricas → Análisis → Revisión independiente → Decisión del responsable → Próximo corte`. Each stage shows a truthful state, timestamp/receipt if available, and next local artifact. `PENDIENTE`/`ESPERANDO_RESPUESTA` must remain visible when human/native work has not occurred.
 3. **Decisiones** — list owner-ready packets and their review state. Expand a packet into four visibly separate groups: `Hechos`, `Desconocidos`, `Hipótesis`, and `Recomendaciones`; every recommendation displays its metric, guardrail, population, window, closure rule, owner and due date. Show evidence references next to the claim they support. Label advice as advisory; owner registration and later closure remain separate events.
 4. **Excepciones y calidad** — put blocking/review/unknown items before passing checks. Each row names affected source/metric, exact reason, severity/state, next required evidence and a local evidence link. Preserve coverage gaps and failed reconciliations as unknown/blocked; do not hide them behind an overall green badge.
-5. **Fuentes** — searchable, expandable source inventory grouped by v1 business domain. Every source exposes exact contract version, grain, keys, required/nullable fields, units, provenance, coverage, synthetic flag and its incoming/outgoing relationships. Search filters the inventory without hiding the total or current query; preserve anchor navigation when opening a source.
+5. **Fuentes** — searchable, expandable source inventory grouped by v1 business domain. Every source exposes exact contract version, grain, keys, required/nullable fields, units, provenance, coverage, synthetic flag and its incoming/outgoing relationships. Search filters the inventory without hiding the total or current query; preserve anchor navigation when opening a source. The exact zero-result copy is heading `Sin coincidencias para “{consulta}”` and body `Borra el filtro o busca por fuente, campo, proceso o decisión. El inventario completo sigue disponible.`
 6. **Métricas** — metric dictionary grouped by decision use (cost/price, purchasing/inventory, cash/obligations, sales/product learning, quality/readiness, budget/channel). Show formula, unit, grain, window, inputs, unknown rule, guardrail, owner and decision use. Link each metric to its registered mart and upstream sources. Keep management proxies distinct from statutory/tax outcomes and cash movement distinct from a bank balance.
 7. **Procesos y roles** — show process trigger, states, gates, exceptions and resulting artifact; show each native role's purpose, permitted inputs, output schema, review partner, dispatch state/receipt and `PROHIBITED` authority boundary. Distinguish actual native Codex dispatch from a request bundle or deterministic analysis.
 8. **Linaje y exportación** — provide a readable source → mart/metric → process/role → packet chain and local links to source/manifest/hash evidence. Include links to downloadable CSV/JSON/printable report artifacts when present and an offline operating guide. Never offer a network share, upload or publish action.
 
-On wide screens, constrain reading width to 1480px, use a 32px page gutter, two-column evidence grids and horizontally scrollable bounded data tables. The overview may show up to six summary facts, with one primary status; do not turn the first screen into a wall of KPI tiles. On widths below 900px, collapse evidence grids to one column and source/process flows to two columns; below 600px use one column, 18px outer gutters, wrap long identifiers, and retain horizontal overflow only inside labelled tables. Sticky navigation scrolls horizontally on narrow screens and must remain keyboard operable. Each target section uses sufficient scroll margin that the sticky bar never covers its heading.
+On wide screens, constrain reading width to 1480px, use a 32px page gutter, two-column evidence grids and horizontally scrollable bounded data tables. The overview may show up to six summary facts, with one primary status; do not turn the first screen into a wall of KPI tiles. On widths below 900px, collapse evidence grids to one column and source/process flows to two columns; below 600px use one column, 16px outer gutters, wrap long identifiers, and retain horizontal overflow only inside labelled tables. Sticky navigation scrolls horizontally on narrow screens and must remain keyboard operable. Each target section uses sufficient scroll margin that the sticky bar never covers its heading.
 
 Use semantic `header`, labelled `nav`, `main`, `section`, headings in order, table captions and scoped column headers, native links and `<details>/<summary>` for optional source/packet detail. Every search field has an accessible label and a visible result count/zero-result message. All interactions work by keyboard with visible focus and without hover. Do not rely on script for critical content or navigation: printable/no-script content remains complete. Avoid animation except optional reduced-motion-aware anchor scrolling.
 
@@ -120,6 +121,8 @@ Keep the provenance badge, cutoff, and status in the page header, browser print 
 
 Deliver paired blank and synthetic-example workbooks/source packs covering every v1 source relation/domain in the versioned intake contract, including the canonical product/catalog, sales/commerce, returns/refunds/payments, inventory/receipts, procurement/costs, obligations/finance/cash, budgets/drop/channel, quality/readiness/loans, and growth/experiment sources wherever declared by the contract. The generated source inventory is authoritative: every required relation appears exactly once in each pack; no hand-maintained shortlist may omit a v1 domain. The example pack has a prominent synthetic marker in its opening sheet, metadata and every domain/table; examples use invented aggregate data, contain no PII, and never resemble a private cut label.
 
+Alongside those 22-source materials, provide two separate versioned management-policy files: an unapproved blank template with status `REVIEW`, and a verified `SYNTHETIC_EXAMPLE` policy for the synthetic walkthrough. A policy file is a Phase 2 input and must never be counted as a Phase 1 source relation. The synthetic policy cannot authorize a private real-data cut, and the public template must not contain an owner approval reference.
+
 Use a clear `INICIO` index to orient the analyst, identify the pack version/cutoff/timezone and link to the glossary/field dictionary. Group table sheets by business domain and order them in weekly-entry order. Each sheet starts with an immutable, exact schema header and a short above-table note naming purpose, row grain, key, units, required/optional fields and source/provenance rules. Include one realistic synthetic example row per sheet only in the example pack; keep blank template data rows empty. Put completeness and unknown-vs-zero instructions beside the relevant fields. Preserve exact headers and values required by the CSV import contract; help text belongs in sheet instructions/notes, not altered column names.
 
 Retain v0.3 workbook strengths: editable input cells filled blue and listed in an input legend; formulas/calculated cells visually distinct and protected from accidental edits; dropdown/data validation for enumerations; date/number limits and duplicate-key checks; frozen title/header rows; filters; readable column widths and wrapped headings; no macros, external workbook links, external data connections or embedded credentials. A validation export must point to workbook/sheet/row/field and explain whether the correction is structural, key/relationship, unit/date, coverage or provenance-related. Preserve the original source values when correcting through a proposed/copy workflow; do not silently truncate rows, coerce blank to zero, or rewrite previous immutable cuts.
@@ -131,10 +134,10 @@ Open both workbooks in desktop Excel and common compatible spreadsheet readers w
 The analyst kit presents one copyable command from the repository root as the supported weekly entrypoint:
 
 ```powershell
-.\run.ps1 weekly --source-pack <blank-or-filled-pack> --output .local/client-runs/<cut-id>
+.\run.ps1 weekly --source-pack <filled-pack-or-workbook> --policy <policy.json> --output-root .local/client-runs [--prior-register <register-dir> --prior-anchor <anchor.json>]
 ```
 
-Use that exact invocation in `EMPIEZA_AQUI` and the offline analyst guide; `--help` and validation output must match the documented names. The command may initialize an empty source pack when explicitly requested; it validates the full contract and privacy rules, builds a new immutable cut, calculates marts/reports and hashes, prepares and validates the analyst/reviewer task bundles, verifies/carries forward the prior decision register, and emits the public blank/example package plus a private run index under `.local/client-runs/`. The page/guide show this sequence as progress receipts with per-stage PASS/REVIEW/BLOCKED/WAITING states and local output paths. Repeated execution must not overwrite a prior immutable cut.
+Use that exact invocation in `EMPIEZA_AQUI` and the offline analyst guide; `--help` and validation output must match the documented names byte for byte. When `--source-pack` points to an XLSX workbook, the workbook adapter first exports a canonical v1 CSV source pack and the weekly pipeline consumes that pack. `--policy` is the separate, versioned Phase 2 policy input. The system derives `cut_id` from the validated immutable input and creates `.local/client-runs/<cut_id>/` beneath `--output-root`; the caller never supplies or predicts that child path. `--prior-register` and `--prior-anchor` are optional, but must be supplied together and independently verified before carry-forward. Blank initialization is an explicit preparation action outside the weekly build and never publishes metrics. The command validates the full contract and privacy rules, builds a new immutable cut, calculates marts/reports and hashes, prepares and validates the analyst/reviewer task bundles, verifies/carries forward the prior decision register when the optional pair is present, and emits the public blank/example package plus a private run index under `.local/client-runs/`. The page/guide show this sequence as progress receipts with per-stage PASS/REVIEW/BLOCKED/WAITING states and local output paths. Repeated execution must not overwrite a prior immutable cut.
 
 The command line may request live native Codex work only through the authorized native task bridge and must retain the actual dispatch receipt, task/model metadata and response hashes. If a native analyst or independent reviewer has not actually run, show a precise waiting state and next authorized continuation step; never simulate a response, turn a prepared request into a completed review, or issue an owner-ready packet from missing/stale evidence. After actual reviewer acceptance, carry-forward remains owner-controlled and records the original cut/source hash, owner, due date and closure evidence. Packaging is for the sanitized client kit only; private filled workbook, source pack, report, decision events and native responses remain in ignored `.local/` paths.
 
@@ -145,7 +148,7 @@ The guide has two clearly separated journeys: (1) client: open the blank templat
 - Meet WCAG AA contrast, full keyboard access, visible focus, meaningful link names, semantic tables/headings, labelled controls, text equivalents for status marks and reduced-motion support. Aim for 44px pointer targets. No data meaning is encoded only by color, hover, icon or graph shape.
 - The HTML portal and guide must print legibly in black and white on letter/A4 portrait or landscape as content requires. Hide navigation, search controls and screen-only buttons in print; keep provenance, cut ID, cutoff, statuses, source/hash references and limitations. Repeat table headers, allow rows to break safely, and print visible local artifact names (never a private absolute filesystem path). Charts require text/table equivalents and must not crop negative/unknown values.
 - Provide explicit local `Descargar CSV`, `Descargar JSON`, `Imprimir / Guardar PDF`, and workbook links only for artifacts actually present and verified. Every downloaded report/export retains cut ID, cutoff, provenance, units, null/coverage state, source hashes and applicable warnings. Do not describe a printable page as a saved PDF until the file exists.
-- The distributable client ZIP contains only the offline portal, its required local assets/evidence, blank and synthetic-example workbooks/packs, data dictionary, weekly guide, resolved/example decision walkthrough and package manifest/hash list. Include no filled private cuts, private reports, native requests/responses/drafts, private decision register/events, credentials, `.local/`, or customer PII. Its first-open state is labelled historical synthetic demo with no private current cut selected. This static package opens through a local file URL with no server and no network access.
+- The distributable client ZIP contains only the offline portal, its required local assets/evidence, blank and synthetic-example workbooks/packs, the unapproved `REVIEW` policy template, the verified synthetic policy example, data dictionary, weekly guide, resolved/example decision walkthrough and package manifest/hash list. Include no filled private cuts, approved/private policy instances, owner approval references, private reports, native requests/responses/drafts, private decision register/events, credentials, `.local/`, or customer PII. Its first-open state is labelled historical synthetic demo with no private current cut selected. This static package opens through a local file URL with no server and no network access.
 - Provide a separate private current-cut portal/run directory only under ignored `.local/`; do not place it beside public kit files or give it an ambiguous “demo” label. A manifest/inventory lists every packaged path/hash and allows local links to resolve after ZIP extraction. Display the offline/no-upload boundary and no-external-execution rule in `INICIO` and guide; business actions remain explicit human decisions.
 
 ## Upstream decisions used
@@ -162,11 +165,11 @@ The guide has two clearly separated journeys: (1) client: open the blank templat
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved 2026-09-22
