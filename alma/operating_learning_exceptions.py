@@ -1,11 +1,15 @@
 """Coverage-aware product observations and governed operating exceptions."""
 from __future__ import annotations
 
+import hashlib
+import re
 from datetime import date, timedelta
 from decimal import Decimal, ROUND_HALF_EVEN, localcontext
 from pathlib import Path
 from typing import Any, Iterable
 
+from alma.operating_contracts import canonical_json
+from alma.operating_cost_inventory import project_cost
 from alma.operating_mart_contracts import BoundCut, MetricDefinition, MetricRow, Policy
 
 SQL_PATH = Path(__file__).resolve().parents[1] / "models" / "operating_learning_exceptions.sql"
@@ -300,3 +304,162 @@ def project_learning(
             "decision_status": "REVIEW",
             "metric_rows": metric_rows,
             "reconciliation_id": f"learning:{cut.cut_id}:{sku_id}:{start}:{end}"}
+
+
+EXCEPTION_CATEGORIES = frozenset({"COST_INCOMPLETE", "RECEIPT_UNINSPECTED", "QUALITY_HOLD",
+                                  "SALES_READINESS", "LOAN_RETURN_DUE", "CUSTODY_EVIDENCE_MISSING"})
+PUBLIC_CATEGORIES = frozenset({"SALES_READINESS", "QUALITY_HOLD", "LOAN_RETURN_DUE"})
+SALES_FIELDS = frozenset({"category", "sku_id", "public_variant", "issue_code", "owner_role",
+                          "next_action_code", "due_date", "closure_state"})
+PUBLIC_ISSUE_CODES = {"SALES_READINESS": frozenset({"BLOCKED", "REVIEW"}),
+                      "QUALITY_HOLD": frozenset({"QUALITY_HOLD"}),
+                      "LOAN_RETURN_DUE": frozenset({"OVERDUE"})}
+PUBLIC_OWNER_ROLES = {"SALES_READINESS": "COMMERCIAL_OWNER", "QUALITY_HOLD": "QUALITY_OWNER",
+                      "LOAN_RETURN_DUE": "CUSTODY_OWNER"}
+PUBLIC_NEXT_ACTIONS = {"SALES_READINESS": "RESOLVE_READINESS_BLOCK",
+                       "QUALITY_HOLD": "RESOLVE_QUALITY_DISPOSITION",
+                       "LOAN_RETURN_DUE": "CONFIRM_LOAN_RETURN"}
+_PUBLIC_TOKEN = re.compile(r"^[A-Za-z][A-Za-z0-9:_-]{0,63}$")
+_SENSITIVE = re.compile(r"cost|cents|margin|profit|supplier|bank|recipient|budget|payment|cash|account|@|\d{7,}", re.I)
+
+
+def _make_exception(
+    cut: BoundCut, policy: Policy, category: str, sku_id: str, event_ref: str,
+    source: str, source_ref: str, as_of: str, *, issue_code: str,
+    due_date: str | None = None, severity: str = "REVIEW",
+    closure_evidence_ref: str | None = None,
+) -> dict[str, Any]:
+    owners = policy.content["bases"].get("exception_owner_roles", {})
+    actions = policy.content["bases"].get("exception_next_actions", {})
+    if category not in EXCEPTION_CATEGORIES or not owners.get(category) or not actions.get(category):
+        raise ValueError("missing exception policy rule")
+    if due_date is not None:
+        date.fromisoformat(due_date)
+    identity = {"cut_id": cut.cut_id, "category": category, "event_ref": event_ref}
+    exception_id = hashlib.sha256(canonical_json(identity)).hexdigest()
+    return {"exception_id": exception_id, "cut_id": cut.cut_id, "as_of": as_of,
+            "category": category, "sku_id": sku_id, "event_ref": event_ref,
+            "issue_code": issue_code, "severity": severity,
+            "evidence_ref": source_ref, "evidence_sha256": cut.source_hashes[f"{source}.csv"],
+            "owner_role": owners[category], "next_action_code": actions[category],
+            "due_date": due_date, "closure_status": "CLOSED" if closure_evidence_ref else "UNRESOLVED",
+            "closure_evidence_ref": closure_evidence_ref,
+            "policy_version": policy.version, "policy_sha256": policy.sha256,
+            "policy_status": policy.status,
+            "reconciliation_id": f"exception:{exception_id}"}
+
+
+def loan_issue(loan: dict[str, Any], *, has_return_movement: bool,
+               as_of: str, grace_days: int) -> str | None:
+    if not isinstance(grace_days, int) or grace_days < 0:
+        raise ValueError("invalid custody grace period")
+    if (loan["returned_date"] is not None or loan["status_code"] == "RETURNED") and not has_return_movement:
+        return "CUSTODY_EVIDENCE_MISSING"
+    if loan["status_code"] in {"OPEN", "PARTIAL"} and loan["due_date"] is not None and \
+            date.fromisoformat(as_of) > date.fromisoformat(loan["due_date"]) + timedelta(days=grace_days):
+        return "LOAN_RETURN_DUE"
+    return None
+
+
+def project_exceptions(cut: BoundCut, as_of: str, policy: Policy) -> list[dict[str, Any]]:
+    """Derive unresolved actions from canonical evidence, never recipient tokens."""
+    cut.coverage_status("sales_readiness", as_of)
+    thresholds = policy.content["thresholds"]
+    rules = ("receipt_inspection_due_days", "quality_disposition_due_days", "loan_overdue_grace_days")
+    if any(name not in thresholds or not isinstance(thresholds[name], int) or thresholds[name] < 0 for name in rules):
+        raise ValueError("missing exception timing policy")
+    skus = _rows(cut, "SELECT sku_id FROM sku_catalog ORDER BY sku_id", {})
+    exceptions = []
+    for sku in skus:
+        cost = project_cost(cut, sku["sku_id"], as_of, policy)
+        if cost["status"] not in {"MEASURED", "ESTIMATED"}:
+            source_refs = cost.get("source_refs", ())
+            exceptions.append(_make_exception(cut, policy, "COST_INCOMPLETE", sku["sku_id"],
+                cost.get("cost_version_id") or sku["sku_id"], "cost_components",
+                source_refs[0] if source_refs else sku["sku_id"], as_of,
+                issue_code="COST_INCOMPLETE", severity="INTERNAL"))
+    for row in _rows(cut, _query("pending_receipts"), {"as_of": as_of}):
+        due = (date.fromisoformat(row["received_date"]) +
+               timedelta(days=thresholds["receipt_inspection_due_days"])).isoformat()
+        exceptions.append(_make_exception(cut, policy, "RECEIPT_UNINSPECTED", row["sku_id"],
+            row["receipt_id"], "purchase_receipts", row["source_ref"], as_of,
+            issue_code="INSPECTION_PENDING", due_date=due, severity="HOLD"))
+    for row in _rows(cut, _query("all_quality"), {"as_of": as_of}):
+        if row["event_type"] not in {"RETURN_REPORTED", "REJECTED"}:
+            continue
+        resolution = (row["resolution_code"] or "").lower()
+        if resolution and not any(token in resolution for token in ("review", "pending", "open", "hold")):
+            continue
+        due = (date.fromisoformat(row["event_date"]) +
+               timedelta(days=thresholds["quality_disposition_due_days"])).isoformat()
+        exceptions.append(_make_exception(cut, policy, "QUALITY_HOLD", row["sku_id"],
+            row["quality_event_id"], "quality_events", row["source_ref"], as_of,
+            issue_code="QUALITY_HOLD", due_date=due, severity="HOLD"))
+    for row in _rows(cut, _query("readiness_latest"), {"as_of": as_of}):
+        if row["readiness_status"] in {"BLOCKED", "REVIEW"}:
+            exceptions.append(_make_exception(cut, policy, "SALES_READINESS", row["sku_id"],
+                f'{row["sku_id"]}:{row["effective_date"]}', "sales_readiness", row["source_ref"],
+                as_of, issue_code=row["readiness_status"], severity="HOLD"))
+    returns = {row["loan_id"]: row["returned_units"] for row in
+               _rows(cut, _query("loan_return_movements"), {"as_of": as_of})}
+    for row in _rows(cut, _query("all_loans"), {"as_of": as_of}):
+        issue = loan_issue(row, has_return_movement=returns.get(row["loan_id"], 0) >= row["quantity"],
+                           as_of=as_of, grace_days=thresholds["loan_overdue_grace_days"])
+        if issue is None:
+            continue
+        due = row["due_date"]
+        exceptions.append(_make_exception(cut, policy, issue, row["sku_id"], row["loan_id"],
+            "loans", row["source_ref"], as_of,
+            issue_code="OVERDUE" if issue == "LOAN_RETURN_DUE" else "CUSTODY_EVIDENCE_MISSING",
+            due_date=due, severity="HOLD"))
+    ids = [row["exception_id"] for row in exceptions]
+    if len(ids) != len(set(ids)):
+        raise ValueError("duplicate exception identity")
+    return sorted(exceptions, key=lambda row: row["exception_id"])
+
+
+def validate_sales_row(row: dict[str, Any]) -> None:
+    """Reject unexpected public shape and sensitive values in allowed fields."""
+    if not isinstance(row, dict) or set(row) != SALES_FIELDS:
+        raise ValueError("sales projection field mismatch")
+    category = row["category"]
+    if category not in PUBLIC_CATEGORIES or row["issue_code"] not in PUBLIC_ISSUE_CODES[category]:
+        raise ValueError("sales projection category or issue code forbidden")
+    if (row["owner_role"] != PUBLIC_OWNER_ROLES[category]
+            or row["next_action_code"] != PUBLIC_NEXT_ACTIONS[category]
+            or row["closure_state"] not in {"OPEN", "CLOSED"}):
+        raise ValueError("sales projection role, action or closure forbidden")
+    for key in ("sku_id", "public_variant", "issue_code", "owner_role", "next_action_code"):
+        value = row[key]
+        if not isinstance(value, str) or not _PUBLIC_TOKEN.fullmatch(value) or _SENSITIVE.search(value):
+            raise ValueError("unsafe sales projection value")
+    if row["due_date"] is not None:
+        date.fromisoformat(row["due_date"])
+
+
+def sales_readiness_projection(
+    cut: BoundCut, exceptions: Iterable[dict[str, Any]], policy: Policy,
+) -> list[dict[str, Any]]:
+    """Use fixed public fields and issue codes; internal rows never cross."""
+    variants = {row["sku_id"]: row["variant_code"] for row in
+                _rows(cut, "SELECT sku_id,variant_code FROM sku_catalog", {})}
+    public = []
+    for issue in exceptions:
+        category = issue["category"]
+        if category not in EXCEPTION_CATEGORIES:
+            raise ValueError("unknown exception category")
+        if category not in PUBLIC_CATEGORIES:
+            continue
+        if issue["owner_role"] != policy.content["bases"]["exception_owner_roles"][category] or \
+                issue["next_action_code"] != policy.content["bases"]["exception_next_actions"][category]:
+            raise ValueError("exception policy binding mismatch")
+        if issue["sku_id"] not in variants:
+            raise ValueError("unknown public SKU")
+        row = {"category": category, "sku_id": issue["sku_id"],
+               "public_variant": variants[issue["sku_id"]],
+               "issue_code": issue["issue_code"], "owner_role": issue["owner_role"],
+               "next_action_code": issue["next_action_code"], "due_date": issue["due_date"],
+               "closure_state": "CLOSED" if issue["closure_status"] == "CLOSED" else "OPEN"}
+        validate_sales_row(row)
+        public.append(row)
+    return public

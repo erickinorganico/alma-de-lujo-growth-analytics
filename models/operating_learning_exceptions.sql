@@ -90,3 +90,38 @@ WHERE k.product_code=:product_code AND v.lifecycle_status='ACTIVE'
     WHERE v2.sku_id=v.sku_id AND v2.lifecycle_status='ACTIVE'
       AND v2.effective_date<=:as_of)
 ORDER BY v.sku_id;
+
+-- name: readiness_latest
+SELECT s.sku_id, s.effective_date, s.readiness_status,
+       s.missing_info_code, s.source_ref
+FROM sales_readiness AS s
+WHERE s.effective_date<=:as_of AND s.effective_date=(
+  SELECT MAX(s2.effective_date) FROM sales_readiness AS s2
+  WHERE s2.sku_id=s.sku_id AND s2.effective_date<=:as_of)
+ORDER BY s.sku_id;
+
+-- name: pending_receipts
+SELECT r.receipt_id, p.sku_id, r.received_date,
+       r.inspection_units, r.source_ref
+FROM purchase_receipts AS r
+JOIN purchase_orders AS p ON p.purchase_order_id=r.purchase_order_id
+WHERE r.received_date<=:as_of AND r.inspection_units>0
+ORDER BY r.receipt_id;
+
+-- name: all_quality
+SELECT quality_event_id, sku_id, receipt_id, delivery_cohort_id,
+       event_date, event_type, units, reason_code, resolution_code, source_ref
+FROM quality_events
+WHERE event_date<=:as_of
+ORDER BY quality_event_id;
+
+-- name: all_loans
+SELECT loan_id, sku_id, quantity, borrowed_date, due_date,
+       returned_date, status_code, condition_code, source_ref
+FROM loans WHERE borrowed_date<=:as_of ORDER BY loan_id;
+
+-- name: loan_return_movements
+SELECT loan_id, SUM(units) AS returned_units
+FROM inventory_movements
+WHERE movement_type='LOAN_IN' AND event_date<=:as_of
+GROUP BY loan_id;
