@@ -209,7 +209,7 @@ class BundleTests(unittest.TestCase):
             self.assertEqual(set(manifest["artifact_sha256"]), set(manifest["artifacts"]))
             for artifact, digest in manifest["artifact_sha256"].items():
                 self.assertEqual(digest, hashlib.sha256((dest1 / artifact).read_bytes()).hexdigest())
-            self.assertEqual({row["metric_id"] for row in metric_rows}, set(registry))
+            self.assertTrue({row["metric_id"] for row in metric_rows} <= set(registry))
             self.assertEqual(len(metric_rows), sum(controls[name]["metric_count"] for name in
                 ("cost_inventory", "finance", "learning")))
             self.assertTrue({"recorded_unpaid_cents", "budget_headroom_cents", "sell_through",

@@ -76,6 +76,11 @@ class CashTests(unittest.TestCase):
                     "direction": "INFLOW", "amount_cents": 100,
                     "obligation_id": None, "payment_id": None, "source_ref": "observed:bank:1"}
         self.assertEqual([observed], active_cash_events([observed], "2026-09-21"))
+        observed_outflow = dict(observed, event_id="observed-outflow",
+                                economic_event_id="expense-outflow", direction="OUTFLOW")
+        self.assertEqual([observed_outflow], active_cash_events([observed_outflow], "2026-09-21"))
+        with self.assertRaises(ValueError):
+            active_cash_events([dict(observed_outflow, source_ref="")], "2026-09-21")
         with self.assertRaises(ValueError):
             active_cash_events([dict(observed, direction="OUTFLOW", obligation_id="payable-1")],
                                "2026-09-21")

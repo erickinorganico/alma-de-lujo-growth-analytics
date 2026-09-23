@@ -34,10 +34,110 @@ def coverage(pack: Path, source: str, status: str) -> None:
     path = pack / "metadata.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     data["coverage"][source]["status"] = status
+    if status == "MISSING":
+        data["coverage"][source]["window_start"] = None
+        data["coverage"][source]["window_end"] = None
     path.write_text(json.dumps(data), encoding="utf-8")
 
 
 class PublicationGapTests(unittest.TestCase):
+    def test_missing_physical_source_and_broken_fk_reject_intake(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            missing = home / "missing"
+            shutil.copytree(PACK, missing)
+            (missing / "cash_events.csv").unlink()
+            with self.assertRaises((FileNotFoundError, ValueError)):
+                build_operating_workspace(missing, private_root=home / "missing-cuts")
+            broken = home / "broken"
+            shutil.copytree(PACK, broken)
+            path = broken / "obligation_payments.csv"
+            fields, values = rows(path)
+            values[0]["obligation_id"] = "synthetic:absent-obligation"
+            write_rows(path, fields, values)
+            with self.assertRaises(ValueError):
+                build_operating_workspace(broken, private_root=home / "broken-cuts")
+
+    def test_empty_domain_matrix(self) -> None:
+        for domain, status in (("sales_aggregates", "ZERO"), ("sales_aggregates", "MISSING"),
+                               ("budgets", "ZERO"), ("budgets", "MISSING"),
+                               ("obligation_payments", "MISSING"),
+                               ("cash_events", "ZERO"), ("cash_events", "MISSING")):
+            with self.subTest(domain=domain, status=status), tempfile.TemporaryDirectory() as tmp:
+                home = Path(tmp)
+                pack = home / "pack"
+                shutil.copytree(PACK, pack)
+                if domain == "sales_aggregates":
+                    path = pack / "sales_aggregates.csv"
+                    fields, _ = rows(path); write_rows(path, fields, [])
+                    path = pack / "inventory_movements.csv"
+                    fields, values = rows(path)
+                    write_rows(path, fields, [row for row in values if row["movement_type"] not in
+                                              {"SALE_OUT", "RETURN_RESTOCK"}])
+                    path = pack / "quality_events.csv"
+                    fields, values = rows(path)
+                    write_rows(path, fields, [row for row in values if row["delivery_cohort_id"] == ""])
+                    counts = pack / "inventory_counts.csv"
+                    counts.write_text(counts.read_text(encoding="utf-8").replace(",24,2,", ",35,2,"), encoding="utf-8")
+                elif domain == "budgets":
+                    for source in ("budgets", "budget_allocations", "expenses", "purchase_orders",
+                                   "purchase_receipts", "obligations", "obligation_payments",
+                                   "cash_events", "cash_balance_evidence"):
+                        path = pack / f"{source}.csv"
+                        fields, _ = rows(path); write_rows(path, fields, [])
+                        coverage(pack, source, status if source == "budgets" else "ZERO")
+                    path = pack / "inventory_movements.csv"
+                    fields, values = rows(path)
+                    write_rows(path, fields, [row for row in values if row["movement_type"] != "RECEIPT_ACCEPTED"])
+                    path = pack / "quality_events.csv"
+                    fields, values = rows(path)
+                    write_rows(path, fields, [row for row in values if row["receipt_id"] == ""])
+                    counts = pack / "inventory_counts.csv"
+                    counts.write_text(counts.read_text(encoding="utf-8").replace(",24,2,", ",8,2,"), encoding="utf-8")
+                elif domain == "obligation_payments":
+                    path = pack / "obligation_payments.csv"
+                    fields, _ = rows(path); write_rows(path, fields, [])
+                    path = pack / "cash_events.csv"
+                    fields, values = rows(path)
+                    write_rows(path, fields, [row for row in values if row["level"] != "RECONCILED"])
+                    balance = pack / "cash_balance_evidence.csv"
+                    balance.write_text(balance.read_text(encoding="utf-8").replace(",1100000,", ",2000000,"), encoding="utf-8")
+                elif domain == "cash_events":
+                    for source in ("cash_events", "cash_balance_evidence"):
+                        path = pack / f"{source}.csv"
+                        fields, _ = rows(path); write_rows(path, fields, [])
+                        coverage(pack, source, status)
+                coverage(pack, domain, status)
+                cut = build_operating_workspace(pack, private_root=home / "cuts")
+                private = home / ".local" / "operating-marts"
+                result = operating_marts.build_operating_marts(cut["destination"], private,
+                    policy_path=POLICY, private_root=private)
+                dest = Path(result["destination"])
+                families = json.loads((dest / "families.json").read_text(encoding="utf-8"))
+                metrics = json.loads((dest / "metric_rows.json").read_text(encoding="utf-8"))
+                manifest = json.loads((dest / "manifest.json").read_text(encoding="utf-8"))
+                self.assertEqual(status, manifest["coverage"][domain]["status"])
+                domain_coverage = json.loads((dest / "domain_coverage.json").read_text(encoding="utf-8"))
+                self.assertEqual(status, domain_coverage[domain]["status"])
+                self.assertEqual(0, domain_coverage[domain]["row_count"])
+                self.assertEqual("DECLARED_ZERO" if status == "ZERO" else "MISSING_SOURCE",
+                                 domain_coverage[domain]["empty_reason"])
+                self.assertTrue(families["inventory"])
+                if domain == "sales_aggregates":
+                    self.assertEqual([], families["economics"])
+                    self.assertEqual("UNKNOWN", families["learning"][0]["sell_through"]["status"])
+                elif domain == "budgets":
+                    self.assertEqual([], families["budgets"]["targets"])
+                    self.assertEqual([], families["purchases"])
+                elif domain == "obligation_payments":
+                    self.assertEqual(900000, next(row for row in families["obligations"]
+                        if row["origin_type"] == "PURCHASE_ORDER")["recorded_unpaid_cents"])
+                    self.assertTrue(all(row["authoritative_outstanding_cents"] is None
+                                        for row in families["obligations"]))
+                elif domain == "cash_events":
+                    self.assertIsNone(families["cash"]["scenario_id"])
+                    self.assertFalse(any(row["metric_id"] == "cash_layer_cents" for row in metrics))
+
     def test_observed_cash_and_all_layers_publish(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             home = Path(tmp)
@@ -83,14 +183,15 @@ class PublicationGapTests(unittest.TestCase):
                     self.assertEqual(amount, matching[0]["value"])
 
     def test_zero_unmet_domain_preserves_unrelated_metrics(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
+        for domain_status in ("ZERO", "MISSING"):
+          with self.subTest(status=domain_status), tempfile.TemporaryDirectory() as tmp:
             home = Path(tmp)
             pack = home / "pack"
             shutil.copytree(PACK, pack)
             demand = pack / "unmet_demand.csv"
             fields, _ = rows(demand)
             write_rows(demand, fields, [])
-            coverage(pack, "unmet_demand", "ZERO")
+            coverage(pack, "unmet_demand", domain_status)
             cut = build_operating_workspace(pack, private_root=home / "cuts")
             private = home / ".local" / "operating-marts"
             result = operating_marts.build_operating_marts(cut["destination"], private,
@@ -101,7 +202,7 @@ class PublicationGapTests(unittest.TestCase):
             self.assertIn("recorded_unmet_units", registry)
             self.assertFalse(any(row["metric_id"] == "recorded_unmet_units" for row in metrics))
             self.assertTrue(any(row["metric_id"] == "available_units" for row in metrics))
-            self.assertEqual("ZERO", json.loads((dest / "manifest.json").read_text(encoding="utf-8"))["coverage"]["unmet_demand"]["status"])
+            self.assertEqual(domain_status, json.loads((dest / "manifest.json").read_text(encoding="utf-8"))["coverage"]["unmet_demand"]["status"])
 
     def test_semantic_registry_covers_published_measures(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -119,15 +220,56 @@ class PublicationGapTests(unittest.TestCase):
             self.assertIn("learning[].mature_returns.value", catalog)
             self.assertEqual("metric", catalog["economics[].ratios.gross_margin"]["kind"])
             original = operating_marts._collect
+            original_definitions = operating_marts._definitions
             def missing_metric(*args):
                 families, measures = original(*args)
                 return families, [row for row in measures if row.metric_id != "realized_gross_margin"]
             other_private = home / "second" / ".local" / "operating-marts"
-            with patch.object(operating_marts, "_collect", side_effect=missing_metric):
+            with patch.object(operating_marts, "_collect", side_effect=missing_metric), patch.object(
+                operating_marts, "_definitions", side_effect=lambda: {key: value for key, value
+                    in original_definitions().items() if key != "realized_gross_margin"}):
                 with self.assertRaises(ValueError):
                     operating_marts.build_operating_marts(cut["destination"], other_private,
                         policy_path=POLICY, private_root=other_private)
             self.assertFalse(other_private.exists())
+            def injected(*args):
+                families, measures = original(*args)
+                families["economics"][0]["unclassified_profit_cents"] = 7
+                return families, measures
+            with patch.object(operating_marts, "_collect", side_effect=injected):
+                with self.assertRaises(ValueError):
+                    operating_marts.build_operating_marts(cut["destination"], other_private,
+                        policy_path=POLICY, private_root=other_private)
+            self.assertFalse(other_private.exists())
+
+    def test_estimated_economics_serialization(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            pack = home / "pack"
+            shutil.copytree(PACK, pack)
+            for source in ("sales_aggregates", "cost_versions", "cost_components", "cost_allocations"):
+                coverage(pack, source, "COMPLETE")
+            sales = pack / "sales_aggregates.csv"
+            sales.write_text(sales.read_text(encoding="utf-8").replace(",PARTIAL,", ",COMPLETE,"), encoding="utf-8")
+            components = pack / "cost_components.csv"
+            components.write_text(components.read_text(encoding="utf-8").replace(",KNOWN,", ",ESTIMATED,"), encoding="utf-8")
+            cut = build_operating_workspace(pack, private_root=home / "cuts")
+            private = home / ".local" / "operating-marts"
+            result = operating_marts.build_operating_marts(cut["destination"], private,
+                policy_path=POLICY, private_root=private)
+            dest = Path(result["destination"])
+            family = json.loads((dest / "families.json").read_text(encoding="utf-8"))["economics"][0]
+            metrics = json.loads((dest / "metric_rows.json").read_text(encoding="utf-8"))
+            self.assertEqual("ESTIMATED", family["status"])
+            self.assertEqual(480000, family["cogs_cents"])
+            self.assertEqual(240000, family["contribution_cents"])
+            for metric_id, expected in (("realized_contribution_cents", 240000),
+                (operating_marts._semantic_id("economics[].cogs_cents"), 480000),
+                ("realized_gross_margin", "0.6"),
+                ("realized_contribution_margin", "0.2"),
+                ("realized_markup", "1.5")):
+                self.assertTrue(any(row["metric_id"] == metric_id and row["value"] == expected and
+                                    row["status"] == "ESTIMATED" for row in metrics), metric_id)
 
 
 if __name__ == "__main__":

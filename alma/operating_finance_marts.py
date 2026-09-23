@@ -127,7 +127,7 @@ def project_obligations(cut: BoundCut, as_of: str) -> list[dict[str, Any]]:
         row["metric_row"] = MetricRow(
             "recorded_unpaid_cents", cut.cut_id, as_of,
             {"obligation_id": row["obligation_id"]}, row["original_cents"], 1,
-            row["recorded_unpaid_cents"], row["status"],
+            row["recorded_unpaid_cents"], "PARTIAL" if row["status"] == "UNKNOWN" else row["status"],
             ("obligations", "obligation_payments"), row["source_refs"], row["reconciliation_id"])
         results.append(row)
     if payment_groups:
@@ -178,8 +178,13 @@ def active_cash_events(events: Iterable[dict[str, Any]], as_of: str) -> list[dic
         if not eligible:
             continue
         winner = eligible[-1]
-        if winner["level"] == "RECONCILED" and not winner.get("payment_id"):
-            raise ValueError("settled cash lacks payment evidence")
+        if winner["level"] == "RECONCILED":
+            if winner.get("obligation_id") and not winner.get("payment_id"):
+                raise ValueError("payable settlement lacks payment evidence")
+            if winner.get("payment_id") and not winner.get("obligation_id"):
+                raise ValueError("payment evidence lacks payable origin")
+            if not winner.get("payment_id") and not winner.get("source_ref"):
+                raise ValueError("observed cash lacks source evidence")
         active.append(winner)
     return sorted(active, key=lambda event: (event["scenario_id"], event["economic_event_id"]))
 
@@ -275,11 +280,30 @@ def project_cash(
     events = active_cash_events(_rows(cut, _query("cash_events")), as_of)
     scenarios = {event["scenario_id"] for event in events if event["level"] != "SCENARIO"}
     if scenario_id is None:
-        if len(scenarios) != 1:
+        if not scenarios:
+            observed = {row[0] for row in cut.connection.execute(
+                "SELECT DISTINCT scenario_id FROM cash_balance_evidence WHERE period_end<=?", (as_of,))}
+            scenarios = observed
+        if len(scenarios) > 1:
             raise ValueError("cash scenario must be selected")
-        scenario_id = next(iter(scenarios))
+        scenario_id = next(iter(scenarios), None)
+    if scenario_id is None:
+        event_coverage = cut.coverage_status("cash_events", as_of)
+        return {"cut_id": cut.cut_id, "as_of": as_of, "timezone": cut.timezone,
+                "scenario_id": None, "active_event_ids": (), "scenario_event_ids": (),
+                "actual_movements_cents": 0 if event_coverage == "ZERO" else None,
+                "reconciled_close_cents": None, "close_status": "UNKNOWN",
+                "horizons": {}, "source_refs": (),
+                "source_hashes": {name: cut.source_hashes[f"{name}.csv"] for name in
+                    ("cash_events", "cash_balance_evidence")},
+                "policy_version": policy.version, "policy_sha256": policy.sha256,
+                "policy_status": policy.status, "forecast_status": "UNKNOWN",
+                "active_event_lineage": (), "scenario_event_lineage": (),
+                "metric_row": None, "reconciliation_id": None,
+                "domain_status": event_coverage, "empty_reason": "NO_SCENARIO_EVIDENCE"}
     selected = [event for event in events if event["scenario_id"] == scenario_id]
-    scenario_events = [event for event in events if event["level"] == "SCENARIO"]
+    scenario_events = [event for event in events if event["level"] == "SCENARIO" and
+                       event["scenario_id"] == scenario_id]
     evidence_rows = _rows(cut, _query("cash_balance_evidence"), {"scenario_id": scenario_id, "as_of": as_of})
     if len(evidence_rows) > 1 and evidence_rows[0]["period_start"] == evidence_rows[1]["period_start"]:
         raise ValueError("ambiguous independent balance evidence")
@@ -319,7 +343,15 @@ def project_cash(
             "active_event_lineage": tuple({"event_id": event["event_id"],
                 "economic_event_id": event["economic_event_id"],
                 "supersedes_event_id": event["supersedes_event_id"],
-                "level": event["level"], "source_ref": event["source_ref"]} for event in selected),
+                "level": event["level"], "direction": event["direction"],
+                "amount_cents": event["amount_cents"], "event_date": event["event_date"],
+                "source_ref": event["source_ref"]} for event in selected),
+            "scenario_event_lineage": tuple({"event_id": event["event_id"],
+                "economic_event_id": event["economic_event_id"],
+                "level": event["level"], "direction": event["direction"],
+                "amount_cents": event["amount_cents"], "event_date": event["event_date"],
+                "source_ref": event["source_ref"]} for event in scenario_events),
+            "domain_status": cut.coverage_status("cash_events", as_of), "empty_reason": None,
             "metric_row": metric_row, "reconciliation_id": metric_row.reconciliation_id}
 
 
@@ -406,6 +438,8 @@ def project_budgets(cut: BoundCut, as_of: str, policy: Policy) -> dict[str, Any]
     payment_groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for payment in payments:
         payment_groups[payment["obligation_id"]].append(payment)
+    payment_coverage = cut.coverage_status("obligation_payments", as_of)
+    application_coverage = "COMPLETE" if payment_coverage in {"COMPLETE", "ZERO"} else payment_coverage
     sources: dict[tuple[str, str], dict[str, Any]] = {}
     for po in purchase_rows:
         origin = ("PURCHASE_ORDER", po["purchase_order_id"])
@@ -446,7 +480,7 @@ def project_budgets(cut: BoundCut, as_of: str, policy: Policy) -> dict[str, Any]
             if obligation["original_cents"] != source["source_cents"]:
                 raise ValueError("obligation amount differs from economic source")
             balance = reconcile_obligation(obligation, payment_groups.pop(obligation["obligation_id"], []),
-                                           as_of=as_of, application_coverage="COMPLETE")
+                                           as_of=as_of, application_coverage=application_coverage)
             applied = balance["recorded_applied_cents"]
             outstanding = balance["recorded_unpaid_cents"]
         origin_allocations = allocations_by_origin.pop(origin, [])

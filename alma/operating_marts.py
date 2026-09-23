@@ -8,6 +8,7 @@ import json
 import os
 import shutil
 import tempfile
+import re
 from dataclasses import asdict, is_dataclass
 from datetime import date, timedelta
 from pathlib import Path
@@ -58,6 +59,208 @@ COST_DEFINITIONS = {
         "finance", "unit_economics_review"),
 }
 
+_FAMILY_SOURCES = {
+    "cost": ("cost_versions", "cost_components", "cost_allocations"),
+    "inventory": ("inventory_movements", "inventory_counts", "inventory_reservations", "loans", "purchase_receipts"),
+    "purchases": ("purchase_orders", "purchase_receipts"),
+    "economics": ("sales_aggregates", "cost_versions", "cost_components", "cost_allocations"),
+    "obligations": ("obligations", "obligation_payments"),
+    "cash": ("cash_events", "cash_balance_evidence"),
+    "budgets": FINANCE_DEFINITIONS["budget_headroom_cents"].sources,
+    "learning": tuple(dict.fromkeys(source for definition in LEARNING_DEFINITIONS.values()
+                                         for source in definition.sources)),
+}
+
+
+def _semantic_formulas() -> dict[str, str]:
+    """The finite family-path contract; new decision fields must be classified here."""
+    groups = {
+        "cost[]": {
+            "known_sum_cents": "sum known eligible component cents",
+            "complete_cost_cents": "sum complete eligible landed component cents",
+            "unallocated_cents": "eligible component cents not allocated to this SKU",
+            "public_price_cents": "effective version public price cents",
+            "unit_cost_cents": "complete landed cost divided across quantity basis by stable residual ordinal",
+            "unit_cost_cents[]": "complete landed cost cent assigned to this unit ordinal",
+        },
+        "inventory[]": {
+            "owned_units": "on hand plus loaned plus inspection custody units",
+            "on_hand_units": "signed distinct physical movements to as-of",
+            "sellable_on_hand_units": "on hand minus non-sellable units",
+            "inspection_units": "receipt units awaiting inspection",
+            "non_sellable_units": "latest observed count non-sellable units",
+            "loaned_units": "loan-out minus loan-in custody units",
+            "reserved_units": "active reservation events summed once",
+            "available_units": "on hand minus non-sellable minus reserved",
+            "count_variance_units": "movement-derived on hand minus observed count",
+        },
+        "purchases[]": {
+            "ordered_units": "documented purchase order units",
+            "received_units": "sum distinct receipt received units",
+            "inspection_units": "sum distinct receipt inspection units",
+            "accepted_units": "sum distinct receipt accepted units",
+            "rejected_units": "sum distinct receipt rejected units",
+            "still_to_receive_units": "ordered minus received for noncancelled order",
+            "cancelled_unreceived_units": "ordered minus received for cancelled order",
+        },
+        "economics[]": {
+            "net_revenue_cents": "sum dated same-grain net revenue cents",
+            "delivered_units": "sum dated same-grain delivered units",
+            "cogs_cents": "canonical pre-filter unit-cost ordinals across SKU and version",
+            "variable_cost_cents": "sum dated same-grain variable cost cents",
+            "gross_profit_cents": "net revenue minus canonical COGS",
+            "contribution_cents": "gross profit minus variable costs",
+            "ratios.markup": "gross profit divided by COGS",
+            "ratios.gross_margin": "gross profit divided by net revenue",
+            "ratios.contribution_margin": "contribution divided by net revenue",
+            "public_prices_by_version.{version}": "effective public price cents for selected cost version",
+        },
+        "obligations[]": {
+            "original_cents": "documented original obligation cents",
+            "documented_adjustments_cents": "documented VOID cancellation cents only",
+            "recorded_applied_cents": "sum distinct payment applications",
+            "recorded_unpaid_cents": "original less documented adjustment and applied cents",
+            "authoritative_outstanding_cents": "recorded unpaid when application coverage is complete",
+        },
+        "cash": {
+            "actual_movements_cents": "signed active reconciled cash movements",
+            "reconciled_close_cents": "observed opening plus settled flows equals independent observed close",
+            "horizons.{horizon}.layers_cents.RECONCILED": "signed active reconciled events in half-open horizon",
+            "horizons.{horizon}.layers_cents.COMMITTED": "signed active commitments in half-open horizon",
+            "horizons.{horizon}.layers_cents.EXPECTED": "signed active expected events in half-open horizon",
+            "horizons.{horizon}.undated_cents": "signed active events with no date",
+            "horizons.{horizon}.scenario_cents": "signed separate scenario events in half-open horizon",
+            "horizons.{horizon}.weekly_layers_cents.{week}.RECONCILED": "signed reconciled events in local seven-day bucket",
+            "horizons.{horizon}.weekly_layers_cents.{week}.COMMITTED": "signed commitments in local seven-day bucket",
+            "horizons.{horizon}.weekly_layers_cents.{week}.EXPECTED": "signed expected events in local seven-day bucket",
+            "horizons.{horizon}.daily_closes_cents": "no daily close without independent opening",
+            "horizons.{horizon}.daily_closes_cents.{day}": "independent close plus cumulative daily commitments and expectations",
+            "horizons.{horizon}.daily_minimum_cents": "minimum projected daily close including starting close",
+        },
+        "budgets": {"unallocated_cents": "source cents without an approved target allocation"},
+        "budgets.targets[]": {
+            "approved_ceiling_cents": "approved budget target ceiling",
+            "open_commitment_cents": "allocated purchase amount not yet received",
+            "incurred_cents": "allocated received purchases plus incurred expenses",
+            "paid_cents": "distinct settlement applications on mapped sources",
+            "outstanding_obligation_cents": "mapped obligation original less distinct payments",
+            "headroom_cents": "approved ceiling minus open commitment minus incurred",
+        },
+        "budgets.sources[]": {
+            "source_cents": "source purchase or expense amount before target allocation",
+            "allocated_cents": "sum exact source shares assigned to targets",
+            "unallocated_cents": "source amount less assigned target cents",
+            "open_commitment_cents": "source purchase amount not yet received",
+            "incurred_cents": "source received purchase or incurred expense amount",
+            "paid_cents": "distinct applied payment cents for source obligation",
+            "outstanding_obligation_cents": "source obligation less distinct applied payments",
+        },
+        "learning[]": {
+            "gross_delivered_units": "sum selected delivered units",
+            "physical_received_return_units": "selected-cohort physically received returns only",
+            "accepted_restocked_units": "distinct accepted physical return restocks",
+            "net_depleted_units": "delivered minus accepted physical restocks",
+            "opening_sellable_units": "eligible opening count on window start less non-sellable",
+            "accepted_receipts_units": "accepted receipt units during launch window",
+            "sell_through.numerator": "delivered minus accepted physical restocks",
+            "sell_through.denominator": "eligible opening sellable plus accepted receipts",
+            "sell_through.value": "net depleted divided by eligible sellable supply",
+            "mature_returns.numerator": "physically received returns for mature eligible cohorts",
+            "mature_returns.denominator": "delivered units for mature eligible cohorts",
+            "mature_returns.value": "eligible mature received returns divided by deliveries",
+            "quality_defects.numerator": "confirmed rejected units for eligible mature cohorts",
+            "quality_defects.denominator": "inspected units for eligible mature cohorts",
+            "quality_defects.value": "eligible mature rejects divided by inspected units",
+            "variant_mix.numerator": "eligible variant delivered units",
+            "variant_mix.denominator": "same-exposure-set delivered units",
+            "variant_mix.value": "eligible variant delivered divided by comparable delivered",
+            "variant_mix.public_price_cents": "effective public price for exposure comparison",
+            "exposure.observed_minutes": "observed availability minutes",
+            "exposure.sellable_minutes": "observed sellable minutes",
+            "exposure.stockout_minutes": "observed stockout minutes",
+            "exposure.eligible_days": "days with complete variant observations",
+            "exposure.numerator": "observed stockout minutes",
+            "exposure.denominator": "observed availability minutes",
+            "exposure.value": "stockout minutes divided by observed minutes",
+        },
+        "learning[].variant_mix_by_channel[]": {
+            "numerator": "eligible variant delivered units in channel",
+            "denominator": "same-exposure-set delivered units in channel",
+            "value": "channel variant delivered divided by comparable delivered",
+            "public_price_cents": "effective public price for channel exposure comparison",
+        },
+        "learning[].cohort_rows[]": {
+            "delivered_units": "selected deliveries in this linked cohort",
+            "received_return_units": "physically received returns linked to this cohort",
+            "reported_return_units": "reported but not necessarily received returns",
+            "inspected_units": "inspected units linked to this cohort",
+            "rejected_units": "confirmed rejected units linked to this cohort",
+            "mature_returns.numerator": "physical returns in mature covered cohort",
+            "mature_returns.denominator": "deliveries in mature covered cohort",
+            "mature_returns.value": "physical returns divided by mature cohort deliveries",
+            "quality_defects.numerator": "confirmed rejects in mature covered cohort",
+            "quality_defects.denominator": "inspected units in mature covered cohort",
+            "quality_defects.value": "confirmed rejects divided by mature inspected units",
+        },
+        "learning[].recorded_unmet[]": {
+            "requested_units_lower_bound": "recorded qualified requested units; unrecorded demand unknown",
+        },
+    }
+    return {f"{prefix}.{field}": formula for prefix, fields in groups.items()
+            for field, formula in fields.items()}
+
+
+SEMANTIC_FORMULAS = _semantic_formulas()
+_ID_OVERRIDES = {
+    "economics[].ratios.gross_margin": "realized_gross_margin",
+    "economics[].ratios.markup": "realized_markup",
+    "economics[].ratios.contribution_margin": "realized_contribution_margin",
+}
+_FACT_KEYS = frozenset({
+    "as_of", "cut_id", "timezone", "sku_id", "channel_code", "product_code", "drop_code",
+    "cost_version_id", "cost_version_ids", "quality", "status", "policy_version", "policy_sha256",
+    "policy_status", "reconciliation_id", "source_ref", "source_refs", "source_hashes",
+    "purchase_order_id", "receipt_ids", "obligation_id", "origin_id", "origin_type",
+    "payment_ids", "due_date", "due_bucket", "scenario_id", "active_event_ids",
+    "scenario_event_ids", "event_id", "economic_event_id", "supersedes_event_id",
+    "event_date", "level", "direction", "amount_cents", "close_status", "forecast_status",
+    "domain_status", "empty_reason", "start", "end", "cash_floor_breached",
+    "minimum_cash_floor_cents", "budget_id", "allocation_ids", "window_start", "window_end",
+    "delivery_cohort_id", "latest_delivery_date", "exclusion_reason", "reason",
+    "quality_event_id", "event_type", "units", "reason_code", "demand_event_id",
+    "exposure_comparable", "price_comparable", "preference_status", "decision_status",
+    "category", "exception_id", "closure_evidence_ref", "closure_status", "severity",
+    "evidence_ref", "evidence_sha256", "event_ref", "issue_code", "next_action_code",
+    "owner_role", "public_variant", "closure_state", "metric_row", "metric_rows",
+    "active_event_lineage", "scenario_event_lineage", "excluded_quality_evidence",
+})
+_SKIP_SUBTREES = frozenset({"source_refs", "source_hashes", "receipt_ids", "payment_ids",
+                            "allocation_ids", "cost_version_ids", "active_event_ids",
+                            "scenario_event_ids", "metric_row", "metric_rows"})
+
+
+def _semantic_id(path: str) -> str:
+    if path in _ID_OVERRIDES:
+        return _ID_OVERRIDES[path]
+    return "semantic_" + re.sub(r"[^a-z0-9]+", "_", path.lower().replace("[]", "_item")).strip("_")
+
+
+def _semantic_definitions() -> dict[str, MetricDefinition]:
+    result = {}
+    for path, formula in SEMANTIC_FORMULAS.items():
+        family = path.split(".", 1)[0].replace("[]", "")
+        unit = "RATIO" if path.endswith((".value", ".markup", ".gross_margin", ".contribution_margin")) else (
+            "UNITS" if path.endswith(("_units", ".eligible_days")) else "MXN_CENTS" if
+            "cents" in path or "price" in path else "MINUTES" if "minutes" in path else "UNITS")
+        metric_id = _semantic_id(path)
+        if metric_id in result:
+            raise ValueError("duplicate semantic metric identity")
+        result[metric_id] = MetricDefinition(metric_id, "v1", formula, unit,
+            path.rsplit(".", 1)[0], "as_of or declared half-open family window",
+            _FAMILY_SOURCES[family], "UNKNOWN or PARTIAL when dependent coverage is incomplete",
+            "source-grain reconciliation and no inferred zero", "analytics", "decision_review")
+    return result
+
 
 def _private_root(output_root: str | Path, configured: str | Path | None) -> Path:
     """Reject redirection before making any output directory."""
@@ -80,7 +283,8 @@ def _private_root(output_root: str | Path, configured: str | Path | None) -> Pat
 
 def _definitions() -> dict[str, MetricDefinition]:
     definitions: dict[str, MetricDefinition] = {}
-    for family in (COST_DEFINITIONS, FINANCE_DEFINITIONS, LEARNING_DEFINITIONS):
+    for family in (COST_DEFINITIONS, FINANCE_DEFINITIONS, LEARNING_DEFINITIONS,
+                   _semantic_definitions()):
         for metric_id, definition in family.items():
             if metric_id in definitions or metric_id != definition.id:
                 raise ValueError("duplicate or mismatched metric definition")
@@ -89,7 +293,7 @@ def _definitions() -> dict[str, MetricDefinition]:
 
 
 def _metric(
-    metric_id: str, cut_id: str, as_of: str, dimensions: dict[str, str], value: int | None,
+    metric_id: str, cut_id: str, as_of: str, dimensions: dict[str, str], value: int | str | None,
     status: str, sources: tuple[str, ...], source_refs: tuple[str, ...], reconciliation_id: str,
     policy: Policy | None = None,
 ) -> MetricRow:
@@ -99,8 +303,140 @@ def _metric(
                      policy.sha256 if policy else None, policy.status if policy else None)
 
 
+def _pattern_child(parent: str, key: Any) -> str:
+    token = str(key)
+    if parent == "cash.horizons":
+        token = "{horizon}"
+    elif parent.endswith(".weekly_layers_cents"):
+        token = "{week}"
+    elif parent.endswith(".daily_closes_cents"):
+        token = "{day}"
+    elif parent.endswith(".public_prices_by_version"):
+        token = "{version}"
+    return f"{parent}.{token}" if parent else token
+
+
+def _semantic_walk(value: Any, pattern: str = "", actual: str = "",
+                   contexts: tuple[dict[str, Any], ...] = ()):
+    if is_dataclass(value):
+        value = asdict(value)
+    if isinstance(value, dict):
+        if not value:
+            yield pattern, actual, value, contexts
+        for key, item in value.items():
+            child_pattern = _pattern_child(pattern, key)
+            child_actual = f"{actual}.{key}" if actual else str(key)
+            if key in _SKIP_SUBTREES:
+                yield child_pattern, child_actual, item, (*contexts, value)
+            else:
+                yield from _semantic_walk(item, child_pattern, child_actual, (*contexts, value))
+    elif isinstance(value, (tuple, list)):
+        if not value:
+            yield pattern + "[]", actual + "[]", value, contexts
+        for index, item in enumerate(value):
+            yield from _semantic_walk(item, pattern + "[]", f"{actual}[{index}]", contexts)
+    else:
+        yield pattern, actual, value, contexts
+
+
+def _semantic_status(path: str, value: Any, contexts: tuple[dict[str, Any], ...],
+                     cut: Any, existing: list[MetricRow]) -> str:
+    if path.startswith("cash.horizons."):
+        parts = path.split(".")
+        actual_layer = parts[-1] if "layers_cents" in path else (
+            "UNDATED" if parts[-1] == "undated_cents" else "SCENARIO" if parts[-1] == "scenario_cents" else None)
+        if actual_layer is not None:
+            for row in existing:
+                if row.metric_id == "cash_layer_cents" and row.dimensions.get("layer") == actual_layer and row.value == value:
+                    return row.status
+    for context in reversed(contexts):
+        status = context.get("status")
+        if status in {"MEASURED", "ESTIMATED", "PARTIAL", "UNKNOWN", "NOT_APPLICABLE", "ERROR"}:
+            if value is not None and status in {"UNKNOWN", "ERROR"}:
+                return "PARTIAL"  # Recorded numerator/fact survives an unknown derived rate.
+            if value is None and status in {"MEASURED", "ESTIMATED"}:
+                return "NOT_APPLICABLE" if path.endswith((".value", ".markup", ".gross_margin", ".contribution_margin")) else "UNKNOWN"
+            return status
+    family = path.split(".", 1)[0].replace("[]", "")
+    if family == "cash":
+        coverage = cut.coverage_status("cash_events", cut.cutoff_at[:10])
+        if coverage in {"MISSING", "ERROR"} or value is None:
+            return "UNKNOWN"
+        return "PARTIAL" if coverage == "PARTIAL" else "MEASURED"
+    if family == "learning":
+        return "UNKNOWN" if value is None else "PARTIAL"
+    return "UNKNOWN" if value is None else "PARTIAL"
+
+
+def _semantic_publication(families: dict[str, Any], cut: Any, as_of: str,
+                          policy: Policy, existing: list[MetricRow]) -> tuple[list[MetricRow], dict[str, Any]]:
+    catalog = {path: {"kind": "metric", "metric_id": _semantic_id(path),
+                      "formula": formula} for path, formula in SEMANTIC_FORMULAS.items()}
+    rows = []
+    for pattern, actual, value, contexts in _semantic_walk(families):
+        if pattern in SEMANTIC_FORMULAS:
+            if isinstance(value, bool) or not isinstance(value, (int, str, type(None))):
+                raise ValueError("invalid semantic measure type")
+            family = pattern.split(".", 1)[0].replace("[]", "")
+            sources = _FAMILY_SOURCES[family]
+            status = _semantic_status(pattern, value, contexts, cut, existing)
+            dimensions = {"family_path": actual}
+            for context in contexts:
+                for key in ("sku_id", "channel_code", "cost_version_id", "purchase_order_id",
+                            "obligation_id", "budget_id", "drop_code", "delivery_cohort_id",
+                            "scenario_id", "window_start", "window_end"):
+                    if context.get(key) is not None:
+                        dimensions[key] = str(context[key])
+            refs = next((tuple(context["source_refs"]) for context in reversed(contexts)
+                         if "source_refs" in context), ())
+            if pattern.startswith("cash.horizons."):
+                horizon = actual.split(".")[2]
+                dimensions["horizon"] = horizon
+                period = next((context for context in reversed(contexts)
+                               if "start" in context and "end" in context), None)
+                if period is not None:
+                    dimensions["window_start"] = period["start"]
+                    dimensions["window_end"] = period["end"]
+                layer = (actual.rsplit(".", 1)[-1] if ".layers_cents." in actual else
+                         "UNDATED" if actual.endswith(".undated_cents") else
+                         "SCENARIO" if actual.endswith(".scenario_cents") else None)
+                if layer is not None:
+                    published_layer = next((row for row in existing if row.metric_id == "cash_layer_cents"
+                        and row.dimensions.get("horizon") == horizon and
+                        row.dimensions.get("layer") == layer), None)
+                    if published_layer is None or published_layer.value != value:
+                        raise ValueError("cash layer and semantic measure mismatch")
+                    status, refs = published_layer.status, published_layer.source_refs
+            digest = hashlib.sha256(actual.encode("utf-8")).hexdigest()[:20]
+            rows.append(_metric(_semantic_id(pattern), cut.cut_id, as_of, dimensions,
+                value, status, sources, refs, f"semantic:{cut.cut_id}:{digest}",
+                policy if family in {"cost", "economics", "cash", "budgets", "learning"} else None))
+        else:
+            key = pattern.rsplit(".", 1)[-1].replace("[]", "")
+            if pattern.endswith(".source_hashes"):
+                if not isinstance(value, dict) or any(
+                    name not in SOURCE_NAMES or digest != cut.source_hashes[f"{name}.csv"]
+                    for name, digest in value.items()):
+                    raise ValueError("family source hash mismatch")
+            elif key not in _FACT_KEYS and pattern not in {
+                "cash.horizons.{horizon}.weekly_layers_cents",
+                "cash.horizons.{horizon}.daily_closes_cents",
+                "cash.horizons", "budgets.sources[]", "budgets.targets[]",
+                "economics[].public_prices_by_version",
+                "learning[].variant_mix_by_channel[]", "learning[].recorded_unmet[]",
+                "learning[].cohort_rows[]", "exceptions[]", "sales_readiness[]",
+                "cost[]", "inventory[]", "purchases[]", "economics[]", "obligations[]",
+                "learning[]"}:
+                raise ValueError(f"unclassified family path: {pattern}")
+            catalog.setdefault(pattern, {"kind": "fact", "description":
+                "verified source, dimension, lineage, status, policy or control evidence"})
+    return rows, dict(sorted(catalog.items()))
+
+
 def _collect(cut: Any, as_of: str, policy: Policy) -> tuple[dict[str, Any], list[MetricRow]]:
-    start = cut.coverage["sales_aggregates"]["window_start"]
+    start = cut.coverage["sales_aggregates"]["window_start"] or min(
+        (entry["window_start"] for entry in cut.coverage.values()
+         if entry["window_start"] is not None), default=as_of)
     end = (date.fromisoformat(as_of) + timedelta(days=1)).isoformat()
     skus = [row[0] for row in cut.connection.execute("SELECT sku_id FROM sku_catalog ORDER BY sku_id")]
     channels = [row[0] for row in cut.connection.execute(
@@ -152,16 +488,32 @@ def _collect(cut: Any, as_of: str, policy: Policy) -> tuple[dict[str, Any], list
             FINANCE_DEFINITIONS["authoritative_outstanding_cents"].sources,
             tuple(obligation["source_refs"]), obligation["reconciliation_id"] + ":authoritative"))
     cash = project_cash(cut, as_of, policy)
-    metrics.append(cash["metric_row"])
+    if cash["metric_row"] is not None:
+        metrics.append(cash["metric_row"])
     for horizon, details in cash["horizons"].items():
-        for layer, value in details.items():
-            if layer not in {"committed_cents", "planned_cents", "scenario_cents", "undated_cents"}:
-                continue
+        layers = {**details["layers_cents"], "UNDATED": details["undated_cents"],
+                  "SCENARIO": details["scenario_cents"]}
+        lineage = (*cash["active_event_lineage"], *cash["scenario_event_lineage"])
+        for layer, value in layers.items():
+            matching = [event for event in lineage if event["level"] == layer and
+                (layer == "UNDATED" or event["event_date"] is not None and
+                 details["start"] <= event["event_date"] < details["end"])]
+            source_status = cash["domain_status"]
+            if source_status in {"MISSING", "ERROR"}:
+                status, published = "UNKNOWN", None
+            elif source_status == "PARTIAL":
+                status, published = "PARTIAL", value
+            elif layer == "RECONCILED":
+                status, published = "MEASURED", value
+            else:
+                status, published = "ESTIMATED", value
             metrics.append(_metric("cash_layer_cents", cut.cut_id, as_of,
-                {"scenario_id": cash["scenario_id"], "horizon": str(horizon), "layer": layer},
-                value, "ESTIMATED" if value is not None else "UNKNOWN",
+                {"scenario_id": cash["scenario_id"], "horizon": str(horizon), "layer": layer,
+                 "window_start": details["start"], "window_end": details["end"]},
+                published, status,
                 FINANCE_DEFINITIONS["cash_layer_cents"].sources,
-                tuple(cash["source_refs"]), f"cash-layer:{cut.cut_id}:{horizon}:{layer}:{as_of}", policy))
+                tuple(sorted(event["source_ref"] for event in matching)),
+                f"cash-layer:{cut.cut_id}:{horizon}:{layer}:{as_of}", policy))
     budgets = project_budgets(cut, as_of, policy)
     metrics.extend(row["metric_row"] for row in budgets["targets"])
     exceptions = project_exceptions(cut, as_of, policy)
@@ -172,13 +524,15 @@ def _collect(cut: Any, as_of: str, policy: Policy) -> tuple[dict[str, Any], list
                 "economics": economic_rows, "obligations": obligations, "cash": cash,
                 "budgets": budgets, "learning": learning_rows, "exceptions": exceptions,
                 "sales_readiness": sales}
+    semantic_rows, _ = _semantic_publication(families, cut, as_of, policy, metrics)
+    metrics.extend(semantic_rows)
     return families, metrics
 
 
 def _validate(cut: Any, policy: Policy, definitions: dict[str, MetricDefinition],
               metrics: list[MetricRow]) -> None:
-    if not metrics or set(definitions) != {row.metric_id for row in metrics}:
-        raise ValueError("metric registry and emitted rows differ")
+    if not metrics or {row.metric_id for row in metrics} - set(definitions):
+        raise ValueError("emitted metric lacks definition")
     reconciliations: set[str] = set()
     for row in metrics:
         definition = definitions[row.metric_id]
@@ -204,9 +558,12 @@ def _controls(metrics: list[MetricRow], exceptions: list[dict[str, Any]]) -> dic
                 "learning": LEARNING_DEFINITIONS}
     result: dict[str, Any] = {}
     for family, definitions in families.items():
-        selected = [row for row in metrics if row.metric_id in definitions]
-        if not selected:
-            raise ValueError("empty metric family")
+        semantic_families = {"cost_inventory": ("cost", "inventory", "purchases", "economics"),
+                             "finance": ("obligations", "cash", "budgets"),
+                             "learning": ("learning",)}[family]
+        selected = [row for row in metrics if row.metric_id in definitions or
+                    row.dimensions.get("family_path", "").split(".", 1)[0].split("[", 1)[0]
+                    in semantic_families]
         counts: dict[str, int] = {}
         for row in selected:
             counts[row.status] = counts.get(row.status, 0) + 1
@@ -253,9 +610,26 @@ def build_operating_marts(
         definitions = _definitions()
         families, metrics = _collect(cut, as_of, policy)
         _validate(cut, policy, definitions, metrics)
+        expected_semantic, catalog = _semantic_publication(families, cut, as_of, policy, metrics)
+        observed_semantic = {row.reconciliation_id: row for row in metrics
+                             if row.reconciliation_id.startswith("semantic:")}
+        if (len(observed_semantic) != len(expected_semantic) or
+            any(expected.metric_id not in definitions or
+                observed_semantic.get(expected.reconciliation_id) != expected
+                for expected in expected_semantic)):
+            raise ValueError("family measure and normalized metric mismatch")
         controls = _controls(metrics, families["exceptions"])
+        row_counts = {name: cut.connection.execute(f'SELECT COUNT(*) FROM "{name}"').fetchone()[0]
+                      for name in cut.coverage}
+        domain_coverage = {name: {**entry,
+            "row_count": row_counts[name],
+            "empty_reason": "MISSING_SOURCE" if entry["status"] == "MISSING" else
+                "DECLARED_ZERO" if entry["status"] == "ZERO" else
+                "NO_ROWS" if row_counts[name] == 0 else None}
+            for name, entry in sorted(cut.coverage.items())}
         registry = {name: asdict(definition) for name, definition in sorted(definitions.items())}
-        contract_hash = hashlib.sha256(canonical_json(registry)).hexdigest()
+        contract_hash = hashlib.sha256(canonical_json({"registry": registry,
+            "semantic_formulas": SEMANTIC_FORMULAS, "fact_keys": sorted(_FACT_KEYS)})).hexdigest()
         cut_id = cut.cut_id
         lineage = {"cut_id": cut_id, "cutoff_at": cut.cutoff_at,
                    "input_class": cut.input_class, "source_sha256": cut.source_hashes,
@@ -266,6 +640,8 @@ def build_operating_marts(
                       not policy.authorizes_real_cut else "SYNTHETIC_EXAMPLE" if
                       cut.input_class == "SYNTHETIC_EXAMPLE" else "APPROVED"}
         artifacts = {"registry.json": canonical_json(registry),
+                     "semantic_catalog.json": canonical_json(catalog),
+                     "domain_coverage.json": canonical_json(domain_coverage),
                      "metric_rows.json": canonical_json([asdict(row) for row in metrics]),
                      "metric_rows.csv": _csv_metric_rows(metrics),
                      "controls.json": canonical_json(controls),
