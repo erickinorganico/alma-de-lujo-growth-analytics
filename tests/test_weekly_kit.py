@@ -309,5 +309,75 @@ class ClientKitTests(unittest.TestCase):
                                         canonical_json(policy)))
 
 
+class GuideContractTests(unittest.TestCase):
+    creation = (
+        r".\run.ps1 weekly --source-pack <filled-pack-or-workbook> --policy <policy.json> "
+        r"--output-root .local/client-runs [--prior-register <register-dir> "
+        r"--prior-anchor <anchor.json>]"
+    )
+    resume_commands = (
+        r".\run.ps1 weekly-resume --run <private-run-dir> --action record --role <role> "
+        r"--response <response.json> --query-trace <trace.json> "
+        r"--dispatch-receipt <receipt.json>",
+        r".\run.ps1 weekly-resume --run <private-run-dir> --action submit --role <role> "
+        r"--response <response.json> --query-trace <trace.json> "
+        r"--dispatch-receipt <receipt.json>",
+        r".\run.ps1 weekly-resume --run <private-run-dir> --action resume",
+        r".\run.ps1 weekly-resume --run <private-run-dir> --action packet",
+        r".\run.ps1 weekly-resume --run <private-run-dir> --action register --register "
+        r"<register-dir> --decision-event <owner-decision.json>",
+    )
+
+    def test_analyst_runbook_has_exact_commands_and_operating_boundaries(self) -> None:
+        text = (ROOT / "docs" / "ANALYST-WEEKLY-v1.md").read_text("utf-8")
+        self.assertIn(self.creation, text)
+        for command in self.resume_commands:
+            self.assertIn(command, text)
+        required = (
+            "--help", "canonical source pack", "<output-root>/<cut_id>/",
+            "both or neither", "git archive", "WAITING", "BLOCKED", "REVIEW",
+            "agents/RUN-NATIVE-CYCLE.md", "Terra", "Luna", "Sol", "Astra",
+            "stage receipts", "READY_FOR_OWNER", "decision-event",
+            "carry-forward", "closure", ".local/", "no upload", "no sync",
+            "no external business execution",
+        )
+        lowered = text.lower()
+        for phrase in required:
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase.lower(), lowered)
+
+    def test_client_guides_start_with_sources_policies_and_public_only_journey(self) -> None:
+        markdown = (ROOT / "client" / "v1" / "EMPIEZA_AQUI.md").read_text("utf-8")
+        html = (ROOT / "client" / "v1" / "GUIA_SEMANAL.html").read_text("utf-8")
+        joined = f"{markdown}\n{html}".lower()
+        for phrase in (
+            "22 tablas", "plantilla vacía", "review", "synthetic_example",
+            "vacío no significa cero", "copia privada", "demo pública",
+            "informativo y sintético", "no contiene el runtime de analistas",
+            "no puede ejecutar un corte privado", "waiting", "blocked", "review",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, joined)
+        self.assertIn("../PORTAL/index.html", joined)
+        self.assertIn("../FUENTES/operating-v1-blank.xlsx", joined)
+        self.assertNotIn(self.creation.lower(), joined)
+
+    def test_real_guides_are_packaged_and_all_extracted_links_audit_cleanly(self) -> None:
+        with weekly_home() as home:
+            output = home / "alma-os-client-v1.zip"
+            result = build_client_kit(output)
+            self.assertEqual("PASS", result["status"])
+            self.assertEqual("PASS", audit_client_zip(output)["status"])
+            with zipfile.ZipFile(output) as bundle:
+                self.assertEqual(
+                    (ROOT / "client" / "v1" / "EMPIEZA_AQUI.md").read_bytes(),
+                    bundle.read("INICIO/EMPIEZA_AQUI.md"),
+                )
+                self.assertEqual(
+                    (ROOT / "client" / "v1" / "GUIA_SEMANAL.html").read_bytes(),
+                    bundle.read("INICIO/GUIA_SEMANAL.html"),
+                )
+
+
 if __name__ == "__main__":
     unittest.main()
