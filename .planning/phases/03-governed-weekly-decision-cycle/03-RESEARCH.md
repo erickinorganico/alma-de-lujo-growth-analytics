@@ -161,11 +161,11 @@ The first three functions and atomic writer exist; the `evidence` shape is a Pha
 
 | Requirement | Essential acceptance/negative controls | Suggested file |
 |---|---|---|
-| FLOW-01 | Workbook and source-pack paths yield the same verified cut identity/report scope; report/source byte mutation blocks task generation; malformed/partial input cannot become `READY_FOR_OWNER`. | `tests/test_weekly_cycle.py` (Wave 0) |
-| FLOW-02 | Valid actual-style response fixture accepts; stale request/evidence hash, nonexistent/invalid pointer, changed exact value, `null→0`, wrong role, extra fields, external action and workspace write attempt fail. | `tests/test_native_agents_v1.py` (Wave 0) |
-| FLOW-03 | Different native IDs pass; same ID with different model, changed analyst after reviewer dispatch, changed mart/report after dispatch, altered receipt and reviewer `BLOCKED` fail terminal approval. | `tests/test_weekly_cycle.py` (Wave 0) |
-| FLOW-04 | Packet visibly preserves four categories and all recommendation fields; tampering packet or event journal fails status/resume. | `tests/test_weekly_cycle.py` (Wave 0) |
-| FLOW-05 | Two distinct weekly cuts: register reviewed decision, carry open one with original source hash, flag overdue one stale, close one with exact next-cut evidence; reject forged closure, duplicate ID, unknown owner/date, CSV formula injection and prior-anchor tamper. | `tests/test_decision_register.py` (Wave 0) |
+| FLOW-01 | The source-pack entry builds/verifies the Phase 1 workspace and Phase 2 bundle before task publication; a downstream workbook-derived cut is accepted only after it produces that same canonical workspace identity. Report/source byte mutation blocks task generation; malformed/partial input cannot become `READY_FOR_OWNER`. | `tests/test_weekly_cycle.py` (written test-first in Plan 03-01) |
+| FLOW-02 | Valid actual-style response fixture accepts; stale request/evidence hash, nonexistent/invalid pointer, changed exact value, `null→0`, wrong role, extra fields, external action, workspace write attempt, missing registered-query trace or changed trace hash fail. | `tests/test_native_agents_v1.py` (written test-first in Plan 03-02) |
+| FLOW-03 | Different native IDs pass; same ID with different model, changed analyst after reviewer dispatch, changed mart/report after dispatch, altered response/dispatch/query-trace receipt and reviewer `BLOCKED` fail terminal approval. | `tests/test_weekly_cycle.py` (written test-first in Plan 03-02) |
+| FLOW-04 | Packet visibly preserves four categories and all recommendation fields; tampering packet or event journal fails status/resume. | `tests/test_weekly_cycle.py` (written test-first in Plan 03-02) |
+| FLOW-05 | Two distinct weekly cuts: register reviewed decision, carry open one with original source hash, flag overdue one stale, close one with exact next-cut evidence; reject forged closure, duplicate ID, unknown owner/date, CSV formula injection and prior-anchor tamper. | `tests/test_decision_register.py` (written test-first in Plan 03-03) |
 
 Test temporary synthetic cuts only. `tests/test_process_engine.py` already demonstrates small fixtures, changed evidence, distinct reviewer, journal tamper and terminal packet tamper. Phase 5 owns broader release/E2E gates, but Phase 3 must prove its own two-cut register behavior before handoff. [VERIFIED: `tests/test_process_engine.py`, `.planning/ROADMAP.md`]
 
@@ -197,11 +197,11 @@ OWASP ASVS 5.0 is web-application guidance; this local CLI has no browser login/
 | A2 | [ASSUMED] Phase 2 will expose report/mart JSON and metric definitions consumable without querying private mutable data during native review. | Task bundle needs an export step or tighter evidence subset. |
 | A3 | [ASSUMED] Owner identity/attestation is a local declared field rather than a cryptographically authenticated login. | If business requires authenticated signoff, Phase 3 cannot claim that assurance. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Exact Phase 1–2 artifact names and manifest schema:** wait for those phase interfaces; keep the bridge behind a versioned adapter rather than guessing field names. [ASSUMED]
-2. **Business definition of “stale”:** recommend `due_date < next_cutoff` with no valid closure and no owner-approved extension event. Confirm during plan review if a different policy is needed. [ASSUMED]
-3. **Owner approval evidence:** software can validate an explicit local entry and artifact hash but cannot authenticate an owner from a CSV cell alone. Keep approval provenance visible as an attestation, not a cryptographic claim. [VERIFIED: `.planning/REQUIREMENTS.md`; RECOMMENDATION]
+1. **Exact Phase 1–2 artifact names and manifest schema — RESOLVED:** Plan 03-01 depends on completed Plan 02-03 and must read the Phase 1–2 summaries before editing. It binds the implemented verifier/build exports named there through one versioned adapter. The Phase 3 entry accepts a v1 source-pack path and invokes those actual APIs; direct v1 workbook preparation remains Phase 4 ownership and may enter the cycle only after it produces the same verified Phase 1 workspace and Phase 2 bundle. No research-era filename is preserved when the implemented interface differs. [RESOLVED: `03-CONTEXT.md` D-01/D-02 and phase boundary]
+2. **Business definition of “stale” — RESOLVED:** At the next verified cutoff, compare the decision due date with the cutoff's local date in its declared IANA timezone. An unresolved item becomes `STALE` when `due_date < cutoff_local_date`, unless an accepted extension event was recorded before that cutoff. [RESOLVED: `03-CONTEXT.md` D-08]
+3. **Owner approval evidence — RESOLVED:** Phase 3 validates an explicit local owner-role attestation and bound artifact hashes. It does not claim cryptographic authentication. Human-judgment closure remains `REVIEW` until a separate allowlisted owner attestation is recorded; authenticated owner identity remains external gate EXT-01. [RESOLVED: `03-CONTEXT.md` D-07/D-08 and Deferred Ideas]
 
 ## Sources
 

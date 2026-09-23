@@ -38,7 +38,7 @@ Phase 3 covers `FLOW-01..05`: a verified current-cut/task bundle, real native an
 | Source | Item | Plan | Status |
 |--------|------|------|--------|
 | GOAL | Evidence-bound native analysis, independent review, owner-ready packet and next-cut continuity | 03-01, 03-02, 03-03 | COVERED |
-| REQ | FLOW-01 current-cut report and evidence-hash-bound task bundle from workbook/source pack | 03-01 | COVERED |
+| REQ | FLOW-01 current-cut report and evidence-hash-bound task bundle through the v1 source-pack route; Phase 4 workbook preparation must converge on the same verified Phase 1/2 boundary | 03-01 | COVERED |
 | REQ | FLOW-02 schema, exact current-cut references and read-only native response boundary | 03-02 | COVERED |
 | REQ | FLOW-03 distinct native review and stale/changed evidence failure | 03-02 | COVERED |
 | REQ | FLOW-04 terminal facts/unknowns/hypotheses/recommendations and complete action contract | 03-02 | COVERED |
@@ -53,4 +53,4 @@ Phase 3 covers `FLOW-01..05`: a verified current-cut/task bundle, real native an
 | CONTEXT | D-07, D-08 | 03-03 | COVERED |
 | CONTEXT | D-09 | 03-01, 03-02, 03-03 | COVERED |
 
-The exact Phase 1 and Phase 2 module signatures are a dependency, not an open product decision. Plan 03-01 begins by reading their completed summaries and binding the actual verified workspace and derived-bundle APIs. It must not preserve a guessed research-era filename or schema when the implemented interface differs.
+The exact Phase 1 and Phase 2 module signatures are a dependency, not an open product decision. Plan 03-01 begins by reading their completed summaries, binding the actual build/verification APIs, and exposing a source-pack route that produces those verified artifacts before starting the cycle. Direct v1 workbook preparation stays in Phase 4; a workbook-derived cut may enter Phase 3 only after it resolves to the same canonical Phase 1 workspace and Phase 2 bundle. Plan 03-01 must not preserve a guessed research-era filename or schema when the implemented interface differs.
