@@ -16,11 +16,11 @@ Provide fast, deterministic evidence after every implementation task and reserve
 
 | Layer | Evidence | Rule |
 |---|---|---|
-| Contract | Focused `unittest` module or class | Runs after each TDD task and must distinguish pass from fail. |
+| Contract | Focused `unittest` plus named `$defs` validation through PowerShell `Test-Json` | Runs after each TDD task, validates real producer artifacts and must distinguish pass from fail without printing private JSON. |
 | Integration | Weekly-cycle, historical process and decision suites | Revalidates upstream bytes, event chains, state projections and compatibility. |
 | Live native acceptance | Actual native task IDs plus response, registered-query-trace and dispatch hashes | Runs once in Plan 03-02 Task 3; deterministic fixtures cannot satisfy this gate. |
 | Privacy | Exact public-receipt allowlist plus `scripts/audit_release.py` | Public evidence may contain synthetic metadata, hashes and statuses only. |
-| Full regression | `unittest discover` | Runs at the terminal task of Plans 03-01 and 03-03. |
+| Full regression | `unittest discover` | Runs at the terminal task of Plans 03-01, 03-03 and gap closure 03-04. |
 
 Project interpreter: `.venv\Scripts\python.exe`. Commands must not use watch mode. Focused checks are the feedback path; full discovery and the release audit are terminal gates rather than per-edit checks.
 
@@ -33,6 +33,8 @@ Project interpreter: `.venv\Scripts\python.exe`. Commands must not use watch mod
 | FLOW-03 | Reviewer request binds every response, trace and dispatch digest; Astra identity differs from all analyst identities. | Same task ID with another model, changed accepted analysis/trace, changed evidence, altered receipt, reviewer `BLOCKED`. | COVERED |
 | FLOW-04 | Terminal packet preserves facts, unknowns, hypotheses, recommendations, reviewer challenges and provenance; every recommendation has the complete action contract. | Missing category/action field, invented fact, tampered packet/event journal, external execution request. | COVERED |
 | FLOW-05 | Two distinct cuts prove register, carry-forward, stale, extension and typed closure or explicit human attestation. | Bad prior anchor, duplicate IDs, invalid transition, formula injection, forged/same-cut closure, failed predicate, missing attestation. | COVERED |
+
+The 03-04 gap closure additionally requires the produced terminal packet and both current-cut variants to validate against their named Draft 2020-12 definitions. Contract negatives remove required fields, add undeclared fields, corrupt hashes/types/anchors and change execution authority. This closes schema drift without changing producer semantics.
 
 ## Per-task automated verification
 
@@ -47,6 +49,8 @@ Project interpreter: `.venv\Scripts\python.exe`. Commands must not use watch mod
 | 3 | 03-03 / 1 | `.venv\Scripts\python.exe -m unittest tests.test_decision_register.DecisionRegisterContractTests -v` | Only intact owner-ready recommendations create append-only owner decisions. |
 | 3 | 03-03 / 2 | `.venv\Scripts\python.exe -m unittest tests.test_decision_register.DecisionContinuityTests tests.test_weekly_cycle -v` | Later cut carries open work, flags stale work and closes only with valid evidence/attestation. |
 | 3 | 03-03 / 3 | `.venv\Scripts\python.exe -m unittest tests.test_decision_register tests.test_weekly_cycle tests.test_native_agents_v1 tests.test_lifecycle tests.test_decisions tests.test_process_engine -v && .venv\Scripts\python.exe -m unittest discover -s tests -q && .venv\Scripts\python.exe scripts/audit_release.py` | All Phase 3, historical, full-regression and privacy gates pass. |
+| 4 | 03-04 / 1 | `.venv\Scripts\python.exe -m unittest tests.test_weekly_cycle_schema.WeeklyCycleJsonSchemaTests -v` | Real terminal packet, first cut and governed later cut pass named schema fragments; missing/extra/hash/authority mutations fail. |
+| 4 | 03-04 / 2 | `.venv\Scripts\python.exe -m unittest tests.test_weekly_cycle_schema tests.test_weekly_cycle tests.test_native_agents_v1 tests.test_decision_register tests.test_process_engine tests.test_client_review -v && .venv\Scripts\python.exe -m unittest discover -s tests -q && .venv\Scripts\python.exe scripts/audit_release.py` | Phase 3 exchange, historical behavior, public receipt privacy and full regression remain green. |
 
 ## Nyquist assessment
 
@@ -57,6 +61,7 @@ Every implementation task has an automated command, and none is marked missing, 
 | 1 | 3 | 3 | PASS — 3/3 |
 | 2 | 3 | 3 | PASS — 3/3 |
 | 3 | 3 | 3 | PASS — 3/3 |
+| 4 | 2 | 2 | PASS — 2/2 |
 
 No three-task window lacks automated feedback. Focused module/class commands are the quick feedback loop. Full discovery, actual native acceptance and privacy audit may take longer and therefore appear only at plan terminal tasks.
 
@@ -83,4 +88,4 @@ A schema-valid fixture, hand-authored response, missing trace, historical v0.2 p
 
 ## Overall
 
-Nyquist compliance: PASS. All nine implementation tasks have executable automated feedback, all three waves maintain continuous sampling, and the live/native and public/privacy claims have dedicated terminal gates.
+Nyquist compliance: PASS. All eleven implementation tasks have executable automated feedback, all four waves maintain continuous sampling, and the schema, live/native and public/privacy claims have dedicated terminal gates.
