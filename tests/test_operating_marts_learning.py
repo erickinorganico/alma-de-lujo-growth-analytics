@@ -53,5 +53,55 @@ class LearningTests(unittest.TestCase):
                 self.assertFalse(any(row["channel_code"] == "synthetic:wholesale" for row in learning["recorded_unmet"]))
 
 
+class ExceptionTests(unittest.TestCase):
+    def test_actionable_exceptions_and_public_projection(self) -> None:
+        from alma.operating_learning_exceptions import project_exceptions, sales_readiness_projection
+
+        policy = load_policy(POLICY, as_of="2026-09-21", real_cut=False)
+        with tempfile.TemporaryDirectory() as tmp:
+            result = build_operating_workspace(PACK, private_root=tmp)
+            with bind_cut(result["destination"]) as cut:
+                exceptions = project_exceptions(cut, "2026-09-21", policy)
+                categories = {row["category"] for row in exceptions}
+                self.assertIn("COST_INCOMPLETE", categories)
+                self.assertIn("RECEIPT_UNINSPECTED", categories)
+                self.assertIn("QUALITY_HOLD", categories)
+                self.assertEqual(len(exceptions), len({row["exception_id"] for row in exceptions}))
+                for row in exceptions:
+                    self.assertTrue(row["owner_role"])
+                    self.assertTrue(row["next_action_code"])
+                    self.assertEqual("UNRESOLVED", row["closure_status"])
+                public = sales_readiness_projection(cut, exceptions, policy)
+                self.assertTrue(all(row["category"] in {"SALES_READINESS", "QUALITY_HOLD", "LOAN_RETURN_DUE"} for row in public))
+                self.assertFalse(any("cost" in key.lower() or "recipient" in key.lower()
+                                     for row in public for key in row))
+
+    def test_overdue_and_missing_custody_are_distinct(self) -> None:
+        from alma.operating_learning_exceptions import loan_issue
+
+        overdue = {"loan_id": "loan-1", "sku_id": "sku-1", "due_date": "2026-09-10",
+                   "returned_date": None, "status_code": "OPEN", "borrowed_date": "2026-09-01"}
+        self.assertEqual("LOAN_RETURN_DUE", loan_issue(overdue, has_return_movement=False,
+            as_of="2026-09-21", grace_days=0))
+        self.assertEqual("CUSTODY_EVIDENCE_MISSING", loan_issue(dict(overdue, returned_date="2026-09-20",
+            status_code="RETURNED"), has_return_movement=False, as_of="2026-09-21", grace_days=0))
+
+    def test_sales_fields_categories_and_values_are_allowlisted(self) -> None:
+        from alma.operating_learning_exceptions import validate_sales_row
+
+        safe = {"category": "SALES_READINESS", "sku_id": "synthetic:sku-001",
+                "public_variant": "synthetic:variant-001", "issue_code": "BLOCKED",
+                "owner_role": "COMMERCIAL_OWNER", "next_action_code": "RESOLVE_READINESS_BLOCK",
+                "due_date": None, "closure_state": "OPEN"}
+        validate_sales_row(safe)
+        for bad in (dict(safe, cost_cents=100), dict(safe, category="COST_INCOMPLETE"),
+                    dict(safe, public_variant="supplier_account_123"),
+                    dict(safe, next_action_code="BANK_TRANSFER"),
+                    dict(safe, owner_role="person@example.com")):
+            with self.subTest(bad=bad):
+                with self.assertRaises(ValueError):
+                    validate_sales_row(bad)
+
+
 if __name__ == "__main__":
     unittest.main()
