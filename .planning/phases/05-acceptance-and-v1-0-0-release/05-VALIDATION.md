@@ -1,7 +1,8 @@
 ---
 phase: 05
 slug: acceptance-and-v1-0-0-release
-status: approved
+status: architecture-approved
+execution_status: pending
 nyquist_compliant: true
 wave_0_complete: true
 created: 2026-09-22
@@ -67,4 +68,4 @@ No separate Wave 0 plan is required. Every implementation task that introduces a
 - [x] External states have fail-closed validators and cannot be upgraded by local or fixture evidence.
 - [x] The command/file names and Python 3.12 boundary match `05-01/02/03-PLAN.md`.
 
-**Approval:** validation architecture is internally complete. Execution remains BLOCKED until the actual native, Excel, same-SHA CI and published-release readback evidence exists.
+**Validation architecture approval:** internally complete. **Release execution:** PENDING and remains BLOCKED until the actual native, Excel, same-SHA CI and published-release readback evidence exists. No acceptance summary may label the release approved before those external receipts pass.
