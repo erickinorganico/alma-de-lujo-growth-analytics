@@ -8,6 +8,7 @@ import re
 import shutil
 import tempfile
 from dataclasses import asdict
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -114,10 +115,16 @@ def _role_gate(report: dict[str, Any], role: str) -> tuple[str, list[str]]:
     required = ROLE_REQUIRED_SOURCES[role]
     blocked = [name for name in required if report["coverage"][name]["status"]
                in {"MISSING", "ERROR", "NOT_APPLICABLE"}]
+    if role == "finance_analyst" and report["quality"]["cash_evidence"] == "MISSING":
+        blocked.append("cash_balance_evidence")
+    if role == "returns_analyst" and report["quality"]["cohort_links"] != "PASS":
+        blocked.append("cohort_links")
     if blocked:
-        return "BLOCKED_EVIDENCE", blocked
+        return "BLOCKED_EVIDENCE", sorted(set(blocked))
     if any(report["coverage"][name]["status"] in {"PARTIAL", "ESTIMATED"}
            for name in required):
+        return "REVIEW", []
+    if role == "finance_analyst" and report["quality"]["cash_evidence"] == "MIXED":
         return "REVIEW", []
     return "READY_FOR_ANALYSIS", []
 
@@ -280,6 +287,8 @@ def start_cycle(workspace: str | Path, mart_bundle: str | Path, output_root: str
     if not chosen or len(chosen) > len(DEFAULT_ROLES) or len(set(chosen)) != len(chosen) or \
             any(role not in ROLE_MODELS for role in chosen):
         raise ValueError("invalid analyst role set")
+    if _input_route not in {"verified_boundary", "source_pack"}:
+        raise ValueError("invalid cycle input route")
     chosen = tuple(sorted(chosen))
     report, manifest_hash, mart_hash = _verified_report(workspace, mart_bundle)
     report["task_scope"] = list(chosen)
@@ -300,6 +309,7 @@ def start_cycle(workspace: str | Path, mart_bundle: str | Path, output_root: str
         "accepted_roles": {}, "workspace_path": str(_path(workspace, existing=True)),
         "mart_bundle_path": str(_path(mart_bundle, existing=True))}
     event = {"sequence": 1, "previous_hash": "GENESIS", "event_type": "TASKS_PREPARED",
+             "recorded_at_utc": datetime.now(timezone.utc).isoformat(),
              "checkpoint": state, "details": {"request_count": len(chosen),
                                                "current_cut_sha256": report_hash}}
     event["hash"] = _digest(canonical_json(event))

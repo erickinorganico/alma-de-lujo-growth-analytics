@@ -4,6 +4,8 @@ from __future__ import annotations
 import hashlib
 import json
 import shutil
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -189,3 +191,59 @@ class WeeklyCycleTaskBundleTests(unittest.TestCase):
             request.write_bytes(original + b"\n")
             with self.assertRaises(ValueError):
                 verify_cycle(first["destination"])
+
+
+class WeeklyCycleCLITests(unittest.TestCase):
+    def _run(self, *arguments: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run([sys.executable, str(ROOT / "scripts" / "run_weekly_cycle.py"),
+            *arguments], text=True, capture_output=True, check=False)
+
+    def test_source_pack_start_status_verify_and_tamper(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            args = ("start", "--source-pack", str(PACK), "--operating-root",
+                str(home / "operating"), "--mart-root", str(home / ".local" / "operating-marts"),
+                "--output-root", str(home / ".local" / "weekly-cycles"))
+            first = self._run(*args)
+            self.assertEqual(0, first.returncode, first.stderr)
+            receipt = json.loads(first.stdout)
+            self.assertEqual("WAITING_ANALYSTS", receipt["status"])
+            self.assertEqual("source_pack", receipt["input_route"])
+            self.assertEqual(6, len(receipt["requests"]))
+            self.assertNotIn("source_sha256", receipt)
+            self.assertNotIn("metric_rows", receipt)
+            for command in ("status", "verify"):
+                checked = self._run(command, "--cycle", receipt["destination"])
+                self.assertEqual(0, checked.returncode, checked.stderr)
+                self.assertEqual(receipt, json.loads(checked.stdout))
+            repeated = self._run(*args)
+            self.assertEqual(0, repeated.returncode, repeated.stderr)
+            self.assertEqual(receipt, json.loads(repeated.stdout))
+            request = Path(receipt["requests"]["finance_analyst"])
+            request.write_bytes(request.read_bytes() + b"\n")
+            damaged = self._run("verify", "--cycle", receipt["destination"])
+            self.assertEqual(2, damaged.returncode)
+            self.assertEqual("cycle_verification_failed", json.loads(damaged.stderr)["code"])
+
+    def test_prebuilt_route_and_argument_rejections(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            cut, mart = upstream(home)
+            output = home / ".local" / "weekly-cycles"
+            started = self._run("start", "--workspace", str(cut), "--mart-bundle",
+                str(mart), "--output-root", str(output))
+            self.assertEqual(0, started.returncode, started.stderr)
+            self.assertEqual("verified_boundary", json.loads(started.stdout)["input_route"])
+            for arguments, code in (
+                (("start", "--workspace", str(cut), "--output-root", str(output)),
+                 "select exactly one route: --source-pack or --workspace with --mart-bundle"),
+                (("start", "--source-pack", str(PACK), "--workspace", str(cut),
+                  "--mart-bundle", str(mart), "--output-root", str(output)),
+                 "select exactly one route: --source-pack or --workspace with --mart-bundle"),
+                (("start", "--workbook", "example.xlsx", "--output-root", str(output)),
+                 "direct workbook preparation belongs to Phase 4"),
+            ):
+                with self.subTest(arguments=arguments):
+                    rejected = self._run(*arguments)
+                    self.assertEqual(2, rejected.returncode)
+                    self.assertEqual(code, json.loads(rejected.stderr)["code"])
