@@ -341,14 +341,23 @@ def _semantic_walk(value: Any, pattern: str = "", actual: str = "",
 
 def _semantic_status(path: str, value: Any, contexts: tuple[dict[str, Any], ...],
                      cut: Any, existing: list[MetricRow]) -> str:
-    if path.startswith("cash.horizons."):
-        parts = path.split(".")
-        actual_layer = parts[-1] if "layers_cents" in path else (
-            "UNDATED" if parts[-1] == "undated_cents" else "SCENARIO" if parts[-1] == "scenario_cents" else None)
-        if actual_layer is not None:
-            for row in existing:
-                if row.metric_id == "cash_layer_cents" and row.dimensions.get("layer") == actual_layer and row.value == value:
-                    return row.status
+    if path.startswith("cash."):
+        cash = next((context for context in reversed(contexts)
+                     if "domain_status" in context and "close_status" in context), None)
+        if cash is not None:
+            coverage = cash["domain_status"]
+            if path == "cash.reconciled_close_cents":
+                return cash["close_status"]
+            if value is None or coverage in {"MISSING", "ERROR"}:
+                return "UNKNOWN"
+            if coverage == "PARTIAL":
+                return "PARTIAL"
+            if path == "cash.actual_movements_cents":
+                return "MEASURED"
+            if path.startswith("cash.horizons."):
+                observed_layer = path.endswith((".layers_cents.RECONCILED",
+                                                ".weekly_layers_cents.{week}.RECONCILED"))
+                return "MEASURED" if observed_layer else "ESTIMATED"
     for context in reversed(contexts):
         status = context.get("status")
         if status in {"MEASURED", "ESTIMATED", "PARTIAL", "UNKNOWN", "NOT_APPLICABLE", "ERROR"}:
@@ -389,6 +398,16 @@ def _semantic_publication(families: dict[str, Any], cut: Any, as_of: str,
                         dimensions[key] = str(context[key])
             refs = next((tuple(context["source_refs"]) for context in reversed(contexts)
                          if "source_refs" in context), ())
+            cash_context = next((context for context in reversed(contexts)
+                if "active_event_lineage" in context and "domain_status" in context), None)
+            if cash_context is not None and pattern == "cash.reconciled_close_cents":
+                close_row = next((row for row in existing if row.metric_id ==
+                    "reconciled_cash_close_cents"), None)
+                if close_row is not None:
+                    refs = close_row.source_refs
+            elif cash_context is not None and pattern == "cash.actual_movements_cents":
+                refs = tuple(sorted(event["source_ref"] for event in
+                    cash_context["active_event_lineage"] if event["level"] == "RECONCILED"))
             if pattern.startswith("cash.horizons."):
                 horizon = actual.split(".")[2]
                 dimensions["horizon"] = horizon
@@ -407,6 +426,27 @@ def _semantic_publication(families: dict[str, Any], cut: Any, as_of: str,
                     if published_layer is None or published_layer.value != value:
                         raise ValueError("cash layer and semantic measure mismatch")
                     status, refs = published_layer.status, published_layer.source_refs
+                elif cash_context is not None and period is not None and ".weekly_layers_cents." in pattern:
+                    week = int(actual.split(".")[4])
+                    level = actual.rsplit(".", 1)[-1]
+                    refs = tuple(sorted(event["source_ref"] for event in cash_context["active_event_lineage"]
+                        if event["level"] == level and event["event_date"] is not None and
+                        period["start"] <= event["event_date"] < period["end"] and
+                        (date.fromisoformat(event["event_date"]) - date.fromisoformat(period["start"])).days // 7 == week))
+                elif cash_context is not None and period is not None and (
+                    ".daily_closes_cents." in pattern or pattern.endswith(".daily_minimum_cents")):
+                    events = cash_context["active_event_lineage"]
+                    event_refs = {event["source_ref"] for event in events}
+                    baseline_refs = set(cash_context["source_refs"]) - event_refs
+                    end_day = (actual.rsplit(".", 1)[-1] if ".daily_closes_cents." in pattern
+                               else period["end"])
+                    relevant = {event["source_ref"] for event in events if
+                        event["level"] == "RECONCILED" or
+                        (event["level"] in {"COMMITTED", "EXPECTED"} and
+                         event["event_date"] is not None and
+                         period["start"] <= event["event_date"] < period["end"] and
+                         event["event_date"] <= end_day)}
+                    refs = tuple(sorted(baseline_refs | relevant))
             digest = hashlib.sha256(actual.encode("utf-8")).hexdigest()[:20]
             rows.append(_metric(_semantic_id(pattern), cut.cut_id, as_of, dimensions,
                 value, status, sources, refs, f"semantic:{cut.cut_id}:{digest}",

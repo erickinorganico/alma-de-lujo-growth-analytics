@@ -65,6 +65,8 @@ class PublicationGapTests(unittest.TestCase):
             dest = Path(result["destination"])
             families = json.loads((dest / "families.json").read_text(encoding="utf-8"))
             metrics = json.loads((dest / "metric_rows.json").read_text(encoding="utf-8"))
+            with (dest / "metric_rows.csv").open(newline="", encoding="utf-8") as stream:
+                self.assertEqual(len(metrics), len(list(csv.DictReader(stream))))
             self.assertEqual(1100000, families["cash"]["reconciled_close_cents"])
             self.assertEqual((1100000, "MEASURED"), next((row["value"], row["status"])
                 for row in metrics if row["metric_id"] == "reconciled_cash_close_cents"))
@@ -114,6 +116,8 @@ class PublicationGapTests(unittest.TestCase):
                     self.assertEqual(total, details["layers_cents"][layer])
                 self.assertEqual(total, details["scenario_cents"])
                 self.assertEqual(minimum, details["daily_minimum_cents"])
+                day55 = (date(2026, 9, 21) + timedelta(days=55)).isoformat()
+                self.assertEqual(1099978, details["daily_closes_cents"][day55])
                 for layer in ("COMMITTED", "EXPECTED", "SCENARIO"):
                     row = next(row for row in metrics if row["metric_id"] == "cash_layer_cents"
                         and row["dimensions"].get("horizon") == str(horizon)
@@ -131,6 +135,13 @@ class PublicationGapTests(unittest.TestCase):
             self.assertEqual(-11, families["cash"]["horizons"]["56"]["weekly_layers_cents"]["7"]["EXPECTED"])
             self.assertEqual(-13, families["cash"]["horizons"]["91"]["weekly_layers_cents"]["8"]["EXPECTED"])
             self.assertEqual(-17, families["cash"]["horizons"]["91"]["weekly_layers_cents"]["12"]["EXPECTED"])
+            for horizon, week, offset in ((56, 7, 55), (91, 8, 56), (91, 12, 90)):
+                weekly = next(row for row in metrics if row["dimensions"].get("family_path") ==
+                    f"cash.horizons.{horizon}.weekly_layers_cents.{week}.EXPECTED")
+                self.assertEqual(("ESTIMATED", [f"synthetic:source:cash-expected-{offset}"]),
+                    (weekly["status"], weekly["source_refs"]))
+            self.assertFalse(any(row["dimensions"].get("family_path", "").endswith(".2026-12-21")
+                                 for row in metrics))
 
     def test_missing_cash_retains_balances_and_publishes_unknown(self) -> None:
         for event_status in ("MISSING", "ZERO"):
