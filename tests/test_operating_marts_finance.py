@@ -67,6 +67,19 @@ class ObligationTests(unittest.TestCase):
 
 
 class CashTests(unittest.TestCase):
+    def test_observed_inflow_without_payable_is_valid(self) -> None:
+        from alma.operating_finance_marts import active_cash_events
+
+        observed = {"event_id": "observed-inflow", "economic_event_id": "sale-inflow",
+                    "supersedes_event_id": None, "scenario_id": "observed",
+                    "event_date": "2026-09-18", "level": "RECONCILED",
+                    "direction": "INFLOW", "amount_cents": 100,
+                    "obligation_id": None, "payment_id": None, "source_ref": "observed:bank:1"}
+        self.assertEqual([observed], active_cash_events([observed], "2026-09-21"))
+        with self.assertRaises(ValueError):
+            active_cash_events([dict(observed, direction="OUTFLOW", obligation_id="payable-1")],
+                               "2026-09-21")
+
     def test_settled_event_supersedes_commitment_and_window_boundaries(self) -> None:
         from alma.operating_finance_marts import active_cash_events, cash_horizons
 
