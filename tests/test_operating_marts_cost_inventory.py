@@ -71,6 +71,13 @@ class MartContractTests(unittest.TestCase):
         self.assertEqual("SYNTHETIC_EXAMPLE", policy.status)
         self.assertFalse(policy.authorizes_real_cut)
         self.assertEqual(64, len(policy.sha256))
+        self.assertEqual("active_leaf_precedence", policy.content["bases"]["cash_projection_selection"])
+        self.assertEqual("daily_minimum_cents", policy.content["bases"]["cash_floor_basis"])
+        self.assertEqual(
+            "approved_minus_open_commitment_minus_allocated_incurred",
+            policy.content["bases"]["budget_headroom_basis"],
+        )
+        self.assertEqual(0, policy.content["thresholds"]["minimum_cash_floor_cents"])
         with self.assertRaises(ValueError):
             load_policy(policy_path, as_of="2030-01-01", real_cut=False)
         with self.assertRaises(ValueError):

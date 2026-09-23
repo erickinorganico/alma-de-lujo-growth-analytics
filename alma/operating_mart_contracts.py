@@ -153,7 +153,8 @@ def load_policy(path: str | Path, *, as_of: str, real_cut: bool) -> Policy:
     if not isinstance(content["bases"], dict) or not isinstance(content["thresholds"], dict) or not isinstance(content["maturity_windows"], dict):
         raise ValueError("invalid policy bases")
     required_bases = {"landed_cost_inclusions", "revenue_basis", "cogs_basis", "variable_cost_basis",
-                      "tax_basis", "shipping_basis", "discount_basis"}
+                      "tax_basis", "shipping_basis", "discount_basis", "cash_projection_selection",
+                      "cash_floor_basis", "budget_headroom_basis"}
     if (set(content["bases"]) != required_bases
             or not isinstance(content["bases"]["landed_cost_inclusions"], list)
             or not content["bases"]["landed_cost_inclusions"]

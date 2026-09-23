@@ -14,13 +14,17 @@
     "variable_cost_basis": "variable_cost_cents",
     "tax_basis": "excluded_from_management_contribution",
     "shipping_basis": "recorded_variable_cost_only",
-    "discount_basis": "recorded_net_revenue_only"
+    "discount_basis": "recorded_net_revenue_only",
+    "cash_projection_selection": "active_leaf_precedence",
+    "cash_floor_basis": "daily_minimum_cents",
+    "budget_headroom_basis": "approved_minus_open_commitment_minus_allocated_incurred"
   },
   "thresholds": {
-    "inventory_variance_units": 0
+    "inventory_variance_units": 0,
+    "minimum_cash_floor_cents": 0
   },
   "maturity_windows": {
     "returns_days": 30
   },
-  "sha256": "30aa47ea370bb824c22007673c3d80e968187c8b962ae11d5023b2186dc750c4"
+  "sha256": "28c3212adac6674a2451672bec48695063a1a50d96d9ff17f553745cb72a9626"
 }
