@@ -251,6 +251,36 @@ class PortalAccessibilityTests(unittest.TestCase):
                 render_portal(boundary_model(), home / ".local" / "tampered",
                               workbook_receipt=home / "missing-receipt.json")
 
+    def test_visual_receipt_rehashes_the_bounded_browser_evidence(self) -> None:
+        evidence = ROOT / "evidence" / "v1.0" / "portal"
+        receipt_path = evidence / "portal-visual-inspection.json"
+        receipt = json.loads(receipt_path.read_text("utf-8"))
+        self.assertEqual("PASS", receipt["status"])
+        self.assertTrue(receipt["inspection"]["all_pages_reviewed"])
+        self.assertEqual(11, receipt["inspection"]["public_pages_reviewed"])
+        self.assertEqual(48, receipt["inspection"]["synthetic_current_pages_reviewed"])
+        self.assertFalse(receipt["contains_absolute_paths"])
+        self.assertFalse(receipt["contains_private_customer_data"])
+        members = receipt["evidence_members"]
+        self.assertEqual(65, receipt["evidence_member_count"])
+        self.assertEqual(len(members), len({row["artifact"] for row in members}))
+        expected = {receipt_path.name, *(row["artifact"] for row in members)}
+        self.assertEqual(expected, {path.name for path in evidence.iterdir() if path.is_file()})
+        for row in members:
+            path = evidence / row["artifact"]
+            self.assertEqual(row["sha256"], hashlib.sha256(path.read_bytes()).hexdigest())
+        for surface in receipt["surfaces"].values():
+            self.assertEqual("PASS", surface["disposition"])
+            names = {row["path"] for row in surface["rendered_portal"]["files"]}
+            self.assertIn("index.html", names)
+            self.assertIn("portal-v1.css", names)
+            self.assertEqual("PASS", surface["desktop"]["disposition"])
+            self.assertEqual("PASS", surface["narrow"]["disposition"])
+            self.assertEqual("PASS", surface["print"]["disposition"])
+        encoded = canonical_json(receipt).decode("utf-8")
+        self.assertNotRegex(encoded, r"[A-Za-z]:\\")
+        self.assertNotIn("/Users/", encoded)
+
 
 if __name__ == "__main__":
     unittest.main()
