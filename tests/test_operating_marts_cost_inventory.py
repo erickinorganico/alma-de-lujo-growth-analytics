@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -104,6 +105,35 @@ class CostMartTests(unittest.TestCase):
         self.assertEqual("0.5", ratios["contribution_margin"])
         self.assertIsNone(economics_ratios(0, 0, 0)["gross_margin"])
         self.assertIsNone(economics_ratios(100, 0, 0)["markup"])
+
+    def test_realized_economics_needs_complete_coverage(self) -> None:
+        from alma.operating_cost_inventory import realized_economics
+        from alma.operating_mart_contracts import bind_cut, load_policy
+
+        policy = load_policy(ROOT / "policies" / "operating-metrics-synthetic-v1.json", as_of="2026-09-15", real_cut=False)
+        with tempfile.TemporaryDirectory() as tmp:
+            partial = build_operating_workspace(SYNTHETIC_PACK, private_root=Path(tmp) / "partial")
+            with bind_cut(partial["destination"]) as cut:
+                row = realized_economics(cut, "synthetic:sku-001", "synthetic:direct", "2026-09-15", "2026-09-16", policy)
+                self.assertEqual("PARTIAL", row["status"])
+                self.assertEqual(1200000, row["net_revenue_cents"])
+                self.assertIsNone(row["cogs_cents"])
+            pack = Path(tmp) / "pack"
+            shutil.copytree(SYNTHETIC_PACK, pack)
+            metadata_path = pack / "metadata.json"
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            for source in ("sales_aggregates", "cost_versions", "cost_components", "cost_allocations"):
+                metadata["coverage"][source]["status"] = "COMPLETE"
+            metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
+            sales_path = pack / "sales_aggregates.csv"
+            sales_path.write_text(sales_path.read_text(encoding="utf-8").replace(",PARTIAL,", ",COMPLETE,"), encoding="utf-8")
+            complete = build_operating_workspace(pack, private_root=Path(tmp) / "complete")
+            with bind_cut(complete["destination"]) as cut:
+                row = realized_economics(cut, "synthetic:sku-001", "synthetic:direct", "2026-09-15", "2026-09-16", policy)
+                self.assertEqual("MEASURED", row["status"])
+                self.assertEqual(480000, row["cogs_cents"])
+                self.assertEqual(240000, row["contribution_cents"])
+                self.assertEqual("0.2", row["ratios"]["contribution_margin"])
 
 
 if __name__ == "__main__":
