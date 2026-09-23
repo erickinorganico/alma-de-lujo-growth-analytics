@@ -2,16 +2,22 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import shutil
+import sqlite3
+import subprocess
+import sys
 import tempfile
 import unittest
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any, Callable
+from unittest import mock
 
 from alma.operating_contracts import SOURCE_NAMES, OperatingContractError, columns_for
 from alma.operating_interchange import MAX_CSV_BYTES, parse_pack
+from alma.operating_workspace import build_operating_workspace, relationship_summary
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -285,6 +291,169 @@ class OperatingParserTests(unittest.TestCase):
                 mutate_cash(fixture, case)
                 with self.subTest(case=case):
                     self.assert_parse_error(fixture, code)
+
+
+class OperatingWorkspaceTests(unittest.TestCase):
+    SCRIPT = ROOT / "scripts" / "operating_build.py"
+
+    def test_build_publishes_exact_strict_source_workspace_and_manifest(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            result = build_operating_workspace(SYNTHETIC_PACK, private_root=root)
+            destination = Path(result["destination"])
+            self.assertEqual(root / "operating-cuts" / result["cut_id"], destination)
+            self.assertTrue((destination / "operating.sqlite3").is_file())
+            self.assertTrue((destination / "workspace.json").is_file())
+            self.assertEqual(
+                {"workspace.json", "operating.sqlite3", "metadata.json", *(f"{name}.csv" for name in SOURCE_NAMES)},
+                {path.name for path in destination.iterdir()},
+            )
+            manifest = json.loads((destination / "workspace.json").read_text(encoding="utf-8"))
+            self.assertEqual(result["cut_id"], manifest["cut_id"])
+            self.assertEqual("operating-v1", manifest["contract_version"])
+            self.assertEqual("PASS", manifest["quality_status"])
+            self.assertEqual(22, len(manifest["row_counts"]))
+            self.assertEqual(22, len(manifest["key_counts"]))
+            self.assertEqual(
+                hashlib.sha256((destination / "operating.sqlite3").read_bytes()).hexdigest(),
+                manifest["sqlite_sha256"],
+            )
+            self.assertEqual(
+                hashlib.sha256((destination / "metadata.json").read_bytes()).hexdigest(),
+                manifest["metadata_sha256"],
+            )
+            self.assertEqual("OBSERVED", manifest["cash_evidence_status"])
+            self.assertEqual("PASS", manifest["cohort_link_status"])
+            self.assertEqual("PASS", manifest["relationship_check"]["status"])
+
+            connection = sqlite3.connect(destination / "operating.sqlite3")
+            connection.row_factory = sqlite3.Row
+            try:
+                tables = {
+                    row["name"]
+                    for row in connection.execute("PRAGMA table_list")
+                    if row["type"] == "table" and not row["name"].startswith("sqlite_")
+                }
+                self.assertEqual(set(SOURCE_NAMES), tables)
+                strict = {
+                    row["name"]
+                    for row in connection.execute("PRAGMA table_list")
+                    if row["type"] == "table" and row["strict"] == 1
+                }
+                self.assertEqual(set(SOURCE_NAMES), strict)
+                self.assertEqual([], list(connection.execute("PRAGMA foreign_key_check")))
+                self.assertNotIn("orders", tables)
+                self.assertNotIn("customers", tables)
+                self.assertNotIn("sales_daily", tables)
+                chain = list(connection.execute(
+                    "SELECT event_id,economic_event_id,supersedes_event_id FROM cash_events ORDER BY event_id"
+                ))
+                self.assertEqual(2, len(chain))
+                self.assertEqual(1, sum(row["supersedes_event_id"] is not None for row in chain))
+                summary = relationship_summary(connection)
+                self.assertEqual(manifest["relationship_check"]["digest"], summary["digest"])
+                self.assertEqual(1, len(summary["cash"]["active_leaf_ids"]))
+                self.assertEqual(1, len(summary["cash"]["supersession_edges"]))
+            finally:
+                connection.close()
+
+    def test_cut_identity_is_stable_and_binds_raw_bytes_cutoff_and_coverage(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            first = build_operating_workspace(SYNTHETIC_PACK, private_root=root / "first")
+            second = build_operating_workspace(SYNTHETIC_PACK, private_root=root / "second")
+            self.assertEqual(first["cut_id"], second["cut_id"])
+            self.assertEqual(first["manifest"]["normalized_rows_digest"], second["manifest"]["normalized_rows_digest"])
+            self.assertEqual(first["manifest"]["sqlite_sha256"], second["manifest"]["sqlite_sha256"])
+
+            raw_fixture = PackFixture(root / "raw")
+            csv_path = raw_fixture.path / "availability_daily.csv"
+            csv_path.write_bytes(csv_path.read_bytes().replace(b"\n", b"\r\n"))
+            raw = build_operating_workspace(raw_fixture.path, private_root=root / "raw-root")
+            self.assertNotEqual(first["cut_id"], raw["cut_id"])
+            self.assertEqual(first["manifest"]["normalized_rows_digest"], raw["manifest"]["normalized_rows_digest"])
+
+            cutoff_fixture = PackFixture(root / "cutoff")
+            cutoff_meta = cutoff_fixture.metadata()
+            cutoff_meta["cutoff_at"] = "2026-09-21T23:59:58-07:00"
+            cutoff_fixture.write_metadata(cutoff_meta)
+            cutoff = build_operating_workspace(cutoff_fixture.path, private_root=root / "cutoff-root")
+            self.assertNotEqual(first["cut_id"], cutoff["cut_id"])
+
+            coverage_fixture = PackFixture(root / "coverage")
+            coverage_meta = coverage_fixture.metadata()
+            coverage_meta["coverage"]["availability_daily"]["status"] = "ESTIMATED"
+            coverage_fixture.write_metadata(coverage_meta)
+            coverage = build_operating_workspace(coverage_fixture.path, private_root=root / "coverage-root")
+            self.assertNotEqual(first["cut_id"], coverage["cut_id"])
+
+    def test_existing_cut_is_never_overwritten(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            first = build_operating_workspace(SYNTHETIC_PACK, private_root=root)
+            destination = Path(first["destination"])
+            before = {path.name: path.read_bytes() for path in destination.iterdir() if path.is_file()}
+            with self.assertRaises(OperatingContractError) as raised:
+                build_operating_workspace(SYNTHETIC_PACK, private_root=root)
+            self.assertEqual("workspace.exists", raised.exception.code)
+            after = {path.name: path.read_bytes() for path in destination.iterdir() if path.is_file()}
+            self.assertEqual(before, after)
+
+    def test_invalid_pack_and_publish_failure_leave_no_cut_or_staging(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fixture = PackFixture(root / "invalid")
+            rows = fixture.rows("availability_daily")
+            rows[0]["sku_id"] = "synthetic:missing"
+            fixture.write_rows("availability_daily", rows)
+            with self.assertRaises(OperatingContractError):
+                build_operating_workspace(fixture.path, private_root=root / "private-invalid")
+            invalid_private = root / "private-invalid"
+            self.assertFalse((invalid_private / "operating-cuts").exists())
+            self.assertFalse(any(invalid_private.glob(".staging-*")) if invalid_private.exists() else False)
+
+            publish_root = root / "private-publish"
+            with mock.patch("alma.operating_workspace.os.replace", side_effect=OSError("synthetic publish failure")):
+                with self.assertRaises(OperatingContractError) as raised:
+                    build_operating_workspace(SYNTHETIC_PACK, private_root=publish_root)
+            self.assertEqual("workspace.publish", raised.exception.code)
+            self.assertFalse((publish_root / "operating-cuts").exists())
+            self.assertEqual([], list(publish_root.glob(".staging-*")))
+
+    def test_cli_validate_and_build_emit_safe_json_receipts(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            validate = subprocess.run(
+                [sys.executable, str(self.SCRIPT), "validate", "--input", str(SYNTHETIC_PACK)],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(0, validate.returncode, validate.stderr)
+            validate_receipt = json.loads(validate.stdout)
+            self.assertEqual("PASS", validate_receipt["status"])
+            self.assertEqual(22, validate_receipt["sources"])
+
+            build = subprocess.run(
+                [
+                    sys.executable,
+                    str(self.SCRIPT),
+                    "build",
+                    "--input",
+                    str(SYNTHETIC_PACK),
+                    "--private-root",
+                    str(root),
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(0, build.returncode, build.stderr)
+            build_receipt = json.loads(build.stdout)
+            self.assertEqual("PASS", build_receipt["status"])
+            self.assertTrue((Path(build_receipt["destination"]) / "workspace.json").is_file())
 
 
 if __name__ == "__main__":
