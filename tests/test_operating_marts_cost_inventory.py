@@ -136,5 +136,37 @@ class CostMartTests(unittest.TestCase):
                 self.assertEqual("0.2", row["ratios"]["contribution_margin"])
 
 
+class InventoryMartTests(unittest.TestCase):
+    def test_purchase_receipt_conservation_and_replay(self) -> None:
+        from alma.operating_cost_inventory import reconcile_purchase
+
+        order = {"purchase_order_id": "po", "ordered_units": 20, "status_code": "PARTIAL"}
+        receipt = {"receipt_id": "r1", "received_units": 18, "inspection_units": 2,
+                   "accepted_units": 16, "rejected_units": 0}
+        result = reconcile_purchase(order, [receipt])
+        self.assertEqual(2, result["still_to_receive_units"])
+        self.assertEqual(16, result["accepted_units"])
+        with self.assertRaises(ValueError):
+            reconcile_purchase(order, [receipt, receipt])
+        with self.assertRaises(ValueError):
+            reconcile_purchase(order, [dict(receipt, accepted_units=17)])
+
+    def test_synthetic_custody_uses_one_receipt_and_only_physical_restock(self) -> None:
+        from alma.operating_cost_inventory import project_inventory
+        from alma.operating_mart_contracts import bind_cut
+
+        with tempfile.TemporaryDirectory() as tmp:
+            result = build_operating_workspace(SYNTHETIC_PACK, private_root=tmp)
+            with bind_cut(result["destination"]) as cut:
+                stock = project_inventory(cut, "synthetic:sku-001", "2026-09-21")
+                self.assertEqual(24, stock["on_hand_units"])
+                self.assertEqual(2, stock["inspection_units"])
+                self.assertEqual(1, stock["loaned_units"])
+                self.assertEqual(2, stock["reserved_units"])
+                self.assertEqual(1, stock["non_sellable_units"])
+                self.assertEqual(21, stock["available_units"])
+                self.assertEqual("PARTIAL", stock["status"])
+
+
 if __name__ == "__main__":
     unittest.main()
