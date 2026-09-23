@@ -1,0 +1,2 @@
+﻿obligation_payment_id,obligation_id,paid_date,amount_cents,source_ref,synthetic
+OPAY-001,OBL-001,2026-09-15,100000,SYN-PAY-01,1

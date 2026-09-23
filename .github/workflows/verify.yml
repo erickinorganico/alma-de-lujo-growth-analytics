@@ -16,12 +16,18 @@ jobs:
       - uses: actions/setup-python@v7.0.0
         with:
           python-version: '3.12'
+      - name: Install optional client-kit verification tools
+        run: python -m pip install -r requirements-client.txt
       - name: Tests, scenarios, reconciliation and replay
         run: python scripts/verify_v2.py --output build/ci-verification
       - name: Published native evidence and full scope acceptance
         run: python scripts/check_scope_v2.py --workspace evidence/v0.2/workspace --verification build/ci-verification/verification.json --output build/ci-acceptance.json
       - name: Public release audit
         run: python scripts/audit_release.py
+      - name: Delivered Excel bytes and independent client arithmetic
+        run: python scripts/verify_client_v3.py check --directory client --engine-receipt evidence/v0.3/excel/excel-recalculation.json --output build/ci-client-workbooks.json
+      - name: Blank and synthetic package privacy boundary
+        run: python scripts/package_client.py
       - name: Save verification receipts
         if: always()
         uses: actions/upload-artifact@v7.0.1
@@ -30,3 +36,4 @@ jobs:
           path: |
             build/ci-verification/*.json
             build/ci-acceptance.json
+            build/ci-client-workbooks.json

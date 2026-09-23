@@ -2,6 +2,8 @@
 import json
 import re
 import subprocess
+import hashlib
+import zipfile
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parent.parent
@@ -32,6 +34,23 @@ def approved_synthetic_database(path,name):
     finally:db.close()
 
 
+def approved_client_workbook(path, name):
+    """Only reviewed blank/synthetic binaries may enter a public release."""
+    allowed = {'client/Alma_de_Lujo_PLANTILLA.xlsx', 'client/Alma_de_Lujo_EJEMPLO.xlsx'}
+    if name not in allowed:
+        raise ValueError('Unapproved workbook: filled customer files stay private')
+    manifest = json.loads((ROOT/'client/release-manifest.json').read_text(encoding='utf-8'))
+    if hashlib.sha256(path.read_bytes()).hexdigest() != manifest['workbook_sha256'].get(name):
+        raise ValueError('Workbook differs from reviewed release bytes')
+    with zipfile.ZipFile(path) as archive:
+        members = archive.infolist()
+        if sum(m.file_size for m in members) > 100_000_000 or len(members) > 1000:
+            raise ValueError('Unexpected workbook archive size')
+        if any('vbaproject' in m.filename.lower() or 'externallinks/' in m.filename.lower() or '/embeddings/' in m.filename.lower() for m in members):
+            raise ValueError('Active or external workbook content is forbidden')
+        return '\n'.join(archive.read(m).decode('utf-8-sig') for m in members if m.filename.endswith(('.xml','.rels')))
+
+
 def audit():
     result=subprocess.run(['git','ls-files','-z','--cached','--others','--exclude-standard'],cwd=ROOT,capture_output=True,check=True)
     names=sorted(set(n for n in result.stdout.decode('utf-8').split('\0') if n))
@@ -43,7 +62,10 @@ def audit():
         if not path.is_file():continue
         if path.suffix.lower() in {'.png','.pdf','.gif','.zip'}:continue
         try:
-            content=approved_synthetic_database(path,name) if path.suffix.lower()=='.sqlite3' else path.read_text(encoding='utf-8-sig')
+            if path.suffix.lower()=='.xlsx':
+                content=approved_client_workbook(path,name)
+            else:
+                content=approved_synthetic_database(path,name) if path.suffix.lower()=='.sqlite3' else path.read_text(encoding='utf-8-sig')
         except ValueError:
             findings.append(dict(file=name,issue='invalid_synthetic_database_or_text'));continue
         except UnicodeDecodeError:

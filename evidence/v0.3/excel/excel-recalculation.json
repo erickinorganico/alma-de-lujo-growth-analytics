@@ -1,0 +1,28 @@
+[
+  {
+    "file": "Alma_de_Lujo_EJEMPLO.xlsx",
+    "engine": "Microsoft Excel",
+    "version": "16.0",
+    "build": 20326.0,
+    "sha256": "628c91e681fe24c2b0575f51ec8d227930d44a210719f5a7aef3b5d46cadd329",
+    "recalculated": true,
+    "exported_pdf": [
+      "Alma_de_Lujo_EJEMPLO_INICIO.pdf",
+      "Alma_de_Lujo_EJEMPLO_DECISIONES.pdf",
+      "Alma_de_Lujo_EJEMPLO_FLUJO_13_SEMANAS.pdf"
+    ]
+  },
+  {
+    "file": "Alma_de_Lujo_PLANTILLA.xlsx",
+    "engine": "Microsoft Excel",
+    "version": "16.0",
+    "build": 20326.0,
+    "sha256": "c22369fe36deb50a034b20ceaf27b0ecd36ae5b3dca59d4569b767d4d2102bef",
+    "recalculated": true,
+    "exported_pdf": [
+      "Alma_de_Lujo_PLANTILLA_INICIO.pdf",
+      "Alma_de_Lujo_PLANTILLA_DECISIONES.pdf",
+      "Alma_de_Lujo_PLANTILLA_FLUJO_13_SEMANAS.pdf"
+    ]
+  }
+]

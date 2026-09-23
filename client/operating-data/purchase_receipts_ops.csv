@@ -1,0 +1,2 @@
+﻿receipt_id,purchase_order_id,received_date,received_qty,inspection_qty,accepted_qty,rejected_qty,preparation_status,source_ref,synthetic
+RCV-OPS-001,PO-OPS-001,2026-09-18,18,2,16,0,PARTIAL_INSPECTION,SYN-RCV-01,1

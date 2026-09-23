@@ -1,0 +1,3 @@
+﻿obligation_id,origin_type,origin_id,concept,due_date,original_cents,currency,status,source_ref,synthetic
+OBL-001,PURCHASE_ORDER,PO-OPS-001,Compra sintética calcetín negro,2026-09-28,180000,MXN,OPEN,SYN-OBL-01,1
+OBL-002,FIXED_EXPENSE,SYN-RENT-01,Renta sintética de ejemplo,2026-10-01,160000,MXN,OPEN,SYN-OBL-02,1

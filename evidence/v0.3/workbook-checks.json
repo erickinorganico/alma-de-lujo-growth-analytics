@@ -1,0 +1,28 @@
+{
+  "version": "3.0",
+  "passed": true,
+  "engine_receipt": "evidence\\v0.3\\excel\\excel-recalculation.json",
+  "workbooks": [
+    {
+      "file": "Alma_de_Lujo_EJEMPLO.xlsx",
+      "sha256": "628c91e681fe24c2b0575f51ec8d227930d44a210719f5a7aef3b5d46cadd329",
+      "synthetic_or_blank": true,
+      "formula_count": 5347,
+      "checks_count": 345,
+      "passed": true,
+      "failures": [],
+      "oracle_status": "REVISAR"
+    },
+    {
+      "file": "Alma_de_Lujo_PLANTILLA.xlsx",
+      "sha256": "c22369fe36deb50a034b20ceaf27b0ecd36ae5b3dca59d4569b767d4d2102bef",
+      "synthetic_or_blank": true,
+      "formula_count": 5347,
+      "checks_count": 8,
+      "passed": true,
+      "failures": [],
+      "oracle_status": "DATOS_PENDIENTES"
+    }
+  ],
+  "limitations": "Recorded Excel 16 recalculation, exact-byte hashes and independent Decimal checks. CI verifies recorded results; it does not run Excel. No real client records or adoption measured."
+}

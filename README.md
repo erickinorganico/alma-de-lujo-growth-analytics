@@ -1,8 +1,34 @@
 # Alma de Lujo · Growth & Business Analytics
 
-Un sistema analítico para ropa deportiva y calcetines de Pilates: datos relacionados, procesos ejecutables, análisis SQL y agentes nativos con evidencia y revisión independiente.
+Un sistema analítico para ropa deportiva y calcetines de Pilates, con un kit semanal de Excel para decidir qué reponer, revisar precios y anticipar faltantes de caja. El núcleo conserva datos relacionados, procesos ejecutables, análisis SQL y agentes nativos con revisión independiente.
 
 **Los datos comerciales son sintéticos.** Las fuentes públicas de mercado están atribuidas por separado. Este proyecto no demuestra ventas o rentabilidad reales de Alma de Lujo.
+
+## Para el cliente: empieza aquí
+
+1. Abre el [sistema analítico navegable](client/SISTEMA_ANALITICO.html): muestra las 30 fuentes, 11 marts, 6 procesos, 7 roles, ejecuciones nativas, paquetes de decisión, métricas y linaje con evidencia verificable.
+2. Recorre [costos y operación](client/COSTOS_Y_OPERACION.html): ocho tablas adicionales separan versiones/componentes de costo, recepción, disponibilidad, obligaciones, pagos y escenarios de caja.
+3. Abre [EMPIEZA_AQUI](client/EMPIEZA_AQUI.md) y la [guía semanal](client/GUIA_SEMANAL.html).
+4. Practica con [Alma_de_Lujo_EJEMPLO.xlsx](client/Alma_de_Lujo_EJEMPLO.xlsx); todos sus importes y productos son ejemplos sintéticos.
+5. Guarda una copia privada de [Alma_de_Lujo_PLANTILLA.xlsx](client/Alma_de_Lujo_PLANTILLA.xlsx). Captura tus variantes, ventas agregadas, conteo y plan de caja en las celdas azules.
+6. Revisa **DECISIONES** y **FLUJO_13_SEMANAS**. Registra responsable, siguiente paso y fecha en el [registro de decisiones](client/REGISTRO_DECISIONES.csv).
+
+Para usar los libros no necesitas Python, GitHub ni una suscripción de IA. Se entregan para Excel de escritorio; otras suites necesitan su propia comprobación de compatibilidad. Las cantidades de compra son propuestas condicionales. Los parámetros iniciales son provisionales y deben revisarse con la operación.
+
+El kit admite hasta **100 variantes, 1,000 agregados fecha/SKU y 250 movimientos de caja previstos**. Separa la propuesta de compra de la cantidad elegida, calcula el precio que cubre los costos y el margen objetivo, y evalúa **91 cierres diarios** agrupados en 13 semanas. La caja dentro de cada día y la exactitud de las fuentes no se presumen verificadas. [Contrato del kit](client/contract.json) · [Alcance](specs/CLIENT-v3.md).
+
+El portal funciona sin servidor ni recursos remotos. Su manifiesto vuelve a calcular filas, campos, hashes, fórmulas, linaje y 49 hechos citados por los agentes. La extensión de costos mantiene sus ocho CSV separados de las 30 fuentes base y publica qué capacidades existen, cuáles siguen pendientes y qué propuesta de la adenda entra en conflicto con el alcance analítico actual. [Recorrido técnico](client/FUENTES_METRICAS_AGENTES.md) · [Aceptación](docs/CLIENT-SYSTEM-ACCEPTANCE.md).
+
+### Revisión privada opcional por el analista
+
+```powershell
+python -m pip install -r requirements-client.txt
+python scripts/review_client_workbook.py --input .local/corte.xlsx --output .local/client-runs/corte-001
+```
+
+Produce un informe HTML/JSON, correcciones con referencias de celda y una solicitud para revisión nativa dentro de Codex. Lee los datos de entrada y recalcula con aritmética independiente; no confía en resultados guardados en Excel. Los informes sólo pueden guardarse en una nueva subcarpeta de `.local/client-runs`, fuera de Git. La generación del informe prepara la solicitud del analista; no ejecuta una llamada a un modelo. **Los libros llenos y datos del cliente permanecen privados.** Los agregados de este kit no se convierten en pedidos o clientes ficticios del almacén v0.2.
+
+## Sistema analítico y evidencia v0.2
 
 [Libro de decisiones](evidence/v0.2/DECISION-BOOK.md) · [Dossier analítico](evidence/v0.2/workspace/DOSSIER.md) · [Tablas](evidence/v0.2/workspace/tables) · [SQL](models/marts) · [Procesos](specs/PROCESS-CATALOG.md) · [Agentes](specs/AGENT-SYSTEM.md)
 
