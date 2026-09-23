@@ -41,6 +41,62 @@ def coverage(pack: Path, source: str, status: str) -> None:
 
 
 class PublicationGapTests(unittest.TestCase):
+    def test_missing_cash_retains_balances_and_publishes_unknown(self) -> None:
+        for event_status in ("MISSING", "ZERO"):
+            with self.subTest(event_status=event_status), tempfile.TemporaryDirectory() as tmp:
+                home = Path(tmp)
+                pack = home / "pack"
+                shutil.copytree(PACK, pack)
+                cash_file = pack / "cash_events.csv"
+                fields, _ = rows(cash_file)
+                write_rows(cash_file, fields, [])
+                coverage(pack, "cash_events", event_status)
+                coverage(pack, "cash_balance_evidence", "COMPLETE")
+                balance_file = pack / "cash_balance_evidence.csv"
+                balance_file.write_text(balance_file.read_text(encoding="utf-8").replace(
+                    ",1100000,", ",2000000,"), encoding="utf-8")
+                cut = build_operating_workspace(pack, private_root=home / "cuts")
+                result = operating_marts.build_operating_marts(cut["destination"],
+                    home / ".local" / "operating-marts", policy_path=POLICY,
+                    private_root=home / ".local" / "operating-marts")
+                dest = Path(result["destination"])
+                families = json.loads((dest / "families.json").read_text(encoding="utf-8"))
+                metrics = json.loads((dest / "metric_rows.json").read_text(encoding="utf-8"))
+                cash = families["cash"]
+                self.assertEqual("synthetic:scenario-observed", cash["scenario_id"])
+                self.assertEqual("MISSING" if event_status == "MISSING" else "ZERO", cash["domain_status"])
+                self.assertIn("synthetic:source:balance-001", cash["source_refs"])
+                expected = None if event_status == "MISSING" else 0
+                self.assertEqual(expected, cash["actual_movements_cents"])
+                self.assertEqual(None if event_status == "MISSING" else 2000000,
+                                 cash["reconciled_close_cents"])
+                for horizon in (56, 91):
+                    details = cash["horizons"][str(horizon)]
+                    self.assertEqual(expected, details["layers_cents"]["RECONCILED"])
+                    self.assertEqual(expected, details["layers_cents"]["COMMITTED"])
+                    self.assertEqual(expected, details["layers_cents"]["EXPECTED"])
+                    self.assertEqual(expected, details["undated_cents"])
+                    self.assertEqual(expected, details["scenario_cents"])
+                    self.assertEqual(None if event_status == "MISSING" else 2000000,
+                                     details["daily_minimum_cents"])
+                    if event_status == "MISSING":
+                        self.assertIsNone(details["cash_floor_breached"])
+                    for layer in ("RECONCILED", "COMMITTED", "EXPECTED", "UNDATED", "SCENARIO"):
+                        standard = next(row for row in metrics if row["metric_id"] == "cash_layer_cents"
+                                        and row["dimensions"].get("horizon") == str(horizon)
+                                        and row["dimensions"].get("layer") == layer)
+                        self.assertEqual(expected, standard["value"])
+                        if event_status == "MISSING":
+                            self.assertEqual("UNKNOWN", standard["status"])
+                        path = f"cash.horizons.{horizon}." + (f"layers_cents.{layer}" if layer in
+                            {"RECONCILED", "COMMITTED", "EXPECTED"} else
+                            "undated_cents" if layer == "UNDATED" else "scenario_cents")
+                        semantic = next(row for row in metrics if row["dimensions"].get("family_path") == path)
+                        self.assertEqual((standard["value"], standard["status"]),
+                                         (semantic["value"], semantic["status"]))
+                self.assertTrue(families["inventory"])
+                self.assertTrue(families["sales_readiness"])
+
     def test_missing_physical_source_and_broken_fk_reject_intake(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             home = Path(tmp)
