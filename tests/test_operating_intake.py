@@ -92,6 +92,7 @@ class OperatingParserTests(unittest.TestCase):
                 self.assertNotEqual(built["cut_id"], changed["cut_id"])
                 self.assertNotEqual(raw_hash, changed["manifest"]["source_sha256"]["cash_events.csv"])
                 self.assertEqual(built["manifest"]["cutoff_at"], changed["manifest"]["cutoff_at"])
+                self.assertEqual(built["manifest"]["coverage"], changed["manifest"]["coverage"])
 
     def test_future_observations_still_rejected(self) -> None:
         for source, field in (("cash_events", "event_date"), ("sales_aggregates", "sales_date"),
@@ -111,6 +112,24 @@ class OperatingParserTests(unittest.TestCase):
                 values[-1]["level"] = invalid_level
                 fixture.write_rows("cash_events", values)
                 self.assert_parse_error(fixture, "value.enum" if invalid_level else "value.required")
+        for name, changes, code in (
+            ("malformed_date", {"event_date": "2026-13-22"}, "value.date"),
+            ("missing_committed_origin", {"level": "COMMITTED", "obligation_id": ""}, "cash.committed_origin"),
+            ("invalid_supersession", {"supersedes_event_id": "synthetic:absent-event"}, "cash.supersedes_orphan"),
+            ("duplicate_identity", {"economic_event_id": "synthetic:economic-po-payment-001"}, "cash.supersedes_chain"),
+            ("future_observed", {"level": "RECONCILED"}, "value.after_cutoff"),
+        ):
+            with self.subTest(case=name), tempfile.TemporaryDirectory() as tmp:
+                fixture = self.fixture(tmp)
+                values = fixture.rows("cash_events")
+                candidate = dict(values[0], event_id=f"synthetic:cash-future-{name}",
+                    economic_event_id=f"synthetic:economic-future-{name}",
+                    supersedes_event_id="", event_date="2026-09-22", level="EXPECTED",
+                    amount_cents="13", obligation_id="", payment_id="",
+                    source_ref=f"synthetic:source:future-{name}")
+                candidate.update(changes)
+                fixture.write_rows("cash_events", [*values, candidate])
+                self.assert_parse_error(fixture, code)
 
     def fixture(self, tmp: str) -> PackFixture:
         return PackFixture(Path(tmp))
