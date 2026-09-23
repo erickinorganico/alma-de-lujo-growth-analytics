@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from contextlib import contextmanager
 from pathlib import Path
 
 from alma.decision_register import create_register, verify_register
@@ -34,10 +35,19 @@ def canonical_file(path: Path, value: object) -> Path:
     return path
 
 
+@contextmanager
+def weekly_home():
+    path = Path(tempfile.mkdtemp())
+    try:
+        yield path
+    finally:
+        target = Path("\\\\?\\" + str(path)) if sys.platform == "win32" else path
+        shutil.rmtree(target, ignore_errors=True)
+
+
 class WeeklyCommandTests(unittest.TestCase):
     def test_source_pack_and_workbook_create_derived_waiting_runs_without_overwrite(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            home = Path(tmp)
+        with weekly_home() as home:
             pack, workbook = generated_materials(home)
             for label, source in (("pack", pack), ("workbook", workbook)):
                 with self.subTest(label=label):
@@ -48,7 +58,7 @@ class WeeklyCommandTests(unittest.TestCase):
                     self.assertEqual(result["cut_id"], run.name)
                     self.assertEqual("WAITING_ANALYSTS", result["status"])
                     self.assertEqual(label, result["input_route"])
-                    self.assertEqual("WAITING_ANALYSTS", verify_cycle(run / result["cycle"])["status"])
+                    self.assertEqual("WAITING_ANALYSTS", verify_cycle(result["cycle_path"])["status"])
                     index = json.loads((run / "run-index.json").read_text("utf-8"))
                     self.assertEqual(result["cut_id"], index["cut_id"])
                     self.assertEqual("SYNTHETIC_EXAMPLE", index["policy"]["status"])
@@ -59,8 +69,7 @@ class WeeklyCommandTests(unittest.TestCase):
                         create_weekly_run(source, POLICY, output)
 
     def test_prior_pair_policy_and_private_output_fail_closed(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            home = Path(tmp)
+        with weekly_home() as home:
             pack, _ = generated_materials(home)
             valid = home / ".local" / "client-runs"
             with self.assertRaises(WeeklyContractError):
@@ -79,12 +88,11 @@ class WeeklyCommandTests(unittest.TestCase):
             self.assertFalse(valid.exists())
 
     def test_resume_actions_validate_evidence_and_preserve_initial_receipts(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            home = Path(tmp)
+        with weekly_home() as home:
             pack, _ = generated_materials(home)
             started = create_weekly_run(pack, POLICY, home / ".local" / "client-runs")
             run = Path(started["run"])
-            cycle = run / started["cycle"]
+            cycle = Path(started["cycle_path"])
             before = {path.name: path.read_bytes() for path in (run / "receipts").iterdir()}
 
             resumed = continue_weekly_run(run, "resume")
@@ -152,8 +160,7 @@ class WeeklyCommandTests(unittest.TestCase):
                                      capture_output=True, check=False)
             self.assertEqual(0, process.returncode, process.stderr)
             self.assertIn("--help", process.stdout)
-        with tempfile.TemporaryDirectory() as tmp:
-            home = Path(tmp)
+        with weekly_home() as home:
             pack, _ = generated_materials(home)
             result = create_weekly_run(pack, POLICY, home / ".local" / "client-runs")
             process = subprocess.run([sys.executable, "-m", "alma.weekly", "weekly-resume",
