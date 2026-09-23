@@ -7,7 +7,9 @@ import hashlib
 import json
 import shutil
 import sys
+import tempfile
 from datetime import datetime, timezone
+from decimal import Decimal
 from pathlib import Path
 from typing import Any, Sequence
 
@@ -22,7 +24,9 @@ from alma.operating_contracts import CONTRACT_VERSION, SOURCE_NAMES, SOURCES, ca
 from alma.operating_interchange import parse_pack  # noqa: E402
 from alma.operating_mart_contracts import load_policy  # noqa: E402
 from alma.operating_marts import _definitions  # noqa: E402
-from scripts.operating_pack import initialize_pack, synthetic_rows  # noqa: E402
+from scripts.operating_pack import (  # noqa: E402
+    blank_metadata, initialize_pack, synthetic_metadata, synthetic_rows,
+)
 
 
 MAX_INPUT_ROWS = 1000
@@ -159,7 +163,7 @@ def _write_support_sheets(workbook: xlsxwriter.Workbook, kind: str, formats: dic
         ("Clase", "SYNTHETIC_EXAMPLE" if synthetic else "BLANK"),
         ("Corte", "2026-09-21T23:59:59-07:00" if synthetic else "POR_COMPLETAR"),
         ("Zona horaria", "America/Tijuana" if synthetic else "POR_COMPLETAR"),
-        ("Moneda", "MXN; importes canónicos en centavos enteros"),
+        ("Moneda", "MXN"),
     ]
     for row, (label, value) in enumerate(metadata, start=3):
         start.write(row - 1, 0, label, formats["header"])
@@ -210,14 +214,18 @@ def _write_support_sheets(workbook: xlsxwriter.Workbook, kind: str, formats: dic
     _setup_page(dictionary, marker)
 
     completeness = workbook.add_worksheet("COMPLETITUD")
-    headers = ("relacion", "dominio", "clasificacion", "estado_si_falta", "familias_metricas", "regla")
+    headers = ("relacion", "dominio", "clasificacion", "estado_si_falta", "familias_metricas",
+               "coverage_status", "window_start", "window_end", "regla")
     for column, header in enumerate(headers):
         completeness.write(0, column, header, formats["header"])
+    metadata = synthetic_metadata() if synthetic else blank_metadata()
     for row, relation in enumerate(SOURCE_NAMES, start=1):
         matrix = COMPLETENESS_MATRIX[relation]
+        coverage = metadata["coverage"][relation]
         values = (
             relation, matrix["domain"], matrix["classification"], matrix["omission_state"],
             ", ".join(matrix["metric_families"]),
+            coverage["status"], coverage["window_start"], coverage["window_end"],
             "Vacío = desconocido; registra ZERO sólo cuando observaste cero en una ventana declarada.",
         )
         for column, value in enumerate(values):
@@ -225,7 +233,9 @@ def _write_support_sheets(workbook: xlsxwriter.Workbook, kind: str, formats: dic
     completeness.autofilter(0, 0, len(SOURCE_NAMES), len(headers) - 1)
     completeness.freeze_panes(1, 0)
     completeness.set_column(0, 3, 23)
-    completeness.set_column(4, 5, 52)
+    completeness.set_column(4, 4, 52)
+    completeness.set_column(5, 7, 18)
+    completeness.set_column(8, 8, 52)
     _setup_page(completeness, marker)
 
 
@@ -392,6 +402,96 @@ def build_operating_workbooks(output: str | Path) -> dict[str, Any]:
     }
     (destination / "workbook-manifest.json").write_bytes(canonical_json(manifest) + b"\n")
     return manifest
+
+
+def build_parity_receipt(workbook_path: str | Path, canonical_pack: str | Path,
+                         receipt_path: str | Path) -> dict[str, Any]:
+    """Independently prove workbook, adapter pack and manifest parity."""
+
+    from csv import DictReader
+    from datetime import date as date_type, datetime as datetime_type
+
+    from openpyxl import load_workbook
+
+    from alma.operating_workbook import export_workbook_to_pack
+
+    workbook_path = Path(workbook_path)
+    canonical_pack = Path(canonical_pack)
+    workbook = load_workbook(workbook_path, data_only=False, keep_links=False)
+    relation_receipts: dict[str, Any] = {}
+    with tempfile.TemporaryDirectory(prefix="alma-workbook-oracle-") as tmp:
+        private_root = Path(tmp)
+        export = export_workbook_to_pack(workbook_path, private_root / "export",
+                                         private_root=private_root)
+        exported_pack = Path(export["pack_path"])
+        export_manifest = json.loads(Path(export["manifest_path"]).read_text(encoding="utf-8"))
+        for relation in SOURCE_NAMES:
+            fields = [field["name"] for field in SOURCES[relation]["fields"]]
+            sheet = workbook[relation]
+            raw_rows = [
+                [sheet.cell(row, column).value for column in range(1, len(fields) + 1)]
+                for row in range(7, sheet.max_row + 1)
+            ]
+            raw_rows = [row for row in raw_rows if any(value is not None for value in row)]
+            with (exported_pack / f"{relation}.csv").open(encoding="utf-8", newline="") as stream:
+                exported_rows = list(DictReader(stream))
+            expected_rows = [
+                ["" if value is None else value.isoformat()
+                 if isinstance(value, (date_type, datetime_type)) else str(value) for value in row]
+                for row in raw_rows
+            ]
+            actual_rows = [[row[field] for field in fields] for row in exported_rows]
+            exported_hash = _sha256(exported_pack / f"{relation}.csv")
+            canonical_hash = _sha256(canonical_pack / f"{relation}.csv")
+            units = {field["name"]: field["unit"] for field in SOURCES[relation]["fields"]}
+            cents_fields = [name for name, unit in units.items() if unit == "MXN cents"]
+            pass_relation = (
+                expected_rows == actual_rows
+                and exported_hash == canonical_hash
+                and exported_hash == export_manifest["relations"][relation]["sha256"]
+                and all(value == "" or Decimal(value) == Decimal(value).to_integral_value()
+                        for row in exported_rows for name, value in row.items() if name in cents_fields)
+            )
+            relation_receipts[relation] = {
+                "disposition": "PASS" if pass_relation else "BLOCKED",
+                "row_count": len(actual_rows),
+                "null_count": sum(value == "" for row in actual_rows for value in row),
+                "zero_count": sum(value == "0" for row in actual_rows for value in row),
+                "cents_fields": cents_fields,
+                "units_sha256": hashlib.sha256(canonical_json(units)).hexdigest(),
+                "source_sha256": exported_hash,
+            }
+    workbook.close()
+    source_hashes = {name: value["source_sha256"] for name, value in relation_receipts.items()}
+    receipt = {
+        "receipt_version": "workbook-pack-parity-v1",
+        "status": "PASS" if len(relation_receipts) == 22 and
+                  all(value["disposition"] == "PASS" for value in relation_receipts.values()) else "BLOCKED",
+        "contract_version": CONTRACT_VERSION,
+        "synthetic_business_data": True,
+        "workbook_sha256": _sha256(workbook_path),
+        "pack_sha256": hashlib.sha256(canonical_json(source_hashes)).hexdigest(),
+        "manifest_sha256": export["manifest_sha256"],
+        "relation_count": len(relation_receipts),
+        "relation_ids": list(SOURCE_NAMES),
+        "relations": relation_receipts,
+        "oracle_command": ".venv\\Scripts\\python.exe -m unittest tests.test_operating_workbooks.WorkbookImportTests -v",
+        "assertions": [
+            "workbook cells equal exported CSV bytes by relation and ordered field",
+            "exported source hashes equal canonical synthetic source-pack hashes",
+            "blank/null remains empty, explicit zero remains 0",
+            "all MXN cents values are exact integers",
+            "manifest units and source hashes cover all 22 relations",
+        ],
+        "contains_absolute_paths": False,
+        "contains_cell_values": False,
+    }
+    if receipt["status"] != "PASS":
+        raise ValueError("workbook parity oracle blocked")
+    target = Path(receipt_path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(canonical_json(receipt) + b"\n")
+    return receipt
 
 
 def main(argv: Sequence[str] | None = None) -> int:

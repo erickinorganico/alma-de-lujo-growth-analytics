@@ -207,7 +207,7 @@ class WorkbookImportTests(unittest.TestCase):
             ("hidden_row", lambda wb: setattr(wb["sales_aggregates"].row_dimensions[7], "hidden", True), "workbook.hidden_row"),
             ("hidden_column", lambda wb: setattr(wb["sales_aggregates"].column_dimensions["A"], "hidden", True), "workbook.hidden_column"),
             ("comment", lambda wb: setattr(wb["sales_aggregates"]["A7"], "comment", __import__("openpyxl").comments.Comment("private", "x")), "workbook.comment"),
-            ("external_link", lambda wb: setattr(wb["sales_aggregates"]["A7"], "hyperlink", "https://example.com"), "workbook.hyperlink"),
+            ("external_link", lambda wb: setattr(wb["sales_aggregates"]["A7"], "hyperlink", "https://example.com"), "workbook.external_content"),
         )
         for name, mutate, code in cases:
             with self.subTest(name=name), tempfile.TemporaryDirectory() as tmp:
@@ -231,7 +231,7 @@ class WorkbookImportTests(unittest.TestCase):
         cases = (
             ("fractional_cents", "sales_aggregates", "H7", 10.5, "value.integer"),
             ("bad_date", "sales_aggregates", "A7", "2026-99-99", "value.date"),
-            ("duplicate_key", "sku_catalog", "A8", "synthetic:sku-001", "value.required"),
+            ("duplicate_key", "sku_catalog", "A8", "synthetic:sku-001", "key.duplicate"),
             ("broken_relation", "sales_aggregates", "B7", "synthetic:missing", "relation.sku"),
             ("pii", "sales_aggregates", "K7", "5551234567", "value.pii"),
         )
@@ -283,6 +283,24 @@ class WorkbookImportTests(unittest.TestCase):
                 export_workbook_to_pack(candidate, private / "export", private_root=private)
             self.assertEqual("workbook.external_content", raised.exception.code)
             self.assertFalse((private / "export").exists())
+
+    def test_public_parity_receipt_is_safe_and_hash_bound(self) -> None:
+        from scripts.build_operating_workbooks import build_parity_receipt
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            workbook, pack = self._generated(root)
+            path = root / "receipt.json"
+            receipt = build_parity_receipt(workbook, pack, path)
+            self.assertEqual("PASS", receipt["status"])
+            self.assertEqual(22, receipt["relation_count"])
+            self.assertEqual(list(SOURCE_NAMES), receipt["relation_ids"])
+            self.assertFalse(receipt["contains_absolute_paths"])
+            self.assertFalse(receipt["contains_cell_values"])
+            self.assertNotIn(str(root), path.read_text(encoding="utf-8"))
+            for relation in SOURCE_NAMES:
+                self.assertEqual("PASS", receipt["relations"][relation]["disposition"])
+                self.assertRegex(receipt["relations"][relation]["source_sha256"], r"^[a-f0-9]{64}$")
 
     pass
 
