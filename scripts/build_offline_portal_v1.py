@@ -399,15 +399,18 @@ def _coverage_markup(model: dict[str, Any]) -> str:
             width = 340 * count / total if total else 0
             if width:
                 segments.append(f'<rect class="segment segment-{state.lower()}" x="{x:.2f}" y="{y}" width="{width:.2f}" height="22"><title>{_esc(row["domain"])} · {state}: {count} de {total}</title></rect>')
+                if width >= 105:
+                    segments.append(f'<text class="segment-label segment-label-{state.lower()}" x="{x+width/2:.2f}" y="{y+16}" text-anchor="middle">{state} {count}</text>')
             x += width
         bars.append(f'<text x="0" y="{y+16}">{_esc(row["domain"])} · {total}</text>' + ''.join(segments))
-        rows.append(f'<tr><th scope="row">{_esc(row["domain"])}</th><td class="numeric">{counts["COMPLETE"]}</td><td class="numeric">{counts["ZERO"]}</td><td class="numeric">{counts["PARTIAL"]}</td><td class="numeric">{counts["ESTIMATED"]}</td><td class="numeric">{counts["MISSING"]}</td><td class="numeric">{counts["ERROR"]}</td><td class="numeric">{counts["NOT_APPLICABLE"]}</td><td class="numeric">{total}</td></tr>')
+        rows.append(f'<tr><th scope="row">{_esc(row["domain"])}</th><td>COMPLETE {counts["COMPLETE"]} · ZERO {counts["ZERO"]}</td><td>PARTIAL {counts["PARTIAL"]} · ESTIMATED {counts["ESTIMATED"]}</td><td>MISSING {counts["MISSING"]} · ERROR {counts["ERROR"]}</td><td class="numeric">{counts["NOT_APPLICABLE"]}</td><td class="numeric">{total}</td></tr>')
     denominator = sum(row["total"] for row in coverage)
     title = "Inventario histórico sintético" if model.get("mode") == "public" else "Fuentes v1 del corte"
     description = f"{title}: {denominator} fuentes; COMPLETE y ZERO se distinguen en cada barra y en el inventario. PARTIAL, ESTIMATED, MISSING, ERROR y NOT_APPLICABLE conservan estados propios."
+    legend = ''.join(f'<span><i class="segment-{state.lower()}" aria-hidden="true"></i>{state}</span>' for state in SOURCE_STATES)
     return (f'<svg class="coverage-chart" role="img" aria-labelledby="coverage-title coverage-desc" viewBox="0 0 590 {max(76, len(coverage)*54+18)}" xmlns="http://www.w3.org/2000/svg"><title id="coverage-title">Cobertura por dominio</title><desc id="coverage-desc">{_esc(description)}</desc>{"".join(bars)}</svg>'
-            f'<p class="chart-legend">COMPLETE · ZERO · PARTIAL · ESTIMATED · MISSING · ERROR · NOT_APPLICABLE. Inventario: {denominator} fuentes.</p>'
-            f'<div class="table-wrap" tabindex="0" role="region" aria-label="Desplazar tabla de cobertura por dominio"><table id="coverage-table"><caption>{_esc(title)} · estados por dominio</caption><thead><tr><th scope="col">Dominio</th><th scope="col">COMPLETE</th><th scope="col">ZERO</th><th scope="col">PARTIAL</th><th scope="col">ESTIMATED</th><th scope="col">MISSING</th><th scope="col">ERROR</th><th scope="col">NOT_APPLICABLE</th><th scope="col">Total</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>')
+            f'<p class="chart-legend">{legend}<span>Inventario: {denominator} fuentes.</span></p>'
+            f'<div class="table-wrap" tabindex="0" role="region" aria-label="Desplazar tabla de cobertura por dominio"><table id="coverage-table"><caption>{_esc(title)} · estados por dominio</caption><thead><tr><th scope="col">Dominio</th><th scope="col">Verificadas</th><th scope="col">Parciales</th><th scope="col">Desconocidas / bloqueadas</th><th scope="col">No aplica</th><th scope="col">Total</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>')
 
 
 def _verify_workbook_receipt(path: str | Path) -> tuple[dict[str, Any], str]:
@@ -515,19 +518,23 @@ def _render_html(model: dict[str, Any], workbook_hash: str) -> str:
     else:
         main_state, state_detail = "REVISAR", "La calidad y la decisión conservan estados separados."
         action, action_href = "Ver excepciones", "#excepciones"
-    exception_count = len(model.get("exceptions", [])) if mode != "unselected" else None
-    decision_count = len(model.get("decisions", [])) if mode != "unselected" else None
+    exception_count = len(model.get("exceptions", [])) if mode == "private_current" else None
+    decision_count = len(model.get("decisions", [])) if mode == "private_current" else None
     next_issue = (model.get("exceptions") or [{}])[0]
     next_issue_text = (next_issue.get("reason") or next_issue.get("message") or
-                       ("No hay excepciones registradas para este corte" if exception_count == 0 and mode == "private_current"
-                        else "No se pudo verificar el estado de excepciones"))
+                       (f'{next_issue["issue_code"]} · falta {next_issue.get("next_action_code", "revisar evidencia")} ({next_issue.get("owner_role", "responsable")})' if next_issue.get("issue_code") else None) or
+                       ("No hay excepciones registradas para este corte" if exception_count == 0 and mode == "private_current" else
+                        "No se pudo verificar el estado de excepciones"))
     next_decision_text = ("Decisión del responsable pendiente" if decision_count == 0 and mode == "private_current"
                           else "Sin decisiones actuales verificadas" if decision_count is None else
                           f"{decision_count} decisión(es) registradas")
+    exception_display = ("NO VERIFICADO" if exception_count is None else
+                         f"{exception_count} requieren atención" if exception_count else "0 verificadas")
+    decision_display = "DESCONOCIDO" if decision_count is None else str(decision_count)
     summary_cards = (f'<article class="summary-card state-card"><span>Estado del corte</span><strong>{_esc(main_state)}</strong><p>{_esc(state_detail)}</p></article>'
                      f'<article class="summary-card"><span>Cobertura de fuentes</span><strong>{_esc(source_summary)}</strong><p>{"Inventario histórico sintético" if mode == "public" else "Fuentes v1; calidad de métricas por separado"}</p></article>'
-                     f'<article class="summary-card"><span>Excepciones</span><strong>{_esc(_value(exception_count, "UNKNOWN"))}</strong><p>{_esc(next_issue_text)}</p></article>'
-                     f'<article class="summary-card"><span>Decisiones</span><strong>{_esc(_value(decision_count, "UNKNOWN"))}</strong><p>{_esc(next_decision_text)}</p></article>')
+                     f'<article class="summary-card"><span>Excepciones</span><strong>{_esc(exception_display)}</strong><p>{_esc(next_issue_text)}</p></article>'
+                     f'<article class="summary-card"><span>Decisiones</span><strong>{_esc(decision_display)}</strong><p>{_esc(next_decision_text)}</p></article>')
     fact_rows = [
         ("Rol", provenance.get("role")), ("Estado", provenance.get("status")),
         ("Corte", cut.get("cut_id")), ("Fecha de corte", cut.get("cutoff")),
@@ -553,7 +560,7 @@ def _render_html(model: dict[str, Any], workbook_hash: str) -> str:
     priority = {"BLOCKED": 0, "ERROR": 0, "REVIEW": 1, "UNKNOWN": 2, "PARTIAL": 2}
     exceptions = sorted(model.get("exceptions", []), key=lambda row: priority.get(str(row.get("status", row.get("severity", "PASS"))), 3))
     exception_rows = "".join(
-        f'<tr><td>{_esc(row.get("status", row.get("severity", "REVIEW")))}</td><th scope="row">{_esc(row.get("metric_id", row.get("source_id", "General")))}</th><td>{_esc(row.get("reason", row.get("message", "Evidencia incompleta")))}</td><td>{_esc(row.get("next_action", "Revisar evidencia local"))}</td><td>{_esc(_short(row.get("source_hash", row.get("source_ref"))))}</td></tr>'
+        f'<tr><td>{_esc(row.get("status", row.get("severity", "REVIEW")))}</td><th scope="row">{_esc(row.get("metric_id", row.get("source_id", row.get("sku_id", "General"))))}</th><td>{_esc(row.get("reason", row.get("message", row.get("issue_code", "Evidencia incompleta"))))}</td><td>{_esc(row.get("next_action", row.get("next_action_code", "Revisar evidencia local")))}</td><td>{_esc(row.get("evidence_ref", row.get("source_ref", "")))} <code>{_esc(_short(row.get("evidence_sha256", row.get("source_hash"))))}</code></td></tr>'
         for row in exceptions
     )
     source_cards = []
@@ -585,6 +592,8 @@ def _render_html(model: dict[str, Any], workbook_hash: str) -> str:
     provenance_short = ("CORTE PRIVADO ACTUAL" if mode == "private_current" else label)
     synthetic_badge = '<span class="synthetic-badge">SINTÉTICO</span>' if provenance.get("synthetic") else ""
     cutoff_text = f'{_value(cut.get("cutoff"))} · {_value(cut.get("timezone"))}' if cut else "Sin cutoff actual"
+    print_heading = f'{provenance_short} · Estado {_value(provenance.get("status"))} · {cutoff_text}'
+    print_heading_css = json.dumps(print_heading, ensure_ascii=False).replace("<", "\\3C ")
     coverage_html = _coverage_markup(model)
     comparable = '<p class="empty-state">No hay una serie comparable para este corte.</p>'
     exception_empty = ("No hay excepciones registradas para este corte" if mode == "private_current"
@@ -595,11 +604,10 @@ def _render_html(model: dict[str, Any], workbook_hash: str) -> str:
                     if mode == "unselected" else
                     "Esta página es local: no sube, sincroniza ni ejecuta datos o decisiones.")
     return f'''<!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>Alma OS · Portal offline v1</title><link rel="stylesheet" href="portal-v1.css"></head>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>Alma OS · Portal offline v1</title><link rel="stylesheet" href="portal-v1.css"><style media="print">@page {{ @top-center {{ content:{print_heading_css}; font:11px system-ui,sans-serif; color:#000; }} }}</style></head>
 <body><a class="skip-link" href="#contenido">Saltar al contenido</a>
-<header><div class="shell header-inner"><div><p class="brand">ALMA OS · PORTAL OFFLINE v1</p><h1>Evidencia semanal para decidir</h1></div><p class="header-state">{_esc(main_state)}</p></div></header>
+<header><div class="shell header-inner"><div><p class="brand">Alma de Lujo · Portal offline v1</p><h1>Corte semanal</h1></div><p class="header-state">{_esc(main_state)}</p></div></header>
 <div class="provenance-strip"><div class="shell"><strong class="provenance-label">{_esc(provenance_short)}</strong>{synthetic_badge}<span>{_esc(cutoff_text)}</span><span>Estado: {_esc(provenance.get("status"))}</span><p class="warning" role="status">{_esc(provenance.get("warning"))}</p></div></div>
-<p class="print-provenance">{_esc(label)} · Corte {_esc(_value(cut.get("cut_id")))} · Estado {_esc(provenance.get("status"))} · {_esc(cutoff_text)}</p>
 <div class="workspace-shell"><nav class="portal-rail" aria-label="Secciones del portal"><div class="nav-inner">{nav}</div><span class="nav-cue">Desliza para ver más secciones →</span></nav>
 <main id="contenido" class="shell">
 <section id="inicio" aria-labelledby="titulo-inicio"><h2 id="titulo-inicio">Inicio / corte seleccionado</h2><p class="context-note">{_esc(context_note)}</p><div class="overview-grid">{summary_cards}</div><div class="overview-lower"><article class="coverage-panel"><h3>Cobertura por dominio</h3>{coverage_html}</article><article class="next-panel"><h3>Siguiente paso</h3><p><strong>Excepción:</strong> {_esc(next_issue_text)}</p><p><strong>Decisión:</strong> {_esc(next_decision_text)}</p><a class="primary-action" href="{action_href}">{_esc(action)}</a></article></div><details class="provenance-details"><summary>Detalles del corte y procedencia</summary><dl class="fact-grid">{facts}</dl><div class="table-wrap" tabindex="0" role="region" aria-label="Desplazar tabla de procedencia"><table><caption>Proveniencia verificada</caption><tbody>{hash_rows or '<tr><td>Sin hashes de un corte seleccionado.</td></tr>'}</tbody></table></div></details><div class="actions"><a href="metricas.csv" download>Descargar CSV</a><a href="metricas.json" download>Descargar JSON</a><a href="portal-model.json" download>Descargar modelo JSON</a><button type="button" onclick="window.print()">Imprimir / Guardar PDF</button></div></section>
@@ -609,7 +617,7 @@ def _render_html(model: dict[str, Any], workbook_hash: str) -> str:
 <section id="fuentes" aria-labelledby="titulo-fuentes"><p class="eyebrow">05 · CONTRATO DE ENTRADA</p><h2 id="titulo-fuentes">Fuentes</h2><div class="search-tools"><label for="source-search">Buscar fuentes</label><input id="source-search" type="search" aria-label="Buscar fuentes" placeholder="Fuente, campo, proceso o decisión"><output id="source-count">Inventario completo: {len(source_cards)} fuentes</output></div><div id="source-empty" class="empty-state" hidden><h3>Sin coincidencias para “<span id="source-query"></span>”</h3><p>Borra el filtro o busca por fuente, campo, proceso o decisión. El inventario completo sigue disponible.</p></div><div class="source-grid">{''.join(source_cards) or '<p>Sin fuentes en este contexto.</p>'}</div></section>
 <section id="metricas" aria-labelledby="titulo-metricas"><h2 id="titulo-metricas">Métricas</h2><p>Un cero observado permanece 0; la ausencia se muestra como DESCONOCIDO.</p><h3>Métricas comparables</h3>{comparable}<div class="table-wrap" tabindex="0" role="region" aria-label="Desplazar tabla de métricas"><table><caption>{_esc(label)} · Diccionario y valores verificados</caption><thead><tr><th scope="col">Métrica</th><th scope="col">Valor</th><th scope="col">Unidad</th><th scope="col">Estado</th><th scope="col">Fórmula</th><th scope="col">Ventana</th><th scope="col">Regla unknown</th><th scope="col">Guardrail</th><th scope="col">Owner</th><th scope="col">Fuente hash</th></tr></thead><tbody>{''.join(metric_rows) or f'<tr><td colspan="10">{metric_empty}</td></tr>'}</tbody></table></div></section>
 <section id="procesos" aria-labelledby="titulo-procesos"><p class="eyebrow">07 · RESPONSABILIDAD</p><h2 id="titulo-procesos">Procesos y roles</h2><p>Estado nativo: <strong>{_esc(model.get("native", {}).get("status", "NO_INICIADO"))}</strong>. Una solicitud preparada no es una ejecución.</p><div class="evidence-grid">{roles or '<p>Sin ejecución nativa para este contexto.</p>'}</div></section>
-<section id="linaje" aria-labelledby="titulo-linaje"><p class="eyebrow">08 · EXPORTACIÓN</p><h2 id="titulo-linaje">Linaje y exportación</h2><p>Fuente → mart/métrica → proceso/rol → paquete. Los hashes enlazan cada capa y no ejecutan acciones externas.</p><div class="table-wrap"><table><caption>Inventario portable de evidencia</caption><thead><tr><th scope="col">Capa</th><th scope="col">Archivo</th><th scope="col">SHA-256</th></tr></thead><tbody>{evidence_rows or '<tr><td colspan="3">Evidencia histórica embebida y verificada.</td></tr>'}</tbody></table></div><p><a href="workbook-pack-parity.json">Ver oracle workbook → pack → manifest</a> · <a href="metricas.csv" download>Descargar CSV</a> · <a href="metricas.json" download>Descargar JSON</a></p></section>
+<section id="linaje" aria-labelledby="titulo-linaje"><p class="eyebrow">08 · EXPORTACIÓN</p><h2 id="titulo-linaje">Linaje y exportación</h2><p>Fuente → mart/métrica → proceso/rol → paquete. Los hashes enlazan cada capa y no ejecutan acciones externas.</p><div class="table-wrap"><table><caption>Inventario portable de evidencia</caption><thead><tr><th scope="col">Capa</th><th scope="col">Archivo</th><th scope="col">SHA-256</th></tr></thead><tbody>{evidence_rows or '<tr><td colspan="3">Evidencia histórica embebida y verificada.</td></tr>'}</tbody></table></div><div class="print-appendix"><h3>Hashes completos del corte y procedencia</h3><table><caption>Valores completos, seleccionables y auditables</caption><tbody>{hash_rows or '<tr><td>Sin hashes de un corte seleccionado.</td></tr>'}</tbody></table></div><p><a href="workbook-pack-parity.json">Ver oracle workbook → pack → manifest</a> · <a href="metricas.csv" download>Descargar CSV</a> · <a href="metricas.json" download>Descargar JSON</a></p></section>
 </main></div><footer><div class="shell"><p>{_esc(label)} · Portal local sin servidor · Ejecución externa prohibida</p></div></footer>
 <script>(function(){{const input=document.getElementById('source-search');const cards=[...document.querySelectorAll('.source-card')];const out=document.getElementById('source-count');const empty=document.getElementById('source-empty');const query=document.getElementById('source-query');if(!input)return;input.addEventListener('input',()=>{{const q=input.value.trim().toLocaleLowerCase('es');let visible=0;cards.forEach(card=>{{const hit=!q||card.dataset.search.toLocaleLowerCase('es').includes(q);card.hidden=!hit;if(hit)visible++;}});out.textContent=q?`${{visible}} de ${{cards.length}} fuentes visibles`:`Inventario completo: ${{cards.length}} fuentes`;query.textContent=input.value;empty.hidden=visible!==0;}});}})();</script>
 </body></html>'''

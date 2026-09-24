@@ -81,6 +81,11 @@ class PortalExecutiveContractTests(unittest.TestCase):
                                 "aria-labelledby" in attrs for tag, attrs in tags.tags))
             self.assertTrue(any(tag == "table" and attrs.get("id") == "coverage-table"
                                 for tag, attrs in tags.tags))
+            from scripts.build_offline_portal_v1 import _source_coverage
+            for row in _source_coverage(boundary_model()):
+                self.assertIn(f'>{row["domain"]} · {row["total"]}</text>', html_text)
+                self.assertIn(f'<th scope="row">{row["domain"]}</th><td>COMPLETE ', html_text)
+                self.assertEqual(row["total"], sum(row["counts"].values()))
             self.assertTrue(any(tag == "div" and attrs.get("tabindex") == "0" and
                                 attrs.get("aria-label", "").startswith("Desplazar tabla de")
                                 for tag, attrs in tags.tags))
@@ -97,6 +102,10 @@ class PortalExecutiveContractTests(unittest.TestCase):
             private_html = (private / "index.html").read_text("utf-8")
             self.assertIn("Inventario histórico sintético", public_html)
             self.assertIn("Sin métricas actuales en este ejemplo", public_html)
+            self.assertIn("NO VERIFICADO", public_html)
+            self.assertIn("DESCONOCIDO", public_html)
+            self.assertIn("Alma de Lujo · Portal offline v1", public_html)
+            self.assertIn("<h1>Corte semanal</h1>", public_html)
             self.assertIn("Todavía no hay un corte actual", private_html)
             self.assertIn("Abre un corte local verificado o consulta el ejemplo sintético.", private_html)
             self.assertNotIn("Inventario histórico sintético", private_html)
@@ -290,7 +299,7 @@ class PortalAccessibilityTests(unittest.TestCase):
             self.assertIn("Inventario completo", html_text)
             self.assertIn(":focus-visible", css)
             self.assertIn("@media print", css)
-            self.assertIn(".print-provenance", css)
+            self.assertIn("@top-center", html_text)
             self.assertRegex(css, r"overflow-wrap:\s*anywhere")
             self.assertRegex(css, r"flex-wrap:\s*wrap")
             self.assertNotIn("width: 390px", css)

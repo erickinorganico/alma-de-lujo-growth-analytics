@@ -18,7 +18,7 @@ h1 { margin:0; font:400 28px/1.2 Georgia,serif; }
 .provenance-label { color:var(--forest); font-weight:600; }
 .synthetic-badge { padding:4px 8px; border:1px solid var(--alert); border-radius:4px; color:var(--alert); font-weight:600; }
 .warning { flex-basis:100%; margin:0; color:var(--alert); }
-.print-provenance { display:none; }
+.print-appendix { display:none; }
 .workspace-shell { display:grid; grid-template-columns:232px minmax(0,1fr); width:min(100%,1700px); margin-inline:auto; }
 .portal-rail { position:sticky; top:0; align-self:start; height:100vh; overflow-y:auto; border-right:1px solid var(--line); background:var(--paper); }
 .nav-inner { display:flex; flex-direction:column; padding:16px 8px; }
@@ -42,12 +42,23 @@ p { max-width:72ch; }
 .overview-lower { display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:16px; margin-top:16px; }
 .coverage-chart { display:block; width:100%; height:auto; max-height:320px; color:var(--ink); }
 .coverage-chart text { fill:currentColor; font:14px system-ui,sans-serif; }
+.coverage-chart .segment-label { fill:#162e29; font-weight:600; }
+.coverage-chart .segment-label-complete, .coverage-chart .segment-label-error { fill:#fff; }
 .segment { stroke:#273d38; stroke-width:1; }
 .segment-complete { fill:#113f3b; } .segment-zero { fill:#b8d6ca; }
 .segment-partial { fill:#b08c54; } .segment-estimated { fill:#e5d8b6; }
 .segment-missing { fill:#fffefa; } .segment-error { fill:#8b3f30; }
 .segment-not_applicable { fill:#aaa; }
-.chart-legend { margin:8px 0; color:var(--muted); font-size:14px; overflow-wrap:anywhere; }
+.chart-legend { display:flex; flex-wrap:wrap; gap:4px 16px; margin:8px 0; color:var(--muted); font-size:14px; overflow-wrap:anywhere; }
+.chart-legend span { display:inline-flex; align-items:center; gap:4px; }
+.chart-legend i { display:inline-block; width:16px; height:16px; border:1px solid #273d38; }
+.chart-legend .segment-complete { background:#113f3b; }
+.chart-legend .segment-zero { background:#b8d6ca; }
+.chart-legend .segment-partial { background:#b08c54; }
+.chart-legend .segment-estimated { background:#e5d8b6; }
+.chart-legend .segment-missing { background:#fffefa; }
+.chart-legend .segment-error { background:#8b3f30; }
+.chart-legend .segment-not_applicable { background:#aaa; }
 .next-panel p { margin:0 0 16px; font-size:14px; }
 .primary-action { display:inline-flex; align-items:center; min-height:44px; padding:8px 16px; border-radius:4px; background:var(--teal); color:#fff; font-size:14px; font-weight:600; text-decoration:none; }
 .primary-action:hover, .primary-action:focus-visible { color:#fff; background:var(--forest); }
@@ -86,6 +97,7 @@ code, pre { overflow-wrap:anywhere; white-space:pre-wrap; font:400 14px/1.4 ui-m
 .detail { padding-bottom:16px; }
 .packet-group ul { padding-left:16px; }
 footer { border-top:1px solid var(--line); padding:16px 0; background:var(--paper); font-size:14px; }
+footer p { overflow-wrap:anywhere; }
 @media (max-width:1199px) {
   .workspace-shell { display:block; }
   .portal-rail { position:sticky; top:0; height:auto; overflow:visible; border-right:0; border-bottom:1px solid var(--line); z-index:10; }
@@ -110,15 +122,16 @@ footer { border-top:1px solid var(--line); padding:16px 0; background:var(--pape
 }
 @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
 @media print {
-  @page { size:A4 landscape; margin:12mm 12mm 17mm; }
+  @page { size:A4 landscape; margin:28mm 12mm 17mm; }
   :root { --cream:#fff; --paper:#fff; --ink:#000; --muted:#000; --line:#555; }
   html { scroll-behavior:auto; }
   body { background:#fff; color:#000; font-size:14px; }
   header, .provenance-strip, .portal-rail, .search-tools, .actions, .skip-link, script { display:none !important; }
-  .print-provenance { display:block; position:fixed; top:0; left:0; right:0; margin:0; padding:4px 8px; border-bottom:1px solid #000; background:#fff; color:#000; font-size:14px; }
+  .provenance-details, .primary-action { display:none !important; }
+  .print-appendix { display:block; margin-top:16px; break-inside:avoid; }
   .workspace-shell { display:block; }
   .shell { width:100%; }
-  main { padding:24px 0 0; }
+  main { padding:0; }
   section { margin:0 0 24px; break-before:page; scroll-margin:0; }
   #inicio { break-before:auto; }
   .overview-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
