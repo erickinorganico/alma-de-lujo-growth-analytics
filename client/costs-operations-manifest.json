@@ -778,7 +778,7 @@
       "evidence_refs": [
         {
           "path": "AGENTS.md",
-          "sha256": "abbf8f9d306eb939b30ef37cb76613af60a0e81583eb55fa375068efe317a9fd"
+          "sha256": "d06a9622ebbb6ff0b55cc76cb0fe8e73dee94a86f63f3e67bf031e23dd7e4f2c"
         },
         {
           "path": "specs/COSTS-OPERATIONS-v3.md",

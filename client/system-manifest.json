@@ -3,7 +3,7 @@
   "assets": [
     {
       "path": "client/SISTEMA_ANALITICO.html",
-      "sha256": "cab2c1ea46d2049d16a2b55f44ba205021fd910f0a6831adbce0360584f97cd7"
+      "sha256": "50c7dc37e7e7f54611ccbd9d335be3cdb7dafa8ddfb450e80399cb275a7c8605"
     }
   ],
   "base_sources": [
@@ -1117,7 +1117,7 @@
       "evidence_refs": [
         {
           "path": "AGENTS.md",
-          "sha256": "abbf8f9d306eb939b30ef37cb76613af60a0e81583eb55fa375068efe317a9fd"
+          "sha256": "d06a9622ebbb6ff0b55cc76cb0fe8e73dee94a86f63f3e67bf031e23dd7e4f2c"
         },
         {
           "path": "specs/COSTS-OPERATIONS-v3.md",
@@ -3570,16 +3570,17 @@
   },
   "source_content_hash": "d06efe733e4525d731093faa31c86ea51bb9f910856ad62e005032c141eaa3c3",
   "source_sha256": {
-    "AGENTS.md": "abbf8f9d306eb939b30ef37cb76613af60a0e81583eb55fa375068efe317a9fd",
+    "AGENTS.md": "d06a9622ebbb6ff0b55cc76cb0fe8e73dee94a86f63f3e67bf031e23dd7e4f2c",
     "agents/commerce_analyst.json": "c9d0278a7f0b77db80610eb8d69cb3d66f85c401d787eea325ac5c8445d45fd5",
     "agents/evidence_reviewer.json": "f2867500a7052cf3c0c7a9ba553f73ed115db0c07a9724688d119112229e6310",
     "agents/finance_analyst.json": "5b33bd44adf6c41fd7c0b74266c8e5b84dd1bd378675cf497d5654cfaed97056",
     "agents/growth_analyst.json": "5566638c4d56c0449c6b742d058ca49ae092d94dfafa7d1ab770f6de6b02b514",
     "agents/market_researcher.json": "50f416faeb91e3ee662a4cd624fcc8b1da91530aa98fbde17ba1c1425ec32364",
     "agents/merchandiser.json": "66c671d2d37820e71d31ab727cd10c4115dc847bc5d4821615adea6349a98c24",
+    "agents/native-cycle-v1.roles.json": "a24541b5cd9f98dafdbe66086f6e3a03502b02ef04baf5359bcad9ba1e0843f6",
     "agents/returns_analyst.json": "5653f9bd473293c1e08695022f85af5b790a947cc1f8db9a3ae945e4398de373",
     "client/COSTOS_Y_OPERACION.html": "599a8c6398dda799ec40403e0b00df80cbf0349643c4e8e07f7765580162c79d",
-    "client/costs-operations-manifest.json": "e955313459f149445cd48bc3ea207e5a9b65c44fdfbbbb4c66b2a59512a9b62b",
+    "client/costs-operations-manifest.json": "75f4821aa676766ba63c9b8a12162a771366c8ceff2a4535c0a529e8ff0b142d",
     "client/example-input.json": "d99f2ab0c7cc3bbb6da1291ba7977d89003e224795479b5b3e2958d84b40c06a",
     "client/operating-data/cash_scenario_events.csv": "2af2267050197b2cb0f8fd5b87911e15a18d69c1004975b3f65670acf1ecd9d5",
     "client/operating-data/cost_allocations.csv": "174d1dec9da9928af1c352f0447a62e9bd424fceb687927d6787569b8d16ffa8",
