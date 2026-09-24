@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://almadelujo.local/contracts/decision-register-v1.schema.json",
+  "title": "Alma de Lujo decision register v1",
+  "type": "object",
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "role": {"type": "string", "pattern": "^[a-z][a-z0-9_]{2,63}_(owner|lead|reviewer|analyst)$"},
+    "closure_check": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "pointer", "operator", "expected", "value_type", "unit", "requires_later_cut"],
+          "properties": {
+            "kind": {"const": "machine"},
+            "pointer": {"type": "string", "pattern": "^/", "maxLength": 500},
+            "operator": {"enum": ["exists", "not_exists", "eq", "ne", "gt", "gte", "lt", "lte"]},
+            "expected": {"type": ["string", "integer", "boolean", "null"]},
+            "value_type": {"enum": ["existence", "string", "status", "integer", "decimal", "boolean"]},
+            "unit": {"type": "string", "minLength": 1, "maxLength": 64},
+            "requires_later_cut": {"const": true}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "criterion", "requires_later_cut"],
+          "properties": {
+            "kind": {"const": "human_judgment"},
+            "criterion": {"type": "string", "minLength": 1, "maxLength": 4000},
+            "requires_later_cut": {"const": true}
+          }
+        }
+      ]
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "event_id", "decision_id", "event_type", "recorded_at_utc", "cut_id", "cutoff", "source_hash", "packet_hash", "recommendation_id", "owner", "due_date", "status", "closure_rule", "closure_check", "closure_evidence", "previous_hash", "hash", "owner_choice", "external_execution", "note_code"],
+      "properties": {
+        "version": {"const": "decision-register-v1"},
+        "event_id": {"type": "string"},
+        "decision_id": {"type": "string"},
+        "event_type": {"enum": ["REGISTER", "STATUS", "EXTEND", "CARRY", "STALE", "CLOSE"]},
+        "recorded_at_utc": {"type": "string", "format": "date-time"},
+        "cut_id": {"type": "string"},
+        "cutoff": {"type": "string", "format": "date-time"},
+        "source_hash": {"$ref": "#/$defs/sha256"},
+        "packet_hash": {"$ref": "#/$defs/sha256"},
+        "recommendation_id": {"type": "string"},
+        "owner": {"$ref": "#/$defs/role"},
+        "due_date": {"type": "string", "format": "date"},
+        "status": {"enum": ["OPEN", "IN_PROGRESS", "REVIEW", "STALE", "CLOSED", "REJECTED"]},
+        "closure_rule": {"type": "string"},
+        "closure_check": {"$ref": "#/$defs/closure_check"},
+        "closure_evidence": {"type": ["object", "null"]},
+        "previous_hash": {"oneOf": [{"const": "GENESIS"}, {"$ref": "#/$defs/sha256"}]},
+        "hash": {"$ref": "#/$defs/sha256"},
+        "owner_choice": {"enum": ["ACCEPT", "DEFER", "REJECT"]},
+        "external_execution": {"const": "PROHIBITED"},
+        "note_code": {"type": ["string", "null"]}
+      }
+    },
+    "anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "register_id", "terminal_hash", "event_count", "origins_hash"],
+      "properties": {
+        "version": {"const": "decision-register-v1"},
+        "register_id": {"type": "string"},
+        "terminal_hash": {"oneOf": [{"const": "GENESIS"}, {"$ref": "#/$defs/sha256"}]},
+        "event_count": {"type": "integer", "minimum": 0},
+        "origins_hash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "csv_projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_id", "recommendation_id", "owner", "due_date", "status", "cut_id", "source_hash", "packet_hash", "event_count", "terminal_hash"],
+      "properties": {
+        "decision_id": {"type": "string"}, "recommendation_id": {"type": "string"},
+        "owner": {"$ref": "#/$defs/role"}, "due_date": {"type": "string", "format": "date"},
+        "status": {"type": "string"}, "cut_id": {"type": "string"},
+        "source_hash": {"$ref": "#/$defs/sha256"}, "packet_hash": {"$ref": "#/$defs/sha256"},
+        "event_count": {"type": "integer"}, "terminal_hash": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

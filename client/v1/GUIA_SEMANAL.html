@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Alma OS — guía semanal</title>
+  <style>
+    :root { color-scheme: light; --ink:#231f20; --wine:#74384a; --paper:#fffaf6; --line:#dccdc6; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--paper); font:17px/1.6 Georgia,serif; }
+    main { width:min(900px,calc(100% - 32px)); margin:40px auto 80px; }
+    h1,h2 { line-height:1.15; letter-spacing:-.02em; }
+    h1 { font-size:clamp(2.2rem,6vw,4.6rem); margin:.2em 0; }
+    h2 { color:var(--wine); margin-top:2em; }
+    .eyebrow { font:700 .78rem/1.2 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; }
+    .notice { padding:18px 20px; border:1px solid var(--line); border-left:5px solid var(--wine); background:white; }
+    li { margin:.6em 0; }
+    a { color:var(--wine); text-underline-offset:.18em; }
+    code { overflow-wrap:anywhere; }
+    table { width:100%; border-collapse:collapse; background:white; }
+    th,td { padding:12px; border:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { font-family:system-ui,sans-serif; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Kit público · operación local</p>
+  <h1>Guía semanal</h1>
+  <p class="notice"><strong>Límite:</strong> este paquete es informativo y sintético. No contiene el runtime de analistas y no puede ejecutar un corte privado.</p>
+
+  <h2>1. Fuentes antes que métricas</h2>
+  <ol>
+    <li>Abre la <a href="../FUENTES/operating-v1-blank.xlsx">plantilla vacía</a>. Contiene las <strong>22 tablas</strong> canónicas.</li>
+    <li>Consulta el <a href="../DICCIONARIO/DICCIONARIO-v1.json">diccionario</a> para conocer tipo, unidad y significado de cada campo.</li>
+    <li>Captura hechos observados sin inventar valores. <strong>Vacío no significa cero</strong>; una celda desconocida permanece vacía.</li>
+    <li>Guarda el archivo lleno como copia privada fuera del ZIP. Nunca sobrescribas el ejemplo o la plantilla.</li>
+  </ol>
+
+  <h2>2. Política separada</h2>
+  <p>El archivo <a href="../POLITICAS/operating-metrics-review-template-v1.json">REVIEW</a> es una plantilla no aprobada. El archivo <a href="../POLITICAS/operating-metrics-synthetic-v1.json">SYNTHETIC_EXAMPLE</a> sólo sirve para el ejemplo sintético. La política no forma parte de las 22 tablas y no concede autoridad para actuar.</p>
+
+  <h2>3. Demo pública</h2>
+  <p>Abre la <a href="../PORTAL/index.html">demo pública</a> o lee el <a href="../EJEMPLO/RECORRIDO-SINTETICO.md">recorrido resuelto</a>. Ambos muestran datos sintéticos y pueden revisarse sin conexión.</p>
+  <table>
+    <thead><tr><th>Estado</th><th>Qué significa</th><th>Siguiente paso</th></tr></thead>
+    <tbody>
+      <tr><td>WAITING</td><td>Falta respuesta o recibo verificable.</td><td>Esperar o entregar la evidencia exacta.</td></tr>
+      <tr><td>BLOCKED</td><td>Una entrada, hash o contrato no es válido.</td><td>Corregir la causa indicada y crear un corte nuevo.</td></tr>
+      <tr><td>REVIEW</td><td>El resultado puede leerse, pero la política no está aprobada.</td><td>Revisión humana; no ejecutar decisiones.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. Entrega a análisis</h2>
+  <p>Entrega por el canal acordado la copia privada y la política aplicable. El analista ejecuta el flujo desde su repositorio local; los cortes y recibos privados permanecen en <code>.local/</code>. El kit no hace upload, no sync, no modifica sistemas externos y no realiza ejecución comercial.</p>
+
+  <p><a href="EMPIEZA_AQUI.md">Volver a Empieza aquí</a> · <a href="../PACKAGE-MANIFEST.json">Ver hashes del paquete</a></p>
+</main>
+</body>
+</html>

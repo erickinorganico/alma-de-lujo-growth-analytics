@@ -1,0 +1,66 @@
+{
+  "version": "operating-cycle-v1",
+  "input_classes": ["BLANK", "SYNTHETIC_EXAMPLE", "PRIVATE"],
+  "execution_mode": "native-codex-task-bridge",
+  "business_execution": "PROHIBITED",
+  "registered_queries": {
+    "metric_rows.by_reconciliation_id": {
+      "source": "metric_rows",
+      "parameters": ["reconciliation_id"],
+      "read_only": true
+    }
+  },
+  "roles": {
+    "merchandiser": {
+      "objective": "Challenge cost completeness, available units, purchase timing and product learning using aggregate v1 evidence.",
+      "model_family": "terra",
+      "families": ["cost", "inventory", "purchases", "learning", "budgets"],
+      "registered_query_required": true,
+      "write_scope": ["tasks/merchandiser.response.json", "tasks/merchandiser.query-trace.json"]
+    },
+    "finance_analyst": {
+      "objective": "Assess contribution, obligations, cash layers and budget headroom with exact cents and coverage gates.",
+      "model_family": "terra",
+      "families": ["economics", "obligations", "cash", "budgets"],
+      "registered_query_required": true,
+      "write_scope": ["tasks/finance_analyst.response.json", "tasks/finance_analyst.query-trace.json"]
+    },
+    "commerce_analyst": {
+      "objective": "Interpret aggregate sales, sell-through and readiness without inventing customers or orders.",
+      "model_family": "luna",
+      "families": ["economics", "learning", "sales_readiness"],
+      "registered_query_required": true,
+      "write_scope": ["tasks/commerce_analyst.response.json", "tasks/commerce_analyst.query-trace.json"]
+    },
+    "returns_analyst": {
+      "objective": "Challenge quality, loans, returns and inventory exceptions against eligible exposure windows.",
+      "model_family": "luna",
+      "families": ["inventory", "learning", "exceptions"],
+      "registered_query_required": true,
+      "write_scope": ["tasks/returns_analyst.response.json", "tasks/returns_analyst.query-trace.json"]
+    },
+    "growth_analyst": {
+      "objective": "Synthesize measured mix and unmet demand with explicit availability and denominator limits.",
+      "model_family": "sol",
+      "families": ["economics", "learning", "sales_readiness"],
+      "registered_query_required": true,
+      "write_scope": ["tasks/growth_analyst.response.json", "tasks/growth_analyst.query-trace.json"]
+    },
+    "market_researcher": {
+      "objective": "Frame testable market hypotheses from current aggregate evidence and flag absent external evidence.",
+      "model_family": "sol",
+      "families": ["learning", "exceptions", "sales_readiness"],
+      "registered_query_required": true,
+      "write_scope": ["tasks/market_researcher.response.json", "tasks/market_researcher.query-trace.json"]
+    },
+    "evidence_reviewer": {
+      "objective": "Independently challenge every accepted analyst's references, denominators, timing and alternative explanations; block unsupported owner-ready claims.",
+      "model_family": "astra",
+      "families": ["accepted_analyses", "frozen_current_cut"],
+      "registered_query_required": true,
+      "write_scope": ["tasks/evidence_reviewer.response.json", "tasks/evidence_reviewer.query-trace.json"]
+    }
+  },
+  "provenance_rule": "Derive synthetic_business_data only from the verified cut; PRIVATE remains private and is never labeled synthetic.",
+  "authority_rule": "Interpretation is advisory. Every proposed action requires owner approval and execution is PROHIBITED."
+}

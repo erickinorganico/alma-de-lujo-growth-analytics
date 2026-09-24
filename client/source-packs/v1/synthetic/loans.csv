@@ -1,0 +1,2 @@
+loan_id,sku_id,quantity,recipient_ref,borrowed_date,due_date,returned_date,condition_code,status_code,source_ref
+synthetic:loan-001,synthetic:sku-001,1,synthetic:recipient-001,2026-09-20,2026-09-25,,GOOD,OPEN,synthetic:source:loan-001

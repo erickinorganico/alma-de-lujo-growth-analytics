@@ -1,0 +1,2 @@
+balance_evidence_id,scenario_id,period_start,period_end,opening_balance_cents,closing_balance_cents,opening_observed_at,closing_observed_at,evidence_status,source_ref
+synthetic:balance-001,synthetic:scenario-observed,2026-09-01,2026-09-21,2000000,1100000,2026-09-01T00:00:00-07:00,2026-09-21T23:59:59-07:00,OBSERVED,synthetic:source:balance-001

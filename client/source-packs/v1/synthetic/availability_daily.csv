@@ -1,0 +1,2 @@
+availability_date,sku_id,observed_minutes,sellable_minutes,stockout_minutes,coverage_status,source_ref
+2026-09-21,synthetic:sku-001,1440,960,480,PARTIAL,synthetic:source:availability-001

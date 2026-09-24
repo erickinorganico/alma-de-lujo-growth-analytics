@@ -24,6 +24,18 @@ from typing import Any, Callable
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+# v0.2 owns these single-role contracts.  The v1 operating-cycle catalog is a
+# separate contract and must not change the historical acceptance surface.
+V02_ROLE_FILES = (
+    "commerce_analyst.json",
+    "evidence_reviewer.json",
+    "finance_analyst.json",
+    "growth_analyst.json",
+    "market_researcher.json",
+    "merchandiser.json",
+    "returns_analyst.json",
+)
+
 from alma.lifecycle import apply_event, definitions as lifecycle_definitions, verify_hash_chains
 from alma.native_agents import digest, validate_dispatch, validate_response, verify_request
 from alma.process_engine import definitions as process_definitions, status as process_status, verify_events
@@ -660,7 +672,9 @@ class ScopeRunner:
         return ok, {"requests": len(requests), "execution_modes": sorted(set(modes)), "authority": sorted(set(authority))}
 
     def _check_agent_002(self):
-        role_paths = sorted((ROOT / "agents").glob("*.json")); invalid = []
+        # Keep the historical v0.2 role surface explicit.  A later version may
+        # add catalogs under agents/ without changing what this gate validates.
+        role_paths = [ROOT / "agents" / name for name in V02_ROLE_FILES]; invalid = []
         expected_fields = {"id", "version", "name", "objective", "tools", "loop", "output", "runtime", "authority", "completion", "fail_closed"}
         for path in role_paths:
             role = read_json(path)

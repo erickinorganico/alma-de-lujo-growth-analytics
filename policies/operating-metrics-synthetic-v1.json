@@ -1,0 +1,49 @@
+{
+  "policy_version": "operating-metrics-policy-v1",
+  "effective_start": "2026-01-01",
+  "effective_end": "2027-01-01",
+  "status": "SYNTHETIC_EXAMPLE",
+  "owner_approval_ref": null,
+  "bases": {
+    "landed_cost_inclusions": [
+      "DIRECT",
+      "ALLOCATED"
+    ],
+    "revenue_basis": "net_revenue_cents",
+    "cogs_basis": "delivered_units_x_effective_unit_cost",
+    "variable_cost_basis": "variable_cost_cents",
+    "tax_basis": "excluded_from_management_contribution",
+    "shipping_basis": "recorded_variable_cost_only",
+    "discount_basis": "recorded_net_revenue_only",
+    "cash_projection_selection": "active_leaf_precedence",
+    "cash_floor_basis": "daily_minimum_cents",
+    "budget_headroom_basis": "approved_minus_open_commitment_minus_allocated_incurred",
+    "exception_owner_roles": {
+      "COST_INCOMPLETE": "FINANCE_OWNER",
+      "RECEIPT_UNINSPECTED": "OPERATIONS_OWNER",
+      "QUALITY_HOLD": "QUALITY_OWNER",
+      "SALES_READINESS": "COMMERCIAL_OWNER",
+      "LOAN_RETURN_DUE": "CUSTODY_OWNER",
+      "CUSTODY_EVIDENCE_MISSING": "CUSTODY_OWNER"
+    },
+    "exception_next_actions": {
+      "COST_INCOMPLETE": "COMPLETE_COST_EVIDENCE",
+      "RECEIPT_UNINSPECTED": "INSPECT_RECEIPT",
+      "QUALITY_HOLD": "RESOLVE_QUALITY_DISPOSITION",
+      "SALES_READINESS": "RESOLVE_READINESS_BLOCK",
+      "LOAN_RETURN_DUE": "CONFIRM_LOAN_RETURN",
+      "CUSTODY_EVIDENCE_MISSING": "ATTACH_CUSTODY_EVIDENCE"
+    }
+  },
+  "thresholds": {
+    "inventory_variance_units": 0,
+    "minimum_cash_floor_cents": 0,
+    "receipt_inspection_due_days": 2,
+    "quality_disposition_due_days": 3,
+    "loan_overdue_grace_days": 0
+  },
+  "maturity_windows": {
+    "returns_days": 30
+  },
+  "sha256": "dd0ea1074c5d0b8fc25dea50daefa27b3f866222de22f96f6ef52c4bcb36b2b2"
+}

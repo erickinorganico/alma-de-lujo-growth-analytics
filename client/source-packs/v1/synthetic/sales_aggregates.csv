@@ -1,0 +1,2 @@
+sales_date,sku_id,channel_code,delivery_cohort_id,delivered_units,returned_units,restocked_units,net_revenue_cents,variable_cost_cents,coverage_status,source_ref
+2026-09-15,synthetic:sku-001,synthetic:direct,synthetic:cohort-001,12,2,1,1200000,480000,PARTIAL,synthetic:source:sales-001

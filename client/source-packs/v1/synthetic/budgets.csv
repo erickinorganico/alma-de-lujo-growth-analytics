@@ -1,0 +1,2 @@
+budget_id,period_start,period_end,drop_code,channel_code,approved_cents,source_ref
+synthetic:budget-001,2026-09-01,2026-09-30,synthetic:drop-001,synthetic:direct,1200000,synthetic:source:budget-001

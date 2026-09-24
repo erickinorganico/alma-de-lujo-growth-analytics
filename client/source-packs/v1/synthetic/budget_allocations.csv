@@ -1,0 +1,3 @@
+budget_allocation_id,budget_id,origin_type,origin_id,drop_code,channel_code,allocated_cents,source_ref
+synthetic:budget-allocation-po-001,synthetic:budget-001,PURCHASE_ORDER,synthetic:po-001,synthetic:drop-001,synthetic:direct,900000,synthetic:source:budget-allocation-po-001
+synthetic:budget-allocation-expense-001,synthetic:budget-001,EXPENSE,synthetic:expense-001,synthetic:drop-001,synthetic:direct,100000,synthetic:source:budget-allocation-expense-001

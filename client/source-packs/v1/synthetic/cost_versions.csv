@@ -1,0 +1,2 @@
+cost_version_id,sku_id,effective_date,lifecycle_status,quantity_basis,public_price_cents,selling_fee_bps,currency,source_ref
+synthetic:cost-version-001,synthetic:sku-001,2026-09-01,ACTIVE,1,150000,800,MXN,synthetic:source:cost-version-001

@@ -1,0 +1,3 @@
+reservation_event_id,reservation_id,sku_id,event_date,event_type,units,source_ref
+synthetic:reservation-event-001,synthetic:reservation-001,synthetic:sku-001,2026-09-20,PLACE,3,synthetic:source:reservation-place-001
+synthetic:reservation-event-002,synthetic:reservation-001,synthetic:sku-001,2026-09-21,RELEASE,1,synthetic:source:reservation-release-001

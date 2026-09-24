@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alma-de-lujo.example/contracts/operating-metrics-policy-v1.schema.json",
+  "title": "Operating metric policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["policy_version", "effective_start", "effective_end", "status", "owner_approval_ref", "bases", "thresholds", "maturity_windows", "sha256"],
+  "properties": {
+    "policy_version": {"const": "operating-metrics-policy-v1"},
+    "effective_start": {"type": "string", "format": "date"},
+    "effective_end": {"type": "string", "format": "date"},
+    "status": {"enum": ["REVIEW", "APPROVED", "SYNTHETIC_EXAMPLE"]},
+    "owner_approval_ref": {"type": ["string", "null"]},
+    "bases": {"type": "object", "additionalProperties": {"type": ["string", "number", "boolean", "array", "object"]}},
+    "thresholds": {"type": "object", "additionalProperties": {"type": ["integer", "number"]}},
+    "maturity_windows": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}
