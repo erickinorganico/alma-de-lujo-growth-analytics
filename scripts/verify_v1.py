@@ -123,6 +123,9 @@ def _gate(name: str, arguments: list[str], *, timeout: int, artifact: Path | Non
 
 def deterministic(output: Path) -> dict[str, Any]:
     _relative(output)
+    # A prior PASS must disappear before any new gate starts; interruption is
+    # absence of current acceptance, never an implicit reuse of old evidence.
+    output.unlink(missing_ok=True)
     python = sys.executable
     work = ROOT / ".local/v1-acceptance/deterministic"
     work.mkdir(parents=True, exist_ok=True)

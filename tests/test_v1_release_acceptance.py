@@ -223,6 +223,8 @@ class ReleaseRunnerContractTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp:
             output = ROOT / ".local/v1-acceptance/test-failed-gate.json"
+            output.parent.mkdir(parents=True, exist_ok=True)
+            output.write_bytes(canonical_json({"status": "PASS", "stale": True}))
             with mock.patch.object(verify_v1, "_gate", return_value={"status": "FAIL", "gate": "probe"}):
                 result = verify_v1.deterministic(output)
             self.assertEqual("FAIL", result["status"])
@@ -230,6 +232,8 @@ class ReleaseRunnerContractTests(unittest.TestCase):
             self.assertEqual("NOT_RUN_BY_DETERMINISTIC_VERIFIER", result["native_execution"])
             self.assertEqual("UNKNOWN", result["external_gates"]["EXT-01"])
             self.assertEqual("REVIEW", result["external_gates"]["EXT-03"])
+            self.assertEqual("FAIL", _json(output)["status"])
+            self.assertNotIn("stale", _json(output))
             output.unlink()
 
     def test_gate_receipt_preserves_the_actual_argument_vector(self) -> None:
