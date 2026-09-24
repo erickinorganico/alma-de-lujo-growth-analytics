@@ -37,7 +37,7 @@ from alma.operating_marts import build_operating_marts  # noqa: E402
 SCENARIO = ROOT / "tests/fixtures/release_v1/two_week_scenario.json"
 ROLES = ROOT / "agents/native-cycle-v1.roles.json"
 SOURCE = ROOT / "client/source-packs/v1/synthetic"
-HEX64 = re.compile(r"[0-9a-f]{64}\Z")
+GIT_SHA = re.compile(r"[0-9a-f]{40}(?:[0-9a-f]{24})?\Z")
 TASK_ID = re.compile(r"/root/[a-z0-9_/-]{1,120}\Z")
 PRIVATE_MARKERS = ("fixture", "test_fixture", "mock", "fake", "sample", "decision_")
 
@@ -110,9 +110,10 @@ def _gate(name: str, arguments: list[str], *, timeout: int, artifact: Path | Non
         stdout, stderr = b"", type(exc).__name__.encode("ascii")
     if status == "PASS" and artifact is not None and not artifact.is_file():
         status = "BLOCKED"
-    return {"gate": name, "status": status, "command": [_relative(Path(arguments[0])) if
-            Path(arguments[0]).is_absolute() and Path(arguments[0]).is_relative_to(ROOT) else
-            ("python" if i == 0 else argument) for i, argument in enumerate(arguments)],
+    executable = Path(arguments[0])
+    display_command = [(_relative(executable) if executable.is_absolute() and
+                        executable.is_relative_to(ROOT) else "python"), *arguments[1:]]
+    return {"gate": name, "status": status, "command": display_command,
             "exit_code": code, "elapsed_seconds": round(time.monotonic() - start, 3),
             "stdout_sha256": _sha(stdout), "stderr_sha256": _sha(stderr),
             "output_sha256": _sha(artifact.read_bytes()) if status == "PASS" and
@@ -163,7 +164,7 @@ def deterministic(output: Path) -> dict[str, Any]:
     commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True,
                             text=True, check=False).stdout.strip()
     receipt = {"version": "v1.0-release-acceptance", "status": overall,
-        "candidate_commit": commit if HEX64.fullmatch(commit) else None,
+        "candidate_commit": commit if GIT_SHA.fullmatch(commit) else None,
         "interpreter": platform.python_version(), "platform": platform.system(),
         "scenario_sha256": _sha(SCENARIO.read_bytes()), "roles_sha256": _sha(ROLES.read_bytes()),
         "counts": counts, "gates": gates,

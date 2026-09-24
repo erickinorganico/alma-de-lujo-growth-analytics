@@ -226,7 +226,16 @@ class ReleaseRunnerContractTests(unittest.TestCase):
             with mock.patch.object(verify_v1, "_gate", return_value={"status": "FAIL", "gate": "probe"}):
                 result = verify_v1.deterministic(output)
             self.assertEqual("FAIL", result["status"])
+            self.assertRegex(result["candidate_commit"], r"^[0-9a-f]{40}$")
             self.assertEqual("NOT_RUN_BY_DETERMINISTIC_VERIFIER", result["native_execution"])
             self.assertEqual("UNKNOWN", result["external_gates"]["EXT-01"])
             self.assertEqual("REVIEW", result["external_gates"]["EXT-03"])
             output.unlink()
+
+    def test_gate_receipt_preserves_the_actual_argument_vector(self) -> None:
+        import sys
+
+        command = [sys.executable, "-c", "print('ok')"]
+        gate = verify_v1._gate("argv-probe", command, timeout=10)
+        self.assertEqual("PASS", gate["status"])
+        self.assertEqual([".venv/Scripts/python.exe", "-c", "print('ok')"], gate["command"])
