@@ -35,5 +35,6 @@ jobs:
           name: analytical-verification
           path: |
             build/ci-verification/*.json
+            build/ci-verification/tests.log
             build/ci-acceptance.json
             build/ci-client-workbooks.json
