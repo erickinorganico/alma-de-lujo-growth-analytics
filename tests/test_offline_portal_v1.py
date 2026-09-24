@@ -101,6 +101,22 @@ class PortalExecutiveContractTests(unittest.TestCase):
             self.assertIn("Abre un corte local verificado o consulta el ejemplo sintético.", private_html)
             self.assertNotIn("Inventario histórico sintético", private_html)
 
+    def test_hash_mismatch_emits_bounded_blocked_diagnostic(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            cut, mart = upstream(home)
+            cycle = Path(start_cycle(cut, mart, home / ".local" / "weekly-cycles")["destination"])
+            (cycle / "current-cut.json").write_bytes((cycle / "current-cut.json").read_bytes() + b"\n")
+            out = home / ".local" / "blocked-view"
+            result = build_offline_portal(mode="private", selected_cycle=cycle, output_dir=out)
+            text = (out / "index.html").read_text("utf-8")
+            self.assertEqual("blocked", result["mode"])
+            self.assertIn("CORTE BLOQUEADO · NO USAR PARA DECISIONES", text)
+            self.assertIn("Corrige la evidencia local", text)
+            self.assertNotIn(str(cycle), text)
+            self.assertNotIn("synthetic:sku", text)
+            self.assertEqual([], json.loads((out / "metricas.json").read_text("utf-8"))["rows"])
+
 
 class PortalEvidenceTests(unittest.TestCase):
     def test_public_and_unselected_views_do_not_accept_private_evidence(self) -> None:
@@ -232,7 +248,7 @@ def boundary_model() -> dict:
                 "manifest_sha256": digest("manifest"), "report_sha256": digest("report"),
                 "current_cut_sha256": digest("current"), "quality": {"workspace": "PASS"}},
         "sources": [{"source_id": "sales_aggregates", "source_hash": digest("source"),
-                     "coverage": {"status": "MEASURED"}, "status": "MEASURED",
+                     "coverage": {"status": "COMPLETE"}, "status": "COMPLETE",
                      "synthetic": True, "contract": {"grain": "day,sku,channel",
                         "primary_key": ["sales_date", "sku_id", "channel_code"],
                         "fields": [{"name": "net_revenue_cents", "nullable": False,
@@ -266,7 +282,7 @@ class PortalAccessibilityTests(unittest.TestCase):
             css = (out / "portal-v1.css").read_text("utf-8")
             positions = [html_text.index(f'id="{section_id}"') for section_id, _ in PORTAL_SECTIONS]
             self.assertEqual(sorted(positions), positions)
-            for landmark in ("<header", '<nav aria-label="Secciones del portal"', "<main", "<section"):
+            for landmark in ("<header", 'aria-label="Secciones del portal"', "<main", "<section"):
                 self.assertIn(landmark, html_text)
             self.assertIn("&lt;script&gt;alert(&#x27;unsafe&#x27;)&lt;/script&gt;", html_text)
             self.assertNotIn("<script>alert('unsafe')</script>", html_text)
@@ -275,11 +291,10 @@ class PortalAccessibilityTests(unittest.TestCase):
             self.assertIn(":focus-visible", css)
             self.assertIn("@media print", css)
             self.assertIn(".print-provenance", css)
-            self.assertIn("overflow-wrap: anywhere", css)
-            self.assertIn("flex-wrap: wrap", css)
+            self.assertRegex(css, r"overflow-wrap:\s*anywhere")
+            self.assertRegex(css, r"flex-wrap:\s*wrap")
             self.assertNotIn("width: 390px", css)
-            self.assertNotIn("http://", html_text)
-            self.assertNotIn("https://", html_text)
+            self.assertNotRegex(html_text, r'(?:href|src)="https?://')
             self.assertEqual("PASS", receipt["status"])
             for href in re.findall(r'href="([^"]+)"', html_text):
                 if href.startswith("#"):

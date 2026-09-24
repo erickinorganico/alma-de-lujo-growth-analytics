@@ -41,6 +41,19 @@ PORTAL_SECTIONS = (
 )
 EXPORT_COLUMNS = ("metric_id", "value", "unit", "status", "source_hash", "cut_id",
                   "as_of", "reconciliation_id")
+SOURCE_DOMAINS = (
+    ("Producto y ventas", ("sku_catalog", "sales_aggregates", "availability_daily",
+                            "unmet_demand", "sales_readiness")),
+    ("Inventario y calidad", ("inventory_counts", "inventory_movements",
+                               "inventory_reservations", "quality_events", "loans")),
+    ("Costos y compras", ("cost_versions", "cost_components", "cost_allocations",
+                            "purchase_orders", "purchase_receipts")),
+    ("Caja y obligaciones", ("obligations", "obligation_payments", "cash_events",
+                                 "cash_balance_evidence")),
+    ("Presupuesto y gastos", ("budgets", "budget_allocations", "expenses")),
+)
+SOURCE_STATES = ("COMPLETE", "ZERO", "PARTIAL", "ESTIMATED", "MISSING", "ERROR",
+                 "NOT_APPLICABLE")
 
 
 class PortalContractError(ValueError):
@@ -131,6 +144,17 @@ def _unselected_model() -> dict[str, Any]:
         "packet": None, "decisions": [], "decision_register": None,
         "stages": [], "evidence": {},
     }
+
+
+def _blocked_model(reason: str) -> dict[str, Any]:
+    model = _unselected_model()
+    model["mode"] = "blocked"
+    model["provenance"] = {
+        "label": "CORTE BLOQUEADO · NO USAR PARA DECISIONES", "role": "blocked",
+        "synthetic": None, "status": "BLOCKED",
+        "warning": f"Verificación del corte falló: {reason}. Corrige la evidencia local y vuelve a seleccionar el corte.",
+    }
+    return model
 
 
 def _private_cycle_path(value: str | Path) -> Path:
@@ -319,6 +343,73 @@ def _json_text(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
 
+def _source_coverage(model: dict[str, Any]) -> list[dict[str, Any]]:
+    """Count source evidence only; metric and workflow states are separate."""
+    sources = model.get("sources", [])
+    ids = [row.get("source_id") for row in sources]
+    if len(ids) != len(set(ids)):
+        raise PortalContractError("duplicate source ID in portal model")
+    if model.get("mode") == "public":
+        groups = (("Inventario histórico sintético", tuple(sorted(ids))),) if ids else ()
+    elif model.get("mode") in {"unselected", "blocked"}:
+        return []
+    else:
+        names = [name for _, group in SOURCE_DOMAINS for name in group]
+        if len(names) != len(set(names)) or set(names) != set(SOURCE_NAMES):
+            raise PortalContractError("canonical source-domain map differs from v1 registry")
+        if set(ids) - set(SOURCE_NAMES):
+            raise PortalContractError("unmapped v1 source ID")
+        groups = SOURCE_DOMAINS
+    by_id = {row["source_id"]: row for row in sources}
+    result = []
+    for domain, names in groups:
+        counts = {state: 0 for state in SOURCE_STATES}
+        for name in names:
+            source = by_id.get(name)
+            status = str(source.get("status", "MISSING") if source else "MISSING")
+            if status == "MEASURED" and model.get("mode") == "public":
+                status = "COMPLETE"  # v0.2's boolean coverage, never a v1 current status
+            if status not in counts:
+                raise PortalContractError(f"unsupported source coverage state: {status}")
+            counts[status] += 1
+        total = len(names)
+        result.append({"domain": domain, "counts": counts, "total": total,
+                       "verified": counts["COMPLETE"] + counts["ZERO"],
+                       "partial": counts["PARTIAL"] + counts["ESTIMATED"],
+                       "unknown_blocked": counts["MISSING"] + counts["ERROR"],
+                       "label": f"{domain}: {total} fuentes" if sources else
+                                "Sin inventario verificado"})
+    return result
+
+
+def _coverage_markup(model: dict[str, Any]) -> str:
+    coverage = _source_coverage(model)
+    if not coverage:
+        return '<p class="empty-state">Sin inventario verificado. La cobertura es DESCONOCIDA.</p>'
+    bars = []
+    rows = []
+    for index, row in enumerate(coverage):
+        counts = row["counts"]
+        total = row["total"]
+        y = 24 + index * 54
+        x = 234
+        segments = []
+        for state in SOURCE_STATES:
+            count = counts[state]
+            width = 340 * count / total if total else 0
+            if width:
+                segments.append(f'<rect class="segment segment-{state.lower()}" x="{x:.2f}" y="{y}" width="{width:.2f}" height="22"><title>{_esc(row["domain"])} · {state}: {count} de {total}</title></rect>')
+            x += width
+        bars.append(f'<text x="0" y="{y+16}">{_esc(row["domain"])} · {total}</text>' + ''.join(segments))
+        rows.append(f'<tr><th scope="row">{_esc(row["domain"])}</th><td class="numeric">{counts["COMPLETE"]}</td><td class="numeric">{counts["ZERO"]}</td><td class="numeric">{counts["PARTIAL"]}</td><td class="numeric">{counts["ESTIMATED"]}</td><td class="numeric">{counts["MISSING"]}</td><td class="numeric">{counts["ERROR"]}</td><td class="numeric">{counts["NOT_APPLICABLE"]}</td><td class="numeric">{total}</td></tr>')
+    denominator = sum(row["total"] for row in coverage)
+    title = "Inventario histórico sintético" if model.get("mode") == "public" else "Fuentes v1 del corte"
+    description = f"{title}: {denominator} fuentes; COMPLETE y ZERO se distinguen en cada barra y en el inventario. PARTIAL, ESTIMATED, MISSING, ERROR y NOT_APPLICABLE conservan estados propios."
+    return (f'<svg class="coverage-chart" role="img" aria-labelledby="coverage-title coverage-desc" viewBox="0 0 590 {max(76, len(coverage)*54+18)}" xmlns="http://www.w3.org/2000/svg"><title id="coverage-title">Cobertura por dominio</title><desc id="coverage-desc">{_esc(description)}</desc>{"".join(bars)}</svg>'
+            f'<p class="chart-legend">COMPLETE · ZERO · PARTIAL · ESTIMATED · MISSING · ERROR · NOT_APPLICABLE. Inventario: {denominator} fuentes.</p>'
+            f'<div class="table-wrap" tabindex="0" role="region" aria-label="Desplazar tabla de cobertura por dominio"><table id="coverage-table"><caption>{_esc(title)} · estados por dominio</caption><thead><tr><th scope="col">Dominio</th><th scope="col">COMPLETE</th><th scope="col">ZERO</th><th scope="col">PARTIAL</th><th scope="col">ESTIMATED</th><th scope="col">MISSING</th><th scope="col">ERROR</th><th scope="col">NOT_APPLICABLE</th><th scope="col">Total</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>')
+
+
 def _verify_workbook_receipt(path: str | Path) -> tuple[dict[str, Any], str]:
     receipt_path = Path(path)
     receipt = _json(receipt_path)
@@ -398,6 +489,45 @@ def _render_html(model: dict[str, Any], workbook_hash: str) -> str:
     cut = model.get("cut") or {}
     label = provenance["label"]
     nav = "".join(f'<a href="#{section_id}">{_esc(title)}</a>' for section_id, title in PORTAL_SECTIONS)
+    nav = nav[:nav.find('<a href="#fuentes">')] + '<span class="nav-group">Evidencia</span>' + nav[nav.find('<a href="#fuentes">'):]
+    nav = '<span class="nav-group">Decidir</span>' + nav
+    coverage = _source_coverage(model)
+    counts = {state: sum(row["counts"][state] for row in coverage) for state in SOURCE_STATES}
+    source_total = sum(row["total"] for row in coverage)
+    source_summary = (f'{counts["COMPLETE"] + counts["ZERO"]} verificadas de {source_total}'
+                      if model.get("sources") else "Cobertura desconocida")
+    mode = model.get("mode")
+    if mode == "public":
+        main_state, state_detail = "EJEMPLO", "Histórico sintético; sin corte actual ni aprobación."
+        action, action_href = "Examinar fuentes históricas", "#fuentes"
+    elif mode == "unselected":
+        main_state, state_detail = "SIN CORTE", "Todavía no hay un corte actual."
+        action, action_href = "Ver cómo se prepara un corte", "#recorrido"
+    elif mode == "blocked":
+        main_state, state_detail = "BLOQUEADO", "No usar para decisiones; corrige la evidencia local."
+        action, action_href = "Ver diagnóstico de procedencia", "#linaje"
+    elif provenance.get("status") in {"WAITING_ANALYSTS", "ESPERANDO_RESPUESTA"}:
+        main_state, state_detail = "PENDIENTE", "Faltan respuestas nativas verificadas y revisión independiente."
+        action, action_href = "Ver la etapa pendiente", "#recorrido"
+    elif provenance.get("status") in {"BLOCKED", "ERROR"}:
+        main_state, state_detail = "BLOQUEADO", "Revisar la evidencia local antes de decidir."
+        action, action_href = "Ver excepciones", "#excepciones"
+    else:
+        main_state, state_detail = "REVISAR", "La calidad y la decisión conservan estados separados."
+        action, action_href = "Ver excepciones", "#excepciones"
+    exception_count = len(model.get("exceptions", [])) if mode != "unselected" else None
+    decision_count = len(model.get("decisions", [])) if mode != "unselected" else None
+    next_issue = (model.get("exceptions") or [{}])[0]
+    next_issue_text = (next_issue.get("reason") or next_issue.get("message") or
+                       ("No hay excepciones registradas para este corte" if exception_count == 0 and mode == "private_current"
+                        else "No se pudo verificar el estado de excepciones"))
+    next_decision_text = ("Decisión del responsable pendiente" if decision_count == 0 and mode == "private_current"
+                          else "Sin decisiones actuales verificadas" if decision_count is None else
+                          f"{decision_count} decisión(es) registradas")
+    summary_cards = (f'<article class="summary-card state-card"><span>Estado del corte</span><strong>{_esc(main_state)}</strong><p>{_esc(state_detail)}</p></article>'
+                     f'<article class="summary-card"><span>Cobertura de fuentes</span><strong>{_esc(source_summary)}</strong><p>{"Inventario histórico sintético" if mode == "public" else "Fuentes v1; calidad de métricas por separado"}</p></article>'
+                     f'<article class="summary-card"><span>Excepciones</span><strong>{_esc(_value(exception_count, "UNKNOWN"))}</strong><p>{_esc(next_issue_text)}</p></article>'
+                     f'<article class="summary-card"><span>Decisiones</span><strong>{_esc(_value(decision_count, "UNKNOWN"))}</strong><p>{_esc(next_decision_text)}</p></article>')
     fact_rows = [
         ("Rol", provenance.get("role")), ("Estado", provenance.get("status")),
         ("Corte", cut.get("cut_id")), ("Fecha de corte", cut.get("cutoff")),
@@ -423,7 +553,7 @@ def _render_html(model: dict[str, Any], workbook_hash: str) -> str:
     priority = {"BLOCKED": 0, "ERROR": 0, "REVIEW": 1, "UNKNOWN": 2, "PARTIAL": 2}
     exceptions = sorted(model.get("exceptions", []), key=lambda row: priority.get(str(row.get("status", row.get("severity", "PASS"))), 3))
     exception_rows = "".join(
-        f'<tr><th scope="row">{_esc(row.get("metric_id", row.get("source_id", "General")))}</th><td>{_esc(row.get("status", row.get("severity", "REVIEW")))}</td><td>{_esc(row.get("reason", row.get("message", "Evidencia incompleta")))}</td><td>{_esc(row.get("next_action", "Revisar evidencia local"))}</td></tr>'
+        f'<tr><td>{_esc(row.get("status", row.get("severity", "REVIEW")))}</td><th scope="row">{_esc(row.get("metric_id", row.get("source_id", "General")))}</th><td>{_esc(row.get("reason", row.get("message", "Evidencia incompleta")))}</td><td>{_esc(row.get("next_action", "Revisar evidencia local"))}</td><td>{_esc(_short(row.get("source_hash", row.get("source_ref"))))}</td></tr>'
         for row in exceptions
     )
     source_cards = []
@@ -452,21 +582,35 @@ def _render_html(model: dict[str, Any], workbook_hash: str) -> str:
         f'<tr><th scope="row">{_esc(name)}</th><td>{_esc(_value(item.get("name") if item else None))}</td><td><code>{_esc(_value(item.get("sha256") if item else None))}</code></td></tr>'
         for name, item in model.get("evidence", {}).items()
     )
+    provenance_short = ("CORTE PRIVADO ACTUAL" if mode == "private_current" else label)
+    synthetic_badge = '<span class="synthetic-badge">SINTÉTICO</span>' if provenance.get("synthetic") else ""
+    cutoff_text = f'{_value(cut.get("cutoff"))} · {_value(cut.get("timezone"))}' if cut else "Sin cutoff actual"
+    coverage_html = _coverage_markup(model)
+    comparable = '<p class="empty-state">No hay una serie comparable para este corte.</p>'
+    exception_empty = ("No hay excepciones registradas para este corte" if mode == "private_current"
+                       else "No se pudo verificar el estado de excepciones")
+    metric_empty = ("Sin métricas actuales en este ejemplo" if mode == "public" else
+                    "Sin valores de métrica para este contexto.")
+    context_note = ("Abre un corte local verificado o consulta el ejemplo sintético."
+                    if mode == "unselected" else
+                    "Esta página es local: no sube, sincroniza ni ejecuta datos o decisiones.")
     return f'''<!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>Alma OS · Portal offline v1</title><link rel="stylesheet" href="portal-v1.css"></head>
 <body><a class="skip-link" href="#contenido">Saltar al contenido</a>
-<header><div class="shell"><p class="eyebrow">ALMA OS · PORTAL OFFLINE v1</p><h1>Evidencia semanal para decidir con trazabilidad</h1><p class="provenance-label">{_esc(label)}</p><p class="warning" role="status">{_esc(provenance.get("warning"))}</p><p class="print-provenance">{_esc(label)} · Corte {_esc(_value(cut.get("cut_id")))} · Estado {_esc(provenance.get("status"))}</p></div></header>
-<nav aria-label="Secciones del portal"><div class="shell nav-inner">{nav}</div></nav>
+<header><div class="shell header-inner"><div><p class="brand">ALMA OS · PORTAL OFFLINE v1</p><h1>Evidencia semanal para decidir</h1></div><p class="header-state">{_esc(main_state)}</p></div></header>
+<div class="provenance-strip"><div class="shell"><strong class="provenance-label">{_esc(provenance_short)}</strong>{synthetic_badge}<span>{_esc(cutoff_text)}</span><span>Estado: {_esc(provenance.get("status"))}</span><p class="warning" role="status">{_esc(provenance.get("warning"))}</p></div></div>
+<p class="print-provenance">{_esc(label)} · Corte {_esc(_value(cut.get("cut_id")))} · Estado {_esc(provenance.get("status"))} · {_esc(cutoff_text)}</p>
+<div class="workspace-shell"><nav class="portal-rail" aria-label="Secciones del portal"><div class="nav-inner">{nav}</div><span class="nav-cue">Desliza para ver más secciones →</span></nav>
 <main id="contenido" class="shell">
-<section id="inicio" aria-labelledby="titulo-inicio"><p class="eyebrow">01 · CONTEXTO</p><h2 id="titulo-inicio">Inicio / corte seleccionado</h2><p>Esta página es local: no sube, sincroniza ni ejecuta datos o decisiones.</p><dl class="fact-grid">{facts}</dl><div class="table-wrap"><table><caption>Proveniencia verificada</caption><tbody>{hash_rows or '<tr><td>Sin hashes de un corte seleccionado.</td></tr>'}</tbody></table></div><div class="actions"><a href="metricas.csv" download>Descargar CSV</a><a href="metricas.json" download>Descargar JSON</a><a href="portal-model.json" download>Descargar modelo JSON</a><button type="button" onclick="window.print()">Imprimir / Guardar PDF</button></div></section>
-<section id="recorrido" aria-labelledby="titulo-recorrido"><p class="eyebrow">02 · FLUJO</p><h2 id="titulo-recorrido">Recorrido semanal</h2><div class="table-wrap"><table><caption>Estados del corte; pendiente y espera siguen visibles</caption><thead><tr><th scope="col">Etapa</th><th scope="col">Estado</th><th scope="col">Evidencia</th></tr></thead><tbody>{stages or '<tr><td colspan="3">Sin corte actual seleccionado.</td></tr>'}</tbody></table></div></section>
-<section id="decisiones" aria-labelledby="titulo-decisiones"><p class="eyebrow">03 · DECISIÓN HUMANA</p><h2 id="titulo-decisiones">Decisiones</h2><p>Los paquetes son asesoría. La revisión, el registro del responsable y el cierre son eventos distintos.</p>{_packet_groups(model.get("packet"))}<div class="table-wrap"><table><caption>Registro de decisiones del corte</caption><thead><tr><th scope="col">ID</th><th scope="col">Estado</th><th scope="col">Vence</th><th scope="col">Fuente</th><th scope="col">Paquete</th><th scope="col">Cierre</th></tr></thead><tbody>{decisions or '<tr><td colspan="6">Sin decisión del responsable registrada.</td></tr>'}</tbody></table></div></section>
-<section id="excepciones" aria-labelledby="titulo-excepciones"><p class="eyebrow">04 · ANTES DE LOS PASS</p><h2 id="titulo-excepciones">Excepciones y calidad</h2><div class="table-wrap"><table><caption>Bloqueos, revisiones y desconocidos primero</caption><thead><tr><th scope="col">Fuente o métrica</th><th scope="col">Estado</th><th scope="col">Razón</th><th scope="col">Siguiente evidencia</th></tr></thead><tbody>{exception_rows or '<tr><td colspan="4">Sin excepciones declaradas en este contexto.</td></tr>'}</tbody></table></div></section>
+<section id="inicio" aria-labelledby="titulo-inicio"><h2 id="titulo-inicio">Inicio / corte seleccionado</h2><p class="context-note">{_esc(context_note)}</p><div class="overview-grid">{summary_cards}</div><div class="overview-lower"><article class="coverage-panel"><h3>Cobertura por dominio</h3>{coverage_html}</article><article class="next-panel"><h3>Siguiente paso</h3><p><strong>Excepción:</strong> {_esc(next_issue_text)}</p><p><strong>Decisión:</strong> {_esc(next_decision_text)}</p><a class="primary-action" href="{action_href}">{_esc(action)}</a></article></div><details class="provenance-details"><summary>Detalles del corte y procedencia</summary><dl class="fact-grid">{facts}</dl><div class="table-wrap" tabindex="0" role="region" aria-label="Desplazar tabla de procedencia"><table><caption>Proveniencia verificada</caption><tbody>{hash_rows or '<tr><td>Sin hashes de un corte seleccionado.</td></tr>'}</tbody></table></div></details><div class="actions"><a href="metricas.csv" download>Descargar CSV</a><a href="metricas.json" download>Descargar JSON</a><a href="portal-model.json" download>Descargar modelo JSON</a><button type="button" onclick="window.print()">Imprimir / Guardar PDF</button></div></section>
+<section id="recorrido" aria-labelledby="titulo-recorrido"><h2 id="titulo-recorrido">Recorrido semanal</h2><div class="table-wrap" tabindex="0" role="region" aria-label="Desplazar tabla de recorrido semanal"><table><caption>Estados del corte; pendiente y espera siguen visibles</caption><thead><tr><th scope="col">Etapa</th><th scope="col">Estado</th><th scope="col">Evidencia</th></tr></thead><tbody>{stages or '<tr><td colspan="3">Sin corte actual seleccionado.</td></tr>'}</tbody></table></div></section>
+<section id="decisiones" aria-labelledby="titulo-decisiones"><h2 id="titulo-decisiones">Decisiones</h2><p>Los paquetes son asesoría. La revisión, el registro del responsable y el cierre son eventos distintos.</p>{_packet_groups(model.get("packet"))}<div class="table-wrap" tabindex="0" role="region" aria-label="Desplazar tabla de decisiones"><table><caption>Registro de decisiones del corte</caption><thead><tr><th scope="col">ID</th><th scope="col">Estado</th><th scope="col">Vence</th><th scope="col">Fuente</th><th scope="col">Paquete</th><th scope="col">Cierre</th></tr></thead><tbody>{decisions or '<tr><td colspan="6">Sin decisión del responsable registrada.</td></tr>'}</tbody></table></div></section>
+<section id="excepciones" aria-labelledby="titulo-excepciones"><h2 id="titulo-excepciones">Excepciones y calidad</h2><div class="table-wrap" tabindex="0" role="region" aria-label="Desplazar tabla de excepciones"><table><caption>Bloqueos, revisiones y desconocidos primero</caption><thead><tr><th scope="col">Estado</th><th scope="col">Fuente o métrica</th><th scope="col">Motivo</th><th scope="col">Qué falta</th><th scope="col">Evidencia</th></tr></thead><tbody>{exception_rows or f'<tr><td colspan="5">{exception_empty}</td></tr>'}</tbody></table></div></section>
 <section id="fuentes" aria-labelledby="titulo-fuentes"><p class="eyebrow">05 · CONTRATO DE ENTRADA</p><h2 id="titulo-fuentes">Fuentes</h2><div class="search-tools"><label for="source-search">Buscar fuentes</label><input id="source-search" type="search" aria-label="Buscar fuentes" placeholder="Fuente, campo, proceso o decisión"><output id="source-count">Inventario completo: {len(source_cards)} fuentes</output></div><div id="source-empty" class="empty-state" hidden><h3>Sin coincidencias para “<span id="source-query"></span>”</h3><p>Borra el filtro o busca por fuente, campo, proceso o decisión. El inventario completo sigue disponible.</p></div><div class="source-grid">{''.join(source_cards) or '<p>Sin fuentes en este contexto.</p>'}</div></section>
-<section id="metricas" aria-labelledby="titulo-metricas"><p class="eyebrow">06 · DEFINICIONES</p><h2 id="titulo-metricas">Métricas</h2><p>Un cero observado permanece 0; la ausencia se muestra como DESCONOCIDO.</p><div class="table-wrap"><table><caption>{_esc(label)} · Diccionario y valores verificados</caption><thead><tr><th scope="col">Métrica</th><th scope="col">Valor</th><th scope="col">Unidad</th><th scope="col">Estado</th><th scope="col">Fórmula</th><th scope="col">Ventana</th><th scope="col">Regla unknown</th><th scope="col">Guardrail</th><th scope="col">Owner</th><th scope="col">Fuente hash</th></tr></thead><tbody>{''.join(metric_rows) or '<tr><td colspan="10">Sin valores de métrica para este contexto.</td></tr>'}</tbody></table></div></section>
+<section id="metricas" aria-labelledby="titulo-metricas"><h2 id="titulo-metricas">Métricas</h2><p>Un cero observado permanece 0; la ausencia se muestra como DESCONOCIDO.</p><h3>Métricas comparables</h3>{comparable}<div class="table-wrap" tabindex="0" role="region" aria-label="Desplazar tabla de métricas"><table><caption>{_esc(label)} · Diccionario y valores verificados</caption><thead><tr><th scope="col">Métrica</th><th scope="col">Valor</th><th scope="col">Unidad</th><th scope="col">Estado</th><th scope="col">Fórmula</th><th scope="col">Ventana</th><th scope="col">Regla unknown</th><th scope="col">Guardrail</th><th scope="col">Owner</th><th scope="col">Fuente hash</th></tr></thead><tbody>{''.join(metric_rows) or f'<tr><td colspan="10">{metric_empty}</td></tr>'}</tbody></table></div></section>
 <section id="procesos" aria-labelledby="titulo-procesos"><p class="eyebrow">07 · RESPONSABILIDAD</p><h2 id="titulo-procesos">Procesos y roles</h2><p>Estado nativo: <strong>{_esc(model.get("native", {}).get("status", "NO_INICIADO"))}</strong>. Una solicitud preparada no es una ejecución.</p><div class="evidence-grid">{roles or '<p>Sin ejecución nativa para este contexto.</p>'}</div></section>
 <section id="linaje" aria-labelledby="titulo-linaje"><p class="eyebrow">08 · EXPORTACIÓN</p><h2 id="titulo-linaje">Linaje y exportación</h2><p>Fuente → mart/métrica → proceso/rol → paquete. Los hashes enlazan cada capa y no ejecutan acciones externas.</p><div class="table-wrap"><table><caption>Inventario portable de evidencia</caption><thead><tr><th scope="col">Capa</th><th scope="col">Archivo</th><th scope="col">SHA-256</th></tr></thead><tbody>{evidence_rows or '<tr><td colspan="3">Evidencia histórica embebida y verificada.</td></tr>'}</tbody></table></div><p><a href="workbook-pack-parity.json">Ver oracle workbook → pack → manifest</a> · <a href="metricas.csv" download>Descargar CSV</a> · <a href="metricas.json" download>Descargar JSON</a></p></section>
-</main><footer><div class="shell"><p>{_esc(label)} · Portal local sin servidor · Ejecución externa PROHIBITED</p></div></footer>
+</main></div><footer><div class="shell"><p>{_esc(label)} · Portal local sin servidor · Ejecución externa prohibida</p></div></footer>
 <script>(function(){{const input=document.getElementById('source-search');const cards=[...document.querySelectorAll('.source-card')];const out=document.getElementById('source-count');const empty=document.getElementById('source-empty');const query=document.getElementById('source-query');if(!input)return;input.addEventListener('input',()=>{{const q=input.value.trim().toLocaleLowerCase('es');let visible=0;cards.forEach(card=>{{const hit=!q||card.dataset.search.toLocaleLowerCase('es').includes(q);card.hidden=!hit;if(hit)visible++;}});out.textContent=q?`${{visible}} de ${{cards.length}} fuentes visibles`:`Inventario completo: ${{cards.length}} fuentes`;query.textContent=input.value;empty.hidden=visible!==0;}});}})();</script>
 </body></html>'''
 
@@ -481,7 +625,7 @@ def render_portal(model: dict[str, Any], output_dir: str | Path, *,
     mode = model.get("mode")
     if mode == "public" and ".local" in destination.parts:
         raise PortalContractError("public portal cannot be written under a private root")
-    if mode == "private_current" and ".local" not in destination.parts:
+    if mode in {"private_current", "blocked"} and ".local" not in destination.parts:
         raise PortalContractError("current portal must remain under an ignored .local root")
     parent = destination.parent.resolve()
     parent.mkdir(parents=True, exist_ok=True)
@@ -522,10 +666,17 @@ def build_offline_portal(*, mode: str, output_dir: str | Path,
                          selected_cycle: str | Path | None = None,
                          decision_register: str | Path | None = None,
                          workbook_receipt: str | Path = WORKBOOK_RECEIPT) -> dict[str, Any]:
-    model = collect_portal_model(mode=mode, selected_cycle=selected_cycle,
-                                 decision_register=decision_register)
+    try:
+        model = collect_portal_model(mode=mode, selected_cycle=selected_cycle,
+                                     decision_register=decision_register)
+    except PortalContractError as exc:
+        if mode != "private" or selected_cycle is None:
+            raise
+        # Only bounded verifier diagnostics; no paths or stale current values.
+        reason = "hash o contrato no coincide" if "hash" in str(exc) or "verification" in str(exc) else "evidencia no verificable"
+        model = _blocked_model(reason)
     return {**render_portal(model, output_dir, workbook_receipt=workbook_receipt),
-            "mode": mode}
+            "mode": model["mode"]}
 
 
 def main(argv: list[str] | None = None) -> int:
