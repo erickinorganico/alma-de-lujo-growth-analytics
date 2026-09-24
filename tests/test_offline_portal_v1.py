@@ -7,10 +7,11 @@ import json
 import re
 import tempfile
 import unittest
+from html.parser import HTMLParser
 from pathlib import Path
 
 from alma.decision_register import close_decision, create_register, register_decision, verify_register
-from alma.operating_contracts import canonical_json
+from alma.operating_contracts import SOURCE_NAMES, canonical_json
 from alma.weekly_cycle import read_terminal_packet, start_cycle
 from scripts.build_offline_portal_v1 import (
     PORTAL_SECTIONS,
@@ -24,6 +25,81 @@ from tests.test_weekly_cycle import upstream
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+class _PortalTags(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.tags: list[tuple[str, dict[str, str]]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.tags.append((tag, dict(attrs)))
+
+
+class PortalExecutiveContractTests(unittest.TestCase):
+    def test_canonical_domain_partition_and_unknown_source_fail_closed(self) -> None:
+        from scripts.build_offline_portal_v1 import SOURCE_DOMAINS, _source_coverage
+
+        grouped = [source for _, names in SOURCE_DOMAINS for source in names]
+        self.assertEqual([5, 5, 5, 4, 3], [len(names) for _, names in SOURCE_DOMAINS])
+        self.assertEqual(set(SOURCE_NAMES), set(grouped))
+        self.assertEqual(len(SOURCE_NAMES), len(grouped))
+        model = boundary_model()
+        model["sources"].append({"source_id": "unmapped_v1", "status": "MISSING"})
+        with self.assertRaises(PortalContractError):
+            _source_coverage(model)
+
+    def test_status_segments_reconcile_without_false_zero(self) -> None:
+        from scripts.build_offline_portal_v1 import SOURCE_DOMAINS, _source_coverage
+
+        model = boundary_model()
+        names = list(SOURCE_NAMES)
+        states = ("COMPLETE", "ZERO", "PARTIAL", "ESTIMATED", "MISSING", "ERROR", "NOT_APPLICABLE")
+        model["sources"] = [{"source_id": name, "status": states[index % len(states)]}
+                            for index, name in enumerate(names)]
+        coverage = _source_coverage(model)
+        self.assertEqual(22, sum(row["total"] for row in coverage))
+        self.assertTrue(all(sum(source in group for _, group in SOURCE_DOMAINS) == 1
+                            for source in names))
+        self.assertEqual(22, sum(sum(row["counts"].values()) for row in coverage))
+        model["sources"] = []
+        self.assertNotIn("0/22", _source_coverage(model)[0]["label"])
+
+    def test_first_screen_semantics_and_chart_table_parity(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / ".local" / "portal"
+            render_portal(boundary_model(), out)
+            html_text = (out / "index.html").read_text("utf-8")
+            tags = _PortalTags()
+            tags.feed(html_text)
+            self.assertIn('class="portal-rail"', html_text)
+            self.assertIn('class="provenance-strip"', html_text)
+            self.assertIn("Cobertura por dominio", html_text)
+            self.assertIn("Detalles del corte y procedencia", html_text)
+            self.assertLess(html_text.index("Cobertura por dominio"), html_text.index("Detalles del corte y procedencia"))
+            self.assertTrue(any(tag == "svg" and attrs.get("role") == "img" and
+                                "aria-labelledby" in attrs for tag, attrs in tags.tags))
+            self.assertTrue(any(tag == "table" and attrs.get("id") == "coverage-table"
+                                for tag, attrs in tags.tags))
+            self.assertTrue(any(tag == "div" and attrs.get("tabindex") == "0" and
+                                attrs.get("aria-label", "").startswith("Desplazar tabla de")
+                                for tag, attrs in tags.tags))
+            self.assertIn("No hay una serie comparable para este corte.", html_text)
+            self.assertIn("&lt;script&gt;alert", html_text)
+
+    def test_public_and_unselected_copy_never_borrows_current_metrics(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            public = Path(tmp) / "public"
+            private = Path(tmp) / ".local" / "unselected"
+            render_portal(collect_portal_model(mode="public"), public)
+            render_portal(collect_portal_model(mode="private"), private)
+            public_html = (public / "index.html").read_text("utf-8")
+            private_html = (private / "index.html").read_text("utf-8")
+            self.assertIn("Inventario histórico sintético", public_html)
+            self.assertIn("Sin métricas actuales en este ejemplo", public_html)
+            self.assertIn("Todavía no hay un corte actual", private_html)
+            self.assertIn("Abre un corte local verificado o consulta el ejemplo sintético.", private_html)
+            self.assertNotIn("Inventario histórico sintético", private_html)
 
 
 class PortalEvidenceTests(unittest.TestCase):
@@ -201,7 +277,7 @@ class PortalAccessibilityTests(unittest.TestCase):
             self.assertIn(".print-provenance", css)
             self.assertIn("overflow-wrap: anywhere", css)
             self.assertIn("flex-wrap: wrap", css)
-            self.assertIn("width: 390px", css)
+            self.assertNotIn("width: 390px", css)
             self.assertNotIn("http://", html_text)
             self.assertNotIn("https://", html_text)
             self.assertEqual("PASS", receipt["status"])
@@ -257,12 +333,16 @@ class PortalAccessibilityTests(unittest.TestCase):
         receipt = json.loads(receipt_path.read_text("utf-8"))
         self.assertEqual("PASS", receipt["status"])
         self.assertTrue(receipt["inspection"]["all_pages_reviewed"])
-        self.assertEqual(11, receipt["inspection"]["public_pages_reviewed"])
-        self.assertEqual(48, receipt["inspection"]["synthetic_current_pages_reviewed"])
+        for key, surface in receipt["surfaces"].items():
+            self.assertEqual(surface["print"]["page_count"],
+                             receipt["inspection"][f"{key}_pages_reviewed"])
+            pages = surface["print"]["rendered_pages"]
+            self.assertEqual(list(range(1, len(pages) + 1)), [page["page"] for page in pages])
+            self.assertTrue(all(page["disposition"] == "PASS" for page in pages))
         self.assertFalse(receipt["contains_absolute_paths"])
         self.assertFalse(receipt["contains_private_customer_data"])
         members = receipt["evidence_members"]
-        self.assertEqual(65, receipt["evidence_member_count"])
+        self.assertEqual(len(members), receipt["evidence_member_count"])
         self.assertEqual(len(members), len({row["artifact"] for row in members}))
         expected = {receipt_path.name, *(row["artifact"] for row in members)}
         self.assertEqual(expected, {path.name for path in evidence.iterdir() if path.is_file()})
@@ -274,8 +354,12 @@ class PortalAccessibilityTests(unittest.TestCase):
             names = {row["path"] for row in surface["rendered_portal"]["files"]}
             self.assertIn("index.html", names)
             self.assertIn("portal-v1.css", names)
-            self.assertEqual("PASS", surface["desktop"]["disposition"])
-            self.assertEqual("PASS", surface["narrow"]["disposition"])
+            self.assertEqual({"desktop", "tablet", "narrow", "small", "zoom"},
+                             set(surface["captures"]))
+            for capture in surface["captures"].values():
+                self.assertEqual("PASS", capture["disposition"])
+                self.assertEqual(capture["sha256"], hashlib.sha256(
+                    (evidence / capture["artifact"]).read_bytes()).hexdigest())
             self.assertEqual("PASS", surface["print"]["disposition"])
         encoded = canonical_json(receipt).decode("utf-8")
         self.assertNotRegex(encoded, r"[A-Za-z]:\\")

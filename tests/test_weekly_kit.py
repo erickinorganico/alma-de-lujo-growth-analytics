@@ -416,6 +416,15 @@ class ClientKitTests(unittest.TestCase):
             self.assertIn("PORTAL/index.html", names)
             self.assertNotIn("synthetic-current", "\n".join(names).lower())
             self.assertFalse(any(name.startswith(("alma/", "scripts/", "tasks/")) for name in names))
+            self.assertFalse(any(token in "\n".join(names).lower() for token in
+                                 (".local/", "current-cut", "response.json", "credential")))
+            from scripts.package_client_v1 import _links, _resolve_link
+            for relative in names:
+                if relative.endswith((".html", ".md")):
+                    for link in _links(relative, (extracted / relative).read_text("utf-8")):
+                        target = _resolve_link(relative, link)
+                        if target is not None:
+                            self.assertTrue((extracted / target).is_file(), (relative, link))
 
     def test_audit_rejects_private_native_runtime_credentials_traversal_and_policy_authority(self) -> None:
         with weekly_home() as home:
