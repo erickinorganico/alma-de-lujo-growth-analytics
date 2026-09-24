@@ -229,6 +229,16 @@ def _decision_projection(register: str | Path | None, report: dict[str, Any]) ->
     }
 
 
+def _analysis_stage_status(state: dict[str, Any]) -> str:
+    expected_roles = set(state.get("expected_roles", {}))
+    accepted_roles = set(state.get("accepted_roles", {}))
+    return (
+        "PASS"
+        if expected_roles and accepted_roles == expected_roles
+        else "ESPERANDO_RESPUESTA"
+    )
+
+
 def _current_model(cycle: Path, decision_register: str | Path | None) -> dict[str, Any]:
     try:
         verified = verify_cycle(cycle)
@@ -260,7 +270,7 @@ def _current_model(cycle: Path, decision_register: str | Path | None) -> dict[st
         {"name": "Fuentes", "status": report["quality"]["workspace"], "evidence": "workspace.json"},
         {"name": "Validación", "status": report["quality"]["workspace"], "evidence": "current-cut.json"},
         {"name": "Marts y métricas", "status": "PASS", "evidence": "mart manifest"},
-        {"name": "Análisis", "status": "PASS" if state.get("accepted_roles") else "ESPERANDO_RESPUESTA", "evidence": "tasks"},
+        {"name": "Análisis", "status": _analysis_stage_status(state), "evidence": "tasks"},
         {"name": "Revisión independiente", "status": state["status"] if state.get("reviewer") else "ESPERANDO_RESPUESTA", "evidence": "evidence_reviewer"},
         {"name": "Decisión del responsable", "status": "ADVISORY" if packet else "PENDIENTE", "evidence": "decision-packet.json" if packet else None},
         {"name": "Próximo corte", "status": "PENDIENTE", "evidence": None},

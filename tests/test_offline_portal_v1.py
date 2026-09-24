@@ -20,6 +20,7 @@ from scripts.build_offline_portal_v1 import (
     collect_portal_model,
     render_portal,
 )
+from scripts import build_offline_portal_v1 as portal_builder
 from tests.test_decision_register import closure_check, later_upstream, terminal_cycle
 from tests.test_weekly_cycle import upstream
 
@@ -128,6 +129,30 @@ class PortalExecutiveContractTests(unittest.TestCase):
 
 
 class PortalEvidenceTests(unittest.TestCase):
+    def test_analysis_stage_passes_only_when_every_expected_role_is_accepted(self) -> None:
+        expected = {f"role-{index}": {} for index in range(6)}
+        for accepted_count, expected_status in (
+            (0, "ESPERANDO_RESPUESTA"),
+            (1, "ESPERANDO_RESPUESTA"),
+            (5, "ESPERANDO_RESPUESTA"),
+            (6, "PASS"),
+        ):
+            state = {
+                "expected_roles": expected,
+                "accepted_roles": dict(list(expected.items())[:accepted_count]),
+            }
+            self.assertEqual(
+                expected_status,
+                portal_builder._analysis_stage_status(state),
+                accepted_count,
+            )
+        self.assertEqual(
+            "ESPERANDO_RESPUESTA",
+            portal_builder._analysis_stage_status({
+                "expected_roles": {}, "accepted_roles": {}
+            }),
+        )
+
     def test_public_and_unselected_views_do_not_accept_private_evidence(self) -> None:
         public = collect_portal_model(mode="public")
         self.assertEqual("EJEMPLO SINTÉTICO · HISTÓRICO v0.2", public["provenance"]["label"])

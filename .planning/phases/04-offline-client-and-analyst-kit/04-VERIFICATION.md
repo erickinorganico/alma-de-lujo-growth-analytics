@@ -1,29 +1,19 @@
 ---
 phase: 04-offline-client-and-analyst-kit
-verified: 2026-09-24T01:40:00Z
+verified: 2026-09-24T19:48:08Z
 status: gaps_found
-score: 19/21 must-haves verified
+score: 20/21 must-haves verified
 overrides_applied: 0
 re_verification:
   previous_status: gaps_found
   previous_score: 14/15
   gaps_closed:
     - "The supported weekly command now builds, audits, receipts and restart-verifies the public client package."
-  gaps_remaining: []
-  regressions:
-    - "Expanded partial-native-state coverage exposes a premature portal analysis PASS; this pre-existing 04-02 defect was missed by the prior verification."
+    - "Analysis now reaches PASS only when all expected verified analyst roles are accepted; 0/6, 1/6, 5/6 and 6/6 are covered."
+  gaps_remaining:
+    - "Actual 200 percent browser zoom and reduced-motion runtime observations remain uncaptured."
+  regressions: []
 gaps:
-  - truth: "Missing, partial, blocked or waiting native work remains visibly pending throughout the portal."
-    status: failed
-    reason: "A valid cycle with 1 of 6 accepted analyst roles remains WAITING_ANALYSTS, but its Analysis stage renders PASS because any nonempty accepted_roles dictionary satisfies the condition. The native-role panel correctly remains ESPERANDO_RESPUESTA."
-    artifacts:
-      - path: scripts/build_offline_portal_v1.py
-        issue: "Line 265 uses PASS if state.get('accepted_roles'), rather than checking completion of the expected role set."
-      - path: tests/test_offline_portal_v1.py
-        issue: "The waiting-state test covers zero accepted responses, but not a strict subset of expected roles."
-    missing:
-      - "Derive completed analysis from all expected verified analyst roles; retain a pending/partial stage while any expected role remains outstanding."
-      - "Add 0/6, 1/6, 5/6 and 6/6 regression cases and preserve separate reviewer and owner states."
   - truth: "The redesigned portal's committed visual evidence demonstrates actual 200 percent browser zoom and reduced-motion behavior for both safe contexts."
     status: partial
     reason: "The receipt explicitly records a 720x450 CSS reflow equivalent to 200 percent of 1440 while labeling captures zoom_percent=200. It does not establish actual browser zoom, and no reduced-motion observation is recorded. CSS implementation exists; runtime behavior is UNCERTAIN, not observably broken."
@@ -50,7 +40,7 @@ deferred:
 **Re-verification:** Yes — package gap closure 04-04 and executive redesign 04-05.
 **Phase 4 baseline:** `3f956604c9498ebb3d7c1f99605f6dbc74b84c31`.
 
-The old package blocker is closed. One functional **BLOCKER** remains in partial native-state presentation, and one **WARNING** concerns incomplete browser acceptance evidence. No override accepts either finding. The phase must not be marked complete yet.
+The package and partial-native-state blockers are closed. One **WARNING** remains for incomplete browser acceptance evidence. No override accepts that warning, so the phase remains `gaps_found` without an open functional blocker.
 
 Concurrent Phase 5 work advanced HEAD to `ed83b7ee4108ef02e7fe95d400cb9b682eafc50e` during inspection. A scoped diff against `3f95660` confirmed unchanged Phase 4 implementation, tests, CSS and visual evidence. AGENTS.md, legacy client/manifests and Phase 5 script changes were preserved. **The parent will rerun the final integrated suite after Phase 5 stabilizes; this report does not claim that gate passed.** Only this verification report was edited, with no commit.
 
@@ -69,7 +59,7 @@ The original 15 truths are retained for regression traceability. Roadmap SC1–4
 | 5 | Workbook failures identify sheet, row, field, issue and correction without rewriting source. | VERIFIED | WorkbookContractError, _fail, _upstream_error and source rehash at `alma/operating_workbook.py:39,69,286,359`; prior passed code unchanged. |
 | 6 | Complete public portal opens through local files and begins with historical synthetic provenance. | VERIFIED | Static local-only renderer; public/unselected tests pass. Fresh public generation matches 7/7 rendered-file receipt hashes; desktop capture shows warning before figures. |
 | 7 | Current portal data derives from verified source/report/native/register evidence without demo contamination. | VERIFIED | `_current_model` calls verify_cycle, checks identity and derives current metric/source hashes. Public/unselected and tamper tests pass. Stage completion is separately assessed in truth 8. |
-| 8 | Missing, partial, blocked or waiting native work remains pending throughout the portal. | **FAILED — BLOCKER** | Direct valid-fixture reproduction: cycle WAITING_ANALYSTS, accepted=1, expected=6; stage Análisis=PASS, native panel=ESPERANDO_RESPUESTA. `scripts/build_offline_portal_v1.py:265`. |
+| 8 | Missing, partial, blocked or waiting native work remains pending throughout the portal. | VERIFIED | Analysis requires the complete nonempty expected-role set; 0/6, 1/6 and 5/6 remain ESPERANDO_RESPUESTA while 6/6 reaches PASS. Reviewer and owner states remain separate. |
 | 9 | Metric model → HTML/CSV/JSON preserves exact values, units, hashes and boundary states. | VERIFIED | Boundary oracle passes for measured 0, null, 123456789 cents and MEASURED/UNKNOWN/PARTIAL/REVIEW/BLOCKED; current report flow inspected at lines 273–288. |
 | 10 | Committed screen/print artifacts form a complete hash-bound inventory. | VERIFIED | 73/73 unique members rehashed, no mismatches or unexpected members: 10 viewport captures, 2 PDFs, 61 page rasters. Fresh public rebuild matches all seven rendered files. Runtime evidence sufficiency is truth 21. |
 | 11 | Weekly creation adapts workbook/pack input and derives a new immutable private cut. | VERIFIED | `create_weekly_run` calls intake/policy/workspace/marts/cycle, refuses existing cuts, enforces `.local/client-runs` and retains WAITING_ANALYSTS. |
@@ -84,7 +74,7 @@ The original 15 truths are retained for regression traceability. Roadmap SC1–4
 | 20 | Five v1 domains account for 22 sources exactly once; historical inventory uses its own denominator. | VERIFIED | 5+5+5+4+3 unique SOURCE_DOMAINS entries equal SOURCE_NAMES; partition/rejection/count tests pass. Historical inventory is separately 30 sources. |
 | 21 | Eight sections have verified responsive/no-JS/keyboard/reduced-motion/print behavior, including actual 200% browser zoom. | **UNCERTAIN — WARNING** | Required viewport captures and no-JS/keyboard observations exist; CSS includes reduced motion. Receipt only establishes 720px reflow equivalence and contains no reduced-motion observation. |
 
-**Score: 19/21 truths verified.**
+**Score: 20/21 truths verified.**
 
 ### Required Artifacts
 
@@ -94,7 +84,7 @@ The original 15 truths are retained for regression traceability. Roadmap SC1–4
 | `alma/operating_workbook.py` | Validated canonical adapter | VERIFIED | Surface/cell checks precede parse_pack and atomic export; weekly calls it for XLSX. |
 | `client/v1/policies/*.json` | Separate REVIEW and synthetic policies | VERIFIED | Package audit and negative controls pass. |
 | `evidence/v1.0/workbooks/workbook-pack-parity.json` | 22-relation oracle | VERIFIED | Fresh oracle/receipt checks pass; SHA below. |
-| `scripts/build_offline_portal_v1.py` | Truthful current/public static portal | SUBSTANTIVE, WIRED; behavioral failure | Current source flow exists, but a partial accepted-role set falsely completes analysis. |
+| `scripts/build_offline_portal_v1.py` | Truthful current/public static portal | VERIFIED | Current source flow exists and analysis completion requires equality with the full expected-role set. |
 | `client/portal-v1.css` | Responsive/focus/reduced-motion/print styles | VERIFIED implementation | Bundled bytes match receipt; reduced-motion runtime proof incomplete. |
 | `evidence/v1.0/portal/portal-visual-inspection.json` | Final bounded visual acceptance | HASH VERIFIED; acceptance PARTIAL | 73 members match; actual zoom and reduced-motion observations missing. |
 | `run.ps1`, `alma/weekly.py` | Creation/continuation/package | VERIFIED | Supported module route, package stage and restart tests pass. |
@@ -127,7 +117,7 @@ The generic key-link query found 1/17 patterns: it does not recognize Python dot
 |----------|------|--------|--------|
 | Workbooks | Relation rows | Authoritative registry and explicit blank/synthetic fixture | FLOWING |
 | Current portal | Sources/metrics/hashes | Verified current-cut report from canonical marts | FLOWING; no historical fallback |
-| Analysis stage | Completion status | Actual verified accepted-role set | **FAILED projection: subset treated as completion** |
+| Analysis stage | Completion status | Actual verified accepted-role set | FLOWING; strict subsets remain pending and only the full expected-role set passes. |
 | Native panel | Per-role status | Expected/accepted roles and response/dispatch hashes | FLOWING; partial fixture correctly waits |
 | Coverage SVG/table | Integer state counts | Verified source inventory | FLOWING; exact 22/22 partition |
 | Metric downloads | Value/unit/state/hash | Same model | FLOWING; zero/null preserved |
@@ -145,7 +135,7 @@ These tests were invoked by this verifier. Disposable fixtures use temporary tes
 | WeeklyPackageStageTests.test_tamper_fails_closed_and_clean_archive_process_revalidates_package | 1 test, 5.487s; clean Git archive/new process | PASS |
 | WeeklyPackageStageTests.test_identical_public_inputs_are_reproducible_and_replay_changes_nothing + test_builder_and_post_build_audit_failures_remove_the_new_cut | 2 tests, 6.531s | PASS |
 | Workbook generation contract + complete workbook/pack oracle + package unsafe-member/policy-authority negative controls | 3 tests, 4.798s | PASS |
-| Valid cycle, accept one role, collect private portal | WAITING_ANALYSTS; accepted=1/6; stage Análisis=PASS; native=ESPERANDO_RESPUESTA | **FAIL** |
+| Analysis-stage role-count regression | 0/6, 1/6 and 5/6 pending; 6/6 PASS; reviewer remains independently pending | PASS |
 | Fresh disposable build_client_kit → audit_client_zip → direct manifest/link/hash reads | 63 members, 22 file links, 7/7 public receipt-file hashes match | PASS |
 | Committed visual inventory rehash | 73 unique members; zero mismatch/unexpected; no reduced-motion observation | Hash PASS; acceptance WARNING |
 | Optional PDF text extraction | fitz/pypdf/PyPDF2/pdfplumber unavailable; no dependency installed | SKIP; existing PNG samples inspected |
@@ -159,7 +149,7 @@ Run from repository root. These synthetic fixture responses exercise validators;
 .venv/Scripts/python.exe -c 'import json,tempfile; from pathlib import Path; from tests.test_weekly_cycle import upstream; from tests.test_native_agents_v1 import response_for,trace_for,receipt_for; from tests.test_decision_register import MODELS; from tests.test_weekly_kit import canonical_file; from alma.weekly_cycle import start_cycle,record_dispatch,submit_response,verify_cycle; from scripts.build_offline_portal_v1 import collect_portal_model; t=tempfile.TemporaryDirectory(); h=Path(t.name); c,m=upstream(h); p=Path(start_cycle(c,m,h/".local"/"weekly-cycles")["destination"]); role=sorted(MODELS)[0]; q=json.loads((p/"tasks"/(role+".request.json")).read_bytes()); r,x=response_for(q),trace_for(q); rp=canonical_file(p/"tasks"/(role+".response.json"),r); xp=canonical_file(p/"tasks"/(role+".query-trace.json"),x); receipt=receipt_for(q,r,x,MODELS[role]); record_dispatch(p,role,rp,xp,receipt); submit_response(p,role,rp,xp,p/"tasks"/(role+".dispatch.json")); model=collect_portal_model(mode="private",selected_cycle=p); state=json.loads((p/"state.json").read_bytes()); print(json.dumps({"verified_cycle":verify_cycle(p)["status"],"accepted":len(state["accepted_roles"]),"expected":len(state["expected_roles"]),"analysis_stage":[s for s in model["stages"] if s["name"]=="Análisis"],"native_status":model["native"]["status"]},ensure_ascii=True)); t.cleanup()'
 ```
 
-Observed: `{"verified_cycle":"WAITING_ANALYSTS","accepted":1,"expected":6,"analysis_stage":[{"name":"Análisis","status":"PASS","evidence":"tasks"}],"native_status":"ESPERANDO_RESPUESTA"}`.
+Observed after correction: `accepted=1/6` keeps `Análisis=ESPERANDO_RESPUESTA`; the bounded 0/6, 1/6, 5/6 and 6/6 regression passes.
 
 ### Exact Package and Visual Evidence
 

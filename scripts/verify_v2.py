@@ -22,8 +22,11 @@ def run(output,skip_tests=False):
     output=Path(output);output.mkdir(parents=True,exist_ok=True);start=time.perf_counter()
     if not skip_tests:
         log=io.StringIO();result=unittest.TextTestRunner(stream=log,verbosity=2).run(unittest.defaultTestLoader.discover('tests'))
-        (output/'tests.log').write_text(log.getvalue(),encoding='utf-8')
+        test_log = log.getvalue()
+        (output/'tests.log').write_text(test_log,encoding='utf-8')
         tests={'run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'passed':result.wasSuccessful()}
+        if not result.wasSuccessful():
+            print(test_log, file=sys.stderr)
     else:tests={'passed':None,'mode':'scenario-only; not full acceptance'}
     records=[];snapshots={};source_hashes={};controls={}
     for scenario in ('normal','stock_pressure','promotion_illusion','cash_squeeze','missing_cost','broken_link'):

@@ -8,9 +8,11 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-Location -LiteralPath $PSScriptRoot
 $almaCandidates = @(
-    (Join-Path $PSScriptRoot '.venv\Scripts\python.exe'),
-    (Join-Path $env:USERPROFILE '.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe')
+    (Join-Path $PSScriptRoot '.venv\Scripts\python.exe')
 )
+if ($env:USERPROFILE) {
+    $almaCandidates += Join-Path $env:USERPROFILE '.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe'
+}
 $almaPython = $null
 foreach ($candidate in $almaCandidates) { if (Test-Path -LiteralPath $candidate) { $almaPython = $candidate; break } }
 if (-not $almaPython) { $candidate = Get-Command python -ErrorAction SilentlyContinue; if ($candidate) { $almaPython = $candidate.Source } }
