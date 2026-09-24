@@ -1,0 +1,21 @@
+{
+  "version": "release-v1-two-week-fixture",
+  "evidence_class": "TEST_FIXTURE",
+  "scope": "Synthetic deterministic checks only; never native live evidence or external adoption",
+  "external_gates": {"EXT-01": "UNKNOWN", "EXT-02": "UNKNOWN", "EXT-03": "REVIEW"},
+  "closure_due_date": "2026-09-22",
+  "weeks": [
+    {
+      "id": "week_one",
+      "cutoff_at": "2026-09-21T23:59:59-07:00",
+      "sales": {"delivered_units": 12, "returned_units": 2, "restocked_units": 1, "net_revenue_cents": 1200000, "variable_cost_cents": 480000},
+      "expected": {"delivered_units": 12, "net_revenue_cents": 1200000, "revenue_after_variable_cents": 720000}
+    },
+    {
+      "id": "week_two",
+      "cutoff_at": "2026-09-28T23:59:59-07:00",
+      "sales": {"delivered_units": 11, "returned_units": 2, "restocked_units": 1, "net_revenue_cents": 1100000, "variable_cost_cents": 440000},
+      "expected": {"delivered_units": 11, "net_revenue_cents": 1100000, "revenue_after_variable_cents": 660000}
+    }
+  ]
+}
