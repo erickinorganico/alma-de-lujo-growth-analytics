@@ -242,4 +242,10 @@ class ReleaseRunnerContractTests(unittest.TestCase):
         command = [sys.executable, "-c", "print('ok')"]
         gate = verify_v1._gate("argv-probe", command, timeout=10)
         self.assertEqual("PASS", gate["status"])
-        self.assertEqual([".venv/Scripts/python.exe", "-c", "print('ok')"], gate["command"])
+        executable = Path(sys.executable)
+        expected = (
+            executable.resolve().relative_to(ROOT.resolve()).as_posix()
+            if executable.is_absolute() and executable.resolve().is_relative_to(ROOT.resolve())
+            else "python"
+        )
+        self.assertEqual([expected, "-c", "print('ok')"], gate["command"])
