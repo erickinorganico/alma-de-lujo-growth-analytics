@@ -77,7 +77,7 @@ Plans:
   2. A client or analyst can open the offline portal and distinguish historical demo evidence from the current private cut while navigating sources, metric definitions, processes, native roles, decisions, exceptions, and lineage.
   3. An analyst can follow one documented command path to initialize, validate, build, review, carry forward, and package a weekly cut without a server.
   4. The client package opens offline with blank/example workbooks and the operating guide; private filled cuts and native responses are absent.
-**Plans**: 5 plans
+**Plans**: 6 plans
 
 Plans:
 - [ ] 04-01: Extend the contract-driven workbook generator and validation for all v1 domains using blank/synthetic materials.
@@ -85,6 +85,7 @@ Plans:
 - [ ] 04-03: Wire and document the one-command analyst cycle and build the offline client kit with private-content exclusions.
 - [ ] 04-04: Integrate the sanitized public-kit build into the weekly command with immutable package evidence and restart verification.
 - [ ] 04-05: Redesign the offline executive portal, verify source/chart parity and responsive accessibility, then bind fresh visual evidence to the rebuilt public kit.
+- [ ] 04-06: Close partial native-analysis PASS and capture actual 200% zoom/reduced-motion evidence, then rebind and audit the public kit.
 **UI hint**: yes
 
 ### Phase 5: Acceptance and v1.0.0 Release
@@ -112,7 +113,7 @@ Plans:
 | 1. Versioned Operating Intake | 3/3 | Complete | 2026-09-22 |
 | 2. Reconciled Decision Metrics | 5/5 | Complete | 2026-09-23 |
 | 3. Governed Weekly Decision Cycle | 4/4 | Complete | 2026-09-23 |
-| 4. Offline Client and Analyst Kit | 0/5 | Gap closure planned | - |
+| 4. Offline Client and Analyst Kit | 0/6 | Gap closure planned | - |
 | 5. Acceptance and v1.0.0 Release | 0/3 | Not started | - |
 
 **Coverage:** 25/25 v1 requirements mapped exactly once. External gates EXT-01..03 remain outside the software phase count and require separate owner or observed-data evidence.
