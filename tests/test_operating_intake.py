@@ -4,6 +4,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import os
 import shutil
 import sqlite3
 import subprocess
@@ -382,7 +383,8 @@ class OperatingWorkspaceTests(unittest.TestCase):
             root = Path(tmp)
             result = build_operating_workspace(SYNTHETIC_PACK, private_root=root)
             destination = Path(result["destination"])
-            self.assertEqual(root / "operating-cuts" / result["cut_id"], destination)
+            self.assertEqual(result["cut_id"], destination.name)
+            self.assertTrue(os.path.samefile(root / "operating-cuts" / result["cut_id"], destination))
             self.assertTrue((destination / "operating.sqlite3").is_file())
             self.assertTrue((destination / "workspace.json").is_file())
             self.assertEqual(
