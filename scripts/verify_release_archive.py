@@ -97,9 +97,11 @@ def failure_stream(value: str | bytes | None, *, limit: int = 3000) -> tuple[str
     return digest(raw), json.dumps(safe[-limit:], ensure_ascii=True)
 
 
-def command(args: list[str], cwd: Path = ROOT, *, timeout: int = 120, text: bool = True) -> subprocess.CompletedProcess:
+def command(args: list[str], cwd: Path = ROOT, *, timeout: int = 120, text: bool = True,
+            env: dict[str, str] | None = None) -> subprocess.CompletedProcess:
     try:
-        result = subprocess.run(args, cwd=cwd, capture_output=True, text=text, timeout=timeout, check=False)
+        result = subprocess.run(args, cwd=cwd, capture_output=True, text=text, timeout=timeout,
+                                check=False, env=env)
     except subprocess.TimeoutExpired as exc:
         out_hash, out_tail = failure_stream(exc.stdout)
         err_hash, err_tail = failure_stream(exc.stderr)
@@ -260,14 +262,17 @@ def run_archive(sha: str, output: Path, receipt_path: Path) -> dict:
     venv = output / "venv"
     command([sys.executable, "-m", "venv", str(venv)], timeout=300)
     python = venv / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+    archive_env = os.environ.copy()
+    archive_env["PATH"] = str(python.parent) + os.pathsep + archive_env.get("PATH", "")
     # Only the committed optional client requirements are installed.
-    command([str(python), "-m", "pip", "install", "-r", "requirements-client.txt"], extracted, timeout=900)
+    command([str(python), "-m", "pip", "install", "-r", "requirements-client.txt"], extracted,
+            timeout=900, env=archive_env)
     gates: list[dict] = []
     for name, suffix, timeout in GATES:
         began = time.monotonic()
         args = [str(python), *suffix]
         try:
-            result = command(args, extracted, timeout=timeout)
+            result = command(args, extracted, timeout=timeout, env=archive_env)
         except (ProofError, subprocess.TimeoutExpired) as exc:
             detail = ""
             if name == "v1-deterministic":

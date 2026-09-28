@@ -4,6 +4,7 @@ from __future__ import annotations
 import io
 import hashlib
 import json
+import shutil
 import tarfile
 import tempfile
 import unittest
@@ -29,6 +30,13 @@ def job(label: str, *, conclusion: str = "success", sha: str = SHA) -> dict:
 
 
 class ArchiveSecurityTests(unittest.TestCase):
+    def test_command_passes_archive_environment_to_subprocess(self) -> None:
+        environment = {"PATH": "venv-bin" + proof.os.pathsep + "system-bin"}
+        completed = CompletedProcess(["python", "-V"], 0, "3.12", "")
+        with patch.object(proof.subprocess, "run", return_value=completed) as called:
+            proof.command(["python", "-V"], env=environment)
+        self.assertIs(environment, called.call_args.kwargs["env"])
+
     def test_failed_v1_gate_surfaces_compact_inner_receipt(self) -> None:
         secret = "ghp_" + "A" * 32
         inner = {"version": "v1.0-release-acceptance", "status": "FAIL", "gates": [
@@ -90,12 +98,17 @@ class ArchiveSecurityTests(unittest.TestCase):
             relative = Path(temp).relative_to(proof.ROOT)
             output = relative / "archive"
             receipt_path = relative / "archive.json"
-            invoked: list[tuple[list[str], Path]] = []
+            invoked: list[tuple[list[str], Path, dict[str, str] | None]] = []
 
             def fake_command(args: list[str], cwd: Path = proof.ROOT, **kwargs) -> CompletedProcess:
-                invoked.append((args, cwd))
+                invoked.append((args, cwd, kwargs.get("env")))
                 if args[:2] == ["git", "rev-parse"]:
                     return CompletedProcess(args, 0, "tree\n", "")
+                if args[1:3] == ["-m", "venv"]:
+                    executable = Path(args[-1]) / ("Scripts/python.exe" if proof.os.name == "nt" else "bin/python")
+                    executable.parent.mkdir(parents=True)
+                    executable.write_bytes(b"test venv python")
+                    executable.chmod(0o755)
                 if args[1:3] == ["scripts/verify_v1.py", "deterministic"]:
                     artifacts = {
                         "evidence/v1.0/regression-acceptance.json": {"status": "PASS"},
@@ -117,9 +130,14 @@ class ArchiveSecurityTests(unittest.TestCase):
             expected_python = (proof.ROOT / output / "venv" /
                                ("Scripts/python.exe" if proof.os.name == "nt" else "bin/python")).resolve()
             extracted = (proof.ROOT / output / "source").resolve()
-            gate_calls = [(args, cwd) for args, cwd in invoked if cwd == extracted and args and
+            gate_calls = [(args, cwd, env) for args, cwd, env in invoked if cwd == extracted and args and
                           args[0] == str(expected_python)]
             self.assertEqual(1 + len(proof.GATES), len(gate_calls))  # pip plus four gates
+            for _, _, env in gate_calls:
+                self.assertIsNotNone(env)
+                self.assertEqual(str(expected_python.parent), env["PATH"].split(proof.os.pathsep, 1)[0])
+                self.assertEqual(proof.os.environ.get("PATH", ""), env["PATH"].split(proof.os.pathsep, 1)[1])
+                self.assertEqual(expected_python, Path(shutil.which("python", path=env["PATH"])).resolve())
             self.assertTrue(expected_python.is_absolute())
             self.assertTrue((proof.ROOT / receipt_path).is_file())
 
