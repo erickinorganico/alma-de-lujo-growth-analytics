@@ -29,6 +29,46 @@ def job(label: str, *, conclusion: str = "success", sha: str = SHA) -> dict:
 
 
 class ArchiveSecurityTests(unittest.TestCase):
+    def test_relative_output_uses_absolute_venv_python_for_extracted_cwd(self) -> None:
+        local = proof.ROOT / ".local"
+        local.mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix="archive-path-test-", dir=local) as temp:
+            relative = Path(temp).relative_to(proof.ROOT)
+            output = relative / "archive"
+            receipt_path = relative / "archive.json"
+            invoked: list[tuple[list[str], Path]] = []
+
+            def fake_command(args: list[str], cwd: Path = proof.ROOT, **kwargs) -> CompletedProcess:
+                invoked.append((args, cwd))
+                if args[:2] == ["git", "rev-parse"]:
+                    return CompletedProcess(args, 0, "tree\n", "")
+                if args[1:3] == ["scripts/verify_v1.py", "deterministic"]:
+                    artifacts = {
+                        "evidence/v1.0/regression-acceptance.json": {"status": "PASS"},
+                        ".local/v1-acceptance/deterministic/v2/verification.json": {},
+                        ".local/v1-acceptance/deterministic/scope.json": {},
+                        ".local/v1-acceptance/deterministic/workbooks.json": {},
+                    }
+                    for name, value in artifacts.items():
+                        canonical_file(cwd / name, value)
+                return CompletedProcess(args, 0, "", "")
+
+            members = {name: "a" * 64 for name in proof.REQUIRED_SOURCE}
+            with patch.object(proof, "archive_commit", return_value=members), \
+                 patch.object(proof, "command", side_effect=fake_command), \
+                 patch.object(proof, "_canonical_comparison", return_value={}), \
+                 patch.object(proof, "tracked_tree_clean"):
+                proof.run_archive(SHA, output, receipt_path)
+
+            expected_python = (proof.ROOT / output / "venv" /
+                               ("Scripts/python.exe" if proof.os.name == "nt" else "bin/python")).resolve()
+            extracted = (proof.ROOT / output / "source").resolve()
+            gate_calls = [(args, cwd) for args, cwd in invoked if cwd == extracted and args and
+                          args[0] == str(expected_python)]
+            self.assertEqual(1 + len(proof.GATES), len(gate_calls))  # pip plus four gates
+            self.assertTrue(expected_python.is_absolute())
+            self.assertTrue((proof.ROOT / receipt_path).is_file())
+
     def tar_bytes(self, extra: tuple[str, str] | None = None) -> bytes:
         stream = io.BytesIO()
         with tarfile.open(fileobj=stream, mode="w") as tar:

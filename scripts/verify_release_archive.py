@@ -80,6 +80,11 @@ def write_new(path: Path, value: dict) -> None:
         stream.write(encoded(value))
 
 
+def rooted(path: Path) -> Path:
+    """Resolve CLI paths against the repository before gates change cwd."""
+    return (path if path.is_absolute() else ROOT / path).resolve(strict=False)
+
+
 def command(args: list[str], cwd: Path = ROOT, *, timeout: int = 120, text: bool = True) -> subprocess.CompletedProcess:
     result = subprocess.run(args, cwd=cwd, capture_output=True, text=text, timeout=timeout, check=False)
     if result.returncode:
@@ -188,6 +193,8 @@ def _canonical_comparison(root: Path) -> dict[str, str]:
 
 
 def run_archive(sha: str, output: Path, receipt_path: Path) -> dict:
+    output = rooted(output)
+    receipt_path = rooted(receipt_path)
     if output.exists() or receipt_path.exists():
         raise ProofError("archive output or receipt already exists")
     if output.resolve(strict=False).is_relative_to(ROOT / "client"):
@@ -433,6 +440,11 @@ def main(argv: list[str] | None = None) -> int:
             raise ProofError("remote sidecar is required")
         if not args.check_existing and args.output is None:
             raise ProofError("output is required when creating proof")
+        args.archive_receipt = rooted(args.archive_receipt)
+        if args.output is not None:
+            args.output = rooted(args.output)
+        if args.remote_sidecar is not None:
+            args.remote_sidecar = rooted(args.remote_sidecar)
         sha = resolve_ref(args.ref)
         tracked_tree_clean(sha)
         if args.check_existing:
