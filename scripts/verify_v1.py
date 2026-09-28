@@ -208,6 +208,10 @@ def _scenario_pack(base: Path, week: dict[str, Any]) -> Path:
 
 
 def prepare_live(output: Path) -> dict[str, Any]:
+    # The documented CLI uses a repository-relative `.local/...` destination.
+    # Normalize it before comparing generated absolute cycle paths so the
+    # prepared index remains portable and the documented command works.
+    output = output.resolve(strict=False)
     if output.exists() or ".local" not in output.parts or ".." in output.parts:
         raise ValueError("prepare-live requires a fresh ignored .local output")
     _relative(output)

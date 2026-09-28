@@ -36,11 +36,24 @@ def approved_synthetic_database(path,name):
 
 def approved_client_workbook(path, name):
     """Only reviewed blank/synthetic binaries may enter a public release."""
-    allowed = {'client/Alma_de_Lujo_PLANTILLA.xlsx', 'client/Alma_de_Lujo_EJEMPLO.xlsx'}
-    if name not in allowed:
+    legacy = {'client/Alma_de_Lujo_PLANTILLA.xlsx', 'client/Alma_de_Lujo_EJEMPLO.xlsx'}
+    v1 = {
+        'client/v1/Alma_de_Lujo_OPERACION_PLANTILLA.xlsx': 'blank',
+        'client/v1/Alma_de_Lujo_OPERACION_EJEMPLO.xlsx': 'synthetic',
+    }
+    if name not in legacy and name not in v1:
         raise ValueError('Unapproved workbook: filled customer files stay private')
-    manifest = json.loads((ROOT/'client/release-manifest.json').read_text(encoding='utf-8'))
-    if hashlib.sha256(path.read_bytes()).hexdigest() != manifest['workbook_sha256'].get(name):
+    if name in legacy:
+        manifest = json.loads((ROOT/'client/release-manifest.json').read_text(encoding='utf-8'))
+        expected = manifest['workbook_sha256'].get(name)
+    else:
+        manifest = json.loads((ROOT/'client/v1/workbook-manifest.json').read_text(encoding='utf-8'))
+        entry = manifest.get('workbooks', {}).get(v1[name], {})
+        if (manifest.get('manifest_version') != 'operating-workbook-acceptance-v1' or
+                entry.get('path') != path.name or manifest.get('stage') not in {'PRE_EXCEL', 'FINAL_EXCEL'}):
+            raise ValueError('Invalid v1 workbook manifest')
+        expected = entry.get('sha256')
+    if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
         raise ValueError('Workbook differs from reviewed release bytes')
     with zipfile.ZipFile(path) as archive:
         members = archive.infolist()

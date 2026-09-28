@@ -196,7 +196,9 @@ class ReleaseRunnerContractTests(unittest.TestCase):
         tmp = Path(tempfile.mkdtemp(dir=ROOT / ".local", prefix="r-"))
         try:
             output = tmp / "v1-acceptance"
-            result = verify_v1.prepare_live(output)
+            # Exercise the documented repository-relative `.local/...` CLI
+            # destination. Generated cycle paths are absolute on Windows.
+            result = verify_v1.prepare_live(output.relative_to(ROOT))
             index = _json(output / "run-index.json")
             self.assertEqual("WAITING_NATIVE_TASKS", result["status"])
             self.assertEqual("NOT_YET_RUN", index["native_execution"])
