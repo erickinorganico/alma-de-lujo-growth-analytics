@@ -12,6 +12,8 @@ import tempfile
 import unittest
 from decimal import Decimal
 from pathlib import Path
+from subprocess import CompletedProcess
+from unittest import mock
 
 from alma.operating_archive import export_cut, restore_cut, verify_cut
 from alma.operating_contracts import canonical_json
@@ -185,6 +187,35 @@ class TwoWeekReleaseAcceptance(unittest.TestCase):
 
 
 class ReleaseRunnerContractTests(unittest.TestCase):
+    def test_gate_failure_keeps_only_bounded_redacted_tails(self) -> None:
+        import sys
+
+        secret = b"ghp_" + b"A" * 32
+        stdout = b"x" * 2500 + b"v0.2 unittest failure " + secret
+        stderr = b"token=" + b"B" * 32 + b" traceback"
+        failed = CompletedProcess([sys.executable, "probe"], 1, stdout, stderr)
+        with mock.patch.object(verify_v1.subprocess, "run", return_value=failed):
+            receipt = verify_v1._gate("probe", [sys.executable, "probe"], timeout=10)
+        self.assertEqual("FAIL", receipt["status"])
+        self.assertIn("v0.2 unittest failure", receipt["stdout_tail"])
+        self.assertIn("traceback", receipt["stderr_tail"])
+        self.assertLessEqual(len(receipt["stdout_tail"]), 1200)
+        self.assertLessEqual(len(receipt["stderr_tail"]), 1200)
+        self.assertNotIn(secret.decode(), receipt["stdout_tail"])
+        self.assertNotIn("B" * 32, receipt["stderr_tail"])
+        self.assertEqual(hashlib.sha256(stdout).hexdigest(), receipt["stdout_sha256"])
+        self.assertEqual(hashlib.sha256(stderr).hexdigest(), receipt["stderr_sha256"])
+
+    def test_gate_pass_has_no_output_tails(self) -> None:
+        import sys
+
+        passed = CompletedProcess([sys.executable, "probe"], 0, b"synthetic output", b"")
+        with mock.patch.object(verify_v1.subprocess, "run", return_value=passed):
+            receipt = verify_v1._gate("probe", [sys.executable, "probe"], timeout=10)
+        self.assertEqual("PASS", receipt["status"])
+        self.assertNotIn("stdout_tail", receipt)
+        self.assertNotIn("stderr_tail", receipt)
+
     def test_aggregate_v1_route_has_fourteen_distinct_native_tasks(self) -> None:
         contract = verify_v1._routing()
         self.assertEqual(6, contract["analysts_per_cut"])

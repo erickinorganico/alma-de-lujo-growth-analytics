@@ -214,6 +214,37 @@ def _canonical_comparison(root: Path) -> dict[str, str]:
     return output
 
 
+def v1_failed_gate_summary(receipt_path: Path) -> str:
+    """Surface failed inner gates without dumping the complete acceptance log."""
+    if not receipt_path.is_file():
+        return "receipt missing"
+    if receipt_path.stat().st_size > 500_000:
+        return "receipt oversized"
+    try:
+        receipt = json.loads(receipt_path.read_bytes())
+        if not isinstance(receipt, dict) or receipt.get("version") != "v1.0-release-acceptance" or \
+                not isinstance(receipt.get("gates"), list) or len(receipt["gates"]) > 16:
+            return "receipt schema invalid"
+        failed = []
+        for gate in receipt["gates"]:
+            if not isinstance(gate, dict) or gate.get("status") not in {"FAIL", "BLOCKED"}:
+                continue
+            name = gate.get("gate")
+            if not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9._-]{1,80}", name):
+                name = "invalid-gate-name"
+            row = {"gate": name, "status": gate["status"]}
+            for key in ("stdout_tail", "stderr_tail"):
+                value = gate.get(key, "")
+                if isinstance(value, str):
+                    row[key] = json.loads(failure_stream(value, limit=600)[1])
+            failed.append(row)
+        status = receipt.get("status") if receipt.get("status") in {"FAIL", "BLOCKED"} else "INVALID"
+        return json.dumps({"status": status, "failed_gates": failed},
+                          sort_keys=True, ensure_ascii=True, separators=(",", ":"))
+    except (OSError, ValueError, TypeError):
+        return "receipt unreadable"
+
+
 def run_archive(sha: str, output: Path, receipt_path: Path) -> dict:
     output = rooted(output)
     receipt_path = rooted(receipt_path)
@@ -238,7 +269,12 @@ def run_archive(sha: str, output: Path, receipt_path: Path) -> dict:
         try:
             result = command(args, extracted, timeout=timeout)
         except (ProofError, subprocess.TimeoutExpired) as exc:
-            raise ProofError(f"gate {name}: {exc}") from exc
+            detail = ""
+            if name == "v1-deterministic":
+                inner = extracted / "evidence/v1.0/regression-acceptance.json"
+                if inner.exists():
+                    detail = f"; inner_receipt={v1_failed_gate_summary(inner)}"
+            raise ProofError(f"gate {name}: {exc}{detail}") from exc
         gates.append({"name": name, "command": ["python", *suffix], "exit_code": result.returncode,
                       "duration_seconds": round(time.monotonic() - began, 3),
                       "stdout_sha256": digest(result.stdout.encode()), "stderr_sha256": digest(result.stderr.encode())})

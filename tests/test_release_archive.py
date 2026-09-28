@@ -29,6 +29,41 @@ def job(label: str, *, conclusion: str = "success", sha: str = SHA) -> dict:
 
 
 class ArchiveSecurityTests(unittest.TestCase):
+    def test_failed_v1_gate_surfaces_compact_inner_receipt(self) -> None:
+        secret = "ghp_" + "A" * 32
+        inner = {"version": "v1.0-release-acceptance", "status": "FAIL", "gates": [
+            {"gate": "v0.2-full-suite-and-scenarios", "status": "FAIL",
+             "stdout_tail": "x" * 1000 + " suite failed " + secret, "stderr_tail": "token=" + "B" * 32},
+            {"gate": "v1-portal-and-package", "status": "FAIL",
+             "stdout_tail": "portal test failed", "stderr_tail": ""},
+            {"gate": "client-system", "status": "PASS"},
+        ]}
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "archive"
+            receipt_path = Path(temp) / "archive.json"
+
+            def fake_archive(_sha: str, destination: Path) -> dict:
+                canonical_file(destination / "evidence/v1.0/regression-acceptance.json", inner)
+                return {name: "a" * 64 for name in proof.REQUIRED_SOURCE}
+
+            def fake_command(args: list[str], cwd: Path = proof.ROOT, **kwargs) -> CompletedProcess:
+                if args[1:2] == ["scripts/verify_v1.py"]:
+                    raise proof.ProofError("outer gate failed")
+                return CompletedProcess(args, 0, "", "")
+
+            with patch.object(proof, "archive_commit", side_effect=fake_archive), \
+                 patch.object(proof, "command", side_effect=fake_command):
+                with self.assertRaises(proof.ProofError) as caught:
+                    proof.run_archive(SHA, output, receipt_path)
+        message = str(caught.exception)
+        self.assertIn("v0.2-full-suite-and-scenarios", message)
+        self.assertIn("v1-portal-and-package", message)
+        self.assertIn("portal test failed", message)
+        self.assertNotIn(secret, message)
+        self.assertNotIn("B" * 32, message)
+        self.assertNotIn("x" * 601, message)
+        self.assertNotIn('"gate":"client-system"', message)
+
     def test_failed_command_reports_bounded_redacted_stdout_and_stderr(self) -> None:
         diagnostic = "v0.2-full-suite-and-scenarios:FAIL"
         secret = "ghp_" + "A" * 32

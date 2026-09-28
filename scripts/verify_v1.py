@@ -40,10 +40,21 @@ SOURCE = ROOT / "client/source-packs/v1/synthetic"
 GIT_SHA = re.compile(r"[0-9a-f]{40}(?:[0-9a-f]{24})?\Z")
 TASK_ID = re.compile(r"/root/[a-z0-9_/-]{1,120}\Z")
 PRIVATE_MARKERS = ("fixture", "test_fixture", "mock", "fake", "sample", "decision_")
+SENSITIVE_OUTPUT = re.compile(
+    r"(?i)(?:gh[pousr]_[A-Za-z0-9_]{20,}|github_pat_[A-Za-z0-9_]{20,}|"
+    r"Bearer\s+[A-Za-z0-9._~+/-]{12,}|Authorization:\s*[^\r\n]+|"
+    r"\b(?:password|secret|token|api[_-]?key)\s*[:=]\s*[^\s,;]+)"
+)
 
 
 def _sha(raw: bytes) -> str:
     return hashlib.sha256(raw).hexdigest()
+
+
+def _diagnostic_tail(raw: bytes, *, limit: int = 1200) -> str:
+    """Retain only a bounded, redacted tail for a failed deterministic gate."""
+    safe = SENSITIVE_OUTPUT.sub("[REDACTED]", raw.decode("utf-8", "replace"))
+    return safe[-limit:]
 
 
 def _read(path: Path) -> tuple[Any, bytes]:
@@ -107,18 +118,24 @@ def _gate(name: str, arguments: list[str], *, timeout: int, artifact: Path | Non
         stdout, stderr = result.stdout, result.stderr
     except (OSError, subprocess.TimeoutExpired) as exc:
         status, code = "BLOCKED", None
-        stdout, stderr = b"", type(exc).__name__.encode("ascii")
+        stdout = exc.stdout or b"" if isinstance(exc, subprocess.TimeoutExpired) else b""
+        stderr = (exc.stderr or b"") if isinstance(exc, subprocess.TimeoutExpired) else b""
+        stderr += b"\n" + type(exc).__name__.encode("ascii")
     if status == "PASS" and artifact is not None and not artifact.is_file():
         status = "BLOCKED"
     executable = Path(arguments[0])
     display_command = [(_relative(executable) if executable.is_absolute() and
                         executable.is_relative_to(ROOT) else "python"), *arguments[1:]]
-    return {"gate": name, "status": status, "command": display_command,
+    receipt = {"gate": name, "status": status, "command": display_command,
             "exit_code": code, "elapsed_seconds": round(time.monotonic() - start, 3),
             "stdout_sha256": _sha(stdout), "stderr_sha256": _sha(stderr),
             "output_sha256": _sha(artifact.read_bytes()) if status == "PASS" and
                              artifact and artifact.is_file() else None,
             "diagnostic": status if status == "PASS" else f"{name}:{status}"}
+    if status != "PASS":
+        receipt["stdout_tail"] = _diagnostic_tail(stdout)
+        receipt["stderr_tail"] = _diagnostic_tail(stderr)
+    return receipt
 
 
 def deterministic(output: Path) -> dict[str, Any]:
