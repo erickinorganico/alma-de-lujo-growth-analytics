@@ -11,11 +11,12 @@ from xml.etree import ElementTree as ET
 
 from alma.operating_contracts import SOURCE_NAMES, SOURCES
 from scripts.verify_operating_workbooks import (
-    FILES, WorkbookAcceptanceError, check_manifest, inspect_book, normalized,
+    FILES, WorkbookAcceptanceError, check_manifest, check_receipts, inspect_book, normalized,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
 DELIVERY = ROOT / "client/v1"
+EXCEL_EVIDENCE = ROOT / "evidence/v1.0/excel"
 MAIN = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
 
 
@@ -50,6 +51,46 @@ class OperatingWorkbookAcceptanceTests(unittest.TestCase):
                 self.assertTrue(all(count == 0 for count in entry["row_counts"].values()))
             else:
                 self.assertTrue(all(count > 0 for count in entry["row_counts"].values()))
+
+    def test_final_excel_and_page_receipts_are_complete(self) -> None:
+        manifest = check_manifest(DELIVERY / "workbook-manifest.json")
+        self.assertEqual("FINAL_EXCEL", manifest["stage"])
+        self.assertEqual({"workbooks": 2, "pdfs": 50, "pages": 62}, check_receipts(
+            manifest, EXCEL_EVIDENCE / "excel-recalculation.json",
+            EXCEL_EVIDENCE / "visual-inspection.json"))
+
+    def test_final_receipt_negative_controls(self) -> None:
+        manifest = check_manifest(DELIVERY / "workbook-manifest.json")
+        root = self.root / "excel"
+        shutil.copytree(EXCEL_EVIDENCE, root)
+        excel = root / "excel-recalculation.json"
+        visual = root / "visual-inspection.json"
+        self.assertEqual(62, check_receipts(manifest, excel, visual)["pages"])
+        with self.assertRaisesRegex(WorkbookAcceptanceError, "required"):
+            check_receipts(manifest, None, visual)
+        original = json.loads(visual.read_text(encoding="utf-8"))
+        cases = (
+            (lambda data: data["pages"].pop(), "visual page count"),
+            (lambda data: data["pages"].__setitem__(1, data["pages"][0]), "missing/duplicate"),
+            (lambda data: data.__setitem__("excel_receipt_sha256", "0" * 64), "stale visual/Excel receipt"),
+            (lambda data: data["pages"][0].__setitem__("png_sha256", "0" * 64), "PNG missing/hash"),
+            (lambda data: data["pages"][0].__setitem__("inspected", False), "uninspected"),
+        )
+        for mutate, error in cases:
+            altered = json.loads(json.dumps(original))
+            mutate(altered)
+            visual.write_text(json.dumps(altered), encoding="utf-8")
+            with self.assertRaisesRegex(WorkbookAcceptanceError, error):
+                check_receipts(manifest, excel, visual)
+        visual.write_text(json.dumps(original), encoding="utf-8")
+        missing_png = root / original["pages"][0]["png"]
+        missing_png.unlink()
+        with self.assertRaisesRegex(WorkbookAcceptanceError, "PNG missing/hash"):
+            check_receipts(manifest, excel, visual)
+        shutil.copyfile(EXCEL_EVIDENCE / original["pages"][0]["png"], missing_png)
+        (root / "unlisted.txt").write_text("extra", encoding="utf-8")
+        with self.assertRaisesRegex(WorkbookAcceptanceError, "unexpected/missing Excel evidence"):
+            check_receipts(manifest, excel, visual)
 
     def test_decimal_cents_preserve_null_and_zero_and_reject_fraction(self) -> None:
         field = next(field for field in SOURCES["sales_aggregates"]["fields"]

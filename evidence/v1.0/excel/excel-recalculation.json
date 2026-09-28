@@ -1,0 +1,332 @@
+{
+  "schema": "operating-excel-recalculation-v1",
+  "timestamp_utc": "2026-09-28T19:57:58Z",
+  "workbooks": [
+    {
+      "kind": "blank",
+      "file": "Alma_de_Lujo_OPERACION_PLANTILLA.xlsx",
+      "engine": "Microsoft Excel",
+      "version": "16.0",
+      "build": "20326",
+      "calculation_mode": -4105,
+      "calculation_state": 0,
+      "calculate_full_rebuild": true,
+      "sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04",
+      "sheets": [
+        {
+          "sheet": "INICIO",
+          "print_area": "$A$1:$F$32",
+          "pdf": "blank__INICIO.pdf",
+          "pdf_sha256": "1406f2d3d3038e166da85dcb68dac27f348cdd11e8f8909aa1f14a315cfa7b08"
+        },
+        {
+          "sheet": "DICCIONARIO",
+          "print_area": "$A$1:$I$185",
+          "pdf": "blank__DICCIONARIO.pdf",
+          "pdf_sha256": "8ab473f1bb8dfef59562a1b29355547965e0d510ee85d7e787ee0810b17b0286"
+        },
+        {
+          "sheet": "COMPLETITUD",
+          "print_area": "$A$1:$I$23",
+          "pdf": "blank__COMPLETITUD.pdf",
+          "pdf_sha256": "4f372e1d66a8f71da67d00eb75c4011c82eb61b4797f0d320cab99b3358428d9"
+        },
+        {
+          "sheet": "sku_catalog",
+          "print_area": "$A$1:$I$6",
+          "pdf": "blank__sku_catalog.pdf",
+          "pdf_sha256": "f5109094e76c58055c718b04361d3ceeea22d62dd020459573d1abc8eb3965ab"
+        },
+        {
+          "sheet": "sales_aggregates",
+          "print_area": "$A$1:$K$6",
+          "pdf": "blank__sales_aggregates.pdf",
+          "pdf_sha256": "733ac99149380995659cb706fdfc8d7943b06cee9e3e7b21fdc6eab2620ab724"
+        },
+        {
+          "sheet": "availability_daily",
+          "print_area": "$A$1:$G$6",
+          "pdf": "blank__availability_daily.pdf",
+          "pdf_sha256": "ea210e5eb4412b3e8de111060f54d4bcfc6ca6eeabf0ecda22c941fa3f84c2e3"
+        },
+        {
+          "sheet": "unmet_demand",
+          "print_area": "$A$1:$G$6",
+          "pdf": "blank__unmet_demand.pdf",
+          "pdf_sha256": "42798d13d436a6c5e5ff8a7730805058979d3b693a709be060e3f76702eca949"
+        },
+        {
+          "sheet": "inventory_counts",
+          "print_area": "$A$1:$H$6",
+          "pdf": "blank__inventory_counts.pdf",
+          "pdf_sha256": "314fd5d2673a0424863e198d1d5a6cde49474b301456f37f9399662da02f426d"
+        },
+        {
+          "sheet": "inventory_movements",
+          "print_area": "$A$1:$K$6",
+          "pdf": "blank__inventory_movements.pdf",
+          "pdf_sha256": "fc9fa658e9f72e0bc75191323db21257cd0469c4517ee1eac2ad0a11e4d50a42"
+        },
+        {
+          "sheet": "inventory_reservations",
+          "print_area": "$A$1:$G$6",
+          "pdf": "blank__inventory_reservations.pdf",
+          "pdf_sha256": "74f5b6aa9e453186974e151eabbe569773798fa4aa872d1c9c6bc1492dfbf640"
+        },
+        {
+          "sheet": "cost_versions",
+          "print_area": "$A$1:$I$6",
+          "pdf": "blank__cost_versions.pdf",
+          "pdf_sha256": "313461d2eb18cbca89031b08ca880a576dca0ee78ce99020287d4c422d92fea1"
+        },
+        {
+          "sheet": "cost_components",
+          "print_area": "$A$1:$I$6",
+          "pdf": "blank__cost_components.pdf",
+          "pdf_sha256": "7af37db6226e5d13476c5d349c7c64e3de7d07485d7285d5144b3d04a8685355"
+        },
+        {
+          "sheet": "cost_allocations",
+          "print_area": "$A$1:$G$6",
+          "pdf": "blank__cost_allocations.pdf",
+          "pdf_sha256": "d863056c2a82421d523a518c83a7541d2d93f028fba895665cfa079ab1b59915"
+        },
+        {
+          "sheet": "purchase_orders",
+          "print_area": "$A$1:$I$6",
+          "pdf": "blank__purchase_orders.pdf",
+          "pdf_sha256": "99c2d214b356c97565b8bf8ff3e55772fd7897047b6da678d09d4920446cdeb3"
+        },
+        {
+          "sheet": "purchase_receipts",
+          "print_area": "$A$1:$H$6",
+          "pdf": "blank__purchase_receipts.pdf",
+          "pdf_sha256": "e348da0082ed607d1f3f0cecdb31b2c21f1a510c4dd8053354d00e2039bae757"
+        },
+        {
+          "sheet": "obligations",
+          "print_area": "$A$1:$H$6",
+          "pdf": "blank__obligations.pdf",
+          "pdf_sha256": "e9c894712c34663dfe0f65de0ed7759a44e8690dec2236502e09ff7f31c7332c"
+        },
+        {
+          "sheet": "obligation_payments",
+          "print_area": "$A$1:$E$6",
+          "pdf": "blank__obligation_payments.pdf",
+          "pdf_sha256": "ba1832f0297f8a46b6d6e9969eee3e1eb3b54b29acc16ffbf37b616cf0f7e917"
+        },
+        {
+          "sheet": "cash_events",
+          "print_area": "$A$1:$L$6",
+          "pdf": "blank__cash_events.pdf",
+          "pdf_sha256": "aa8e019d5bbc27e85660caa305c2a62a0ce55918f76048d11d3a98521c37b979"
+        },
+        {
+          "sheet": "cash_balance_evidence",
+          "print_area": "$A$1:$J$6",
+          "pdf": "blank__cash_balance_evidence.pdf",
+          "pdf_sha256": "055c5dfb1201e52e7c1b4585df0af1f5fb7cfd92baafa3802ac566d5d235b46c"
+        },
+        {
+          "sheet": "budgets",
+          "print_area": "$A$1:$G$6",
+          "pdf": "blank__budgets.pdf",
+          "pdf_sha256": "5e76646bde995b436d2ddd7701095304e735fa7871eefa8f2bed03398ef83a2f"
+        },
+        {
+          "sheet": "budget_allocations",
+          "print_area": "$A$1:$H$6",
+          "pdf": "blank__budget_allocations.pdf",
+          "pdf_sha256": "bb42a1d367b40c0204ef87f59ba065b27214831b80817efe32e43270207eb072"
+        },
+        {
+          "sheet": "expenses",
+          "print_area": "$A$1:$G$6",
+          "pdf": "blank__expenses.pdf",
+          "pdf_sha256": "258e0534ec58ec6168172f5d24b46b7696c3ed9847ca6912b48b7caea940e4c9"
+        },
+        {
+          "sheet": "quality_events",
+          "print_area": "$A$1:$J$6",
+          "pdf": "blank__quality_events.pdf",
+          "pdf_sha256": "ba33376860f65f69d8232090cc19cbef7f7888b86c30d83ae54de29e109fb981"
+        },
+        {
+          "sheet": "sales_readiness",
+          "print_area": "$A$1:$E$6",
+          "pdf": "blank__sales_readiness.pdf",
+          "pdf_sha256": "f0f82b7a381b14704f0fe2c3fc21e48987442c267c302b739f03fdc4c0b547f0"
+        },
+        {
+          "sheet": "loans",
+          "print_area": "$A$1:$J$6",
+          "pdf": "blank__loans.pdf",
+          "pdf_sha256": "3726a47659053a60ed19f0245edfc63f12a317c09610465a284c84e903cbc45a"
+        }
+      ]
+    },
+    {
+      "kind": "synthetic",
+      "file": "Alma_de_Lujo_OPERACION_EJEMPLO.xlsx",
+      "engine": "Microsoft Excel",
+      "version": "16.0",
+      "build": "20326",
+      "calculation_mode": -4105,
+      "calculation_state": 0,
+      "calculate_full_rebuild": true,
+      "sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49",
+      "sheets": [
+        {
+          "sheet": "INICIO",
+          "print_area": "$A$1:$F$32",
+          "pdf": "synthetic__INICIO.pdf",
+          "pdf_sha256": "65a4294346540301af3a78bfd1794147ad86f9d21028448d93b8d67f12e97307"
+        },
+        {
+          "sheet": "DICCIONARIO",
+          "print_area": "$A$1:$I$185",
+          "pdf": "synthetic__DICCIONARIO.pdf",
+          "pdf_sha256": "ae8fcaff82d5eb1176e42c5aa3652ddc4a0c652d02e18bff8888e18beff8d632"
+        },
+        {
+          "sheet": "COMPLETITUD",
+          "print_area": "$A$1:$I$23",
+          "pdf": "synthetic__COMPLETITUD.pdf",
+          "pdf_sha256": "2916141bce9814496945d1ff9750ecdfecb1dde0aa5ceacb1fab56d4780a9e13"
+        },
+        {
+          "sheet": "sku_catalog",
+          "print_area": "$A$1:$I$7",
+          "pdf": "synthetic__sku_catalog.pdf",
+          "pdf_sha256": "e6cc4741ec457f516e7337bb54c0a7203323459dc7bc49c7c7f7060b9ae98b3a"
+        },
+        {
+          "sheet": "sales_aggregates",
+          "print_area": "$A$1:$K$7",
+          "pdf": "synthetic__sales_aggregates.pdf",
+          "pdf_sha256": "bf453df13250839a04957113f9891124d9f5adc1c4f34ee28dd23a72a26eb618"
+        },
+        {
+          "sheet": "availability_daily",
+          "print_area": "$A$1:$G$7",
+          "pdf": "synthetic__availability_daily.pdf",
+          "pdf_sha256": "56dd028fd11bb394e1b8a5b736b35ab7feadc6d50003f8f1558fbf2358c7185f"
+        },
+        {
+          "sheet": "unmet_demand",
+          "print_area": "$A$1:$G$7",
+          "pdf": "synthetic__unmet_demand.pdf",
+          "pdf_sha256": "aa7ba45b035734029cc490446045303c498574d697b4531f21a88b218a87825f"
+        },
+        {
+          "sheet": "inventory_counts",
+          "print_area": "$A$1:$H$7",
+          "pdf": "synthetic__inventory_counts.pdf",
+          "pdf_sha256": "5a4462e9f4d8fbc5db206ac7c2c29b86fb72c8e9ba2c52ebdcfea9472019471c"
+        },
+        {
+          "sheet": "inventory_movements",
+          "print_area": "$A$1:$K$11",
+          "pdf": "synthetic__inventory_movements.pdf",
+          "pdf_sha256": "3f174a0f4e349c3d2fc98aac20f92e9e264196b923e2ea1af595986aae1db762"
+        },
+        {
+          "sheet": "inventory_reservations",
+          "print_area": "$A$1:$G$8",
+          "pdf": "synthetic__inventory_reservations.pdf",
+          "pdf_sha256": "f37d24579636a9c07ad9a84aea333534562ef84cb79df9a321db93c4b1b88d07"
+        },
+        {
+          "sheet": "cost_versions",
+          "print_area": "$A$1:$I$7",
+          "pdf": "synthetic__cost_versions.pdf",
+          "pdf_sha256": "e2187aecf0cd15dfbbabb7de12878c58dbb75993aac1efc7b6dcbaa428a14e6a"
+        },
+        {
+          "sheet": "cost_components",
+          "print_area": "$A$1:$I$7",
+          "pdf": "synthetic__cost_components.pdf",
+          "pdf_sha256": "d4207c46d049387d5226ac52059a860c2e3128510dcb3d8209a57f4e556bc6f8"
+        },
+        {
+          "sheet": "cost_allocations",
+          "print_area": "$A$1:$G$7",
+          "pdf": "synthetic__cost_allocations.pdf",
+          "pdf_sha256": "253e7e7c1a1f669a0773a5c952b09a2cdcf76556cc6d3a4f45a238f3c7ede7ca"
+        },
+        {
+          "sheet": "purchase_orders",
+          "print_area": "$A$1:$I$7",
+          "pdf": "synthetic__purchase_orders.pdf",
+          "pdf_sha256": "71caf434a8292e409cdebb3836d30cd00015942af64184db8ba0efb6a8280940"
+        },
+        {
+          "sheet": "purchase_receipts",
+          "print_area": "$A$1:$H$7",
+          "pdf": "synthetic__purchase_receipts.pdf",
+          "pdf_sha256": "f00f1a0edeaa0b7ed620e3cab030f3387ffad53b362af4f5dcea11b6b413a574"
+        },
+        {
+          "sheet": "obligations",
+          "print_area": "$A$1:$H$8",
+          "pdf": "synthetic__obligations.pdf",
+          "pdf_sha256": "94147718c0c64aa1d5b49c7bdbe8537766ecfdf796b7dd2399f189797659aeff"
+        },
+        {
+          "sheet": "obligation_payments",
+          "print_area": "$A$1:$E$7",
+          "pdf": "synthetic__obligation_payments.pdf",
+          "pdf_sha256": "8c81f6f1c8d26ff37dff10babb1e78c784dfd8ce83778c49c551e3f3da593deb"
+        },
+        {
+          "sheet": "cash_events",
+          "print_area": "$A$1:$L$8",
+          "pdf": "synthetic__cash_events.pdf",
+          "pdf_sha256": "54b0e14217a8c996a2289e762fdee45987b2f71beb7264367d67c2182cf535f4"
+        },
+        {
+          "sheet": "cash_balance_evidence",
+          "print_area": "$A$1:$J$7",
+          "pdf": "synthetic__cash_balance_evidence.pdf",
+          "pdf_sha256": "36daf6761933c9602975b946899d401be5d2c1384cb48d372a5d1d3d442c57cf"
+        },
+        {
+          "sheet": "budgets",
+          "print_area": "$A$1:$G$7",
+          "pdf": "synthetic__budgets.pdf",
+          "pdf_sha256": "62f427bd3e41c0e136f3590b795eda6a7b7c1da25560a2e50eb9ff8b8b56ce36"
+        },
+        {
+          "sheet": "budget_allocations",
+          "print_area": "$A$1:$H$8",
+          "pdf": "synthetic__budget_allocations.pdf",
+          "pdf_sha256": "914e4022d66eefcbf36bd2aee1be887d277c329d6c02fa15ff86d46a87e419bb"
+        },
+        {
+          "sheet": "expenses",
+          "print_area": "$A$1:$G$7",
+          "pdf": "synthetic__expenses.pdf",
+          "pdf_sha256": "7ce489d22710fcd6259405af54b049d0f828fc8df86aede88ed5ee3b3a3deb2f"
+        },
+        {
+          "sheet": "quality_events",
+          "print_area": "$A$1:$J$8",
+          "pdf": "synthetic__quality_events.pdf",
+          "pdf_sha256": "f76d733931d6ea989c1395f1e557e01d5115888fbc8207d806478501f601e7c1"
+        },
+        {
+          "sheet": "sales_readiness",
+          "print_area": "$A$1:$E$7",
+          "pdf": "synthetic__sales_readiness.pdf",
+          "pdf_sha256": "8d81282520e708a35bcfedc34fb47a7645f0a3a0412c037bbf075e4989bab327"
+        },
+        {
+          "sheet": "loans",
+          "print_area": "$A$1:$J$7",
+          "pdf": "synthetic__loans.pdf",
+          "pdf_sha256": "b8f15bf48895de809512b2c607cf7ec2922be155714aaf438e53418566f4c4cd"
+        }
+      ]
+    }
+  ]
+}
