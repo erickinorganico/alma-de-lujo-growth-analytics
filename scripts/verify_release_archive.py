@@ -26,6 +26,11 @@ OWNER = "erickinorganico"
 REPOSITORY = "alma-de-lujo-growth-analytics"
 WORKFLOW = "verify.yml"
 SHA = re.compile(r"[0-9a-f]{40}(?:[0-9a-f]{24})?\Z")
+SENSITIVE_OUTPUT = re.compile(
+    r"(?i)(?:gh[pousr]_[A-Za-z0-9_]{20,}|github_pat_[A-Za-z0-9_]{20,}|"
+    r"Bearer\s+[A-Za-z0-9._~+/-]{12,}|Authorization:\s*[^\r\n]+|"
+    r"\b(?:password|secret|token|api[_-]?key)\s*[:=]\s*[^\s,;]+)"
+)
 OS_LABELS = {"windows-latest": "Windows", "ubuntu-latest": "Linux"}
 REQUIRED_SOURCE = (
     "requirements-client.txt",
@@ -85,11 +90,28 @@ def rooted(path: Path) -> Path:
     return (path if path.is_absolute() else ROOT / path).resolve(strict=False)
 
 
+def failure_stream(value: str | bytes | None, *, limit: int = 3000) -> tuple[str, str]:
+    """Return a full digest and a bounded, redacted diagnostic tail."""
+    raw = value.encode("utf-8", "replace") if isinstance(value, str) else value or b""
+    safe = SENSITIVE_OUTPUT.sub("[REDACTED]", raw.decode("utf-8", "replace"))
+    return digest(raw), json.dumps(safe[-limit:], ensure_ascii=True)
+
+
 def command(args: list[str], cwd: Path = ROOT, *, timeout: int = 120, text: bool = True) -> subprocess.CompletedProcess:
-    result = subprocess.run(args, cwd=cwd, capture_output=True, text=text, timeout=timeout, check=False)
+    try:
+        result = subprocess.run(args, cwd=cwd, capture_output=True, text=text, timeout=timeout, check=False)
+    except subprocess.TimeoutExpired as exc:
+        out_hash, out_tail = failure_stream(exc.stdout)
+        err_hash, err_tail = failure_stream(exc.stderr)
+        raise ProofError(f"command timed out after {timeout}s: {Path(args[0]).name}; "
+                         f"stdout_sha256={out_hash} stdout_tail={out_tail}; "
+                         f"stderr_sha256={err_hash} stderr_tail={err_tail}") from exc
     if result.returncode:
-        detail = result.stderr if text else result.stderr.decode("utf-8", "replace")
-        raise ProofError(f"command failed ({result.returncode}): {args[:4]}: {detail[-1200:]}")
+        out_hash, out_tail = failure_stream(result.stdout)
+        err_hash, err_tail = failure_stream(result.stderr)
+        raise ProofError(f"command failed ({result.returncode}): {Path(args[0]).name}; "
+                         f"stdout_sha256={out_hash} stdout_tail={out_tail}; "
+                         f"stderr_sha256={err_hash} stderr_tail={err_tail}")
     return result
 
 

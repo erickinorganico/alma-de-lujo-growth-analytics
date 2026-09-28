@@ -29,6 +29,25 @@ def job(label: str, *, conclusion: str = "success", sha: str = SHA) -> dict:
 
 
 class ArchiveSecurityTests(unittest.TestCase):
+    def test_failed_command_reports_bounded_redacted_stdout_and_stderr(self) -> None:
+        diagnostic = "v0.2-full-suite-and-scenarios:FAIL"
+        secret = "ghp_" + "A" * 32
+        stdout = "x" * 5000 + diagnostic + " " + secret
+        stderr = "token=" + "B" * 32 + " gate failed"
+        completed = CompletedProcess(["python", "scripts/verify_v1.py"], 1, stdout, stderr)
+        with patch.object(proof.subprocess, "run", return_value=completed):
+            with self.assertRaises(proof.ProofError) as caught:
+                proof.command(["python", "scripts/verify_v1.py"])
+        message = str(caught.exception)
+        self.assertIn(diagnostic, message)
+        self.assertIn("stdout_tail=", message)
+        self.assertIn("stderr_tail=", message)
+        self.assertIn("stdout_sha256=" + proof.digest(stdout.encode()), message)
+        self.assertIn("stderr_sha256=" + proof.digest(stderr.encode()), message)
+        self.assertNotIn(secret, message)
+        self.assertNotIn("B" * 32, message)
+        self.assertNotIn("x" * 3001, message)
+
     def test_relative_output_uses_absolute_venv_python_for_extracted_cwd(self) -> None:
         local = proof.ROOT / ".local"
         local.mkdir(exist_ok=True)
