@@ -252,22 +252,45 @@ class ReleaseRunnerContractTests(unittest.TestCase):
                 verify_v1._native_entry(cycle, "merchandiser", state)
 
     def test_failed_deterministic_gate_blocks_overall_receipt(self) -> None:
-        from unittest import mock
+        local = ROOT / ".local"
+        local.mkdir(exist_ok=True)
+        default_work = local / "v1-acceptance/deterministic"
+        default_work.mkdir(parents=True, exist_ok=True)
+        with tempfile.NamedTemporaryFile(dir=default_work, prefix="work-sentinel-", delete=False) as stream:
+            sentinel = Path(stream.name)
+            stream.write(b"preserve outer v2 artifact")
+        try:
+            with tempfile.TemporaryDirectory(dir=local, prefix="v1-failed-gate-") as tmp:
+                home = Path(tmp)
+                output = home / "receipt.json"
+                work = home / "work"
+                output.write_bytes(canonical_json({"status": "PASS", "stale": True}))
+                with mock.patch.object(verify_v1, "_gate", return_value={"status": "FAIL", "gate": "probe"}) as gate:
+                    result = verify_v1.deterministic(output, work=work)
+                self.assertEqual("FAIL", result["status"])
+                self.assertRegex(result["candidate_commit"], r"^[0-9a-f]{40}$")
+                self.assertEqual("NOT_RUN_BY_DETERMINISTIC_VERIFIER", result["native_execution"])
+                self.assertEqual("UNKNOWN", result["external_gates"]["EXT-01"])
+                self.assertEqual("REVIEW", result["external_gates"]["EXT-03"])
+                self.assertEqual("FAIL", _json(output)["status"])
+                self.assertNotIn("stale", _json(output))
+                self.assertIn((work.relative_to(ROOT) / "v2").as_posix(), gate.call_args_list[0].args[1])
+                self.assertEqual(b"preserve outer v2 artifact", sentinel.read_bytes())
+        finally:
+            sentinel.unlink(missing_ok=True)
 
-        with tempfile.TemporaryDirectory() as tmp:
-            output = ROOT / ".local/v1-acceptance/test-failed-gate.json"
-            output.parent.mkdir(parents=True, exist_ok=True)
-            output.write_bytes(canonical_json({"status": "PASS", "stale": True}))
-            with mock.patch.object(verify_v1, "_gate", return_value={"status": "FAIL", "gate": "probe"}):
-                result = verify_v1.deterministic(output)
-            self.assertEqual("FAIL", result["status"])
-            self.assertRegex(result["candidate_commit"], r"^[0-9a-f]{40}$")
-            self.assertEqual("NOT_RUN_BY_DETERMINISTIC_VERIFIER", result["native_execution"])
-            self.assertEqual("UNKNOWN", result["external_gates"]["EXT-01"])
-            self.assertEqual("REVIEW", result["external_gates"]["EXT-03"])
-            self.assertEqual("FAIL", _json(output)["status"])
-            self.assertNotIn("stale", _json(output))
-            output.unlink()
+    def test_deterministic_work_and_output_must_be_disjoint_inside_repo(self) -> None:
+        local = ROOT / ".local"
+        local.mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=local, prefix="v1-paths-") as tmp, \
+             tempfile.TemporaryDirectory() as outside:
+            home = Path(tmp)
+            with self.assertRaises(ValueError):
+                verify_v1.deterministic(home / "work/receipt.json", work=home / "work")
+            with self.assertRaises(ValueError):
+                verify_v1.deterministic(home / "receipt.json", work=Path(outside))
+            with self.assertRaises(ValueError):
+                verify_v1.deterministic(Path(outside) / "receipt.json", work=home / "work")
 
     def test_gate_receipt_preserves_the_actual_argument_vector(self) -> None:
         import sys

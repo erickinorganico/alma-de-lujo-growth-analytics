@@ -138,13 +138,17 @@ def _gate(name: str, arguments: list[str], *, timeout: int, artifact: Path | Non
     return receipt
 
 
-def deterministic(output: Path) -> dict[str, Any]:
+def deterministic(output: Path, *, work: Path | None = None) -> dict[str, Any]:
     _relative(output)
+    work = (work or ROOT / ".local/v1-acceptance/deterministic").resolve(strict=False)
+    work_relative = _relative(work)
+    output_absolute = output.resolve(strict=False)
+    if output_absolute.is_relative_to(work) or work.is_relative_to(output_absolute):
+        raise ValueError("deterministic output and work directory overlap")
     # A prior PASS must disappear before any new gate starts; interruption is
     # absence of current acceptance, never an implicit reuse of old evidence.
     output.unlink(missing_ok=True)
     python = sys.executable
-    work = ROOT / ".local/v1-acceptance/deterministic"
     work.mkdir(parents=True, exist_ok=True)
     try:
         routing = _routing()
@@ -155,15 +159,15 @@ def deterministic(output: Path) -> dict[str, Any]:
                                    "contract": routing}]
     specs = [
         ("v0.2-full-suite-and-scenarios", [python, "scripts/verify_v2.py", "--output",
-          ".local/v1-acceptance/deterministic/v2"], 1800,
+          f"{work_relative}/v2"], 1800,
          work / "v2/verification.json"),
         ("v0.2-scope", [python, "scripts/check_scope_v2.py", "--workspace",
           "evidence/v0.2/workspace", "--verification",
-          ".local/v1-acceptance/deterministic/v2/verification.json", "--output",
-          ".local/v1-acceptance/deterministic/scope.json"], 240, work / "scope.json"),
+          f"{work_relative}/v2/verification.json", "--output",
+          f"{work_relative}/scope.json"], 240, work / "scope.json"),
         ("v0.3-workbooks", [python, "scripts/verify_client_v3.py", "check", "--directory",
           "client", "--engine-receipt", "evidence/v0.3/excel/excel-recalculation.json",
-          "--output", ".local/v1-acceptance/deterministic/workbooks.json"], 240, work / "workbooks.json"),
+          "--output", f"{work_relative}/workbooks.json"], 240, work / "workbooks.json"),
         ("historical-client", [python, "-m", "unittest", "tests.test_client_system", "-q"], 300, None),
         ("v1-portal-and-package", [python, "-m", "unittest", "tests.test_offline_portal_v1",
           "tests.test_weekly_kit", "-q"], 600, None),
