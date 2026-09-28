@@ -9,7 +9,7 @@ requires:
   - phase: 04-offline-client-and-analyst-kit
     provides: Offline weekly adapter and client kit consumed by v1 acceptance.
 provides:
-  - Deterministic v1 acceptance runner and adversarial release matrix, with a prior 9/9 gate result.
+  - Deterministic v1 acceptance runner and adversarial release matrix, with a post-fix 9/9 gate result.
   - Sanitized native acceptance receipt for two distinct synthetic cuts and 14 native tasks.
   - Evidence-backed week-one decision continuity and closure against the later cut.
 affects: [05-02, 05-03, v1.0-release]
@@ -57,7 +57,7 @@ completed: 2026-09-28
 
 ## Accomplishments
 
-- The prior deterministic acceptance result was 9/9 gates. The deterministic runner includes historical and v1 release checks; this result predates the current `prepare-live` path fix.
+- The post-fix deterministic acceptance completed against candidate `f9af688c950610014cd99e0e358fe090a57f1fa4` with 9/9 gates PASS, 0 FAIL and 0 BLOCKED. The committed machine-readable receipt is `evidence/v1.0/regression-acceptance.json`.
 - The final sanitized native receipt reports 14 distinct native tasks: 12 analysts and 2 separate Astra reviews across two different synthetic cutoffs. Both cuts reached `READY_FOR_OWNER`.
 - The verified decision register records one synthetic week-one decision closed with evidence anchored to the distinct week-two cut. The receipt preserves the evidence hashes and excludes private response prose and query contents.
 - Corrected `prepare_live` to resolve the documented relative `.local/...` output before checking generated absolute cycle paths, with the acceptance test exercising that relative invocation.
@@ -79,12 +79,12 @@ completed: 2026-09-28
 
 The documented relative `prepare-live` command exposed a path-normalization issue because prepared cycle paths are absolute on Windows. The implementation now resolves the output path before validating it, and the contract test covers the relative CLI form.
 
-The recorded prior deterministic result is 9/9. A deterministic rerun after this path correction has not been recorded, and publication of the v1.0 release has not occurred. This summary makes no claim that either happened.
+The deterministic rerun after the path correction is recorded as 9/9 PASS. Publication of the v1.0 release has not occurred, and this summary makes no claim that it happened.
 
 ---
 
 **Total deviations:** 1 implementation correction
-**Impact on plan:** The change aligns `prepare-live` behavior with its documented relative-path invocation; the post-correction deterministic rerun remains outstanding.
+**Impact on plan:** The change aligns `prepare-live` behavior with its documented relative-path invocation; the post-correction deterministic rerun is now green.
 
 ## Issues Encountered
 
@@ -96,7 +96,7 @@ None - no external service configuration required.
 
 ## Next Phase Readiness
 
-The final native acceptance receipt is complete for the synthetic two-cut scenario. Run the deterministic acceptance after the path correction and evaluate release publication separately; neither is evidenced as completed here. External gates remain `EXT-01 UNKNOWN`, `EXT-02 UNKNOWN`, and `EXT-03 REVIEW`.
+The final native acceptance receipt is complete for the synthetic two-cut scenario, and deterministic acceptance is 9/9 PASS after the path correction. Release publication remains a separate gate. External gates remain `EXT-01 UNKNOWN`, `EXT-02 UNKNOWN`, and `EXT-03 REVIEW`.
 
 ---
 *Phase: 05-acceptance-and-v1-0-0-release*
