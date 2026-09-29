@@ -87,6 +87,10 @@ def main(argv=None):
     proc.add_argument('--response');proc.add_argument('--receipt')
     mart=sub.add_parser('query',help='Run a registered read-only SQL mart')
     mart.add_argument('--workspace',default='build/workspace-v2');mart.add_argument('--mart',required=True)
+    inventory=sub.add_parser('inventory',help='Create an immutable private inventory control report')
+    inventory.add_argument('--source',required=True,help='Operating-v1 workbook or source-pack directory')
+    inventory.add_argument('--output-root',default='.local/inventory-runs')
+    inventory.add_argument('--count-max-age-days',type=int,default=7)
     args=parser.parse_args(argv)
     try:
         if args.command=='workspace':
@@ -109,6 +113,10 @@ def main(argv=None):
             from .process_engine import _manifest
             _manifest(Path(args.workspace).resolve())
             print(json.dumps(query_mart(Path(args.workspace)/'warehouse.sqlite3',args.mart),ensure_ascii=False,indent=2));return 0
+        if args.command=='inventory':
+            from .inventory_control import create_inventory_run
+            result=create_inventory_run(args.source,args.output_root,count_max_age_days=args.count_max_age_days)
+            print(json.dumps(result,ensure_ascii=False,indent=2));return 2 if result['status']=='BLOCKED' else 0
         if args.command=='verify':return verify(args.output)
         report=build(args.output,args.seed,args.scenario,args.csv_input)
         print(json.dumps(dict(output=str(Path(args.output).resolve()),status=report['meta']['status'],scenario=report['meta']['scenario'],synthetic=True),ensure_ascii=False))

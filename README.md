@@ -15,6 +15,16 @@ Un sistema analítico para ropa deportiva y calcetines de Pilates, con un kit se
 
 Para usar los libros no necesitas Python, GitHub ni una suscripción de IA. Se entregan para Excel de escritorio; otras suites necesitan su propia comprobación de compatibilidad. Las cantidades de compra son propuestas condicionales. Los parámetros iniciales son provisionales y deben revisarse con la operación.
 
+### Controlar el inventario desde el primer corte
+
+El libro operativo ya funciona como registro único de SKU, movimientos, reservas, conteos, compras, recepciones y préstamos. Después de actualizar una copia privada, genera el control por SKU con:
+
+```powershell
+.\run.ps1 inventory --source .local\Alma_OPERACION_SEMANA_01.xlsx --output-root .local\inventory-runs
+```
+
+El resultado queda fuera de Git en `.local/inventory-runs/<cut_id>/`: un tablero HTML, CSV, JSON y recibo con hashes. Concilia existencia física, reservado, disponible, no vendible, inspección, tránsito, compras abiertas, préstamos y variación contra conteo. Una diferencia bloquea la decisión hasta cerrar la conciliación. [Procedimiento completo](docs/CONTROL-INVENTARIO.md).
+
 El kit admite hasta **100 variantes, 1,000 agregados fecha/SKU y 250 movimientos de caja previstos**. Separa la propuesta de compra de la cantidad elegida, calcula el precio que cubre los costos y el margen objetivo, y evalúa **91 cierres diarios** agrupados en 13 semanas. La caja dentro de cada día y la exactitud de las fuentes no se presumen verificadas. [Contrato del kit](client/contract.json) · [Alcance](specs/CLIENT-v3.md).
 
 El portal funciona sin servidor ni recursos remotos. Su manifiesto vuelve a calcular filas, campos, hashes, fórmulas, linaje y 49 hechos citados por los agentes. La extensión de costos mantiene sus ocho CSV separados de las 30 fuentes base y publica qué capacidades existen, cuáles siguen pendientes y qué propuesta de la adenda entra en conflicto con el alcance analítico actual. [Recorrido técnico](client/FUENTES_METRICAS_AGENTES.md) · [Aceptación](docs/CLIENT-SYSTEM-ACCEPTANCE.md).

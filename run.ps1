@@ -1,6 +1,6 @@
 param(
     [Parameter(Position=0)]
-    [ValidateSet('workspace','demo','verify','weekly','weekly-resume')]
+    [ValidateSet('workspace','demo','verify','weekly','weekly-resume','inventory')]
     [string]$Command = 'workspace',
     [Parameter(ValueFromRemainingArguments=$true)]
     [string[]]$CommandArgs
