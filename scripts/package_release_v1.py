@@ -16,6 +16,8 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 VERSION = "1.0.0"
 MANIFEST = "release-manifest.json"
 FIXED_TIME = (1980, 1, 1, 0, 0, 0)

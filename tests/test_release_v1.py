@@ -275,6 +275,26 @@ class ReleaseDocumentationTests(unittest.TestCase):
 
 
 class ReleaseWorkflowTests(unittest.TestCase):
+    def test_preflight_cli_builds_and_audits_current_commit(self):
+        root = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as temporary:
+            archive = Path(temporary) / "Alma_OS_v1.0.0.zip"
+            checksum = Path(temporary) / "Alma_OS_v1.0.0.zip.sha256"
+            result = subprocess.run(
+                [sys.executable, "scripts/package_release_v1.py", "preflight",
+                 "--ref", "HEAD", "--output", str(archive), "--checksum", str(checksum)],
+                cwd=root, check=True, capture_output=True, text=True)
+            receipt = json.loads(result.stdout)
+            self.assertEqual("PASS", receipt["status"])
+            self.assertEqual(receipt["zip_sha256"], hashlib.sha256(archive.read_bytes()).hexdigest())
+            self.assertEqual(
+                "PASS",
+                audit.audit_preflight(
+                    archive, checksum, root / "client/v1/release-manifest.json", "1.0.0",
+                    expected_license_sha256=receipt["license_sha256"],
+                )["status"],
+            )
+
     def test_both_matrix_jobs_share_four_exact_commands_and_receipt(self):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/verify.yml").read_text(encoding="utf-8")
         self.assertIn("os: [windows-latest, ubuntu-latest]", workflow)
