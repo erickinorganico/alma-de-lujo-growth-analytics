@@ -11,7 +11,7 @@
     "evidence/v1.0/excel/excel-recalculation.json": "3759774d4f214850be8d32c39c4d38bd178d1f626576faf42fc01cc658b5262c",
     "evidence/v1.0/excel/visual-inspection.json": "726dad722b19df5509588164a09d597f6ec2fda76488c9a57f4999ae22113be1"
   },
-  "license_sha256": "9b7ecfbaf57616b628c323e6179ee901baa4cb62d35c581b7938eabbe49f7101",
+  "license_sha256": "4d60f94f197e876592f859c38f67ad2a9dafb2ecb5ecd78672f4e2e58ed74d82",
   "third_party_bundled": false,
   "external_gates": {
     "EXT-01": "UNKNOWN",
