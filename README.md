@@ -4,6 +4,23 @@ Un sistema analítico para ropa deportiva y calcetines de Pilates, con un kit se
 
 **Los datos comerciales son sintéticos.** Las fuentes públicas de mercado están atribuidas por separado. Este proyecto no demuestra ventas o rentabilidad reales de Alma de Lujo.
 
+## Instrucciones de uso
+
+La guía [INSTRUCCIONES.md](INSTRUCCIONES.md) reúne en un solo lugar la descarga del paquete, instalación del checkout, preparación del libro, captura correcta de movimientos, control de inventario, ciclo semanal con agentes, privacidad, actualización y solución de errores.
+
+Para comenzar a controlar inventario desde el repositorio:
+
+```powershell
+New-Item -ItemType Directory -Force .local | Out-Null
+Copy-Item .\client\v1\Alma_de_Lujo_OPERACION_PLANTILLA.xlsx .\.local\Alma_OPERACION_SEMANA_01.xlsx
+```
+
+Abre la copia, cambia su clase a `PRIVATE`, completa corte, zona horaria, cobertura y hechos observados como indica la guía. Después genera el control:
+
+```powershell
+.\run.ps1 inventory --source .local\Alma_OPERACION_SEMANA_01.xlsx --output-root .local\inventory-runs
+```
+
 ## Para el cliente: empieza aquí
 
 1. Abre el [sistema analítico navegable](client/SISTEMA_ANALITICO.html): muestra las 30 fuentes, 11 marts, 6 procesos, 7 roles, ejecuciones nativas, paquetes de decisión, métricas y linaje con evidencia verificable.

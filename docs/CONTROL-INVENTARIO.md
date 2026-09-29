@@ -2,6 +2,8 @@
 
 Alma OS puede generar un tablero privado e inmutable por corte a partir del libro operativo o del pack canónico de 22 tablas. El tablero usa el mismo kardex del sistema; no crea un inventario paralelo.
 
+Para instalación, preparación inicial, ciclo semanal, privacidad y solución de errores, consulta la [guía completa de GitHub](../INSTRUCCIONES.md).
+
 ## Uso semanal
 
 1. En una copia privada de `client/v1/Alma_de_Lujo_OPERACION_PLANTILLA.xlsx`, mantén estas hojas:
