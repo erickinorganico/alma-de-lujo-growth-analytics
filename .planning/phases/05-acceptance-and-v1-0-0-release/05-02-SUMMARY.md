@@ -55,6 +55,7 @@ completed: 2026-09-28
 ## Accomplishments
 
 - Generated the final blank and synthetic XLSX pair with all 22 operating relations and 25 print areas per workbook. The manifest records the exact post-Excel hashes, sheet dimensions, tables, validations and source-pack provenance.
+- Removed the optional Excel `x15ac:absPath` extension after discovering that it exposed a local absolute path. The final blank hash is `a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6`; the final synthetic hash is `ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958`. Per-book receipts prove that only `xl/workbook.xml` changed and that the other 33 XLSX members remained byte-identical.
 - Verified the books with an independent integer/Decimal oracle and adversarial checks for formula injection, hidden content, external relationships, metadata and member/hash drift. The final focused workbook suite passed 11/11.
 - Recalculated both books in Microsoft Excel 16.0 build 20326 and exported 50 PDFs. All 62 rendered pages were individually inspected and recorded as PASS. Seven pages have an incomplete Excel footer page-number field; their content and pagination remain readable.
 - Implemented a fail-closed archive verifier that extracts only committed blobs, creates a disposable venv, installs the pinned optional requirements, executes deterministic, privacy/link, workbook and public-scope gates, and records canonical outputs without claiming that CI ran Excel.
@@ -76,9 +77,11 @@ Cross-platform CI revealed four portability defects that local Windows checks di
 
 The rendered content is accepted, but seven pages retain an incomplete Excel footer page-number field. This is recorded as a limitation rather than represented as a perfect footer render.
 
+The absolute-path repair happened after rehearsal SHA P. Its archive and CI receipts remain valid historical rehearsal evidence for P, but they do not prove the repaired workbook bytes. Plan 05-03 must establish the clean archive and both operating systems again on final SHA A before publication.
+
 ## Next phase readiness
 
-REL-02 and REL-03 are complete. Plan 05-03 may implement the deterministic outer release package, documentation, manifest and publication flow. It must create a separate final SHA-A archive/CI sidecar after all release inputs are committed; this rehearsal sidecar cannot substitute for final tag evidence.
+REL-02 remains complete with the post-Excel privacy delta explicitly proven. The earlier REL-03 rehearsal is historical after the workbook repair; Plan 05-03 must re-establish REL-03 on final SHA A while implementing the deterministic outer release package, documentation, manifest and publication flow. The rehearsal sidecar cannot substitute for final tag evidence.
 
 ---
 *Phase: 05-acceptance-and-v1-0-0-release*

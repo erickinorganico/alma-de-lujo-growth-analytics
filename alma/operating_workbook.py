@@ -30,6 +30,8 @@ MAX_ARCHIVE_MEMBERS = 2_000
 MAX_INPUT_ROWS = 1_000
 SUPPORT_SHEETS = ("INICIO", "DICCIONARIO", "COMPLETITUD")
 _EXTERNAL_REL = re.compile(rb'TargetMode=["\']External["\']', re.IGNORECASE)
+_ABSOLUTE_PATH = re.compile(rb'(?<![A-Za-z0-9])(?:[A-Za-z]:[\\/]|\\\\[^\\/]+[\\/]|/(?:Users|home|mnt|tmp|private|var|opt)/|file://)', re.IGNORECASE)
+_ABS_PATH_ELEMENT = re.compile(rb'<(?:[A-Za-z_][\w.-]*:)?absPath\b', re.IGNORECASE)
 _PII_LIKE = re.compile(r"(?:[^@\s]+@[^@\s]+\.[^@\s]+|\b\d{7,15}\b)")
 
 
@@ -109,7 +111,10 @@ def _inspect_archive(path: Path) -> None:
                         or lowered.startswith("xl/embeddings/") or lowered.startswith("customxml/")
                         or lowered.startswith("xl/connections")):
                     _fail("workbook.external_content", correction="Elimina macros, vínculos y objetos externos.")
-                if lowered.endswith(".rels") and _EXTERNAL_REL.search(archive.read(member)):
+                content = archive.read(member)
+                if _ABS_PATH_ELEMENT.search(content) or _ABSOLUTE_PATH.search(content):
+                    _fail("workbook.absolute_path", correction="Regenera el libro sin metadatos de rutas locales.")
+                if lowered.endswith(".rels") and _EXTERNAL_REL.search(content):
                     _fail("workbook.external_content", correction="Elimina relaciones a recursos externos.")
     except zipfile.BadZipFile as exc:
         raise WorkbookContractError("workbook.archive", correction="Usa un .xlsx válido.") from exc

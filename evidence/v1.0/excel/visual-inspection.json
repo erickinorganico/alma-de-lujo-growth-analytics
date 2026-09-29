@@ -1,5 +1,5 @@
 {
-  "excel_receipt_sha256": "ac9fb1ed7a48bb645b8ca4f8c1183d0591f1272968831a15b4f9cd0248f59805",
+  "excel_receipt_sha256": "3759774d4f214850be8d32c39c4d38bd178d1f626576faf42fc01cc658b5262c",
   "inspector": "Codex GPT-6; direct inspection of each final rendered PNG via tools.view_image",
   "limitations": [
     "Excel-generated page-number footer fields are incomplete on seven pages; PDF page inventory and all worksheet content remain readable."
@@ -19,7 +19,8 @@
       "pdf_sha256": "1406f2d3d3038e166da85dcb68dac27f348cdd11e8f8909aa1f14a315cfa7b08",
       "png": "rendered-pages/blank__INICIO__page-01.png",
       "png_sha256": "925ed494f8c4725efe8991154f6059e2bbfd1457d71c9d006008c18d9eda8b83",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -35,7 +36,8 @@
       "pdf_sha256": "1406f2d3d3038e166da85dcb68dac27f348cdd11e8f8909aa1f14a315cfa7b08",
       "png": "rendered-pages/blank__INICIO__page-02.png",
       "png_sha256": "949fc86840db2589f8c60162f467d71454958782d1afe8ab0137acd569aa118b",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -51,7 +53,8 @@
       "pdf_sha256": "8ab473f1bb8dfef59562a1b29355547965e0d510ee85d7e787ee0810b17b0286",
       "png": "rendered-pages/blank__DICCIONARIO__page-01.png",
       "png_sha256": "01c6c56106870ccfbc3c3ba323921d69c40ea905316e6427463cde5bce8f855e",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -67,7 +70,8 @@
       "pdf_sha256": "8ab473f1bb8dfef59562a1b29355547965e0d510ee85d7e787ee0810b17b0286",
       "png": "rendered-pages/blank__DICCIONARIO__page-02.png",
       "png_sha256": "bc7459f78ac1678ea310fece568bc6865535645b6e9f3c476189a8dbff434098",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -83,7 +87,8 @@
       "pdf_sha256": "8ab473f1bb8dfef59562a1b29355547965e0d510ee85d7e787ee0810b17b0286",
       "png": "rendered-pages/blank__DICCIONARIO__page-03.png",
       "png_sha256": "00984f7b0c33eedb89a164d05c677ab09d11aa3eeaad8c16253b9212796d0677",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -99,7 +104,8 @@
       "pdf_sha256": "8ab473f1bb8dfef59562a1b29355547965e0d510ee85d7e787ee0810b17b0286",
       "png": "rendered-pages/blank__DICCIONARIO__page-04.png",
       "png_sha256": "5f30ebed51b05e39bed33de815de610c5a985cce63e7dc5bb485fba0fad1f90a",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -115,7 +121,8 @@
       "pdf_sha256": "8ab473f1bb8dfef59562a1b29355547965e0d510ee85d7e787ee0810b17b0286",
       "png": "rendered-pages/blank__DICCIONARIO__page-05.png",
       "png_sha256": "96745714945a935a257236f9506226fc6c8d39987dad9e091ad83ab8ef081342",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -131,7 +138,8 @@
       "pdf_sha256": "8ab473f1bb8dfef59562a1b29355547965e0d510ee85d7e787ee0810b17b0286",
       "png": "rendered-pages/blank__DICCIONARIO__page-06.png",
       "png_sha256": "aa0a770bf1a9b748c1e302ab98e4b3f2c2282079d5774b57b00b381830e1aa58",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -147,7 +155,8 @@
       "pdf_sha256": "4f372e1d66a8f71da67d00eb75c4011c82eb61b4797f0d320cab99b3358428d9",
       "png": "rendered-pages/blank__COMPLETITUD__page-01.png",
       "png_sha256": "7b2cbb2414eee3b3aff38c0e1413ea7685a7448bb1b8220328716ddbca3f7699",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -163,7 +172,8 @@
       "pdf_sha256": "f5109094e76c58055c718b04361d3ceeea22d62dd020459573d1abc8eb3965ab",
       "png": "rendered-pages/blank__sku_catalog__page-01.png",
       "png_sha256": "e87afc2a13ac4dc35d1e4729db904dfb332d269888ce9715ee6c9031238421c2",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -179,7 +189,8 @@
       "pdf_sha256": "733ac99149380995659cb706fdfc8d7943b06cee9e3e7b21fdc6eab2620ab724",
       "png": "rendered-pages/blank__sales_aggregates__page-01.png",
       "png_sha256": "64e2bd7310d87e736aac639993d44c7655b92e3f90a47e7926f5350a85d1150c",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -195,7 +206,8 @@
       "pdf_sha256": "ea210e5eb4412b3e8de111060f54d4bcfc6ca6eeabf0ecda22c941fa3f84c2e3",
       "png": "rendered-pages/blank__availability_daily__page-01.png",
       "png_sha256": "727c319de86b69420b19d13840d640482cc1283857a18afe3bcfe1d32fdf09b4",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -211,7 +223,8 @@
       "pdf_sha256": "42798d13d436a6c5e5ff8a7730805058979d3b693a709be060e3f76702eca949",
       "png": "rendered-pages/blank__unmet_demand__page-01.png",
       "png_sha256": "0f23eefe777dc68fd29941bd32efb7dd9318d3c9accb6f41dd173b438bf0e8a4",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -227,7 +240,8 @@
       "pdf_sha256": "314fd5d2673a0424863e198d1d5a6cde49474b301456f37f9399662da02f426d",
       "png": "rendered-pages/blank__inventory_counts__page-01.png",
       "png_sha256": "bc11fcb7a1432df14c63aaaaa4cfe620a003e5dd5babcf63e91e6d74b39a19c1",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -243,7 +257,8 @@
       "pdf_sha256": "fc9fa658e9f72e0bc75191323db21257cd0469c4517ee1eac2ad0a11e4d50a42",
       "png": "rendered-pages/blank__inventory_movements__page-01.png",
       "png_sha256": "7fe13821267671c746544265efbbccca00189b1e9f334988c609ff0b9d3e52af",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -259,7 +274,8 @@
       "pdf_sha256": "74f5b6aa9e453186974e151eabbe569773798fa4aa872d1c9c6bc1492dfbf640",
       "png": "rendered-pages/blank__inventory_reservations__page-01.png",
       "png_sha256": "70748607827921d60469bbe0cb689e4d47cc7b7c889c14c451fd52228966b29d",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -275,7 +291,8 @@
       "pdf_sha256": "313461d2eb18cbca89031b08ca880a576dca0ee78ce99020287d4c422d92fea1",
       "png": "rendered-pages/blank__cost_versions__page-01.png",
       "png_sha256": "c4f393c398a70c4526a638f942615aaa93147ccb0ec6a5e8b52befd818ad1b19",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -291,7 +308,8 @@
       "pdf_sha256": "7af37db6226e5d13476c5d349c7c64e3de7d07485d7285d5144b3d04a8685355",
       "png": "rendered-pages/blank__cost_components__page-01.png",
       "png_sha256": "95504321f629be0677851e3b55b2ca7003395363fa3f25d4a3aada066e2b4201",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -307,7 +325,8 @@
       "pdf_sha256": "d863056c2a82421d523a518c83a7541d2d93f028fba895665cfa079ab1b59915",
       "png": "rendered-pages/blank__cost_allocations__page-01.png",
       "png_sha256": "49c102ef606b3c4be0ed77fb4fe6a1b6112efde135f780bd04fe7c2fe7766533",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -323,7 +342,8 @@
       "pdf_sha256": "99c2d214b356c97565b8bf8ff3e55772fd7897047b6da678d09d4920446cdeb3",
       "png": "rendered-pages/blank__purchase_orders__page-01.png",
       "png_sha256": "6bcf0a919e0dbf1269d0b0663fea2b7728b32f5680459a8baca4a6ef09938eb4",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -339,7 +359,8 @@
       "pdf_sha256": "e348da0082ed607d1f3f0cecdb31b2c21f1a510c4dd8053354d00e2039bae757",
       "png": "rendered-pages/blank__purchase_receipts__page-01.png",
       "png_sha256": "58f1e12d033646e97ed1d6af73d9d8b2da67299498c4367af74c0c3d563fcf16",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -355,7 +376,8 @@
       "pdf_sha256": "e9c894712c34663dfe0f65de0ed7759a44e8690dec2236502e09ff7f31c7332c",
       "png": "rendered-pages/blank__obligations__page-01.png",
       "png_sha256": "19e4c9921c9c1882534033534041b2f629122fadb608cd476dc4b30bec5b5e2d",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -371,7 +393,8 @@
       "pdf_sha256": "ba1832f0297f8a46b6d6e9969eee3e1eb3b54b29acc16ffbf37b616cf0f7e917",
       "png": "rendered-pages/blank__obligation_payments__page-01.png",
       "png_sha256": "ef589e9895d9bf24a32dbf1f2808b18196d861b04700c552655f7cec44345d54",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -387,7 +410,8 @@
       "pdf_sha256": "aa8e019d5bbc27e85660caa305c2a62a0ce55918f76048d11d3a98521c37b979",
       "png": "rendered-pages/blank__cash_events__page-01.png",
       "png_sha256": "61e0f014a09856df6a60e0a3346d6a9c7fd0c12d98d48a1132475bf66761e490",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -403,7 +427,8 @@
       "pdf_sha256": "055c5dfb1201e52e7c1b4585df0af1f5fb7cfd92baafa3802ac566d5d235b46c",
       "png": "rendered-pages/blank__cash_balance_evidence__page-01.png",
       "png_sha256": "08e881ac2c7b0c96de66482aec0fdff3a796cd6d434654a0edc27a30946214b0",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -419,7 +444,8 @@
       "pdf_sha256": "5e76646bde995b436d2ddd7701095304e735fa7871eefa8f2bed03398ef83a2f",
       "png": "rendered-pages/blank__budgets__page-01.png",
       "png_sha256": "c6a42236729ae46d4e82a6b76468b0e94c1189ba74327e416aea2b9177a12a77",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -435,7 +461,8 @@
       "pdf_sha256": "bb42a1d367b40c0204ef87f59ba065b27214831b80817efe32e43270207eb072",
       "png": "rendered-pages/blank__budget_allocations__page-01.png",
       "png_sha256": "7f326a3fbb2622f1c2fe47d52c93923ce18b27e9c8d36431739dbc8a6d1409d3",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -451,7 +478,8 @@
       "pdf_sha256": "258e0534ec58ec6168172f5d24b46b7696c3ed9847ca6912b48b7caea940e4c9",
       "png": "rendered-pages/blank__expenses__page-01.png",
       "png_sha256": "df1eae8153c2779b7418e24551ad7bdf6cedf637512ef4540f450cf1bcb239d7",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -467,7 +495,8 @@
       "pdf_sha256": "ba33376860f65f69d8232090cc19cbef7f7888b86c30d83ae54de29e109fb981",
       "png": "rendered-pages/blank__quality_events__page-01.png",
       "png_sha256": "58675dfb29bae8279a4b041edf22590542f695811f1ab428ce4c54fadce760a8",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -483,7 +512,8 @@
       "pdf_sha256": "f0f82b7a381b14704f0fe2c3fc21e48987442c267c302b739f03fdc4c0b547f0",
       "png": "rendered-pages/blank__sales_readiness__page-01.png",
       "png_sha256": "2d6568f3491896527ba0a246de932b87ff2a3277939d699cd6e1a3cc4a2e54a4",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -499,7 +529,8 @@
       "pdf_sha256": "3726a47659053a60ed19f0245edfc63f12a317c09610465a284c84e903cbc45a",
       "png": "rendered-pages/blank__loans__page-01.png",
       "png_sha256": "f08b12c8406792cb73659a62b664b3c62f83532082e9bb0bb23bca9b71dfa5bc",
-      "workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
+      "workbook_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "pdf_workbook_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04"
     },
     {
       "clipping": "NONE",
@@ -515,7 +546,8 @@
       "pdf_sha256": "65a4294346540301af3a78bfd1794147ad86f9d21028448d93b8d67f12e97307",
       "png": "rendered-pages/synthetic__INICIO__page-01.png",
       "png_sha256": "5734030448b21db3e739ae93ae5f8fdcbf4a272bd4d42372e7f8643ff938f06d",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -531,7 +563,8 @@
       "pdf_sha256": "65a4294346540301af3a78bfd1794147ad86f9d21028448d93b8d67f12e97307",
       "png": "rendered-pages/synthetic__INICIO__page-02.png",
       "png_sha256": "e249d3c99c77b609330cd3f0d074d8987a91f1757be08c886f01654efe607627",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -547,7 +580,8 @@
       "pdf_sha256": "ae8fcaff82d5eb1176e42c5aa3652ddc4a0c652d02e18bff8888e18beff8d632",
       "png": "rendered-pages/synthetic__DICCIONARIO__page-01.png",
       "png_sha256": "cabe4dcf0ccb772cf68aeed1bca1c0b3877d82bfe244d7d70d5b2250e6e35fcc",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -563,7 +597,8 @@
       "pdf_sha256": "ae8fcaff82d5eb1176e42c5aa3652ddc4a0c652d02e18bff8888e18beff8d632",
       "png": "rendered-pages/synthetic__DICCIONARIO__page-02.png",
       "png_sha256": "7339b86829d782cdcca9f1d5d6bd1ab73f4dd3cd09ed008962844cb1b9ae32d2",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -579,7 +614,8 @@
       "pdf_sha256": "ae8fcaff82d5eb1176e42c5aa3652ddc4a0c652d02e18bff8888e18beff8d632",
       "png": "rendered-pages/synthetic__DICCIONARIO__page-03.png",
       "png_sha256": "72564f903262c07014dafdacc05e4a00915e66342461a5508b9e5597f02c33c2",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -595,7 +631,8 @@
       "pdf_sha256": "ae8fcaff82d5eb1176e42c5aa3652ddc4a0c652d02e18bff8888e18beff8d632",
       "png": "rendered-pages/synthetic__DICCIONARIO__page-04.png",
       "png_sha256": "8c34610d3976646a53a46ffbc5e843938c2cdb4666ba2c5d2a8b21b7356760ee",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -611,7 +648,8 @@
       "pdf_sha256": "ae8fcaff82d5eb1176e42c5aa3652ddc4a0c652d02e18bff8888e18beff8d632",
       "png": "rendered-pages/synthetic__DICCIONARIO__page-05.png",
       "png_sha256": "39ed46ac5dc51be6c77b544ea894ae4c5b2c5eed2a869f1d37460e93837b0a1d",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -627,7 +665,8 @@
       "pdf_sha256": "ae8fcaff82d5eb1176e42c5aa3652ddc4a0c652d02e18bff8888e18beff8d632",
       "png": "rendered-pages/synthetic__DICCIONARIO__page-06.png",
       "png_sha256": "f1030a91913a07a11c0b36dade8938d6a10c8bc3178e8e2130cae1ecc1739ced",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -643,7 +682,8 @@
       "pdf_sha256": "2916141bce9814496945d1ff9750ecdfecb1dde0aa5ceacb1fab56d4780a9e13",
       "png": "rendered-pages/synthetic__COMPLETITUD__page-01.png",
       "png_sha256": "4c0586afec43e0545786209bf84942a49ca7ee16a7e9a52b36ad29d4a0e0dd5a",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -659,7 +699,8 @@
       "pdf_sha256": "e6cc4741ec457f516e7337bb54c0a7203323459dc7bc49c7c7f7060b9ae98b3a",
       "png": "rendered-pages/synthetic__sku_catalog__page-01.png",
       "png_sha256": "564091ec1e3b36161124be41d727949d065dfc15e5cbbe73bc9645df01a5e054",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -675,7 +716,8 @@
       "pdf_sha256": "bf453df13250839a04957113f9891124d9f5adc1c4f34ee28dd23a72a26eb618",
       "png": "rendered-pages/synthetic__sales_aggregates__page-01.png",
       "png_sha256": "54b29d53ef593262201627dde06e1e2069496271819ee48d1a7878cebe410c63",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -691,7 +733,8 @@
       "pdf_sha256": "56dd028fd11bb394e1b8a5b736b35ab7feadc6d50003f8f1558fbf2358c7185f",
       "png": "rendered-pages/synthetic__availability_daily__page-01.png",
       "png_sha256": "58e64190569ada86c88e1506a4c4d2716907bd0ee21803680dc71a4b830391ad",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -707,7 +750,8 @@
       "pdf_sha256": "aa7ba45b035734029cc490446045303c498574d697b4531f21a88b218a87825f",
       "png": "rendered-pages/synthetic__unmet_demand__page-01.png",
       "png_sha256": "0403546b5fede58bdcc04d3b57b6dd645b1fb81c3a6ad2fbb716c9da822cedc1",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -723,7 +767,8 @@
       "pdf_sha256": "5a4462e9f4d8fbc5db206ac7c2c29b86fb72c8e9ba2c52ebdcfea9472019471c",
       "png": "rendered-pages/synthetic__inventory_counts__page-01.png",
       "png_sha256": "8ff9b57741e5d0a9ce484d41a6e3c332a662da741b77ac8e616401fc10e34e8b",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -739,7 +784,8 @@
       "pdf_sha256": "3f174a0f4e349c3d2fc98aac20f92e9e264196b923e2ea1af595986aae1db762",
       "png": "rendered-pages/synthetic__inventory_movements__page-01.png",
       "png_sha256": "e54f814087f82ca0b1ac31c37a0591162bdbfd6172be8773e0da9216cae132d8",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -755,7 +801,8 @@
       "pdf_sha256": "f37d24579636a9c07ad9a84aea333534562ef84cb79df9a321db93c4b1b88d07",
       "png": "rendered-pages/synthetic__inventory_reservations__page-01.png",
       "png_sha256": "0e3649994512d7cac7d4292a3f7db1df3850f5bc3b851beab83d0e8c26b6510e",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -771,7 +818,8 @@
       "pdf_sha256": "e2187aecf0cd15dfbbabb7de12878c58dbb75993aac1efc7b6dcbaa428a14e6a",
       "png": "rendered-pages/synthetic__cost_versions__page-01.png",
       "png_sha256": "c08d6dbcd4137f0d09eb993a5571e33ed3dc759f5baa8b8df6a60b21c9c4f090",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -787,7 +835,8 @@
       "pdf_sha256": "d4207c46d049387d5226ac52059a860c2e3128510dcb3d8209a57f4e556bc6f8",
       "png": "rendered-pages/synthetic__cost_components__page-01.png",
       "png_sha256": "acd396946a8e8908dd9639f1445dee5d21daad8123c348af13b6e138cd525a03",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -803,7 +852,8 @@
       "pdf_sha256": "253e7e7c1a1f669a0773a5c952b09a2cdcf76556cc6d3a4f45a238f3c7ede7ca",
       "png": "rendered-pages/synthetic__cost_allocations__page-01.png",
       "png_sha256": "c52863f2037d923a7208bd7c6b0e738e31976f170152cc421e26218cfc1019a3",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -819,7 +869,8 @@
       "pdf_sha256": "71caf434a8292e409cdebb3836d30cd00015942af64184db8ba0efb6a8280940",
       "png": "rendered-pages/synthetic__purchase_orders__page-01.png",
       "png_sha256": "96a4d4dcd289901dad7d44473e6aac45f92afa865eb725b5347c1b462ef1db50",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -835,7 +886,8 @@
       "pdf_sha256": "f00f1a0edeaa0b7ed620e3cab030f3387ffad53b362af4f5dcea11b6b413a574",
       "png": "rendered-pages/synthetic__purchase_receipts__page-01.png",
       "png_sha256": "550dbdc6ff1d134da8d0d730b7dbbd4ce0eb7d2b7cf5c34495aec7e126aa6b1a",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -851,7 +903,8 @@
       "pdf_sha256": "94147718c0c64aa1d5b49c7bdbe8537766ecfdf796b7dd2399f189797659aeff",
       "png": "rendered-pages/synthetic__obligations__page-01.png",
       "png_sha256": "8de44a0ee598b1623d2bcbef80b2d8912b4e249586e51634fc8f0aab287d46fd",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -867,7 +920,8 @@
       "pdf_sha256": "8c81f6f1c8d26ff37dff10babb1e78c784dfd8ce83778c49c551e3f3da593deb",
       "png": "rendered-pages/synthetic__obligation_payments__page-01.png",
       "png_sha256": "570638f8c66e84ab1903ced1346d379995ed2bc5a40e109245a960ebd6265854",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -883,7 +937,8 @@
       "pdf_sha256": "54b0e14217a8c996a2289e762fdee45987b2f71beb7264367d67c2182cf535f4",
       "png": "rendered-pages/synthetic__cash_events__page-01.png",
       "png_sha256": "d11ef959b636559eeaa44cdc68a18c25df984df7f0c20b913078b706eed86b02",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -899,7 +954,8 @@
       "pdf_sha256": "36daf6761933c9602975b946899d401be5d2c1384cb48d372a5d1d3d442c57cf",
       "png": "rendered-pages/synthetic__cash_balance_evidence__page-01.png",
       "png_sha256": "3d469707b74dc9a56209858408e2c757520ad867dd658b8ec82fbc359efea541",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -915,7 +971,8 @@
       "pdf_sha256": "62f427bd3e41c0e136f3590b795eda6a7b7c1da25560a2e50eb9ff8b8b56ce36",
       "png": "rendered-pages/synthetic__budgets__page-01.png",
       "png_sha256": "46321199a2ee1fcc81c9e41e06d2ec230bfb72e7bcbc19cd205357e01874db8e",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -931,7 +988,8 @@
       "pdf_sha256": "914e4022d66eefcbf36bd2aee1be887d277c329d6c02fa15ff86d46a87e419bb",
       "png": "rendered-pages/synthetic__budget_allocations__page-01.png",
       "png_sha256": "0c14238c461ccb24706478ff01a78c3e22b5143427ccd9fa12992b971adc72da",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -947,7 +1005,8 @@
       "pdf_sha256": "7ce489d22710fcd6259405af54b049d0f828fc8df86aede88ed5ee3b3a3deb2f",
       "png": "rendered-pages/synthetic__expenses__page-01.png",
       "png_sha256": "612c8656bca341c3e028b853b1583097958d7a09f62698b7f9513a9c9f1cc02c",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -963,7 +1022,8 @@
       "pdf_sha256": "f76d733931d6ea989c1395f1e557e01d5115888fbc8207d806478501f601e7c1",
       "png": "rendered-pages/synthetic__quality_events__page-01.png",
       "png_sha256": "de166b2246b541d61a2e6ec850dafdbb6d47a30650fcdb039942b993b8c54b2c",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -979,7 +1039,8 @@
       "pdf_sha256": "8d81282520e708a35bcfedc34fb47a7645f0a3a0412c037bbf075e4989bab327",
       "png": "rendered-pages/synthetic__sales_readiness__page-01.png",
       "png_sha256": "d78ff019fa335aee36609211190d902ba45218d6622d3fb75096ca5e3b5b773b",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     },
     {
       "clipping": "NONE",
@@ -995,10 +1056,32 @@
       "pdf_sha256": "b8f15bf48895de809512b2c607cf7ec2922be155714aaf438e53418566f4c4cd",
       "png": "rendered-pages/synthetic__loans__page-01.png",
       "png_sha256": "378cc55a66b4edce5572efc670c50847069c6e48648fb86a11ae66a5e62aa0d7",
-      "workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
+      "workbook_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "pdf_workbook_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49"
     }
   ],
   "runtime": "Windows; Microsoft Excel 16.0 build 20326; Poppler pdftoppm 26.07.0 at 120 dpi",
   "schema": "operating-visual-inspection-v1",
-  "timestamp_utc": "2026-09-28T20:07:51Z"
+  "timestamp_utc": "2026-09-28T20:07:51Z",
+  "sanitization_limitation": "The PDFs were exported by Microsoft Excel from the pre-sanitization Excel-saved workbook bytes. The final XLSX differs only by removal of x15ac:absPath from xl/workbook.xml; that metadata change does not affect rendered worksheet content.",
+  "sanitization_equivalence": {
+    "blank": {
+      "pre_sanitization_sha256": "8a7ccd2f7544da2eaa7b764f8baa436b22091cfd35bba9a1e96f101257826c04",
+      "final_sha256": "a86dd64e36cb32cc076f0e6e86d4cadc74fd8222393d8c4ca502f1d4c28c18d6",
+      "normalized_workbook_xml_sha256": "ee4599858b2035cf5c400eb9bc9a562720d005c4af082ee802a0f1590d52fdcf",
+      "removed_abs_path_elements": 1,
+      "changed_members": [
+        "xl/workbook.xml"
+      ]
+    },
+    "synthetic": {
+      "pre_sanitization_sha256": "c7e295aa22a78fe02c8e9011da689b715abaf1a216ce9eef78730015ada7fc49",
+      "final_sha256": "ddb6096a3e82ebc1b15589674697a168811c3718af593d87329b6367edb83958",
+      "normalized_workbook_xml_sha256": "e183d99d977f4b7e23814c10b8f3489cd2cd69684c9b6539f0075f919281901b",
+      "removed_abs_path_elements": 1,
+      "changed_members": [
+        "xl/workbook.xml"
+      ]
+    }
+  }
 }

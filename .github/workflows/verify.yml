@@ -21,6 +21,8 @@ jobs:
       - uses: actions/setup-python@v7.0.0
         with:
           python-version: '3.12'
+      - name: Install pinned client dependencies
+        run: python -m pip install -r requirements-client.txt
       # The verifier extracts this exact commit, installs requirements-client.txt
       # in a disposable venv and runs identical gates on both operating systems.
       # CI validates committed Excel/visual receipts but never launches Excel.
@@ -38,3 +40,19 @@ jobs:
           name: release-receipt-${{ matrix.os }}
           path: build/ci-release-archive.json
           if-no-files-found: warn
+      - name: Build and audit final release preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest tests.test_release_v1 -v
+          python scripts/audit_release_v1.py check-manifest --manifest client/v1/release-manifest.json --source-root . --require-version 1.0.0
+          python scripts/package_release_v1.py preflight --ref HEAD --output build/release-v1/Alma_OS_v1.0.0.zip --checksum build/release-v1/Alma_OS_v1.0.0.zip.sha256
+          python scripts/audit_release_v1.py audit-preflight --zip build/release-v1/Alma_OS_v1.0.0.zip --checksum build/release-v1/Alma_OS_v1.0.0.zip.sha256 --manifest client/v1/release-manifest.json --require-version 1.0.0
+          python -c 'import hashlib,json,os,pathlib; h=lambda p:hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest(); c=["python -m unittest tests.test_release_v1 -v","python scripts/audit_release_v1.py check-manifest --manifest client/v1/release-manifest.json --source-root . --require-version 1.0.0","python scripts/package_release_v1.py preflight --ref HEAD --output build/release-v1/Alma_OS_v1.0.0.zip --checksum build/release-v1/Alma_OS_v1.0.0.zip.sha256","python scripts/audit_release_v1.py audit-preflight --zip build/release-v1/Alma_OS_v1.0.0.zip --checksum build/release-v1/Alma_OS_v1.0.0.zip.sha256 --manifest client/v1/release-manifest.json --require-version 1.0.0"]; p="build/release-v1/Alma_OS_v1.0.0.zip"; x={"schema":"alma-release-v1-ci-preflight","status":"PASS","headSha":os.environ["GITHUB_SHA"],"commands":c,"zipSha256":h(p),"checksumSha256":h(p+".sha256"),"manifestSha256":h("client/v1/release-manifest.json"),"licenseSha256":h("LICENSE"),"privacy":"PASS","links":"PASS","release_publication_executed":False}; pathlib.Path("build/release-v1/job-receipt.json").write_bytes((json.dumps(x,sort_keys=True,separators=(",",":"))+"\n").encode("utf-8"))'
+      - name: Save final release preflight receipt
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: release-v1-preflight-${{ matrix.os }}
+          path: build/release-v1/job-receipt.json
+          if-no-files-found: error

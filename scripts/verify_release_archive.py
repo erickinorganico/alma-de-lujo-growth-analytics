@@ -22,6 +22,10 @@ import time
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from scripts.package_release_v1 import RELEASE_COMMANDS  # noqa: E402
+
 OWNER = "erickinorganico"
 REPOSITORY = "alma-de-lujo-growth-analytics"
 WORKFLOW = "verify.yml"
@@ -32,6 +36,10 @@ SENSITIVE_OUTPUT = re.compile(
     r"\b(?:password|secret|token|api[_-]?key)\s*[:=]\s*[^\s,;]+)"
 )
 OS_LABELS = {"windows-latest": "Windows", "ubuntu-latest": "Linux"}
+REHEARSAL_SIDECAR = "v1.0.0-ci-rehearsal-p.json"
+FINAL_SIDECAR = "v1.0.0-ci-reproducibility.json"
+PREFLIGHT_FILE = "release-v1-preflight.json"
+HEX64 = re.compile(r"[0-9a-f]{64}\Z")
 REQUIRED_SOURCE = (
     "requirements-client.txt",
     "scripts/verify_release_archive.py",
@@ -431,12 +439,71 @@ def _download_receipts(run: dict, sha: str, directory: Path) -> dict[str, dict]:
     return downloaded
 
 
+def _download_preflights(run: dict, sha: str, directory: Path) -> dict[str, dict]:
+    """Download one exact final-package receipt from each already-successful OS job."""
+    jobs = _selected_jobs(run, sha)
+    rows: dict[str, dict] = {}
+    for label, job in jobs.items():
+        folder = directory / label / "preflight"
+        folder.mkdir(parents=True)
+        artifact = f"release-v1-preflight-{label}"
+        gh("run", "download", str(run["id"]), "--repo", f"{OWNER}/{REPOSITORY}",
+           "--name", artifact, "--dir", str(folder))
+        files = [file for file in folder.rglob("*") if file.is_file()]
+        if any(file.is_symlink() or not file.resolve().is_relative_to(folder.resolve()) for file in files):
+            raise ProofError(f"{label} preflight artifact has an unsafe file path")
+        if len(files) != 1 or files[0].name != "job-receipt.json":
+            raise ProofError(f"{label} preflight receipt artifact is missing or ambiguous")
+        receipt = read_canonical(files[0])
+        if (receipt.get("schema") != "alma-release-v1-ci-preflight" or receipt.get("status") != "PASS" or
+                receipt.get("headSha") != sha or receipt.get("commands") != list(RELEASE_COMMANDS) or
+                receipt.get("privacy") != "PASS" or receipt.get("links") != "PASS" or
+                receipt.get("release_publication_executed") is not False or
+                any(not isinstance(receipt.get(key), str) or not HEX64.fullmatch(receipt[key])
+                    for key in ("zipSha256", "checksumSha256", "manifestSha256", "licenseSha256"))):
+            raise ProofError(f"{label} final-package preflight receipt content mismatch")
+        rows[label] = {**receipt, "job_id": job["id"], "job_name": job["name"],
+                       "conclusion": job["conclusion"], "head_sha": job["head_sha"],
+                       "artifact": artifact, "sha256": file_digest(files[0]), "file": files[0]}
+    return rows
+
+
+def _validate_preflight_pair(rows: dict[str, dict], sha: str) -> dict:
+    if set(rows) != set(OS_LABELS):
+        raise ProofError("both final-package preflight receipts required")
+    manifest_hash = digest(command(["git", "show", f"{sha}:client/v1/release-manifest.json"],
+                                   text=False).stdout)
+    license_hash = digest(command(["git", "show", f"{sha}:LICENSE"], text=False).stdout)
+    baseline: tuple | None = None
+    for label, row in rows.items():
+        if (row.get("schema") != "alma-release-v1-ci-preflight" or row.get("status") != "PASS" or
+                row.get("headSha") != sha or row.get("head_sha") != sha or
+                row.get("commands") != list(RELEASE_COMMANDS) or
+                row.get("manifestSha256") != manifest_hash or
+                row.get("licenseSha256") != license_hash or
+                row.get("privacy") != "PASS" or row.get("links") != "PASS" or
+                row.get("release_publication_executed") is not False or
+                row.get("conclusion") != "success" or
+                any(not isinstance(row.get(key), str) or not HEX64.fullmatch(row[key])
+                    for key in ("zipSha256", "checksumSha256", "manifestSha256", "licenseSha256", "sha256"))):
+            raise ProofError(f"{label} final-package preflight SHA, command, hash or disposition mismatch")
+        identity = tuple(row[key] for key in ("zipSha256", "checksumSha256", "manifestSha256", "licenseSha256"))
+        if baseline is None:
+            baseline = identity
+        elif identity != baseline:
+            raise ProofError("Windows and Ubuntu final-package preflight hashes differ")
+    return {"commands": list(RELEASE_COMMANDS),
+            "receipts": {label: {key: value for key, value in rows[label].items() if key != "file"}
+                         for label in OS_LABELS}}
+
+
 def remote_proof(sha: str, archive_receipt: Path, sidecar: Path, *, existing: bool) -> None:
     sidecar_absolute = sidecar.absolute()
     if sidecar_absolute.is_relative_to(ROOT) and not sidecar_absolute.is_relative_to(ROOT / ".local"):
         raise ProofError("remote sidecar must be ignored under .local or outside the repository")
     local = read_canonical(archive_receipt)
     validate_archive_receipt(local, sha)
+    final_required = sidecar.name != REHEARSAL_SIDECAR
     if existing:
         saved = read_canonical(sidecar)
         if (saved.get("schema") != "alma-release-remote-v1" or saved.get("proof_sha") != sha or
@@ -451,6 +518,21 @@ def remote_proof(sha: str, archive_receipt: Path, sidecar: Path, *, existing: bo
             stored = sidecar.parent / "downloads" / sha / label / "ci-release-archive.json"
             if not stored.is_file() or row.get("sha256") != file_digest(stored):
                 raise ProofError(f"stored {label} receipt altered or absent")
+        if final_required:
+            section = saved.get("release_preflight")
+            if not isinstance(section, dict) or section.get("commands") != list(RELEASE_COMMANDS) or \
+                    set(section.get("receipts", {})) != set(OS_LABELS):
+                raise ProofError("final release preflight missing from canonical sidecar")
+            for label in OS_LABELS:
+                row = section["receipts"][label]
+                stored = sidecar.parent / "downloads" / sha / label / PREFLIGHT_FILE
+                if not stored.is_file() or row.get("sha256") != file_digest(stored):
+                    raise ProofError(f"stored {label} final preflight receipt altered or absent")
+                archive_row = saved["receipts"][label]
+                if any(row.get(key) != archive_row.get(key) for key in
+                       ("job_id", "job_name", "conclusion", "head_sha")):
+                    raise ProofError(f"{label} archive and preflight job identity mismatch")
+            _validate_preflight_pair(section["receipts"], sha)
     elif sidecar.exists():
         raise ProofError("remote sidecar already exists")
     run = _selected_run(sha) if existing else wait_for_ci(sha)
@@ -464,11 +546,19 @@ def remote_proof(sha: str, archive_receipt: Path, sidecar: Path, *, existing: bo
             downloaded = read_canonical(row["file"])
             if downloaded["source_hashes"] != local["source_hashes"] or downloaded["canonical_outputs"] != local["canonical_outputs"]:
                 raise ProofError(f"{label} canonical output or source mismatch")
+        preflights = _download_preflights(run, sha, Path(temp)) if final_required else None
+        if preflights is not None:
+            for label in OS_LABELS:
+                if preflights[label]["job_id"] != received[label]["job_id"]:
+                    raise ProofError(f"{label} archive and preflight receipts came from different jobs")
+            final_section = _validate_preflight_pair(preflights, sha)
         if existing:
             for label, row in received.items():
                 old = saved["receipts"][label]
                 if any(old.get(field) != row[field] for field in ("job_id", "job_name", "conclusion", "head_sha", "artifact", "sha256")):
                     raise ProofError(f"{label} downloaded receipt changed")
+            if preflights is not None and final_section != saved["release_preflight"]:
+                raise ProofError("downloaded final preflight receipts changed")
             return
         folder = sidecar.parent / "downloads" / sha
         if folder.exists():
@@ -478,11 +568,18 @@ def remote_proof(sha: str, archive_receipt: Path, sidecar: Path, *, existing: bo
             target.parent.mkdir(parents=True)
             target.write_bytes(row["file"].read_bytes())
             del row["file"]
+        if preflights is not None:
+            for label, row in preflights.items():
+                target = folder / label / PREFLIGHT_FILE
+                target.write_bytes(row["file"].read_bytes())
+                del row["file"]
         sidecar_data = {"schema": "alma-release-remote-v1", "proof_sha": sha,
                         "archive_receipt_sha256": file_digest(archive_receipt),
                         "commands": [gate["command"] for gate in local["gates"]],
                         "run": {"id": run["id"], "url": run.get("html_url"), "head_sha": run["head_sha"],
                                 "conclusion": run["conclusion"]}, "receipts": received}
+        if preflights is not None:
+            sidecar_data["release_preflight"] = final_section
         write_new(sidecar, sidecar_data)
 
 

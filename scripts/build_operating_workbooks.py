@@ -5,9 +5,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shutil
 import sys
 import tempfile
+import zipfile
 from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
@@ -124,6 +126,84 @@ def omission_impact(omitted: Sequence[str]) -> dict[str, Any]:
 
 def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+_ABSOLUTE_PATH = re.compile(rb"(?<![A-Za-z0-9])(?:[A-Za-z]:[\\/]|\\\\[^\\/]+[\\/]|/(?:Users|home|mnt|tmp|private|var|opt)/|file://)", re.I)
+_ABS_PATH_ELEMENT = re.compile(rb"<(?:[A-Za-z_][\w.-]*:)?absPath\b[^>]*/>|<(?:[A-Za-z_][\w.-]*:)?absPath\b[^>]*>.*?</(?:[A-Za-z_][\w.-]*:)?absPath\s*>", re.I | re.S)
+
+
+def _strip_private_path_metadata(path: Path) -> dict[str, Any]:
+    """Remove Excel's optional absolute-path extension and prove the package delta."""
+    with zipfile.ZipFile(path) as source:
+        members = [(item, source.read(item.filename)) for item in source.infolist()]
+    workbook_found = False
+    before = {item.filename: hashlib.sha256(data).hexdigest() for item, data in members}
+    original_workbook_xml: bytes | None = None
+    removed_abs_path_elements = 0
+    sanitized: list[tuple[zipfile.ZipInfo, bytes]] = []
+    for item, data in members:
+        if item.filename == "xl/workbook.xml":
+            workbook_found = True
+            original_workbook_xml = data
+            data, removed_abs_path_elements = _ABS_PATH_ELEMENT.subn(b"", data)
+        if _ABS_PATH_ELEMENT.search(data) or _ABSOLUTE_PATH.search(data):
+            raise ValueError(f"absolute path metadata in generated workbook member: {item.filename}")
+        sanitized.append((item, data))
+    if not workbook_found:
+        raise ValueError("generated workbook is missing xl/workbook.xml")
+    temporary = path.with_suffix(path.suffix + ".privacy.tmp")
+    with zipfile.ZipFile(temporary, "w") as target:
+        for item, data in sanitized:
+            target.writestr(item, data)
+    temporary.replace(path)
+    with zipfile.ZipFile(path) as final:
+        after_data = {name: final.read(name) for name in final.namelist()}
+    after = {name: hashlib.sha256(data).hexdigest() for name, data in after_data.items()}
+    changed = sorted(name for name in before if before[name] != after[name])
+    if set(before) != set(after) or changed not in ([], ["xl/workbook.xml"]):
+        raise ValueError("unexpected XLSX package delta while removing absolute-path metadata")
+    if original_workbook_xml is None or after_data["xl/workbook.xml"] != _ABS_PATH_ELEMENT.sub(b"", original_workbook_xml):
+        raise ValueError("workbook.xml differs beyond absPath removal")
+    return {
+        "contract": "remove-x15ac-absPath-only-v1",
+        "changed_members": changed,
+        "removed_abs_path_elements": removed_abs_path_elements,
+        "members_sha256_before": before,
+        "members_sha256_after": after,
+        "pre_workbook_xml_sha256": hashlib.sha256(original_workbook_xml).hexdigest(),
+        "normalized_workbook_xml_sha256": hashlib.sha256(after_data["xl/workbook.xml"]).hexdigest(),
+        "only_absPath_removed": True,
+    }
+
+
+def sanitize_excel_saved_workbook(path: str | Path) -> dict[str, Any]:
+    """Normalize Excel's volatile author field, then capture the absPath-only delta."""
+    workbook_path = Path(path)
+    author_tag = re.compile(rb"(<cp:lastModifiedBy>)[^<]*(</cp:lastModifiedBy>)")
+    with zipfile.ZipFile(workbook_path) as source:
+        members = [(item, source.read(item.filename)) for item in source.infolist()]
+    found_core = False
+    normalized: list[tuple[zipfile.ZipInfo, bytes]] = []
+    for item, data in members:
+        if item.filename == "docProps/core.xml":
+            found_core = True
+            data, count = author_tag.subn(rb"\1Alma de Lujo\2", data)
+            if count != 1:
+                raise ValueError("Expected one cp:lastModifiedBy in Excel core properties")
+        normalized.append((item, data))
+    if not found_core:
+        raise ValueError("Excel workbook is missing docProps/core.xml")
+    temporary = workbook_path.with_suffix(workbook_path.suffix + ".author.tmp")
+    with zipfile.ZipFile(temporary, "w") as target:
+        for item, data in normalized:
+            target.writestr(item, data)
+    temporary.replace(workbook_path)
+
+    pre_sanitization_sha256 = _sha256(workbook_path)
+    proof = _strip_private_path_metadata(workbook_path)
+    proof["pre_sanitization_sha256"] = pre_sanitization_sha256
+    proof["final_sha256"] = _sha256(workbook_path)
+    return proof
 
 
 def _formats(workbook: xlsxwriter.Workbook) -> dict[str, Any]:
@@ -332,6 +412,7 @@ def _build_workbook(path: Path, kind: str) -> None:
     for relation in SOURCE_NAMES:
         _write_relation_sheet(workbook, relation, rows[relation], kind, formats)
     workbook.close()
+    _strip_private_path_metadata(path)
 
 
 def _copy_policy(source: Path, destination: Path) -> dict[str, str]:

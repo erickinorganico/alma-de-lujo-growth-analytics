@@ -12,18 +12,12 @@ $books = @(
     @{ kind='synthetic'; file='Alma_de_Lujo_OPERACION_EJEMPLO.xlsx' }
 )
 $bookRoot = Join-Path $projectRoot 'client/v1'
-$normalizeCore = @'
-import io,re,sys,zipfile
+$sanitizeExcel = @'
+import json,sys
 from pathlib import Path
-p=Path(sys.argv[1]); out=io.BytesIO()
-with zipfile.ZipFile(p) as source, zipfile.ZipFile(out,'w') as target:
-    for info in source.infolist():
-        data=source.read(info.filename)
-        if info.filename=='docProps/core.xml':
-            data,count=re.subn(rb'(<cp:lastModifiedBy>)[^<]*(</cp:lastModifiedBy>)',rb'\1Alma de Lujo\2',data)
-            if count!=1: raise ValueError('Expected one cp:lastModifiedBy in Excel core properties')
-        target.writestr(info,data)
-p.write_bytes(out.getvalue())
+sys.path.insert(0,str(Path(sys.argv[1]).resolve().parents[2]))
+from scripts.build_operating_workbooks import sanitize_excel_saved_workbook
+print(json.dumps(sanitize_excel_saved_workbook(Path(sys.argv[1])),sort_keys=True))
 '@
 foreach ($book in $books) {
     if (-not (Test-Path -LiteralPath (Join-Path $bookRoot $book.file) -PathType Leaf)) { throw "Missing fixed workbook: $($book.file)" }
@@ -69,13 +63,21 @@ try {
         $opened.Close($false)
         [void][Runtime.InteropServices.Marshal]::FinalReleaseComObject($opened)
         $opened = $null
-        & (Join-Path $projectRoot '.venv/Scripts/python.exe') -c $normalizeCore $path
-        if ($LASTEXITCODE -ne 0) { throw 'Author metadata normalization failed.' }
+        $sanitizationOutput = & (Join-Path $projectRoot '.venv/Scripts/python.exe') -c $sanitizeExcel $path
+        if ($LASTEXITCODE -ne 0) { throw 'Excel workbook privacy sanitization failed.' }
+        $sanitizationProof = ($sanitizationOutput -join [Environment]::NewLine) | ConvertFrom-Json
+        $finalSha256 = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant()
+        if ($sanitizationProof.final_sha256 -ne $finalSha256 -or
+            $sanitizationProof.pre_sanitization_sha256 -eq $finalSha256) {
+            throw 'Excel workbook sanitization proof does not bind to final bytes.'
+        }
         $receipts += [ordered]@{
             kind=$book.kind; file=$book.file; engine='Microsoft Excel'; version=[string]$excel.Version
             build=[string]$excel.Build; calculation_mode=$calculationMode
             calculation_state=$calculationState; calculate_full_rebuild=$true
-            sha256=(Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant()
+            pre_sanitization_sha256=[string]$sanitizationProof.pre_sanitization_sha256
+            post_excel_sanitization=$sanitizationProof
+            sha256=$finalSha256
             sheets=@($sheets)
         }
     }

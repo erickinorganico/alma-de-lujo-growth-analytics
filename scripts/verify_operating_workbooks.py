@@ -41,6 +41,8 @@ FILES = {
 INTEGER_TYPES = {"integer", "nonnegative_integer", "signed_integer"}
 LEAK = re.compile(r"(?:[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}|(?:[A-Za-z]:\\|/Users/|/home/|file://)|\b\+?\d[\d ()-]{8,}\d\b)", re.I)
 CELL_LEAK = re.compile(r"(?:[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}|(?:[A-Za-z]:\\|/Users/|/home/|file://))", re.I)
+ABSOLUTE_PATH = re.compile(rb"(?<![A-Za-z0-9])(?:[A-Za-z]:[\\/]|\\\\[^\\/]+[\\/]|/(?:Users|home|mnt|tmp|private|var|opt)/|file://)", re.I)
+ABS_PATH_ELEMENT = re.compile(rb"<(?:[A-Za-z_][\w.-]*:)?absPath\b", re.I)
 ACTIVE_PART = re.compile(r"(?:vbaProject|externalLinks|embeddings|connections|customXml|activeX|oleObjects|queryTables|pivotCache|powerPivot)", re.I)
 SAFE_PART = re.compile(r"(?:\[Content_Types\]\.xml|_rels/\.rels|xl/_rels/workbook\.xml\.rels|xl/workbook\.xml|xl/worksheets/sheet\d+\.xml|xl/sharedStrings\.xml|xl/styles\.xml|xl/theme/theme\d+\.xml|docProps/(?:core|app)\.xml)")
 REL_NS = "{http://schemas.openxmlformats.org/package/2006/relationships}"
@@ -113,6 +115,8 @@ def archive_inventory(path: Path) -> dict[str, str]:
             require(not ACTIVE_PART.search(name), f"active XLSX part: {name}")
             require(bool(SAFE_PART.fullmatch(name)), f"unexpected XLSX part: {name}")
             data = archive.read(item)
+            require(not ABS_PATH_ELEMENT.search(data) and not ABSOLUTE_PATH.search(data),
+                    f"absolute path privacy leak: {name}")
             if name.endswith(".rels"):
                 root = ET.fromstring(data)
                 ids: set[str] = set()
@@ -343,8 +347,13 @@ def check_receipts(manifest: dict[str, Any], excel_path: Path | None, visual_pat
                 "receipt UTC timestamp")
     require(visual.get("excel_receipt_sha256") == sha(excel_path), "stale visual/Excel receipt")
     require(visual.get("inspector") and visual.get("runtime"), "visual inspector/runtime missing")
+    require(isinstance(visual.get("sanitization_limitation"), str) and
+            "pre-sanitization Excel-saved workbook bytes" in visual["sanitization_limitation"] and
+            "x15ac:absPath" in visual["sanitization_limitation"],
+            "visual receipt omits post-Excel sanitization limitation")
     expected_files = {excel_path.name, visual_path.name}
     expected_pages: dict[tuple[str, str, int], dict[str, Any]] = {}
+    sanitization_proofs: dict[str, dict[str, Any]] = {}
     books = excel.get("workbooks")
     require(isinstance(books, list) and len(books) == len(FILES), "Excel book count")
     require([entry.get("kind") for entry in books] == list(FILES), "Excel book order/kinds")
@@ -353,6 +362,28 @@ def check_receipts(manifest: dict[str, Any], excel_path: Path | None, visual_pat
         expected = manifest["workbooks"][kind]
         require(book.get("file") == FILES[kind] and book.get("sha256") == expected["sha256"],
                 f"stale Excel workbook: {kind}")
+        proof = book.get("post_excel_sanitization")
+        require(isinstance(proof, dict) and proof.get("contract") == "remove-x15ac-absPath-only-v1" and
+                proof.get("only_absPath_removed") is True and
+                proof.get("changed_members") == ["xl/workbook.xml"] and
+                proof.get("removed_abs_path_elements", 0) > 0,
+                f"post-Excel sanitization proof missing/invalid: {kind}")
+        before_members = proof.get("members_sha256_before")
+        after_members = proof.get("members_sha256_after")
+        require(isinstance(before_members, dict) and isinstance(after_members, dict) and
+                set(before_members) == set(expected["members"]) == set(after_members) and
+                after_members == expected["members"],
+                f"post-Excel member inventory/hash proof: {kind}")
+        require(all(before_members[name] == after_members[name] for name in before_members
+                    if name != "xl/workbook.xml"),
+                f"unexpected post-Excel member changed: {kind}")
+        require(before_members["xl/workbook.xml"] == proof.get("pre_workbook_xml_sha256") and
+                after_members["xl/workbook.xml"] == proof.get("normalized_workbook_xml_sha256") and
+                book.get("pre_sanitization_sha256") == proof.get("pre_sanitization_sha256") and
+                book.get("sha256") == proof.get("final_sha256") and
+                book.get("pre_sanitization_sha256") != book.get("sha256"),
+                f"post-Excel workbook hash/equivalence proof: {kind}")
+        sanitization_proofs[kind] = proof
         require(book.get("engine") == "Microsoft Excel" and book.get("version") and book.get("build"),
                 f"Excel engine/version/build: {kind}")
         require(book.get("calculate_full_rebuild") is True and book.get("calculation_state") == 0 and
@@ -378,6 +409,7 @@ def check_receipts(manifest: dict[str, Any], excel_path: Path | None, visual_pat
                 png = f"rendered-pages/{kind}__{name}__page-{number:02d}.png"
                 expected_pages[key] = {
                     "kind": kind, "workbook_sha256": expected["sha256"], "pdf": filename,
+                    "pdf_workbook_sha256": book["pre_sanitization_sha256"],
                     "pdf_sha256": sheet["pdf_sha256"], "page": number, "page_count": count,
                     "png": png,
                 }
@@ -399,6 +431,13 @@ def check_receipts(manifest: dict[str, Any], excel_path: Path | None, visual_pat
                 page.get("legibility") == "READABLE" and page.get("clipping") == "NONE",
                 f"uninspected/illegible/clipped page: {expected['png']}")
     require(seen == set(expected_pages), "visual page inventory incomplete")
+    require(visual.get("sanitization_equivalence") == {
+        kind: {field: proof[field] for field in (
+            "pre_sanitization_sha256", "final_sha256", "normalized_workbook_xml_sha256",
+            "removed_abs_path_elements", "changed_members",
+        )}
+        for kind, proof in sanitization_proofs.items()
+    }, "visual sanitization equivalence binding")
     actual_files = {p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file()}
     require(actual_files == expected_files, f"unexpected/missing Excel evidence files: {sorted(actual_files ^ expected_files)}")
     return {"workbooks": len(books), "pdfs": len(expected_files) - len(expected_pages) - 2,
@@ -417,7 +456,8 @@ def main() -> int:
             args.manifest.write_bytes(canonical_json(build_manifest(args.manifest.parent)) + b"\n")
         else:
             manifest = check_manifest(args.manifest)
-            if manifest["stage"] == "FINAL_EXCEL":
+            if (manifest["stage"] == "FINAL_EXCEL" or args.excel_receipt is not None or
+                    args.visual_receipt is not None):
                 check_receipts(manifest, args.excel_receipt, args.visual_receipt)
         print(json.dumps({"status": "PASS", "stage": args.command, "manifest": str(args.manifest)}, sort_keys=True))
         return 0

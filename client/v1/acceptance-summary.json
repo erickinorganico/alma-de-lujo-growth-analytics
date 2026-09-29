@@ -1,0 +1,32 @@
+{
+  "schema": "alma-release-acceptance-summary-v1",
+  "version": "1.0.0",
+  "execution": "PROHIBITED",
+  "package_scope": "offline static client portal, blank operating workbook, synthetic example workbook, guides, license, and hash manifest",
+  "runtime_included": false,
+  "committed_evidence_sha256": {
+    "evidence/v1.0/regression-acceptance.json": "c644760697b156b7b9e41f25b548287f82643978f7c6a9ba21898b5fadbf8980",
+    "evidence/v1.0/two-week-native.json": "50ef72931bffc4d5d46f359e9a0645d1c323e46edb2521d713092508956e346d",
+    "client/v1/workbook-manifest.json": "09ff32e10747f34526a055d085243dab0aa1dc9e0c3d981ffd82bb4cb9bcadbf",
+    "evidence/v1.0/excel/excel-recalculation.json": "3759774d4f214850be8d32c39c4d38bd178d1f626576faf42fc01cc658b5262c",
+    "evidence/v1.0/excel/visual-inspection.json": "726dad722b19df5509588164a09d597f6ec2fda76488c9a57f4999ae22113be1"
+  },
+  "license_sha256": "9b7ecfbaf57616b628c323e6179ee901baa4cb62d35c581b7938eabbe49f7101",
+  "third_party_bundled": false,
+  "external_gates": {
+    "EXT-01": "UNKNOWN",
+    "EXT-02": "UNKNOWN",
+    "EXT-03": "REVIEW"
+  },
+  "analytical_scope": {
+    "business_data": "synthetic",
+    "pilates_socks": "hypothesis_under_review",
+    "execution": "PROHIBITED"
+  },
+  "release_proof": "EXTERNAL_SIDECAR_REQUIRED",
+  "limitations": [
+    "Final same-SHA Windows and Ubuntu CI receipts and publication evidence belong in the external acceptance sidecar.",
+    "Seven reviewed Excel pages have an incomplete page-number footer field; content and pagination remain readable.",
+    "Native and Excel evidence are distinct from deterministic CI validation."
+  ]
+}

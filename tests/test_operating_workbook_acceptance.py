@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import shutil
 import tempfile
 import unittest
@@ -10,6 +11,8 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 from alma.operating_contracts import SOURCE_NAMES, SOURCES
+from alma.operating_workbook import WorkbookContractError, _inspect_archive
+from scripts.build_operating_workbooks import sanitize_excel_saved_workbook
 from scripts.verify_operating_workbooks import (
     FILES, WorkbookAcceptanceError, check_manifest, check_receipts, inspect_book, normalized,
 )
@@ -92,6 +95,21 @@ class OperatingWorkbookAcceptanceTests(unittest.TestCase):
         with self.assertRaisesRegex(WorkbookAcceptanceError, "unexpected/missing Excel evidence"):
             check_receipts(manifest, excel, visual)
 
+    def test_post_excel_sanitization_delta_proof_is_fail_closed(self) -> None:
+        manifest = check_manifest(DELIVERY / "workbook-manifest.json")
+        root = self.root / "sanitization"
+        shutil.copytree(EXCEL_EVIDENCE, root)
+        excel = root / "excel-recalculation.json"
+        visual = root / "visual-inspection.json"
+        receipt = json.loads(excel.read_text(encoding="utf-8"))
+        receipt["workbooks"][0]["post_excel_sanitization"]["members_sha256_before"]["docProps/core.xml"] = "0" * 64
+        excel.write_text(json.dumps(receipt), encoding="utf-8")
+        visual_receipt = json.loads(visual.read_text(encoding="utf-8"))
+        visual_receipt["excel_receipt_sha256"] = hashlib.sha256(excel.read_bytes()).hexdigest()
+        visual.write_text(json.dumps(visual_receipt), encoding="utf-8")
+        with self.assertRaisesRegex(WorkbookAcceptanceError, "unexpected post-Excel member changed"):
+            check_receipts(manifest, excel, visual)
+
     def test_decimal_cents_preserve_null_and_zero_and_reject_fraction(self) -> None:
         field = next(field for field in SOURCES["sales_aggregates"]["fields"]
                      if field["name"] == "net_revenue_cents")
@@ -158,6 +176,40 @@ class OperatingWorkbookAcceptanceTests(unittest.TestCase):
         replace_member(book, "docProps/core.xml", lambda data: data.replace(b"Alma de Lujo", b"private@example.com"))
         with self.assertRaisesRegex(WorkbookAcceptanceError, "metadata leak"):
             inspect_book(book, "synthetic")
+
+    def test_absolute_path_metadata_fails_closed(self) -> None:
+        book = self.root / FILES["synthetic"]
+        private_path = b'C:\\Users\\erick\\OneDrive\\private.xlsx'
+        replace_member(book, "xl/workbook.xml", lambda data: data.replace(
+            b"</workbook>", b'<x15ac:absPath url="' + private_path + b'"/></workbook>'))
+        with self.assertRaisesRegex(WorkbookAcceptanceError, "absolute path privacy leak"):
+            inspect_book(book, "synthetic")
+        with self.assertRaisesRegex(WorkbookContractError, "workbook.absolute_path"):
+            _inspect_archive(book)
+
+    def test_excel_sanitizer_returns_receipt_proof_for_next_recalculation(self) -> None:
+        book = self.root / FILES["synthetic"]
+        replace_member(book, "xl/workbook.xml", lambda data: data.replace(
+            b"</workbook>",
+            b'<x15ac:absPath xmlns:x15ac="http://schemas.microsoft.com/office/spreadsheetml/2010/11/ac" '
+            b'url="C:\\\\Users\\\\erick\\\\private\\\\client\\\\v1\\\\"/></workbook>'))
+        replace_member(book, "docProps/core.xml", lambda data: data.replace(
+            b"<cp:lastModifiedBy>Alma de Lujo</cp:lastModifiedBy>",
+            b"<cp:lastModifiedBy>Local User</cp:lastModifiedBy>"))
+
+        proof = sanitize_excel_saved_workbook(book)
+
+        self.assertEqual("remove-x15ac-absPath-only-v1", proof["contract"])
+        self.assertEqual(["xl/workbook.xml"], proof["changed_members"])
+        self.assertEqual(1, proof["removed_abs_path_elements"])
+        self.assertNotEqual(proof["pre_sanitization_sha256"], proof["final_sha256"])
+        self.assertEqual(proof["final_sha256"], __import__("hashlib").sha256(book.read_bytes()).hexdigest())
+        self.assertEqual(proof["members_sha256_before"]["docProps/core.xml"],
+                         proof["members_sha256_after"]["docProps/core.xml"])
+        self.assertEqual(proof["members_sha256_after"]["xl/workbook.xml"],
+                         proof["normalized_workbook_xml_sha256"])
+        self.assertEqual("Alma de Lujo", __import__("openpyxl").load_workbook(book).properties.lastModifiedBy)
+        inspect_book(book, "synthetic")
 
     def test_formula_injection_in_source_cell_fails(self) -> None:
         book = self.root / FILES["synthetic"]

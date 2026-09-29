@@ -231,7 +231,7 @@ class RemoteProvenanceTests(unittest.TestCase):
 
     def fixtures(self, base: Path) -> tuple[Path, Path, dict]:
         receipt = base / "archive.json"
-        sidecar = base / "sidecar.json"
+        sidecar = base / proof.REHEARSAL_SIDECAR
         canonical_file(receipt, {"proof_sha": SHA, "status": "PASS", "source_hashes": {"source": SHA},
                                  "canonical_outputs": {"rows": OTHER}, "gates": [{"command": ["python", "gate"]}]})
         run = {"id": 4, "html_url": "https://github.com/example/actions/runs/4", "head_sha": SHA,
@@ -262,6 +262,53 @@ class RemoteProvenanceTests(unittest.TestCase):
             rows[label] = {"job_id": 1 if label == "windows-latest" else 2,
                            "job_name": f"Release archive ({label})", "conclusion": "success",
                            "head_sha": SHA, "artifact": f"release-receipt-{label}",
+                           "sha256": proof.file_digest(target), "file": target}
+        return rows
+
+    @staticmethod
+    def preflight_value(*, sha: str = SHA, zip_hash: str = "c" * 64,
+                        status: str = "PASS", commands: list[str] | None = None) -> dict:
+        return {"schema": "alma-release-v1-ci-preflight", "status": status,
+                "headSha": sha, "commands": list(proof.RELEASE_COMMANDS) if commands is None else commands,
+                "zipSha256": zip_hash, "checksumSha256": "d" * 64,
+                "manifestSha256": proof.digest(b"manifest"),
+                "licenseSha256": proof.digest(b"license"),
+                "privacy": "PASS", "links": "PASS", "release_publication_executed": False}
+
+    @staticmethod
+    def final_git_command(args: list[str], cwd: Path = proof.ROOT, **kwargs) -> CompletedProcess:
+        if args[:2] == ["git", "show"]:
+            return CompletedProcess(args, 0, b"manifest" if args[-1].endswith("release-manifest.json") else b"license", b"")
+        return CompletedProcess(args, 0, "", "")
+
+    def final_fixtures(self, base: Path) -> tuple[Path, Path, dict]:
+        receipt, rehearsal, run = self.fixtures(base)
+        sidecar = base / proof.FINAL_SIDECAR
+        saved = proof.read_canonical(rehearsal)
+        rows = {}
+        for label in proof.OS_LABELS:
+            stored = base / "downloads" / SHA / label / proof.PREFLIGHT_FILE
+            value = self.preflight_value()
+            canonical_file(stored, value)
+            rows[label] = {**value, "job_id": saved["receipts"][label]["job_id"],
+                           "job_name": saved["receipts"][label]["job_name"],
+                           "conclusion": "success", "head_sha": SHA,
+                           "artifact": f"release-v1-preflight-{label}",
+                           "sha256": proof.file_digest(stored)}
+        saved["release_preflight"] = {"commands": list(proof.RELEASE_COMMANDS), "receipts": rows}
+        canonical_file(sidecar, saved)
+        return receipt, sidecar, run
+
+    def fake_preflight_download(self, _run: dict, sha: str, directory: Path) -> dict:
+        self.assertEqual(sha, SHA)
+        rows = {}
+        for label in proof.OS_LABELS:
+            target = directory / label / "preflight" / "job-receipt.json"
+            value = self.preflight_value()
+            canonical_file(target, value)
+            rows[label] = {**value, "job_id": 1 if label == "windows-latest" else 2,
+                           "job_name": f"Release archive ({label})", "conclusion": "success",
+                           "head_sha": SHA, "artifact": f"release-v1-preflight-{label}",
                            "sha256": proof.file_digest(target), "file": target}
         return rows
 
@@ -316,6 +363,85 @@ class RemoteProvenanceTests(unittest.TestCase):
                 with self.assertRaisesRegex(proof.ProofError, "downloaded receipt changed"):
                     proof.remote_proof(SHA, receipt, sidecar, existing=True)
             self.assertEqual(before, (receipt.read_bytes(), sidecar.read_bytes()))
+
+    def test_final_preflight_download_requires_schema_pass_and_four_commands(self) -> None:
+        run = {"id": 4}
+        for mutation in ({"status": "BLOCKED"}, {"commands": ["python -V"]},
+                         {"headSha": OTHER}, {"release_publication_executed": True}):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as temp:
+                def fake_gh(*args: str) -> str:
+                    folder = Path(args[args.index("--dir") + 1])
+                    canonical_file(folder / "job-receipt.json", {**self.preflight_value(), **mutation})
+                    return ""
+                with patch.object(proof, "_selected_jobs", return_value={label: job(label) for label in proof.OS_LABELS}), \
+                     patch.object(proof, "gh", side_effect=fake_gh):
+                    with self.assertRaisesRegex(proof.ProofError, "preflight receipt content mismatch"):
+                        proof._download_preflights(run, SHA, Path(temp))
+        with tempfile.TemporaryDirectory() as temp:
+            with patch.object(proof, "_selected_jobs", return_value={label: job(label) for label in proof.OS_LABELS}), \
+                 patch.object(proof, "gh", return_value=""):
+                with self.assertRaisesRegex(proof.ProofError, "preflight receipt artifact is missing"):
+                    proof._download_preflights(run, SHA, Path(temp))
+
+    def test_final_sidecar_create_and_check_existing_preserve_bytes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            receipt, rehearsal, run = self.fixtures(base)
+            shutil.rmtree(base / "downloads")
+            sidecar = base / proof.FINAL_SIDECAR
+            with patch.object(proof, "validate_archive_receipt"), \
+                 patch.object(proof, "wait_for_ci", return_value=run), \
+                 patch.object(proof, "_selected_run", return_value=run), \
+                 patch.object(proof, "_download_receipts", side_effect=self.fake_download), \
+                 patch.object(proof, "_download_preflights", side_effect=self.fake_preflight_download), \
+                 patch.object(proof, "command", side_effect=self.final_git_command):
+                proof.remote_proof(SHA, receipt, sidecar, existing=False)
+                saved = proof.read_canonical(sidecar)
+                self.assertEqual(list(proof.RELEASE_COMMANDS), saved["release_preflight"]["commands"])
+                self.assertEqual(set(proof.OS_LABELS), set(saved["release_preflight"]["receipts"]))
+                paths = [receipt, sidecar, *(
+                    base / "downloads" / SHA / label / proof.PREFLIGHT_FILE for label in proof.OS_LABELS)]
+                before = {path: path.read_bytes() for path in paths}
+                proof.remote_proof(SHA, receipt, sidecar, existing=True)
+                self.assertEqual(before, {path: path.read_bytes() for path in paths})
+
+    def test_final_sidecar_requires_preflight_and_rejects_stored_tamper(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            receipt, rehearsal, run = self.fixtures(base)
+            final = base / proof.FINAL_SIDECAR
+            canonical_file(final, proof.read_canonical(rehearsal))
+            with patch.object(proof, "validate_archive_receipt"):
+                with self.assertRaisesRegex(proof.ProofError, "preflight missing"):
+                    proof.remote_proof(SHA, receipt, final, existing=True)
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            receipt, final, run = self.final_fixtures(base)
+            stored = base / "downloads" / SHA / "ubuntu-latest" / proof.PREFLIGHT_FILE
+            stored.write_bytes(b"tampered")
+            before = final.read_bytes()
+            with patch.object(proof, "validate_archive_receipt"):
+                with self.assertRaisesRegex(proof.ProofError, "altered or absent"):
+                    proof.remote_proof(SHA, receipt, final, existing=True)
+            self.assertEqual(before, final.read_bytes())
+
+    def test_final_sidecar_rejects_remote_preflight_drift(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            receipt, final, run = self.final_fixtures(base)
+            before = final.read_bytes()
+            def drift(remote_run: dict, sha: str, directory: Path) -> dict:
+                rows = self.fake_preflight_download(remote_run, sha, directory)
+                rows["ubuntu-latest"]["zipSha256"] = "e" * 64
+                return rows
+            with patch.object(proof, "validate_archive_receipt"), \
+                 patch.object(proof, "_selected_run", return_value=run), \
+                 patch.object(proof, "_download_receipts", side_effect=self.fake_download), \
+                 patch.object(proof, "_download_preflights", side_effect=drift), \
+                 patch.object(proof, "command", side_effect=self.final_git_command):
+                with self.assertRaisesRegex(proof.ProofError, "preflight hashes differ"):
+                    proof.remote_proof(SHA, receipt, final, existing=True)
+            self.assertEqual(before, final.read_bytes())
 
 
 if __name__ == "__main__":
