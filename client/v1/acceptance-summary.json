@@ -7,7 +7,7 @@
   "committed_evidence_sha256": {
     "evidence/v1.0/regression-acceptance.json": "c644760697b156b7b9e41f25b548287f82643978f7c6a9ba21898b5fadbf8980",
     "evidence/v1.0/two-week-native.json": "50ef72931bffc4d5d46f359e9a0645d1c323e46edb2521d713092508956e346d",
-    "client/v1/workbook-manifest.json": "09ff32e10747f34526a055d085243dab0aa1dc9e0c3d981ffd82bb4cb9bcadbf",
+    "client/v1/workbook-manifest.json": "13e7d2289fb4df1456338663cddee37bfa3e5f129806d5816f8f5e01af722c12",
     "evidence/v1.0/excel/excel-recalculation.json": "3759774d4f214850be8d32c39c4d38bd178d1f626576faf42fc01cc658b5262c",
     "evidence/v1.0/excel/visual-inspection.json": "726dad722b19df5509588164a09d597f6ec2fda76488c9a57f4999ae22113be1"
   },
