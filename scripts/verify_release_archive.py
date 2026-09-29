@@ -264,54 +264,61 @@ def run_archive(sha: str, output: Path, receipt_path: Path) -> dict:
         raise ProofError("archive output cannot be inside delivered client files")
     start = time.monotonic()
     output.mkdir(parents=True)
-    extracted = output / "source"
-    extracted.mkdir()
-    members = archive_commit(sha, extracted)
-    venv = output / "venv"
-    command([sys.executable, "-m", "venv", str(venv)], timeout=300)
-    python = venv / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
-    archive_env = os.environ.copy()
-    archive_env["PATH"] = str(python.parent) + os.pathsep + archive_env.get("PATH", "")
-    # Only the committed optional client requirements are installed.
-    command([str(python), "-m", "pip", "install", "-r", "requirements-client.txt"], extracted,
-            timeout=900, env=archive_env)
-    gates: list[dict] = []
-    for name, suffix, timeout in GATES:
-        began = time.monotonic()
-        args = [str(python), *suffix]
-        try:
-            result = command(args, extracted, timeout=timeout, env=archive_env)
-        except (ProofError, subprocess.TimeoutExpired) as exc:
-            detail = ""
-            if name == "v1-deterministic":
-                inner = extracted / "evidence/v1.0/regression-acceptance.json"
-                if inner.exists():
-                    detail = f"; inner_receipt={v1_failed_gate_summary(inner)}"
-            raise ProofError(f"gate {name}: {exc}{detail}") from exc
-        gates.append({"name": name, "command": ["python", *suffix], "exit_code": result.returncode,
-                      "duration_seconds": round(time.monotonic() - began, 3),
-                      "stdout_sha256": digest(result.stdout.encode()), "stderr_sha256": digest(result.stderr.encode())})
-    regression = json.loads((extracted / "evidence/v1.0/regression-acceptance.json").read_bytes())
-    if regression.get("status") != "PASS":
-        raise ProofError("v1 deterministic acceptance did not PASS")
-    canonical = _canonical_comparison(extracted)
-    artifacts = {
-        "evidence/v1.0/regression-acceptance.json": file_digest(extracted / "evidence/v1.0/regression-acceptance.json"),
-        ".local/v1-acceptance/deterministic/v2/verification.json": file_digest(
-            extracted / ".local/v1-acceptance/deterministic/v2/verification.json"),
-        ".local/v1-acceptance/deterministic/scope.json": file_digest(
-            extracted / ".local/v1-acceptance/deterministic/scope.json"),
-        ".local/v1-acceptance/deterministic/workbooks.json": file_digest(
-            extracted / ".local/v1-acceptance/deterministic/workbooks.json"),
-    }
-    tracked_tree_clean(sha)
-    receipt = {"schema": "alma-release-archive-v1", "status": "PASS", "proof_sha": sha,
-               "os": platform.system(), "python": platform.python_version(), "excel_executed": False,
-               "requirements_sha256": members["requirements-client.txt"],
-               "source_tree": command(["git", "rev-parse", f"{sha}^{{tree}}"] ).stdout.strip(),
-               "source_hashes": {name: members[name] for name in REQUIRED_SOURCE},
-               "canonical_outputs": canonical, "artifact_sha256": artifacts, "gates": gates,
-               "duration_seconds": round(time.monotonic() - start, 3)}
+    # Execute the immutable archive in the system temp directory. OneDrive's
+    # deeply nested checkout path can block atomic writes in disposable cuts.
+    # TemporaryDirectory cleans source, generated private cuts and venv once.
+    with tempfile.TemporaryDirectory(prefix="alma-release-proof-") as scratch:
+        workspace = Path(scratch).resolve()
+        if workspace.is_relative_to(ROOT.resolve()) or workspace.is_relative_to(output):
+            raise ProofError("archive workspace must be outside checkout and output")
+        extracted = workspace / "source"
+        extracted.mkdir()
+        members = archive_commit(sha, extracted)
+        venv = workspace / "venv"
+        command([sys.executable, "-m", "venv", str(venv)], timeout=300)
+        python = venv / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+        archive_env = os.environ.copy()
+        archive_env["PATH"] = str(python.parent) + os.pathsep + archive_env.get("PATH", "")
+        # Only the committed optional client requirements are installed.
+        command([str(python), "-m", "pip", "install", "-r", "requirements-client.txt"], extracted,
+                timeout=900, env=archive_env)
+        gates: list[dict] = []
+        for name, suffix, timeout in GATES:
+            began = time.monotonic()
+            args = [str(python), *suffix]
+            try:
+                result = command(args, extracted, timeout=timeout, env=archive_env)
+            except (ProofError, subprocess.TimeoutExpired) as exc:
+                detail = ""
+                if name == "v1-deterministic":
+                    inner = extracted / "evidence/v1.0/regression-acceptance.json"
+                    if inner.exists():
+                        detail = f"; inner_receipt={v1_failed_gate_summary(inner)}"
+                raise ProofError(f"gate {name}: {exc}{detail}") from exc
+            gates.append({"name": name, "command": ["python", *suffix], "exit_code": result.returncode,
+                          "duration_seconds": round(time.monotonic() - began, 3),
+                          "stdout_sha256": digest(result.stdout.encode()), "stderr_sha256": digest(result.stderr.encode())})
+        regression = json.loads((extracted / "evidence/v1.0/regression-acceptance.json").read_bytes())
+        if regression.get("status") != "PASS":
+            raise ProofError("v1 deterministic acceptance did not PASS")
+        canonical = _canonical_comparison(extracted)
+        artifacts = {
+            "evidence/v1.0/regression-acceptance.json": file_digest(extracted / "evidence/v1.0/regression-acceptance.json"),
+            ".local/v1-acceptance/deterministic/v2/verification.json": file_digest(
+                extracted / ".local/v1-acceptance/deterministic/v2/verification.json"),
+            ".local/v1-acceptance/deterministic/scope.json": file_digest(
+                extracted / ".local/v1-acceptance/deterministic/scope.json"),
+            ".local/v1-acceptance/deterministic/workbooks.json": file_digest(
+                extracted / ".local/v1-acceptance/deterministic/workbooks.json"),
+        }
+        tracked_tree_clean(sha)
+        receipt = {"schema": "alma-release-archive-v1", "status": "PASS", "proof_sha": sha,
+                   "os": platform.system(), "python": platform.python_version(), "excel_executed": False,
+                   "requirements_sha256": members["requirements-client.txt"],
+                   "source_tree": command(["git", "rev-parse", f"{sha}^{{tree}}"] ).stdout.strip(),
+                   "source_hashes": {name: members[name] for name in REQUIRED_SOURCE},
+                   "canonical_outputs": canonical, "artifact_sha256": artifacts, "gates": gates,
+                   "duration_seconds": round(time.monotonic() - start, 3)}
     write_new(receipt_path, receipt)
     return receipt
 

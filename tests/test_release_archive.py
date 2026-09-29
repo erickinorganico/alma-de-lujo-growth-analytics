@@ -30,6 +30,23 @@ def job(label: str, *, conclusion: str = "success", sha: str = SHA) -> dict:
 
 
 class ArchiveSecurityTests(unittest.TestCase):
+    def test_requested_output_or_receipt_must_be_new(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            output = base / "archive"
+            receipt = base / "archive.json"
+            output.mkdir()
+            with patch.object(proof, "archive_commit") as archived:
+                with self.assertRaisesRegex(proof.ProofError, "already exists"):
+                    proof.run_archive(SHA, output, receipt)
+                archived.assert_not_called()
+            output.rmdir()
+            receipt.write_bytes(b"existing")
+            with patch.object(proof, "archive_commit") as archived:
+                with self.assertRaisesRegex(proof.ProofError, "already exists"):
+                    proof.run_archive(SHA, output, receipt)
+                archived.assert_not_called()
+
     def test_command_passes_archive_environment_to_subprocess(self) -> None:
         environment = {"PATH": "venv-bin" + proof.os.pathsep + "system-bin"}
         completed = CompletedProcess(["python", "-V"], 0, "3.12", "")
@@ -49,8 +66,10 @@ class ArchiveSecurityTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp) / "archive"
             receipt_path = Path(temp) / "archive.json"
+            workspaces: list[Path] = []
 
             def fake_archive(_sha: str, destination: Path) -> dict:
+                workspaces.append(destination.parent)
                 canonical_file(destination / "evidence/v1.0/regression-acceptance.json", inner)
                 return {name: "a" * 64 for name in proof.REQUIRED_SOURCE}
 
@@ -63,6 +82,10 @@ class ArchiveSecurityTests(unittest.TestCase):
                  patch.object(proof, "command", side_effect=fake_command):
                 with self.assertRaises(proof.ProofError) as caught:
                     proof.run_archive(SHA, output, receipt_path)
+            self.assertEqual(1, len(workspaces))
+            self.assertFalse(workspaces[0].exists())
+            self.assertTrue(output.is_dir())
+            self.assertFalse(receipt_path.exists())
         message = str(caught.exception)
         self.assertIn("v0.2-full-suite-and-scenarios", message)
         self.assertIn("v1-portal-and-package", message)
@@ -91,7 +114,7 @@ class ArchiveSecurityTests(unittest.TestCase):
         self.assertNotIn("B" * 32, message)
         self.assertNotIn("x" * 3001, message)
 
-    def test_relative_output_uses_absolute_venv_python_for_extracted_cwd(self) -> None:
+    def test_archive_executes_in_disposable_system_temp_outside_checkout_and_output(self) -> None:
         local = proof.ROOT / ".local"
         local.mkdir(exist_ok=True)
         with tempfile.TemporaryDirectory(prefix="archive-path-test-", dir=local) as temp:
@@ -99,9 +122,22 @@ class ArchiveSecurityTests(unittest.TestCase):
             output = relative / "archive"
             receipt_path = relative / "archive.json"
             invoked: list[tuple[list[str], Path, dict[str, str] | None]] = []
+            workspaces: list[Path] = []
+            resolved_python_during_run: list[Path] = []
+
+            def fake_archive(_sha: str, destination: Path) -> dict:
+                self.assertEqual("source", destination.name)
+                workspace = destination.parent.resolve()
+                self.assertFalse(workspace.is_relative_to(proof.ROOT.resolve()))
+                self.assertFalse(workspace.is_relative_to((proof.ROOT / output).resolve()))
+                self.assertFalse((destination / ".local").exists())
+                workspaces.append(workspace)
+                return {name: "a" * 64 for name in proof.REQUIRED_SOURCE}
 
             def fake_command(args: list[str], cwd: Path = proof.ROOT, **kwargs) -> CompletedProcess:
                 invoked.append((args, cwd, kwargs.get("env")))
+                if cwd != proof.ROOT and args and args[0].endswith(("python.exe", "/python")) and kwargs.get("env"):
+                    resolved_python_during_run.append(Path(shutil.which("python", path=kwargs["env"]["PATH"])).resolve())
                 if args[:2] == ["git", "rev-parse"]:
                     return CompletedProcess(args, 0, "tree\n", "")
                 if args[1:3] == ["-m", "venv"]:
@@ -120,16 +156,17 @@ class ArchiveSecurityTests(unittest.TestCase):
                         canonical_file(cwd / name, value)
                 return CompletedProcess(args, 0, "", "")
 
-            members = {name: "a" * 64 for name in proof.REQUIRED_SOURCE}
-            with patch.object(proof, "archive_commit", return_value=members), \
+            with patch.object(proof, "archive_commit", side_effect=fake_archive), \
                  patch.object(proof, "command", side_effect=fake_command), \
                  patch.object(proof, "_canonical_comparison", return_value={}), \
                  patch.object(proof, "tracked_tree_clean"):
                 proof.run_archive(SHA, output, receipt_path)
 
-            expected_python = (proof.ROOT / output / "venv" /
+            self.assertEqual(1, len(workspaces))
+            workspace = workspaces[0]
+            expected_python = (workspace / "venv" /
                                ("Scripts/python.exe" if proof.os.name == "nt" else "bin/python")).resolve()
-            extracted = (proof.ROOT / output / "source").resolve()
+            extracted = (workspace / "source").resolve()
             gate_calls = [(args, cwd, env) for args, cwd, env in invoked if cwd == extracted and args and
                           args[0] == str(expected_python)]
             self.assertEqual(1 + len(proof.GATES), len(gate_calls))  # pip plus four gates
@@ -137,9 +174,13 @@ class ArchiveSecurityTests(unittest.TestCase):
                 self.assertIsNotNone(env)
                 self.assertEqual(str(expected_python.parent), env["PATH"].split(proof.os.pathsep, 1)[0])
                 self.assertEqual(proof.os.environ.get("PATH", ""), env["PATH"].split(proof.os.pathsep, 1)[1])
-                self.assertEqual(expected_python, Path(shutil.which("python", path=env["PATH"])).resolve())
+            self.assertEqual([expected_python] * (1 + len(proof.GATES)), resolved_python_during_run)
             self.assertTrue(expected_python.is_absolute())
             self.assertTrue((proof.ROOT / receipt_path).is_file())
+            self.assertTrue((proof.ROOT / output).is_dir())
+            self.assertFalse((proof.ROOT / output / "source").exists())
+            self.assertFalse((proof.ROOT / output / "venv").exists())
+            self.assertFalse(workspace.exists())
 
     def tar_bytes(self, extra: tuple[str, str] | None = None) -> bytes:
         stream = io.BytesIO()
