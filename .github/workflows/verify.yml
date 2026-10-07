@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   app-cash-contract:
-    name: App cash contract (${{ matrix.os }})
+    name: App handoff contracts (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     strategy:
@@ -21,8 +21,8 @@ jobs:
       - uses: actions/setup-python@v7.0.0
         with:
           python-version: '3.12'
-      - name: Validate synthetic cash adapter and native operating contracts
-        run: python -B -m unittest tests.test_app_cash_intake tests.test_operating_contracts tests.test_operating_intake tests.test_operating_marts_finance -v
+      - name: Validate synthetic app reconciliation and native operating contracts
+        run: python -B -m unittest tests.test_app_inventory_reconciliation tests.test_app_cash_intake tests.test_operating_contracts tests.test_operating_intake tests.test_operating_marts_finance -v
 
   release-archive:
     name: Release archive (${{ matrix.os }})
