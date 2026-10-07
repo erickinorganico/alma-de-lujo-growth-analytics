@@ -6,6 +6,10 @@ Un sistema analítico para ropa deportiva y calcetines de Pilates, con un kit se
 
 ## Instrucciones de uso
 
+La app local puede preparar un [intercambio de caja conciliada](docs/APP-CASH-INTAKE.md)
+con el contrato `operating-v1`. Requiere el exportador de la app, revisión de
+movimientos y saldos observados; conserva ventas e inventario como pendientes.
+
 La guía [INSTRUCCIONES.md](INSTRUCCIONES.md) reúne en un solo lugar la descarga del paquete, instalación del checkout, preparación del libro, captura correcta de movimientos, control de inventario, ciclo semanal con agentes, privacidad, actualización y solución de errores.
 
 Para comenzar a controlar inventario desde el repositorio:
