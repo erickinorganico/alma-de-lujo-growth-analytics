@@ -9,6 +9,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from alma.decision_register import (
     append_status,
@@ -211,7 +212,9 @@ class DecisionContinuityTests(unittest.TestCase):
             self.assertEqual("WAITING_ANALYSTS", verify_cycle(second["destination"])["status"])
 
     def test_extension_before_cutoff_preserves_open_and_records_old_new_due_dates(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
+        # This scenario's next cut is September 28, independent of the test date.
+        with tempfile.TemporaryDirectory() as tmp, patch(
+                'alma.decision_register._utc_now', return_value='2026-09-24T12:00:00Z'):
             home = Path(tmp)
             register, decision_id, _ = self._registered(home, "2026-09-25")
             extended = extend_decision(register, decision_id, "2026-10-05", "growth_owner",
@@ -223,10 +226,26 @@ class DecisionContinuityTests(unittest.TestCase):
             self.assertEqual("OPEN", state["decisions"][0]["status"])
             self.assertEqual("2026-10-05", state["decisions"][0]["due_date"])
             extension = next(event for event in state["events"] if event["event_type"] == "EXTEND")
+            self.assertEqual('2026-09-24T12:00:00Z', extension['recorded_at_utc'])
             self.assertEqual({"old_due_date": "2026-09-25", "new_due_date": "2026-10-05"},
                              extension["closure_evidence"]["extension"])
             self.assertEqual("OPEN", json.loads((Path(second["destination"]) /
                 "current-cut.json").read_text("utf-8"))["carried_decisions"][0]["status"])
+
+    def test_extension_recorded_after_cutoff_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            with patch('alma.decision_register._utc_now', return_value='2026-09-24T12:00:00Z'):
+                register, decision_id, _ = self._registered(home, '2026-09-25')
+            with patch('alma.decision_register._utc_now', return_value='2026-09-29T12:00:00Z'):
+                extended = extend_decision(register, decision_id, '2026-10-05',
+                                           'growth_owner', 'OWNER_EXTENDED')
+            cut, marts = later_upstream(home)
+            before = (Path(register)/'events.json').read_bytes()
+            with self.assertRaisesRegex(ValueError, 'extension was recorded after'):
+                start_cycle(cut, marts, home/'.local'/'weekly-cycles',
+                            prior_register=register, prior_anchor=extended['anchor'])
+            self.assertEqual((Path(register)/'events.json').read_bytes(), before)
 
     def test_exact_later_cut_pointer_closes_and_forgery_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
